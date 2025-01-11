@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 /**
  * 
  */
-public interface GyroIO {
+public interface GyroModuleIO {
     @AutoLog
     public static class GyroIOInputs {
         public boolean connected = false;

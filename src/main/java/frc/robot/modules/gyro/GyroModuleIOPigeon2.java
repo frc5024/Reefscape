@@ -18,7 +18,7 @@ import frc.robot.utils.PhoenixOdometryThread;
 /**
  * 
  */
-public class GyroIOPigeon2 implements GyroIO {
+public class GyroModuleIOPigeon2 implements GyroModuleIO {
     private final Pigeon2 pigeon = new Pigeon2(TunerConstants.DrivetrainConstants.Pigeon2Id,
             TunerConstants.DrivetrainConstants.CANBusName);
     private final StatusSignal<Angle> yaw = pigeon.getYaw();
@@ -29,7 +29,7 @@ public class GyroIOPigeon2 implements GyroIO {
     /**
      * 
      */
-    public GyroIOPigeon2() {
+    public GyroModuleIOPigeon2() {
         pigeon.getConfigurator().apply(new Pigeon2Configuration());
         pigeon.getConfigurator().setYaw(0.0);
         yaw.setUpdateFrequency(PhoenixOdometryThread.ODOMETRY_FREQUENCY);
