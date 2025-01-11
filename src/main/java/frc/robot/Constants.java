@@ -13,22 +13,23 @@ import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-  // AdvantageKit simulation
-  public static final Mode simMode = Mode.SIM;
-  public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+    // AdvantageKit simulation
+    public static final Mode simMode = Mode.SIM;
+    public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
-  public static enum Mode {
-    REAL,  // Running on a real robot
-    SIM,   // Running a physics simulator
-    REPLAY // Replaying from a log file
-  }
+    public static enum Mode {
+        REAL, // Running on a real robot
+        SIM, // Running a physics simulator
+        REPLAY // Replaying from a log file
+    }
 
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
-  public static final double stickDeadband = 0.1;
+    public static class OperatorConstants {
+        public static final int kDriverControllerPort = 0;
+    }
 
-      public static final class Swerve {
+    public static final double stickDeadband = 0.1;
+
+    public static final class Swerve {
         public static final int AHRS = 1;
 
         public static final COTSTalonFXSwerveConstants chosenModule = // TODO: This must be tuned to specific robot
