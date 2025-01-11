@@ -1,4 +1,6 @@
 {
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.server.launchMode": "Standard",
   "files.exclude": {
