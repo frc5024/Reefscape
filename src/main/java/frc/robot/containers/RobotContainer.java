@@ -1,5 +1,7 @@
 package frc.robot.containers;
 
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -8,29 +10,37 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Robot;
+import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
- * subsystems, commands, and button mappings) should be declared here.
+ * 
  */
 abstract public class RobotContainer {
-    // Subsystems
+    /* Subsystems */
     protected SwerveDriveSubsystem swerveDriveSubsystem;
 
-    // Controller
+    /* Controllers */
     private final CommandXboxController controller = new CommandXboxController(0);
+
+    /* Autonomous */
+    AutoBuilder autoBuilder;
+    LoggedDashboardChooser<Command> autonomousChooser;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+    }
+
+    /**
+     * 
+     */
+    protected void configureAutoBuilder() {
+        this.autoBuilder = new AutoBuilder(this.swerveDriveSubsystem);
+        this.autoBuilder.configureAutonomous();
+        this.autonomousChooser = autoBuilder.getAutonomousChooser();
     }
 
     /**
@@ -80,6 +90,6 @@ abstract public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return null; // autoChooser.get();
+        return this.autonomousChooser.get();
     }
 }
