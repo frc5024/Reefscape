@@ -15,8 +15,7 @@ public class ReefscapeRobotContainer extends RobotContainer {
     public ReefscapeRobotContainer() {
         super();
 
-        this.swerveDriveSubsystem =
-            new SwerveDriveSubsystem(
+        this.swerveDriveSubsystem = new SwerveDriveSubsystem(
                 new GyroIOPigeon2(),
                 new SwerveModuleIOTalonFX(TunerConstants.FrontLeft),
                 new SwerveModuleIOTalonFX(TunerConstants.FrontRight),
