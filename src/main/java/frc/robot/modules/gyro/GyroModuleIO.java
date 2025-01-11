@@ -19,7 +19,6 @@ public interface GyroModuleIO {
 
     /**
      * 
-     * @param inputs
      */
     public default void updateInputs(GyroIOInputs inputs) {
     }

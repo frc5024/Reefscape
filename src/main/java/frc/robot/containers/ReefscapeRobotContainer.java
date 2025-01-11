@@ -22,7 +22,7 @@ public class ReefscapeRobotContainer extends RobotContainer {
                 new SwerveModuleIOTalonFX(TunerConstants.BackLeft),
                 new SwerveModuleIOTalonFX(TunerConstants.BackRight));
 
-        // Configure the button bindings
+        configureAutoBuilder();
         configureButtonBindings();
     }
 }
