@@ -15,7 +15,7 @@ import frc.robot.utils.PhoenixOdometryThread;
 /**
  * 
  */
-public class GyroIONavX implements GyroIO {
+public class GyroModuleIONavX implements GyroModuleIO {
     private final AHRS navX = new AHRS(NavXComType.kMXP_SPI, (byte) PhoenixOdometryThread.ODOMETRY_FREQUENCY);
     private final Queue<Double> yawPositionQueue;
     private final Queue<Double> yawTimestampQueue;
@@ -23,7 +23,7 @@ public class GyroIONavX implements GyroIO {
     /**
      * 
      */
-    public GyroIONavX() {
+    public GyroModuleIONavX() {
         yawTimestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
         yawPositionQueue = PhoenixOdometryThread.getInstance().registerSignal(navX::getYaw);
     }

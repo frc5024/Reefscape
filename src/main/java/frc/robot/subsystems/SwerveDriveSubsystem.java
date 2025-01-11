@@ -43,8 +43,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.generated.TunerConstants;
-import frc.robot.modules.gyro.GyroIO;
 import frc.robot.modules.gyro.GyroIOInputsAutoLogged;
+import frc.robot.modules.gyro.GyroModuleIO;
 import frc.robot.modules.swerve.SwerveModule;
 import frc.robot.modules.swerve.SwerveModuleIO;
 import frc.robot.utils.LocalADStarAK;
@@ -81,7 +81,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
             getModuleTranslations());
 
     static final Lock odometryLock = new ReentrantLock();
-    private final GyroIO gyroIO;
+    private final GyroModuleIO gyroIO;
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final SwerveModule[] modules = new SwerveModule[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
@@ -103,7 +103,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     /**
      * 
      */
-    public SwerveDriveSubsystem(GyroIO gyroIO, SwerveModuleIO flModuleIO, SwerveModuleIO frModuleIO,
+    public SwerveDriveSubsystem(GyroModuleIO gyroIO, SwerveModuleIO flModuleIO, SwerveModuleIO frModuleIO,
             SwerveModuleIO blModuleIO, SwerveModuleIO brModuleIO) {
         this.gyroIO = gyroIO;
         modules[0] = new SwerveModule(flModuleIO, 0, TunerConstants.FrontLeft);
