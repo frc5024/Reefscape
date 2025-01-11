@@ -1,16 +1,3 @@
-// Copyright 2021-2025 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-
 package frc.robot.modules.gyro;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -27,7 +14,9 @@ import frc.robot.utils.PhoenixOdometryThread;
 
 import java.util.Queue;
 
-/** IO implementation for Pigeon 2. */
+/**
+ * 
+ */
 public class GyroIOPigeon2 implements GyroIO {
   private final Pigeon2 pigeon =
       new Pigeon2(TunerConstants.DrivetrainConstants.Pigeon2Id, TunerConstants.DrivetrainConstants.CANBusName);
@@ -36,6 +25,9 @@ public class GyroIOPigeon2 implements GyroIO {
   private final Queue<Double> yawTimestampQueue;
   private final StatusSignal<AngularVelocity> yawVelocity = pigeon.getAngularVelocityZWorld();
 
+  /**
+   * 
+   */
   public GyroIOPigeon2() {
     pigeon.getConfigurator().apply(new Pigeon2Configuration());
     pigeon.getConfigurator().setYaw(0.0);

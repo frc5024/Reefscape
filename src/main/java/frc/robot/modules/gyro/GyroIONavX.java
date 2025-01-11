@@ -1,16 +1,6 @@
 // Copyright 2021-2025 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-
 package frc.robot.modules.gyro;
 
 import com.studica.frc.AHRS;
@@ -21,12 +11,17 @@ import frc.robot.utils.PhoenixOdometryThread;
 
 import java.util.Queue;
 
-/** IO implementation for NavX. */
+/**
+ * 
+ */
 public class GyroIONavX implements GyroIO {
   private final AHRS navX = new AHRS(NavXComType.kMXP_SPI, (byte) PhoenixOdometryThread.ODOMETRY_FREQUENCY);
   private final Queue<Double> yawPositionQueue;
   private final Queue<Double> yawTimestampQueue;
 
+  /**
+   * 
+   */
   public GyroIONavX() {
     yawTimestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
     yawPositionQueue = PhoenixOdometryThread.getInstance().registerSignal(navX::getYaw);

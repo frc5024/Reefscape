@@ -1,16 +1,3 @@
-// Copyright 2021-2025 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-
 package frc.robot.modules.swerve;
 
 import static frc.robot.utils.PhoenixUtils.*;
@@ -92,6 +79,9 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
   private final Debouncer turnConnectedDebounce = new Debouncer(0.5);
   private final Debouncer turnEncoderConnectedDebounce = new Debouncer(0.5);
 
+  /**
+   * 
+   */
   public SwerveModuleIOTalonFX(SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants) {
     this.constants = constants;
     driveTalon = new TalonFX(constants.DriveMotorId, TunerConstants.DrivetrainConstants.CANBusName);
