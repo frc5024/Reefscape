@@ -1,21 +1,7 @@
-// Copyright 2021-2025 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -61,6 +47,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+/**
+ * 
+ */
 public class SwerveDriveSubsystem extends SubsystemBase {
   // TunerConstants doesn't include these constants, so they are declared locally
   public static final double DRIVE_BASE_RADIUS =
@@ -107,15 +96,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         new SwerveModulePosition(),
         new SwerveModulePosition()
       };
-  private SwerveDrivePoseEstimator poseEstimator =
-      new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+  private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-  public SwerveDriveSubsystem(
-      GyroIO gyroIO,
-      SwerveModuleIO flModuleIO,
-      SwerveModuleIO frModuleIO,
-      SwerveModuleIO blModuleIO,
-      SwerveModuleIO brModuleIO) {
+  /**
+   * 
+   */
+  public SwerveDriveSubsystem(GyroIO gyroIO, SwerveModuleIO flModuleIO, SwerveModuleIO frModuleIO, SwerveModuleIO blModuleIO, SwerveModuleIO brModuleIO) {
     this.gyroIO = gyroIO;
     modules[0] = new SwerveModule(flModuleIO, 0, TunerConstants.FrontLeft);
     modules[1] = new SwerveModule(frModuleIO, 1, TunerConstants.FrontRight);
@@ -252,7 +238,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
   }
 
-  /** Stops the drive. */
+  /** 
+   * Stops the drive. 
+   */
   public void stop() {
     runVelocity(new ChassisSpeeds());
   }
@@ -282,7 +270,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     return run(() -> runCharacterization(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
   }
 
-  /** Returns the module states (turn angles and drive velocities) for all of the modules. */
+  /** 
+   * Returns the module states (turn angles and drive velocities) for all of the modules. 
+   */
   @AutoLogOutput(key = "SwerveStates/Measured")
   private SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
@@ -292,7 +282,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     return states;
   }
 
-  /** Returns the module positions (turn angles and drive positions) for all of the modules. */
+  /** 
+   * Returns the module positions (turn angles and drive positions) for all of the modules.
+   */
   private SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] states = new SwerveModulePosition[4];
     for (int i = 0; i < 4; i++) {
@@ -301,7 +293,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     return states;
   }
 
-  /** Returns the measured chassis speeds of the robot. */
+  /** 
+   * Returns the measured chassis speeds of the robot. 
+   */
   @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
   private ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
@@ -325,23 +319,31 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     return output;
   }
 
-  /** Returns the current odometry pose. */
+  /** 
+   * Returns the current odometry pose. 
+   */
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
     return poseEstimator.getEstimatedPosition();
   }
 
-  /** Returns the current odometry rotation. */
+  /** 
+   * Returns the current odometry rotation. 
+   */
   public Rotation2d getRotation() {
     return getPose().getRotation();
   }
 
-  /** Resets the current odometry pose. */
+  /**
+   * Resets the current odometry pose. 
+   */
   public void setPose(Pose2d pose) {
     poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
   }
 
-  /** Adds a new timestamped vision measurement. */
+  /** 
+   * Adds a new timestamped vision measurement. 
+   */
   public void addVisionMeasurement(
       Pose2d visionRobotPoseMeters,
       double timestampSeconds,
@@ -350,17 +352,23 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
   }
 
-  /** Returns the maximum linear speed in meters per sec. */
+  /** 
+   * Returns the maximum linear speed in meters per sec. 
+   */
   public double getMaxLinearSpeedMetersPerSec() {
     return TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
   }
 
-  /** Returns the maximum angular speed in radians per sec. */
+  /** 
+   * Returns the maximum angular speed in radians per sec. 
+   */
   public double getMaxAngularSpeedRadPerSec() {
     return getMaxLinearSpeedMetersPerSec() / DRIVE_BASE_RADIUS;
   }
 
-  /** Returns an array of module translations. */
+  /** 
+   * Returns an array of module translations. 
+   */
   public static Translation2d[] getModuleTranslations() {
     return new Translation2d[] {
       new Translation2d(TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),

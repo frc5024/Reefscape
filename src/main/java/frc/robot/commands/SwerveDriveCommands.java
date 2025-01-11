@@ -1,16 +1,3 @@
-// Copyright 2021-2025 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
@@ -36,6 +23,9 @@ import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+/**
+ * 
+ */
 public class SwerveDriveCommands {
   private static final double DEADBAND = 0.1;
   private static final double ANGLE_KP = 5.0;
@@ -47,8 +37,14 @@ public class SwerveDriveCommands {
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
+  /**
+   * 
+   */
   private SwerveDriveCommands() {}
 
+  /**
+   * 
+   */
   private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
     // Apply deadband
     double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DEADBAND);
@@ -107,48 +103,32 @@ public class SwerveDriveCommands {
    * Possible use cases include snapping to an angle, aiming at a vision target, or controlling
    * absolute rotation with a joystick.
    */
-  public static Command joystickDriveAtAngle(
-      SwerveDriveSubsystem swerveDriveSubsystem,
-      DoubleSupplier xSupplier,
-      DoubleSupplier ySupplier,
-      Supplier<Rotation2d> rotationSupplier) {
-
+  public static Command joystickDriveAtAngle(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier xSupplier, DoubleSupplier ySupplier, Supplier<Rotation2d> rotationSupplier) {
     // Create PID controller
-    ProfiledPIDController angleController =
-        new ProfiledPIDController(
-            ANGLE_KP,
-            0.0,
-            ANGLE_KD,
-            new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
+    ProfiledPIDController angleController = new ProfiledPIDController(ANGLE_KP, 0.0, ANGLE_KD, new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
 
     // Construct command
     return Commands.run(
             () -> {
               // Get linear velocity
-              Translation2d linearVelocity =
-                  getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+              Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
               // Calculate angular speed
-              double omega =
-                  angleController.calculate(
-                      swerveDriveSubsystem.getRotation().getRadians(), rotationSupplier.get().getRadians());
+              double omega = angleController.calculate(swerveDriveSubsystem.getRotation().getRadians(), rotationSupplier.get().getRadians());
 
               // Convert to field relative speeds & send command
-              ChassisSpeeds speeds =
-                  new ChassisSpeeds(
-                      linearVelocity.getX() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
-                      linearVelocity.getY() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
-                      omega);
-              boolean isFlipped =
-                  DriverStation.getAlliance().isPresent()
-                      && DriverStation.getAlliance().get() == Alliance.Red;
-              swerveDriveSubsystem.runVelocity(
-                  ChassisSpeeds.fromFieldRelativeSpeeds(
-                      speeds,
-                      isFlipped
-                          ? swerveDriveSubsystem.getRotation().plus(new Rotation2d(Math.PI))
-                          : swerveDriveSubsystem.getRotation()));
+              ChassisSpeeds speeds = new ChassisSpeeds(
+                    linearVelocity.getX() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
+                    linearVelocity.getY() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
+                    omega);
+
+              boolean isFlipped = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red;
+
+              swerveDriveSubsystem.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
+                    isFlipped
+                        ? swerveDriveSubsystem.getRotation().plus(new Rotation2d(Math.PI))
+                        : swerveDriveSubsystem.getRotation()));
             },
             swerveDriveSubsystem)
 
@@ -168,19 +148,17 @@ public class SwerveDriveCommands {
 
     return Commands.sequence(
         // Reset data
-        Commands.runOnce(
-            () -> {
+        Commands.runOnce(() -> {
               velocitySamples.clear();
               voltageSamples.clear();
             }),
 
         // Allow modules to orient
-        Commands.run(
-                () -> {
-                  swerveDriveSubsystem.runCharacterization(0.0);
-                },
-                swerveDriveSubsystem)
-            .withTimeout(FF_START_DELAY),
+        Commands.run(() -> {
+            swerveDriveSubsystem.runCharacterization(0.0);
+          },
+          swerveDriveSubsystem)
+        .withTimeout(FF_START_DELAY),
 
         // Start timer
         Commands.runOnce(timer::restart),
@@ -219,7 +197,9 @@ public class SwerveDriveCommands {
                 }));
   }
 
-  /** Measures the robot's wheel radius by spinning in a circle. */
+  /** 
+   * Measures the robot's wheel radius by spinning in a circle.
+   */
   public static Command wheelRadiusCharacterization(SwerveDriveSubsystem swerveDriveSubsystem) {
     SlewRateLimiter limiter = new SlewRateLimiter(WHEEL_RADIUS_RAMP_RATE);
     WheelRadiusCharacterizationState state = new WheelRadiusCharacterizationState();
@@ -273,12 +253,9 @@ public class SwerveDriveCommands {
                       double wheelRadius = (state.gyroDelta * SwerveDriveSubsystem.DRIVE_BASE_RADIUS) / wheelDelta;
 
                       NumberFormat formatter = new DecimalFormat("#0.000");
-                      System.out.println(
-                          "********** Wheel Radius Characterization Results **********");
-                      System.out.println(
-                          "\tWheel Delta: " + formatter.format(wheelDelta) + " radians");
-                      System.out.println(
-                          "\tGyro Delta: " + formatter.format(state.gyroDelta) + " radians");
+                      System.out.println("********** Wheel Radius Characterization Results **********");
+                      System.out.println("\tWheel Delta: " + formatter.format(wheelDelta) + " radians");
+                      System.out.println("\tGyro Delta: " + formatter.format(state.gyroDelta) + " radians");
                       System.out.println(
                           "\tWheel Radius: "
                               + formatter.format(wheelRadius)
@@ -288,6 +265,9 @@ public class SwerveDriveCommands {
                     })));
   }
 
+  /**
+   * 
+   */
   private static class WheelRadiusCharacterizationState {
     double[] positions = new double[4];
     Rotation2d lastAngle = new Rotation2d();
