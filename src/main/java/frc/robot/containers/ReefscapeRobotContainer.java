@@ -25,4 +25,13 @@ public class ReefscapeRobotContainer extends RobotContainer {
         configureAutoBuilder();
         configureButtonBindings();
     }
+
+    /**
+     * Maple Sim Routines not used for Real Robot
+     */
+    public void displaySimFieldToAdvantageScope() {
+    }
+
+    public void resetSimulationField() {
+    }
 }

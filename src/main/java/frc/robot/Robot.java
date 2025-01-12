@@ -1,5 +1,6 @@
 package frc.robot;
 
+import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -21,8 +22,8 @@ import frc.robot.containers.SimulatedRobotContainer;
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends LoggedRobot {
-    private RobotContainer m_robotContainer;
-    private Command m_autonomousCommand;
+    private RobotContainer robotContainer;
+    private Command autonomousCommand;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -58,7 +59,7 @@ public class Robot extends LoggedRobot {
                 // Running a physics simulator, log to NT
                 Logger.addDataReceiver(new NT4Publisher());
 
-                m_robotContainer = new SimulatedRobotContainer();
+                this.robotContainer = new SimulatedRobotContainer();
                 break;
 
             case REPLAY:
@@ -75,7 +76,7 @@ public class Robot extends LoggedRobot {
                 Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
 
-                m_robotContainer = new ReefscapeRobotContainer();
+                this.robotContainer = new ReefscapeRobotContainer();
                 break;
         }
 
@@ -108,6 +109,7 @@ public class Robot extends LoggedRobot {
     /** This function is called once each time the robot enters Disabled mode. */
     @Override
     public void disabledInit() {
+        this.robotContainer.resetSimulationField();
     }
 
     @Override
@@ -120,11 +122,11 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        this.autonomousCommand = this.robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.schedule();
+        if (this.autonomousCommand != null) {
+            this.autonomousCommand.schedule();
         }
     }
 
@@ -139,8 +141,8 @@ public class Robot extends LoggedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.cancel();
+        if (this.autonomousCommand != null) {
+            this.autonomousCommand.cancel();
         }
     }
 
@@ -168,5 +170,7 @@ public class Robot extends LoggedRobot {
     /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {
+        SimulatedArena.getInstance().simulationPeriodic();
+        this.robotContainer.displaySimFieldToAdvantageScope();
     }
 }
