@@ -92,4 +92,11 @@ abstract public class RobotContainer {
     public Command getAutonomousCommand() {
         return this.autonomousChooser.get();
     }
+
+    /**
+     * Maple Sim Routines
+     */
+    abstract public void displaySimFieldToAdvantageScope();
+
+    abstract public void resetSimulationField();
 }
