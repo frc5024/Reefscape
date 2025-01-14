@@ -17,9 +17,6 @@ public final class Main {
     private Main() {
     }
 
-    private Main() {
-    }
-
     /**
      * Main initialization function. Do not perform any initialization here.
      *
