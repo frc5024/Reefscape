@@ -40,6 +40,9 @@ public class SimulatedRobotContainer extends RobotContainer {
         configureButtonBindings();
     }
 
+    /**
+     * 
+     */
     public void displaySimFieldToAdvantageScope() {
         if (Constants.currentMode != Constants.Mode.SIM)
             return;
@@ -51,6 +54,9 @@ public class SimulatedRobotContainer extends RobotContainer {
                 "FieldSimulation/Algae", SimulatedArena.getInstance().getGamePiecesArrayByType("Algae"));
     }
 
+    /**
+     * 
+     */
     public void resetSimulationField() {
         if (Constants.currentMode != Constants.Mode.SIM)
             return;

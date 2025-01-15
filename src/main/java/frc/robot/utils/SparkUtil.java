@@ -27,7 +27,7 @@ import com.revrobotics.spark.SparkBase;
 
 import edu.wpi.first.wpilibj.Timer;
 
-public class SparkUtils {
+public class SparkUtil {
     /** Stores whether any error was has been detected by other utility methods. */
     public static boolean sparkStickyFault = false;
 

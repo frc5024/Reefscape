@@ -26,7 +26,7 @@ import org.ironmaple.simulation.motorsims.SimulatedMotorController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
-import frc.robot.utils.SparkUtils;
+import frc.robot.utils.SparkUtil;
 
 /** Physics sim implementation of module IO. */
 public class SwerveModuleIOMapleSim implements SwerveModuleIO {
@@ -89,7 +89,7 @@ public class SwerveModuleIOMapleSim implements SwerveModuleIO {
         inputs.turnCurrentAmps = Math.abs(moduleSimulation.getSteerMotorStatorCurrent().in(Amps));
 
         // Update odometry inputs
-        inputs.odometryTimestamps = SparkUtils.getSimulationOdometryTimeStamps();
+        inputs.odometryTimestamps = SparkUtil.getSimulationOdometryTimeStamps();
         inputs.odometryDrivePositionsRad = Arrays.stream(moduleSimulation.getCachedDriveWheelFinalPositions())
                 .mapToDouble(angle -> angle.in(Radians))
                 .toArray();
