@@ -4,7 +4,9 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TestLEDs;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,10 +21,14 @@ public class RobotContainer {
   private final CommandXboxController operator = new CommandXboxController(1);
 
   private final Swerve s_Swerve = Swerve.getInstance();
+  private final LEDs s_LEDs = LEDs.getInstance();
 
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
+
+  //Driver/TestLEDs buttons
+  private final Trigger changeRainbow = driver.x();//Sets Which button is pressed in order for the Command to funtion
 
   public RobotContainer() {
 
@@ -43,7 +49,7 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-
+    changeRainbow.onTrue(new TestLEDs());
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
 

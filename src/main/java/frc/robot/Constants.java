@@ -12,11 +12,14 @@ import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
+        public static class LEDs{
+                public final static int ledPort = 9;
+        }
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
   public static final double stickDeadband = 0.1;
-
+  
       public static final class Swerve {
         public static final int AHRS = 1;
 
