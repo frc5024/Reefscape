@@ -7,7 +7,7 @@ public class ClimbCommand extends Command {
 
   private Climb ClimbSubsystem;
 
-  public ClimbCommand(Climb ClimbSubsystem, boolean motorOn) {
+  public ClimbCommand(Climb ClimbSubsystem) {
     this.ClimbSubsystem = ClimbSubsystem;
     addRequirements(ClimbSubsystem);
   }
@@ -20,6 +20,11 @@ public class ClimbCommand extends Command {
 
   @Override
   public void execute() {
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    ClimbSubsystem.motorController(false);
   }
 
   // Returns true when the command should end.

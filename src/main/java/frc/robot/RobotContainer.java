@@ -30,15 +30,14 @@ public class RobotContainer {
   public RobotContainer() {
 
     s_Swerve.setDefaultCommand(
-                new TeleopSwerve(
-                        s_Swerve,
-                        () -> -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
-                        () -> false // true = robotcentric
+        new TeleopSwerve(
+            s_Swerve,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            () -> -driver.getRawAxis(rotationAxis),
+            () -> false // true = robotcentric
 
-                ));
-
+        ));
 
     configureBindings();
 
@@ -46,13 +45,12 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    driver.rightBumper().whileTrue(new ClimbCommand(m_climbSubsystem, true));
+    driver.rightBumper().whileTrue(new ClimbCommand(m_climbSubsystem));
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
 
   public Command getAutonomousCommand() {
     return Autos.exampleAuto(m_exampleSubsystem);
   }
-
 
 }
