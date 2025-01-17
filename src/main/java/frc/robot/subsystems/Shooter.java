@@ -58,11 +58,11 @@ public class Shooter extends SubsystemBase {
         // This method will be called once per scheduler run
 
         if (linebreak.get() == true) {
-            sensorOutput = false;
+            sensorOutput = true;
             System.out.println("Linebreak: " + sensorOutput);
 
         } else {
-            sensorOutput = true;
+            sensorOutput = false;
             System.out.println("Linebreak: " + sensorOutput);
         }
 
