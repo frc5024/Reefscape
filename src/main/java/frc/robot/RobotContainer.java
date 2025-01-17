@@ -6,6 +6,9 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Coral;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.OuttakeCommand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -23,6 +26,8 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
+
+  private final Coral coralSubsystem = new Coral();
 
   public RobotContainer() {
 
@@ -43,7 +48,8 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-
+    driver.a().whileTrue(new IntakeCommand(coralSubsystem));
+    driver.b().onTrue(new OuttakeCommand(coralSubsystem));
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
 

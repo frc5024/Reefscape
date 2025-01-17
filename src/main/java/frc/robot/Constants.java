@@ -11,11 +11,24 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
+//import frc.robot.commands.OuttakeCommand;
+
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
   public static final double stickDeadband = 0.1;
+
+        public static final class coralConstants {
+                public static final int coralChannel = 10;
+                public static final int linebreakChannel = 8;
+                public static final double intakeSpeed = 0.6;
+                public static final double outtakeSpeed = -0.6;
+        }
+
+        public static final class outtakeConstants {
+                public static final int outtakeTime = 1;
+        }
 
       public static final class Swerve {
         public static final int AHRS = 1;
