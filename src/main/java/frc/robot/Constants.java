@@ -13,6 +13,10 @@ import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
+    public static class LEDs {
+        public final static int ledPort = 9;
+    }
+
     // AdvantageKit simulation
     public static final Mode simMode = Mode.SIM;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;

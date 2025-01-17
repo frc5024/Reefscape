@@ -4,9 +4,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Autos;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TestFlashLEDs;
+import frc.robot.commands.TestLEDs;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
@@ -17,11 +21,16 @@ public class RobotContainer {
     private final CommandXboxController operator = new CommandXboxController(1);
 
     private final Swerve s_Swerve = Swerve.getInstance();
+    private final LEDs s_LEDs = LEDs.getInstance();
     private final Shooter s_Shooter = Shooter.getInstance();
 
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
+
+    // Driver/TestLEDs buttons
+    private final Trigger changeRainbow = driver.x();// Sets Which button is pressed in order for the Command to funtion
+    private final Trigger testFlash = driver.y();
 
     public RobotContainer() {
 
@@ -36,7 +45,8 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-
+        changeRainbow.whileTrue(new TestLEDs());
+        testFlash.whileTrue(new TestFlashLEDs());
         driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
     }
 
