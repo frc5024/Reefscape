@@ -137,4 +137,7 @@ public final class Constants {
                     canCoderID, angleOffset);
         }
     }
+
+    public final class ClimbConstants{
+    }
 }

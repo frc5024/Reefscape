@@ -2,9 +2,11 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final Climb m_climbSubsystem = new Climb();
 
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -43,11 +46,13 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-
+    driver.rightBumper().whileTrue(new ClimbCommand(m_climbSubsystem, true));
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
 
   public Command getAutonomousCommand() {
     return Autos.exampleAuto(m_exampleSubsystem);
   }
+
+
 }
