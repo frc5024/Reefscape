@@ -12,7 +12,8 @@ public class Shooter extends SubsystemBase {
     private DigitalInput linebreak;
     private DigitalInput limSwInput;
     private static Shooter mInstance = null;
-    boolean sensor;
+    public boolean sensorOutput;
+    private LEDs LEDS = LEDs.getInstance();
 
     public static final Shooter getInstance() {
         if (mInstance == null) {
@@ -23,8 +24,8 @@ public class Shooter extends SubsystemBase {
     }
 
     private Shooter() {
-        linebreak = new DigitalInput(8);
-        limSwInput = new DigitalInput(7);
+        linebreak = new DigitalInput(6);
+        limSwInput = new DigitalInput(5);
     }
 
     /**
@@ -57,20 +58,23 @@ public class Shooter extends SubsystemBase {
         // This method will be called once per scheduler run
 
         if (linebreak.get() == true) {
-            sensor = false;
-            System.out.println("Linebreak: " + sensor);
+            sensorOutput = false;
+            System.out.println("Linebreak: " + sensorOutput);
+
         } else {
-            sensor = true;
-            System.out.println("Linebreak: " + sensor);
+            sensorOutput = true;
+            System.out.println("Linebreak: " + sensorOutput);
         }
 
         if (limSwInput.get() == true) {
             // maybe don't invert this. will have to test with an actual sensor.
-            sensor = false;
-            System.out.println("Limit Switch: " + sensor);
+            sensorOutput = false;
+            System.out.println("Limit Switch: " + sensorOutput);
+            LEDS.setLEDS(LEDPreset.Solid.kRed);
         } else {
-            sensor = true;
-            System.out.println("Limit Switch: " + sensor);
+            sensorOutput = true;
+            System.out.println("Limit Switch: " + sensorOutput);
+            LEDS.setLEDS(LEDPreset.Solid.kGreen);
 
         }
     }
