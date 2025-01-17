@@ -4,6 +4,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TestFlashLEDs;
 import frc.robot.commands.TestLEDs;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LEDs;
@@ -29,7 +30,7 @@ public class RobotContainer {
 
   //Driver/TestLEDs buttons
   private final Trigger changeRainbow = driver.x();//Sets Which button is pressed in order for the Command to funtion
-
+  private final Trigger testFlash = driver.y();
   public RobotContainer() {
 
     s_Swerve.setDefaultCommand(
@@ -49,7 +50,8 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    changeRainbow.onTrue(new TestLEDs());
+    changeRainbow.whileTrue(new TestLEDs());
+    testFlash.whileTrue(new TestFlashLEDs());
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
 

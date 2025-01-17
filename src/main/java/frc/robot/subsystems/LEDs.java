@@ -11,6 +11,8 @@ public class LEDs extends SubsystemBase {
     private static LEDs mInstance = null;
     private LEDController ledController;
 
+    private Timer timer = new Timer();
+    private int flashCount = 0;
 
     public static LEDs getInstance() {
         if (mInstance == null) {
@@ -23,7 +25,6 @@ public class LEDs extends SubsystemBase {
     }
 
     public void setLEDS(ILEDPreset colour){
-        System.out.println("YESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
         ledController.set(colour);
     }
 }
