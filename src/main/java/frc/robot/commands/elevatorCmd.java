@@ -6,9 +6,11 @@ import frc.robot.subsystems.Elevator;
 public class elevatorCmd extends Command{
 
     public final Elevator elevatorSubsystem;
+    public boolean forward;
 
-    public elevatorCmd(Elevator elevatorSubsystem) {
+    public elevatorCmd(Elevator elevatorSubsystem, boolean forward) {
         this.elevatorSubsystem = elevatorSubsystem;
+        this.forward = forward;
 
         addRequirements(elevatorSubsystem);
 
@@ -17,7 +19,12 @@ public class elevatorCmd extends Command{
 
     @Override
     public void initialize() {
-        elevatorSubsystem.activeMotor(true);
+        if (forward) {
+            elevatorSubsystem.activeMotor(true);
+        }
+        else {
+            elevatorSubsystem.reverseMotor(true);
+        }
 
     }
 
@@ -25,4 +32,6 @@ public class elevatorCmd extends Command{
     public void end(boolean interrupted) {
         elevatorSubsystem.activeMotor(false);
     }
+
+   
 }

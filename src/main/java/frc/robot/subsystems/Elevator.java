@@ -5,7 +5,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.elevatorConstants;
 
 
 public class Elevator extends SubsystemBase{
@@ -15,7 +14,6 @@ public class Elevator extends SubsystemBase{
     public Elevator() {
         elevatorMotor = new TalonFX(0);
 
-        super (new PIDController(elevatorConstants.kP, elevatorConstants.kI, elevatorConstants.kD));
 
     }
 
@@ -32,6 +30,18 @@ public class Elevator extends SubsystemBase{
 
 
 }
+
+public void reverseMotor (boolean reverseOn)
+{
+    if (reverseOn){
+        elevatorMotor.set(-Constants.elevatorConstants.elevatorSpeed); 
+    }
+    else{
+        elevatorMotor.set(Constants.elevatorConstants.elevatorOff);
+    }
+
+}
+
 
 }
 
