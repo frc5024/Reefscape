@@ -19,15 +19,16 @@ public final class Constants {
   }
   public static final double stickDeadband = 0.1;
 
+        //constants for intake and channels
         public static final class coralConstants {
                 public static final int coralChannel = 10;
                 public static final int linebreakChannel = 8;
                 public static final double intakeSpeed = 0.6;
-                public static final double outtakeSpeed = -0.6;
         }
-
+        //outtaketime (how long to run motors for) and outtakespeed (negative of intakeSpeed)
         public static final class outtakeConstants {
                 public static final int outtakeTime = 1;
+                public static final double outtakeSpeed = -0.6;
         }
 
       public static final class Swerve {

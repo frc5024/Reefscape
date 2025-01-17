@@ -4,9 +4,6 @@ import frc.robot.Constants;
 
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
-//import com.revrobotics.spark.config.SparkFlexConfig;
-//import edu.wpi.first.wpilibj.DigitalInput;
-//import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -19,20 +16,21 @@ public class Coral extends SubsystemBase{
         HOLDING,
         DROPPING,
     }
-
+    // motor controller for coral
     private SparkFlex coralMotor;
-    //private DigitalInput linebreak;
-    
+
+    //all constants for coral
     int coralChannel = Constants.coralConstants.coralChannel;
     int linebreakChannel = Constants.coralConstants.linebreakChannel;
     double intakeSpeed = Constants.coralConstants.intakeSpeed;
-    double outtakeSpeed = Constants.coralConstants.outtakeSpeed;
+    double outtakeSpeed = Constants.outtakeConstants.outtakeSpeed;
 
+    //constructor for coralMotor
     public Coral() {
         coralMotor = new SparkFlex(coralChannel, SparkLowLevel.MotorType.kBrushless);
-        //linebreak = new DigitalInput(linebreakChannel);
+        
     }
-
+    // method for intaking coral, takes in a boolean to determine if the coral should intake
     public void startIntake(boolean intaking) {
         if(intaking) {
             coralMotor.set(intakeSpeed);
@@ -41,13 +39,14 @@ public class Coral extends SubsystemBase{
             coralMotor.set(0);
         }
     }
-
+    //idle state, set motor to 0
     public void setIdle() {
         coralMotor.set(0);
     }
 
-
+    // method for outtaking coral, takes in a boolean to determine if the coral should outtake
     public void startOuttake(boolean outtaking) {
+        //if outtaking true, set outtakeSpeed, if not, set motor to 0
         if(outtaking) {
             coralMotor.set(outtakeSpeed);
         }
