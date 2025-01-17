@@ -8,19 +8,32 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-        public static class LEDs{
-                public final static int ledPort = 9;
-        }
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
-  public static final double stickDeadband = 0.1;
-  
-      public static final class Swerve {
+    public static class LEDs {
+        public final static int ledPort = 9;
+    }
+
+    // AdvantageKit simulation
+    public static final Mode simMode = Mode.SIM;
+    public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+
+    public static enum Mode {
+        REAL, // Running on a real robot
+        SIM, // Running a physics simulator
+        REPLAY // Replaying from a log file
+    }
+
+    public static class OperatorConstants {
+        public static final int kDriverControllerPort = 0;
+    }
+
+    public static final double stickDeadband = 0.1;
+
+    public static final class Swerve {
         public static final int AHRS = 1;
 
         public static final COTSTalonFXSwerveConstants chosenModule = // TODO: This must be tuned to specific robot

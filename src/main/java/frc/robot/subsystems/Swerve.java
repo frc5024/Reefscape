@@ -44,10 +44,8 @@ public class Swerve extends SubsystemBase {
 
         speedModifier = 1;
         mSwerveMods = new SwerveModule[] {
-                new SwerveModule(0, Constants.Swerve.Mod0.constants),
-                new SwerveModule(1, Constants.Swerve.Mod1.constants),
-                new SwerveModule(2, Constants.Swerve.Mod2.constants),
-                new SwerveModule(3, Constants.Swerve.Mod3.constants)
+            new SwerveModule(0, Constants.Swerve.Mod0.constants), new SwerveModule(1, Constants.Swerve.Mod1.constants),
+            new SwerveModule(2, Constants.Swerve.Mod2.constants), new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
@@ -78,7 +76,7 @@ public class Swerve extends SubsystemBase {
 
     // Controller called values - only call when lockController isnt true
     public void controllerTranslationalVal(double translationOutput) {
-        if (!lockTranslation){
+        if (!lockTranslation) {
             translationVal = translationOutput;
         }
     }
@@ -98,18 +96,16 @@ public class Swerve extends SubsystemBase {
     /**
      * 
      */
-    public void drive( boolean fieldRelative, boolean isOpenLoop) {
+    public void drive(boolean fieldRelative, boolean isOpenLoop) {
         ChassisSpeeds chassisSpeeds = null;
 
         if (fieldRelative) {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     translationVal * Constants.Swerve.maxSpeed * speedModifier,
                     strafeVal * Constants.Swerve.maxSpeed * speedModifier,
-                    rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier,
-                    getHeading());
+                    rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier, getHeading());
         } else {
-            chassisSpeeds = new ChassisSpeeds(
-                    translationVal * Constants.Swerve.maxSpeed * speedModifier,
+            chassisSpeeds = new ChassisSpeeds(translationVal * Constants.Swerve.maxSpeed * speedModifier,
                     strafeVal * Constants.Swerve.maxSpeed * speedModifier,
                     rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier);
         }
@@ -213,6 +209,8 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("Heading", getHeading().getDegrees());
 
         // Log subsystem to AK
-        double[] acceleration = new double[] { this.gyro.getWorldLinearAccelX(), this.gyro.getWorldLinearAccelY() };
+        double[] acceleration = new double[] {
+            this.gyro.getWorldLinearAccelX(), this.gyro.getWorldLinearAccelY()
+        };
     }
 }
