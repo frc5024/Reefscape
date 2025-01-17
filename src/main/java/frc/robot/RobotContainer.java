@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
@@ -16,6 +17,7 @@ public class RobotContainer {
     private final CommandXboxController operator = new CommandXboxController(1);
 
     private final Swerve s_Swerve = Swerve.getInstance();
+    private final Shooter s_Shooter = Shooter.getInstance();
 
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -24,7 +26,8 @@ public class RobotContainer {
     public RobotContainer() {
 
         s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, () -> -driver.getRawAxis(translationAxis),
-                () -> -driver.getRawAxis(strafeAxis), () -> -driver.getRawAxis(rotationAxis), () -> false // true = robotcentric
+                () -> -driver.getRawAxis(strafeAxis), () -> -driver.getRawAxis(rotationAxis), () -> false // true =
+                                                                                                          // robotcentric
 
         ));
 
