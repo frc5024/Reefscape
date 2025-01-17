@@ -29,9 +29,9 @@ public class TestFlashLEDs extends Command{
             }
 
             if (flashCount % 2 == 0) {
-                leds.setLEDS(LEDPreset.Solid.kYellow);
+                leds.setLEDS(LEDPreset.Solid.kDarkRed);
             } else {
-                leds.setLEDS(LEDPreset.Solid.kBlue);
+                leds.setLEDS(LEDPreset.Solid.kDarkBlue);
             }
         }
     }
