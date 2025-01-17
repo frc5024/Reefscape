@@ -22,7 +22,7 @@ public class TestFlashLEDs extends Command{
 
     @Override
     public void execute() {
-        if(flashCount< 100){
+        if(flashCount< 1000){
             if (timer.hasElapsed(0.1)) {
                 flashCount++;
                 timer.restart();
