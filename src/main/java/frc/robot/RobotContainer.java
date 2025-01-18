@@ -4,7 +4,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.elevatorCmd;
+import frc.robot.commands.SetElevatorSetpointCmd;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Swerve;
@@ -45,9 +45,9 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-
-    driver.x().whileTrue(new elevatorCmd(elevatorSubsystem, true) );
-    driver.a().whileTrue(new elevatorCmd(elevatorSubsystem, false));
+    driver.b().onTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
+    //driver.x().whileTrue(new elevatorCmd(elevatorSubsystem, true) );
+    //driver.a().whileTrue(new elevatorCmd(elevatorSubsystem, false));
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
 

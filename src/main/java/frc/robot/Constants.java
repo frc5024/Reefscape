@@ -24,6 +24,8 @@ public final class Constants {
         public static final double kI = 0;
         public static final double kD = 0;
 
+        public static final double L1Position = Units.degreesToRadians(100);
+
   }
   public static final double stickDeadband = 0.1;
 
