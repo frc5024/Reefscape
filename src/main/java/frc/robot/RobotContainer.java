@@ -45,7 +45,8 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    driver.a().whileTrue(new ClimbCommand(m_climbSubsystem));
+    driver.a().whileTrue(new ClimbCommand(m_climbSubsystem, 0.1));
+    driver.b().whileTrue(new ClimbCommand(m_climbSubsystem, -0.1));
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
 

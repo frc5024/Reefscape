@@ -13,19 +13,22 @@ public class Climb extends SubsystemBase {
     private DigitalInput linebreak;
 
     public Climb() {
-        climbMotor = new TalonFX(41);
-
-        // if (linebreak.get()) {
-        // System.out.println("LINE BROKEN");
-        // }
+        climbMotor = new TalonFX(7);
+        // linebreak = new DigitalInput(7);
     }
 
-    public void startMotor() {
-        climbMotor.set(.1);
+    public void startMotor(double speed) {
+        climbMotor.set(speed);
     }
 
     public void stopMotor() {
         climbMotor.set(0);
     }
+
+    // public void linebreak() {
+    // if (linebreak.get()) {
+    // System.out.println("LINE BROKEN");
+    // }
+    // }
 
 }
