@@ -5,7 +5,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import org.ironmaple.simulation.drivesims.GyroSimulation;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.utils.SparkUtils;
+import frc.robot.utils.SparkUtil;
 
 /**
  * 
@@ -28,7 +28,7 @@ public class GyroModuleIOSim implements GyroModuleIO {
         inputs.yawVelocityRadPerSec = Units.degreesToRadians(
                 gyroSimulation.getMeasuredAngularVelocity().in(RadiansPerSecond));
 
-        inputs.odometryYawTimestamps = SparkUtils.getSimulationOdometryTimeStamps();
+        inputs.odometryYawTimestamps = SparkUtil.getSimulationOdometryTimeStamps();
         inputs.odometryYawPositions = gyroSimulation.getCachedGyroReadings();
     }
 

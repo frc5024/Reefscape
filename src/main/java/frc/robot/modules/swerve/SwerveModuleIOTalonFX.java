@@ -1,6 +1,6 @@
 package frc.robot.modules.swerve;
 
-import static frc.robot.utils.PhoenixUtils.tryUntilOk;
+import static frc.robot.utils.PhoenixUtil.tryUntilOk;
 
 import java.util.Queue;
 
