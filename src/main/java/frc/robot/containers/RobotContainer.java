@@ -4,15 +4,20 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.Robot;
 import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.utils.AllianceFlipUtil;
 
 /**
  * 
@@ -20,6 +25,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 abstract public class RobotContainer {
     /* Subsystems */
     protected SwerveDriveSubsystem swerveDriveSubsystem;
+    protected VisionSubsystem visionSubsystem;
 
     /* Controllers */
     private final CommandXboxController controller = new CommandXboxController(0);
@@ -94,9 +100,24 @@ abstract public class RobotContainer {
     }
 
     /**
+     * Called when the alliance reported by the driverstation/FMS changes -
+     * Simulation Only
+     * 
+     * @param alliance new alliance value
+     */
+    public void onAllianceChanged(Alliance alliance, int location) {
+        location -= 1;
+
+        Pose2d pose2d = AllianceFlipUtil.apply(RobotConstants.TUNING_MODE ? FieldConstants.TUNING_POSES[location]
+                : FieldConstants.STATION_POSES[location]);
+        this.swerveDriveSubsystem.resetPosition(pose2d);
+        resetSimulationField(pose2d);
+    }
+
+    /**
      * Maple Sim Routines
      */
     abstract public void displaySimFieldToAdvantageScope();
 
-    abstract public void resetSimulationField();
+    abstract public void resetSimulationField(Pose2d pose2d);
 }

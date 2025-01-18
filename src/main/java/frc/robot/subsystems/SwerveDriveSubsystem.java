@@ -42,7 +42,7 @@ import frc.robot.utils.PhoenixOdometryThread;
 /**
  * 
  */
-public class SwerveDriveSubsystem extends SubsystemBase {
+public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsystem.VisionConsumer {
     // TunerConstants doesn't include these constants, so they are declared locally
     public static final double DRIVE_BASE_RADIUS = Math.max(
             Math.max(
@@ -100,10 +100,16 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                         (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
     }
 
+    /** Adds a new timestamped vision measurement. */
+    @Override
+    public void accept(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
+        this.poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+    }
+
     @Override
     public void periodic() {
         odometryLock.lock(); // Prevents odometry updates while reading data
-        gyroIO.updateInputs(gyroInputs);
+        this.gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("Drive/Gyro", gyroInputs);
         for (var module : modules) {
             module.periodic();
@@ -155,6 +161,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         // Update gyro alert
         gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+    }
+
+    /**
+     * 
+     */
+    public void resetPosition(Pose2d pose2d) {
+        this.poseEstimator.resetPosition(getRotation(), getModulePositions(), pose2d);
     }
 
     /**

@@ -10,6 +10,7 @@ import frc.robot.Constants;
 import frc.robot.modules.gyro.GyroModuleIOSim;
 import frc.robot.modules.swerve.SwerveModuleIOMapleSim;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 /**
  * 
@@ -25,7 +26,7 @@ public class SimulatedRobotContainer extends RobotContainer {
 
         // create a maple-sim swerve drive simulation instance
         this.driveSimulation = new SwerveDriveSimulation(Constants.mapleSimConfig,
-                new Pose2d(3, 3, new Rotation2d()));
+                new Pose2d(0, 0, new Rotation2d()));
         // add the simulated drivetrain to the simulation field
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
 
@@ -35,6 +36,9 @@ public class SimulatedRobotContainer extends RobotContainer {
                 new SwerveModuleIOMapleSim(driveSimulation.getModules()[1]),
                 new SwerveModuleIOMapleSim(driveSimulation.getModules()[2]),
                 new SwerveModuleIOMapleSim(driveSimulation.getModules()[3]));
+
+        this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
+                this.driveSimulation::getSimulatedDriveTrainPose, this.swerveDriveSubsystem::getRotation);
 
         configureAutoBuilder();
         configureButtonBindings();
@@ -51,11 +55,11 @@ public class SimulatedRobotContainer extends RobotContainer {
                 "FieldSimulation/Algae", SimulatedArena.getInstance().getGamePiecesArrayByType("Algae"));
     }
 
-    public void resetSimulationField() {
+    public void resetSimulationField(Pose2d pose2d) {
         if (Constants.currentMode != Constants.Mode.SIM)
             return;
 
-        driveSimulation.setSimulationWorldPose(new Pose2d(3, 3, new Rotation2d()));
+        this.driveSimulation.setSimulationWorldPose(pose2d);
         SimulatedArena.getInstance().resetFieldForAuto();
     }
 }

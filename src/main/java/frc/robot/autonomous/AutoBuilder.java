@@ -3,6 +3,7 @@ package frc.robot.autonomous;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.pathfinding.Pathfinding;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.commands.FeedForwardCharacterizationCommand;
 import frc.robot.commands.WheelRadiusCharacterizationCommand;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -65,12 +67,15 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
         // Setup the chooser
         this.autonomousChooser = new LoggedDashboardChooser<Command>("Auto Routine", AutoBuilder.buildAutoChooser());
 
-        if (Constants.TUNING_MODE) {
+        if (RobotConstants.TUNING_MODE) {
             this.autonomousChooser.addOption("Drive Characterization",
                     FeedForwardCharacterizationCommand.get(this.swerveDriveSubsystem));
             this.autonomousChooser.addOption("Wheel Radius Characterization",
                     WheelRadiusCharacterizationCommand.get(this.swerveDriveSubsystem));
         }
+
+        // Load Game Autos
+        this.autonomousChooser.addOption("DriveAway", new PathPlannerAuto("DriveAway"));
     }
 
     /**
