@@ -4,16 +4,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.Autos;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
-    private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
     private final CommandXboxController driver = new CommandXboxController(0);
-    private final CommandXboxController operator = new CommandXboxController(1);
+    // private final CommandXboxController operator = new CommandXboxController(1);
 
     private final Swerve s_Swerve = Swerve.getInstance();
 
@@ -24,7 +21,8 @@ public class RobotContainer {
     public RobotContainer() {
 
         s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, () -> -driver.getRawAxis(translationAxis),
-                () -> -driver.getRawAxis(strafeAxis), () -> -driver.getRawAxis(rotationAxis), () -> false // true = robotcentric
+                () -> -driver.getRawAxis(strafeAxis), () -> -driver.getRawAxis(rotationAxis), () -> false // true =
+                                                                                                          // robotcentric
 
         ));
 
@@ -38,6 +36,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return Autos.exampleAuto(m_exampleSubsystem);
+        return null;
     }
 }
