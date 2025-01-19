@@ -44,16 +44,15 @@ public final class Constants {
         // Set to true to use FeedForwardCharacterization and
         // WheelRadiusCharacterization auto commands
         public static final boolean TUNING_MODE = true;
-    }
 
-    // AdvantageKit simulation
-    public static final Mode simMode = Mode.SIM;
-    public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+        // AdvantageKit simulation
+        public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
 
-    public static enum Mode {
-        REAL, // Running on a real robot
-        SIM, // Running a physics simulator
-        REPLAY // Replaying from a log file
+        public static enum Mode {
+            REAL, // Running on a real robot
+            SIM, // Running a physics simulator
+            REPLAY // Replaying from a log file
+        }
     }
 
     // PathPlanner Config Constants
@@ -76,31 +75,33 @@ public final class Constants {
     /**
      * Maple Sim Constants
      */
-    public static final int driveMotorCurrentLimit = 60;
-    public static final int turnMotorCurrentLimit = 20;
+    public static class MapleSimConstants {
+        public static final int driveMotorCurrentLimit = 60;
+        public static final int turnMotorCurrentLimit = 20;
 
-    public static final double driveSimP = 0.05;
-    public static final double driveSimD = 0.0;
-    public static final double driveSimKs = 0.0;
-    public static final double driveSimKv = 0.0789;
+        public static final double driveSimP = 0.05;
+        public static final double driveSimD = 0.0;
+        public static final double driveSimKs = 0.0;
+        public static final double driveSimKv = 0.0789;
 
-    public static final double turnSimP = 8.0;
-    public static final double turnSimD = 0.0;
+        public static final double turnSimP = 8.0;
+        public static final double turnSimD = 0.0;
 
-    public static final DriveTrainSimulationConfig mapleSimConfig = DriveTrainSimulationConfig.Default()
-            .withCustomModuleTranslations(SwerveDriveSubsystem.getModuleTranslations())
-            .withRobotMass(Kilogram.of(ROBOT_MASS_KG))
-            .withGyro(COTS.ofPigeon2())
-            .withSwerveModule(new SwerveModuleSimulationConfig(
-                    DCMotor.getNeoVortex(1),
-                    DCMotor.getNeo550(1),
-                    (45.0 * 22.0) / (14.0 * 15.0),
-                    9424.0 / 203.0,
-                    Volts.of(0.1),
-                    Volts.of(0.1),
-                    Meters.of(TunerConstants.FrontLeft.WheelRadius),
-                    KilogramSquareMeters.of(0.02),
-                    WHEEL_COF));
+        public static final DriveTrainSimulationConfig mapleSimConfig = DriveTrainSimulationConfig.Default()
+                .withCustomModuleTranslations(SwerveDriveSubsystem.getModuleTranslations())
+                .withRobotMass(Kilogram.of(ROBOT_MASS_KG))
+                .withGyro(COTS.ofPigeon2())
+                .withSwerveModule(new SwerveModuleSimulationConfig(
+                        DCMotor.getNeoVortex(1),
+                        DCMotor.getNeo550(1),
+                        (45.0 * 22.0) / (14.0 * 15.0),
+                        9424.0 / 203.0,
+                        Volts.of(0.1),
+                        Volts.of(0.1),
+                        Meters.of(TunerConstants.FrontLeft.WheelRadius),
+                        KilogramSquareMeters.of(0.02),
+                        WHEEL_COF));
+    }
 
     /**
      * 
@@ -122,6 +123,87 @@ public final class Constants {
                 new Pose2d(8.217, 6.166, Rotation2d.fromDegrees(180.0)),
                 new Pose2d(8.217, 5.074, Rotation2d.fromDegrees(180.0))
         };
+    }
+
+    /**
+     *
+     */
+    public static final class PIDConstants {
+        // PID constants for simulated swerve modules
+        public static final double SIM_SWERVE_MODULE_DRIVE_KP = 0.2;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KI = 0.0;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KD = 0.0;
+
+        public static final double SIM_SWERVE_MODULE_TURN_KP = 1.0;
+        public static final double SIM_SWERVE_MODULE_TURN_KI = 0.0;
+        public static final double SIM_SWERVE_MODULE_TURN_KD = 0.0;
+
+        // PID constants for autonomous/pathplanner mode
+        public static final double SWERVE_DRIVE_X_KP = 0.0;
+        public static final double SWERVE_DRIVE_X_KI = 0.0;
+        public static final double SWERVE_DRIVE_X_KD = 0.0;
+
+        public static final double SWERVE_DRIVE_Y_KP = 0.0;
+        public static final double SWERVE_DRIVE_Y_KI = 0.0;
+        public static final double SWERVE_DRIVE_Y_KD = 0.0;
+
+        public static final double SWERVE_DRIVE_OMEGA_KP = 0.0;
+        public static final double SWERVE_DRIVE_OMEGA_KI = 0.0;
+        public static final double SWERVE_DRIVE_OMEGA_KD = 0.0;
+
+        // PID constants for simulated autonomous/pathplanner mode
+        public static final double SIM_SWERVE_DRIVE_X_KP = 1.0;
+        public static final double SIM_SWERVE_DRIVE_X_KI = 0.0;
+        public static final double SIM_SWERVE_DRIVE_X_KD = 0.0;
+
+        public static final double SIM_SWERVE_DRIVE_Y_KP = 1.0;
+        public static final double SIM_SWERVE_DRIVE_Y_KI = 0.0;
+        public static final double SIM_SWERVE_DRIVE_Y_KD = 0.0;
+
+        public static final double SIM_SWERVE_DRIVE_OMEGA_KP = 25.0;
+        public static final double SIM_SWERVE_DRIVE_OMEGA_KI = 0.0;
+        public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 2.0;
+
+        /**
+         * Should only be call by simulation as TunerContants has real values
+         */
+        public static final double[] getDrivePIDs() {
+            return new double[] { SIM_SWERVE_MODULE_DRIVE_KP, SIM_SWERVE_MODULE_DRIVE_KI, SIM_SWERVE_MODULE_DRIVE_KD };
+        }
+
+        /**
+         * Should only be call by simulation as TunerContants has real values
+         */
+        public static final double[] getTurnPIDs() {
+            return new double[] { SIM_SWERVE_MODULE_TURN_KP, SIM_SWERVE_MODULE_TURN_KI, SIM_SWERVE_MODULE_TURN_KD };
+        }
+
+        /**
+         * 
+         */
+        public static final double[] getDriveXPIDs() {
+            return Robot.isReal()
+                    ? new double[] { SWERVE_DRIVE_X_KP, SWERVE_DRIVE_X_KI, SWERVE_DRIVE_X_KD }
+                    : new double[] { SIM_SWERVE_DRIVE_X_KP, SIM_SWERVE_DRIVE_X_KI, SIM_SWERVE_DRIVE_X_KD };
+        }
+
+        /**
+         * 
+         */
+        public static final double[] getDriveYPIDs() {
+            return Robot.isReal()
+                    ? new double[] { SWERVE_DRIVE_Y_KP, SWERVE_DRIVE_Y_KI, SWERVE_DRIVE_Y_KD }
+                    : new double[] { SIM_SWERVE_DRIVE_Y_KP, SIM_SWERVE_DRIVE_Y_KI, SIM_SWERVE_DRIVE_Y_KD };
+        }
+
+        /**
+         * 
+         */
+        public static final double[] getDriveOmegaPIDs() {
+            return Robot.isReal()
+                    ? new double[] { SWERVE_DRIVE_OMEGA_KP, SWERVE_DRIVE_OMEGA_KI, SWERVE_DRIVE_OMEGA_KD }
+                    : new double[] { SIM_SWERVE_DRIVE_OMEGA_KP, SIM_SWERVE_DRIVE_OMEGA_KI, SIM_SWERVE_DRIVE_OMEGA_KD };
+        }
     }
 
     /**

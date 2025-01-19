@@ -1,16 +1,3 @@
-// Copyright 2021-2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-
 package frc.robot.modules.swerve;
 
 import static edu.wpi.first.units.Units.Amps;
@@ -25,10 +12,12 @@ import org.ironmaple.simulation.motorsims.SimulatedMotorController;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.Constants;
+import frc.robot.Constants.MapleSimConstants;
 import frc.robot.utils.SparkUtil;
 
-/** Physics sim implementation of module IO. */
+/**
+ * Physics sim implementation of module IO.
+ */
 public class SwerveModuleIOMapleSim implements SwerveModuleIO {
     private final SwerveModuleSimulation moduleSimulation;
     private final SimulatedMotorController.GenericMotorController driveMotor;
@@ -36,18 +25,23 @@ public class SwerveModuleIOMapleSim implements SwerveModuleIO {
 
     private boolean driveClosedLoop = false;
     private boolean turnClosedLoop = false;
-    private final PIDController driveController = new PIDController(Constants.driveSimP, 0, Constants.driveSimD);
-    private final PIDController turnController = new PIDController(Constants.turnSimP, 0, Constants.turnSimD);
+    private final PIDController driveController = new PIDController(MapleSimConstants.driveSimP, 0,
+            MapleSimConstants.driveSimD);
+    private final PIDController turnController = new PIDController(MapleSimConstants.turnSimP, 0,
+            MapleSimConstants.turnSimD);
     private double driveFFVolts = 0.0;
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;
 
+    /**
+     * 
+     */
     public SwerveModuleIOMapleSim(SwerveModuleSimulation moduleSimulation) {
         this.moduleSimulation = moduleSimulation;
         this.driveMotor = moduleSimulation.useGenericMotorControllerForDrive()
-                .withCurrentLimit(Amps.of(Constants.driveMotorCurrentLimit));
+                .withCurrentLimit(Amps.of(MapleSimConstants.driveMotorCurrentLimit));
         this.turnMotor = moduleSimulation.useGenericControllerForSteer()
-                .withCurrentLimit(Amps.of(Constants.turnMotorCurrentLimit));
+                .withCurrentLimit(Amps.of(MapleSimConstants.turnMotorCurrentLimit));
 
         // Enable wrapping for turn PID
         turnController.enableContinuousInput(-Math.PI, Math.PI);
@@ -111,7 +105,8 @@ public class SwerveModuleIOMapleSim implements SwerveModuleIO {
     @Override
     public void setDriveVelocity(double velocityRadPerSec) {
         driveClosedLoop = true;
-        driveFFVolts = Constants.driveSimKs * Math.signum(velocityRadPerSec) + Constants.driveSimKv * velocityRadPerSec;
+        driveFFVolts = MapleSimConstants.driveSimKs * Math.signum(velocityRadPerSec)
+                + MapleSimConstants.driveSimKv * velocityRadPerSec;
         driveController.setSetpoint(velocityRadPerSec);
     }
 

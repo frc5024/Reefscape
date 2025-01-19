@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
  * 
  */
 public class SwerveModule {
-    private final SwerveModuleIO io;
+    private final SwerveModuleIO swerveModuleIO;
     private final SwerveModuleIOInputsAutoLogged inputs = new SwerveModuleIOInputsAutoLogged();
     private final int index;
     private final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants;
@@ -30,9 +30,9 @@ public class SwerveModule {
     /**
      * 
      */
-    public SwerveModule(SwerveModuleIO io, int index,
+    public SwerveModule(SwerveModuleIO swerveModuleIO, int index,
             SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants) {
-        this.io = io;
+        this.swerveModuleIO = swerveModuleIO;
         this.index = index;
         this.constants = constants;
         driveDisconnectedAlert = new Alert("Disconnected drive motor on module " + Integer.toString(index) + ".",
@@ -47,7 +47,7 @@ public class SwerveModule {
      * 
      */
     public void periodic() {
-        io.updateInputs(inputs);
+        swerveModuleIO.updateInputs(inputs);
         Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
 
         // Calculate positions for odometry
@@ -75,24 +75,24 @@ public class SwerveModule {
         state.cosineScale(inputs.turnPosition);
 
         // Apply setpoints
-        io.setDriveVelocity(state.speedMetersPerSecond / constants.WheelRadius);
-        io.setTurnPosition(state.angle);
+        swerveModuleIO.setDriveVelocity(state.speedMetersPerSecond / constants.WheelRadius);
+        swerveModuleIO.setTurnPosition(state.angle);
     }
 
     /**
      * Runs the module with the specified output while controlling to zero degrees.
      */
     public void runCharacterization(double output) {
-        io.setDriveOpenLoop(output);
-        io.setTurnPosition(new Rotation2d());
+        swerveModuleIO.setDriveOpenLoop(output);
+        swerveModuleIO.setTurnPosition(new Rotation2d());
     }
 
     /**
      * Disables all outputs to motors.
      */
     public void stop() {
-        io.setDriveOpenLoop(0.0);
-        io.setTurnOpenLoop(0.0);
+        swerveModuleIO.setDriveOpenLoop(0.0);
+        swerveModuleIO.setTurnOpenLoop(0.0);
     }
 
     /**
@@ -156,5 +156,26 @@ public class SwerveModule {
      */
     public double getFFCharacterizationVelocity() {
         return Units.radiansToRotations(inputs.driveVelocityRadPerSec);
+    }
+
+    /**
+     * 
+     */
+    public void resetDrivePID() {
+        this.swerveModuleIO.resetDrivePID();
+    }
+
+    /**
+     * 
+     */
+    public void updateDrivePID(double kP, double kI, double kD) {
+        this.swerveModuleIO.updateDrivePID(kP, kI, kD);
+    }
+
+    /**
+     * 
+     */
+    public void updateTurnPID(double kP, double kI, double kD) {
+        this.swerveModuleIO.updateTurnPID(kP, kI, kD);
     }
 }

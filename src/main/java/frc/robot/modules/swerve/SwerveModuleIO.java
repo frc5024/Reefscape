@@ -58,4 +58,22 @@ public interface SwerveModuleIO {
      */
     public default void setTurnPosition(Rotation2d rotation) {
     }
+
+    /**
+     * 
+     */
+    public default void resetDrivePID() {
+    }
+
+    /**
+     * 
+     */
+    public default void updateDrivePID(double kP, double kI, double kD) {
+    }
+
+    /**
+     * 
+     */
+    public default void updateTurnPID(double kP, double kI, double kD) {
+    }
 }

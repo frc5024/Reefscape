@@ -7,6 +7,7 @@ import java.util.Queue;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -117,6 +118,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
             case RemoteCANcoder -> FeedbackSensorSourceValue.RemoteCANcoder;
             case FusedCANcoder -> FeedbackSensorSourceValue.FusedCANcoder;
             case SyncCANcoder -> FeedbackSensorSourceValue.SyncCANcoder;
+            default -> throw new IllegalArgumentException("Unexpected value: " + constants.FeedbackSource);
         };
         turnConfig.Feedback.RotorToSensorRatio = constants.SteerMotorGearRatio;
         turnConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0 / constants.SteerMotorGearRatio;
@@ -242,5 +244,28 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
                     case TorqueCurrentFOC -> positionTorqueCurrentRequest.withPosition(
                             rotation.getRotations());
                 });
+    }
+
+    @Override
+    public void resetDrivePID() {
+        this.driveTalon.getConfigurator().refresh(TunerConstants.driveGains);
+    }
+
+    @Override
+    public void updateDrivePID(double kP, double kI, double kD) {
+        Slot0Configs slot0Configs = new Slot0Configs();
+        slot0Configs.kP = kP;
+        slot0Configs.kI = kI;
+        slot0Configs.kD = kD;
+        this.driveTalon.getConfigurator().refresh(slot0Configs);
+    }
+
+    @Override
+    public void updateTurnPID(double kP, double kI, double kD) {
+        Slot0Configs slot0Configs = new Slot0Configs();
+        slot0Configs.kP = kP;
+        slot0Configs.kI = kI;
+        slot0Configs.kD = kD;
+        this.turnTalon.getConfigurator().refresh(slot0Configs);
     }
 }

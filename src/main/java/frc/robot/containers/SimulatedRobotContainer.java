@@ -6,7 +6,8 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.Constants;
+import frc.robot.Constants.MapleSimConstants;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.modules.gyro.GyroModuleIOSim;
 import frc.robot.modules.swerve.SwerveModuleIOMapleSim;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -25,7 +26,7 @@ public class SimulatedRobotContainer extends RobotContainer {
         super();
 
         // create a maple-sim swerve drive simulation instance
-        this.driveSimulation = new SwerveDriveSimulation(Constants.mapleSimConfig,
+        this.driveSimulation = new SwerveDriveSimulation(MapleSimConstants.mapleSimConfig,
                 new Pose2d(0, 0, new Rotation2d()));
         // add the simulated drivetrain to the simulation field
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
@@ -45,7 +46,7 @@ public class SimulatedRobotContainer extends RobotContainer {
     }
 
     public void displaySimFieldToAdvantageScope() {
-        if (Constants.currentMode != Constants.Mode.SIM)
+        if (RobotConstants.currentMode != RobotConstants.Mode.SIM)
             return;
 
         Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
@@ -56,7 +57,7 @@ public class SimulatedRobotContainer extends RobotContainer {
     }
 
     public void resetSimulationField(Pose2d pose2d) {
-        if (Constants.currentMode != Constants.Mode.SIM)
+        if (RobotConstants.currentMode != RobotConstants.Mode.SIM)
             return;
 
         this.driveSimulation.setSimulationWorldPose(pose2d);

@@ -30,8 +30,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
-import frc.robot.Constants.Mode;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.modules.gyro.GyroIOInputsAutoLogged;
 import frc.robot.modules.gyro.GyroModuleIO;
@@ -55,7 +54,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     static final Lock odometryLock = new ReentrantLock();
     private final GyroModuleIO gyroIO;
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-    private final SwerveModule[] modules = new SwerveModule[4]; // FL, FR, BL, BR
+    private final SwerveModule[] swerveModules = new SwerveModule[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
     private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.",
             AlertType.kError);
@@ -78,10 +77,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public SwerveDriveSubsystem(GyroModuleIO gyroIO, SwerveModuleIO flModuleIO, SwerveModuleIO frModuleIO,
             SwerveModuleIO blModuleIO, SwerveModuleIO brModuleIO) {
         this.gyroIO = gyroIO;
-        modules[0] = new SwerveModule(flModuleIO, 0, TunerConstants.FrontLeft);
-        modules[1] = new SwerveModule(frModuleIO, 1, TunerConstants.FrontRight);
-        modules[2] = new SwerveModule(blModuleIO, 2, TunerConstants.BackLeft);
-        modules[3] = new SwerveModule(brModuleIO, 3, TunerConstants.BackRight);
+        this.swerveModules[0] = new SwerveModule(flModuleIO, 0, TunerConstants.FrontLeft);
+        this.swerveModules[1] = new SwerveModule(frModuleIO, 1, TunerConstants.FrontRight);
+        this.swerveModules[2] = new SwerveModule(blModuleIO, 2, TunerConstants.BackLeft);
+        this.swerveModules[3] = new SwerveModule(brModuleIO, 3, TunerConstants.BackRight);
 
         // Usage reporting for swerve template
         HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
@@ -111,14 +110,14 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         odometryLock.lock(); // Prevents odometry updates while reading data
         this.gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("Drive/Gyro", gyroInputs);
-        for (var module : modules) {
+        for (var module : swerveModules) {
             module.periodic();
         }
         odometryLock.unlock();
 
         // Stop moving when disabled
         if (DriverStation.isDisabled()) {
-            for (var module : modules) {
+            for (var module : swerveModules) {
                 module.stop();
             }
         }
@@ -130,14 +129,14 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         }
 
         // Update odometry
-        double[] sampleTimestamps = modules[0].getOdometryTimestamps(); // All signals are sampled together
+        double[] sampleTimestamps = swerveModules[0].getOdometryTimestamps(); // All signals are sampled together
         int sampleCount = sampleTimestamps.length;
         for (int i = 0; i < sampleCount; i++) {
             // Read wheel positions and deltas from each module
             SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
             SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
             for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
-                modulePositions[moduleIndex] = modules[moduleIndex].getOdometryPositions()[i];
+                modulePositions[moduleIndex] = swerveModules[moduleIndex].getOdometryPositions()[i];
                 moduleDeltas[moduleIndex] = new SwerveModulePosition(
                         modulePositions[moduleIndex].distanceMeters
                                 - lastModulePositions[moduleIndex].distanceMeters,
@@ -160,7 +159,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         }
 
         // Update gyro alert
-        gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+        gyroDisconnectedAlert.set(!gyroInputs.connected && RobotConstants.currentMode != RobotConstants.Mode.SIM);
     }
 
     /**
@@ -187,7 +186,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
         // Send setpoints to modules
         for (int i = 0; i < 4; i++) {
-            modules[i].runSetpoint(setpointStates[i]);
+            swerveModules[i].runSetpoint(setpointStates[i]);
         }
 
         // Log optimized setpoints (runSetpoint mutates each state)
@@ -197,7 +196,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     /** Runs the drive in a straight line with the specified drive output. */
     public void runCharacterization(double output) {
         for (int i = 0; i < 4; i++) {
-            modules[i].runCharacterization(output);
+            swerveModules[i].runCharacterization(output);
         }
     }
 
@@ -243,7 +242,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     private SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (int i = 0; i < 4; i++) {
-            states[i] = modules[i].getState();
+            states[i] = swerveModules[i].getState();
         }
         return states;
     }
@@ -255,7 +254,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     private SwerveModulePosition[] getModulePositions() {
         SwerveModulePosition[] states = new SwerveModulePosition[4];
         for (int i = 0; i < 4; i++) {
-            states[i] = modules[i].getPosition();
+            states[i] = swerveModules[i].getPosition();
         }
         return states;
     }
@@ -272,7 +271,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public double[] getWheelRadiusCharacterizationPositions() {
         double[] values = new double[4];
         for (int i = 0; i < 4; i++) {
-            values[i] = modules[i].getWheelRadiusCharacterizationPosition();
+            values[i] = swerveModules[i].getWheelRadiusCharacterizationPosition();
         }
         return values;
     }
@@ -284,7 +283,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public double getFFCharacterizationVelocity() {
         double output = 0.0;
         for (int i = 0; i < 4; i++) {
-            output += modules[i].getFFCharacterizationVelocity() / 4.0;
+            output += swerveModules[i].getFFCharacterizationVelocity() / 4.0;
         }
         return output;
     }
@@ -346,5 +345,41 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
                 new Translation2d(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
                 new Translation2d(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
         };
+    }
+
+    /**
+     * 
+     */
+    public void resetDrivePID() {
+        for (SwerveModule swerveModule : this.swerveModules) {
+            swerveModule.resetDrivePID();
+        }
+    }
+
+    /**
+     * 
+     */
+    public void updateDrivePID(double kP, double kI, double kD) {
+        for (SwerveModule swerveModule : this.swerveModules) {
+            swerveModule.updateDrivePID(kP, kI, kD);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void updateTurnPID(double kP, double kI, double kD) {
+        for (SwerveModule swerveModule : this.swerveModules) {
+            swerveModule.updateTurnPID(kP, kI, kD);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void zeroDrivePID() {
+        for (SwerveModule swerveModule : this.swerveModules) {
+            swerveModule.updateDrivePID(0.0, 0.0, 0.0);
+        }
     }
 }
