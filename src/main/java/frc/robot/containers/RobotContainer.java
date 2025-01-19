@@ -14,6 +14,8 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Robot;
 import frc.robot.autonomous.AutoBuilder;
+import frc.robot.commands.DriveNearestCoralStationCommand;
+import frc.robot.commands.DriveProcessorCommand;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -88,6 +90,18 @@ abstract public class RobotContainer {
                                         new Pose2d(swerveDriveSubsystem.getPose().getTranslation(), new Rotation2d())),
                                 swerveDriveSubsystem)
                                 .ignoringDisable(true));
+
+        // Drive to nearest coral station
+        controller
+                .x()
+                .whileTrue(
+                        new DriveNearestCoralStationCommand(this.swerveDriveSubsystem));
+
+        // Drive to processor station
+        controller
+                .y()
+                .whileTrue(
+                        new DriveProcessorCommand(this.swerveDriveSubsystem));
     }
 
     /**

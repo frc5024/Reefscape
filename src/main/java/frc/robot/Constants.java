@@ -73,6 +73,34 @@ public final class Constants {
             SwerveDriveSubsystem.getModuleTranslations());
 
     /**
+     * 
+     */
+    public static class FieldConstants {
+        public static final double LENGTH_METERS = Units.inchesToMeters(689.0);
+        public static final double WIDTH_METERS = Units.inchesToMeters(323.0);
+
+        // starting poses for game mode for blue alliance station 1, 2, 3
+        public static final Pose2d[] STATION_POSES = new Pose2d[] {
+                new Pose2d(8.217, 7.272, Rotation2d.fromDegrees(180.0)),
+                new Pose2d(8.217, 6.166, Rotation2d.fromDegrees(180.0)),
+                new Pose2d(8.217, 5.074, Rotation2d.fromDegrees(180.0))
+        };
+
+        // starting poses for tuning mode for station 1, 2, 3
+        public static final Pose2d[] TUNING_POSES = new Pose2d[] {
+                new Pose2d(8.217, 7.272, Rotation2d.fromDegrees(180.0)),
+                new Pose2d(8.217, 6.166, Rotation2d.fromDegrees(180.0)),
+                new Pose2d(8.217, 5.074, Rotation2d.fromDegrees(180.0))
+        };
+
+        // left and right coral station poses
+        public static final Pose2d[] CORAL_STATION_POSES = new Pose2d[] {
+                new Pose2d(1.227, 7.034, Rotation2d.fromDegrees(0.0)),
+                new Pose2d(1.185, 1.016, Rotation2d.fromDegrees(0.0))
+        };
+    }
+
+    /**
      * Maple Sim Constants
      */
     public static class MapleSimConstants {
@@ -101,28 +129,6 @@ public final class Constants {
                         Meters.of(TunerConstants.FrontLeft.WheelRadius),
                         KilogramSquareMeters.of(0.02),
                         WHEEL_COF));
-    }
-
-    /**
-     * 
-     */
-    public static class FieldConstants {
-        public static final double LENGTH_METERS = Units.inchesToMeters(689.0);
-        public static final double WIDTH_METERS = Units.inchesToMeters(323.0);
-
-        // starting poses for game mode for blue alliance station 1, 2, 3
-        public static final Pose2d[] STATION_POSES = new Pose2d[] {
-                new Pose2d(8.217, 7.272, Rotation2d.fromDegrees(180.0)),
-                new Pose2d(8.217, 6.166, Rotation2d.fromDegrees(180.0)),
-                new Pose2d(8.217, 5.074, Rotation2d.fromDegrees(180.0))
-        };
-
-        // starting poses for tuning mode for station 1, 2, 3
-        public static final Pose2d[] TUNING_POSES = new Pose2d[] {
-                new Pose2d(8.217, 7.272, Rotation2d.fromDegrees(180.0)),
-                new Pose2d(8.217, 6.166, Rotation2d.fromDegrees(180.0)),
-                new Pose2d(8.217, 5.074, Rotation2d.fromDegrees(180.0))
-        };
     }
 
     /**
