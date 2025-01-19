@@ -45,6 +45,9 @@ public class SimulatedRobotContainer extends RobotContainer {
         configureButtonBindings();
     }
 
+    /**
+     * 
+     */
     public void displaySimFieldToAdvantageScope() {
         if (RobotConstants.currentMode != RobotConstants.Mode.SIM)
             return;

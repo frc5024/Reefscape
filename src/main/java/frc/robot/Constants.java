@@ -21,6 +21,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.lib.camera.Camera;
@@ -78,6 +79,7 @@ public final class Constants {
     public static class FieldConstants {
         public static final double LENGTH_METERS = Units.inchesToMeters(689.0);
         public static final double WIDTH_METERS = Units.inchesToMeters(323.0);
+        public static final double REEF_POLE_OFFSET = Units.inchesToMeters(12); // TODO: set actual distance
 
         // starting poses for game mode for blue alliance station 1, 2, 3
         public static final Pose2d[] STATION_POSES = new Pose2d[] {
@@ -97,6 +99,46 @@ public final class Constants {
         public static final Pose2d[] CORAL_STATION_POSES = new Pose2d[] {
                 new Pose2d(1.227, 7.034, Rotation2d.fromDegrees(0.0)),
                 new Pose2d(1.185, 1.016, Rotation2d.fromDegrees(0.0))
+        };
+
+        // starts with one closest to driver station and rotates clockwise
+        public static final Pose2d[][] REEF_POSES = new Pose2d[][] {
+                // station 1
+                new Pose2d[] {
+                        new Pose2d(3.17, 4.03 + REEF_POLE_OFFSET, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(3.17, 4.03, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(3.17, 4.03 - REEF_POLE_OFFSET, Rotation2d.fromDegrees(0.0))
+                },
+                // station 2
+                new Pose2d[] {
+                        new Pose2d(3.81, 5.16, Rotation2d.fromDegrees(120.0)),
+                        new Pose2d(3.81, 5.16, Rotation2d.fromDegrees(120.0)),
+                        new Pose2d(3.81, 5.16, Rotation2d.fromDegrees(120.0))
+                },
+                // station 3
+                new Pose2d[] {
+                        new Pose2d(5.16, 5.16, Rotation2d.fromDegrees(60.0)),
+                        new Pose2d(5.16, 5.16, Rotation2d.fromDegrees(60.0)),
+                        new Pose2d(5.16, 5.16, Rotation2d.fromDegrees(60.0))
+                },
+                // station 4
+                new Pose2d[] {
+                        new Pose2d(5.81, 4.03 - REEF_POLE_OFFSET, Rotation2d.fromDegrees(180.0)),
+                        new Pose2d(5.81, 4.03, Rotation2d.fromDegrees(180.0)),
+                        new Pose2d(5.81, 4.03 + REEF_POLE_OFFSET, Rotation2d.fromDegrees(180.0))
+                },
+                // station 5
+                new Pose2d[] {
+                        new Pose2d(5.16, 2.85, Rotation2d.fromDegrees(-60.0)),
+                        new Pose2d(5.16, 2.85, Rotation2d.fromDegrees(-60.0)),
+                        new Pose2d(5.16, 2.85, Rotation2d.fromDegrees(-60.0))
+                },
+                // station 6
+                new Pose2d[] {
+                        new Pose2d(3.81, 2.85, Rotation2d.fromDegrees(-120.0)),
+                        new Pose2d(3.81, 2.85, Rotation2d.fromDegrees(-120.0)),
+                        new Pose2d(3.81, 2.85, Rotation2d.fromDegrees(-120.0))
+                }
         };
     }
 
@@ -210,6 +252,33 @@ public final class Constants {
                     ? new double[] { SWERVE_DRIVE_OMEGA_KP, SWERVE_DRIVE_OMEGA_KI, SWERVE_DRIVE_OMEGA_KD }
                     : new double[] { SIM_SWERVE_DRIVE_OMEGA_KP, SIM_SWERVE_DRIVE_OMEGA_KI, SIM_SWERVE_DRIVE_OMEGA_KD };
         }
+    }
+
+    /**
+     * 
+     */
+    public static final class TeleopConstants {
+        public static final double DEADBAND = 0.1;
+
+        public static final double X_RATE_LIMIT = 6.0;
+        public static final double Y_RATE_LIMIT = 6.0;
+        public static final double ROTATION_RATE_LIMIT = 5.0 * Math.PI;
+
+        public static final double HEADING_MAX_VELOCITY = Math.PI * 4;
+        public static final double HEADING_MAX_ACCELERATION = Math.PI * 16;
+
+        public static final double HEADING_kP = 2.0;
+        public static final double HEADING_kI = 0.0;
+        public static final double HEADING_kD = 0.0;
+
+        public static final double HEADING_TOLERANCE = Units.degreesToRadians(1.5);
+
+        public static final double SPEED_MODIFIER_ONE_HUNDRED = 1.00;
+        public static final double SPEED_MODIFIER_THIRTY = 0.30;
+
+        public static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(4.5, 4);
+        public static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(4.5, 4);
+        public static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(10, 10);
     }
 
     /**

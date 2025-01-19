@@ -31,7 +31,6 @@ import frc.robot.modules.vision.VisionModuleIOPhotonVision;
 import frc.robot.modules.vision.VisionModuleIOSim;
 
 public class VisionSubsystem extends SubsystemBase {
-
     /* Modules */
     private List<VisionModuleIO> visionModules = new ArrayList<VisionModuleIO>();
 
