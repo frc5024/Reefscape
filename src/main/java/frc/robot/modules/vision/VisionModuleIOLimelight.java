@@ -17,6 +17,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.lib.camera.Camera;
+import frc.robot.utils.LimelightHelpers;
+import frc.robot.utils.LimelightHelpers.LimelightResults;
 
 /** IO implementation for real Limelight hardware. */
 public class VisionModuleIOLimelight implements VisionModuleIO {
@@ -51,8 +53,34 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
     }
 
     @Override
-    public Camera getCamera() {
-        return this.camera;
+    public Object getBestTarget() {
+        LimelightResults results = LimelightHelpers.getLatestResults(this.camera.getName());
+
+        if (results != null && results.targets_Fiducials.length != 0) {
+            return results.targets_Fiducials[results.targets_Fiducials.length - 1];
+        }
+
+        return null;
+    }
+
+    @Override
+    public double getHeight() {
+        return this.camera.getHeight();
+    }
+
+    @Override
+    public String getName() {
+        return this.camera.getName();
+    }
+
+    @Override
+    public double getPitch() {
+        return this.camera.getPitch();
+    }
+
+    @Override
+    public double getYaw() {
+        return this.camera.getYaw();
     }
 
     @Override
@@ -62,8 +90,8 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
         inputs.connected = ((RobotController.getFPGATime() - this.latencySubscriber.getLastChange()) / 1000) < 250;
 
         // Update target observation
-        inputs.latestTargetObservation = new TargetObservation(
-                Rotation2d.fromDegrees(this.txSubscriber.get()), Rotation2d.fromDegrees(this.tySubscriber.get()));
+        inputs.latestTargetObservation = new TargetObservation(Rotation2d.fromDegrees(this.txSubscriber.get()),
+                Rotation2d.fromDegrees(this.tySubscriber.get()));
 
         // Update orientation for MegaTag 2
         this.orientationPublisher.accept(

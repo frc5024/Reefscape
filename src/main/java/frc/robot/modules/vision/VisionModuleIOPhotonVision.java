@@ -10,6 +10,8 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -48,8 +50,28 @@ public class VisionModuleIOPhotonVision implements VisionModuleIO {
     }
 
     @Override
-    public Camera getCamera() {
-        return this.camera;
+    public PhotonTrackedTarget getBestTarget() {
+        return null;
+    }
+
+    @Override
+    public double getHeight() {
+        return this.camera.getHeight();
+    }
+
+    @Override
+    public String getName() {
+        return this.camera.getName();
+    }
+
+    @Override
+    public double getPitch() {
+        return this.camera.getPitch();
+    }
+
+    @Override
+    public double getYaw() {
+        return this.camera.getYaw();
     }
 
     @Override
@@ -59,9 +81,13 @@ public class VisionModuleIOPhotonVision implements VisionModuleIO {
         // Read new camera observations
         Set<Short> tagIds = new HashSet<>();
         List<PoseObservation> poseObservations = new LinkedList<>();
-        for (var result : this.photonCamera.getAllUnreadResults()) {
+        for (PhotonPipelineResult result : this.photonCamera.getAllUnreadResults()) {
             // Update latest target observation
             if (result.hasTargets()) {
+                inputs.bestTargetId = result.getBestTarget().getFiducialId();
+                inputs.bestTargetPose = VisionConstants.TAG_FIELD_LAYOUT
+                        .getTagPose(result.getBestTarget().getFiducialId()).get();
+
                 inputs.latestTargetObservation = new TargetObservation(
                         Rotation2d.fromDegrees(result.getBestTarget().getYaw()),
                         Rotation2d.fromDegrees(result.getBestTarget().getPitch()));

@@ -9,11 +9,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.TeleopConstants;
+import frc.robot.modules.vision.VisionModuleIO;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
@@ -114,31 +116,19 @@ public class DriveToBestTagCommand extends Command {
      * 
      */
     private Pose2d getBestTagPose(Pose3d currentPose) {
-        // PhotonTrackedTarget target =
-        // this.visionSubsystem.getBestTarget(this.cameraName);
+        Pose3d targetPose = this.visionSubsystem.getBestTargetPose(this.cameraName);
 
-        // if (target == null)
-        // return null;
+        if (targetPose == null)
+            return null;
 
-        // double cameraYaw =
-        // this.visionSubsystem.getVisionModuleByName(this.cameraName).getCameraYaw();
+        VisionModuleIO visionModuleIO = this.visionSubsystem.getVisionModuleByName(cameraName);
+        double cameraYaw = visionModuleIO.getYaw();
         // double xMetersFromTag =
         // this.visionSubsystem.getTagOffset(target.getFiducialId());
 
-        // if (xMetersFromTag < 0)
-        // return null;
+        this.ROBOT_TO_TAG = new Transform3d(new Translation3d(0.5, 0.0, 0.0), new Rotation3d(0.0, 0.0, cameraYaw));
 
-        // this.ROBOT_TO_TAG = new Transform3d(new Translation3d(xMetersFromTag, 0.0,
-        // 0.0),
-        // new Rotation3d(0.0, 0.0, cameraYaw));
-
-        // Pose3d cameraPose =
-        // currentPose.transformBy(this.visionSubsystem.getRobotToCamera(this.cameraName));
-        // Transform3d camToTarget = target.getBestCameraToTarget();
-        // Pose3d targetPose = cameraPose.transformBy(camToTarget);
-
-        // return targetPose.transformBy(ROBOT_TO_TAG).toPose2d();
-        return null;
+        return targetPose.transformBy(ROBOT_TO_TAG).toPose2d();
     }
 
     /**

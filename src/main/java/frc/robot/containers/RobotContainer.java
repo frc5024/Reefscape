@@ -14,10 +14,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Robot;
 import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.DriveNearestCoralStationCommand;
 import frc.robot.commands.DriveProcessorCommand;
+import frc.robot.commands.DriveToBestTagCommand;
 import frc.robot.commands.DriveToReefStationCommand;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -127,6 +129,12 @@ abstract public class RobotContainer {
                 .rightTrigger()
                 .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem, this.swerveDriveSubsystem::getPose,
                         this.reefStationChooser::getSelected, this.reefPoleChooser::getSelected));
+
+        // Drive to best apriltag
+        controller
+                .rightBumper()
+                .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                        this.swerveDriveSubsystem::getPose, VisionConstants.DATA_FROM_CAMERA));
     }
 
     /**

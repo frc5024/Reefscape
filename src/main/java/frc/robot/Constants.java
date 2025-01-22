@@ -294,7 +294,7 @@ public final class Constants {
          */
         public static final Camera FRONT_CAMERA = new Camera("Arducam_OV9281-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(0.0), Units.inchesToMeters(0.0), Units.inchesToMeters(6.0),
+                Units.inchesToMeters(19.0), Units.inchesToMeters(0.0), Units.inchesToMeters(6.0),
                 0.0, Units.degreesToRadians(0), 0.0);
         public static final Camera REAR_CAMERA = new Camera("Arducam_OV9281-1",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
@@ -308,8 +308,8 @@ public final class Constants {
         /**
          * TODO: set list of enabled camera
          */
-        public static final List<Camera> CAMERAS = Arrays.asList(FRONT_CAMERA, REAR_CAMERA);
-        public static final String DATA_FROM_CAMERA = REAR_CAMERA.getName();
+        public static final List<Camera> CAMERAS = Arrays.asList(FRONT_CAMERA);
+        public static final String DATA_FROM_CAMERA = FRONT_CAMERA.getName();
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;
@@ -332,7 +332,7 @@ public final class Constants {
         };
 
         // for simulation only
-        public static final double DIAGONAL_FOV = 70;
+        public static final double DIAGONAL_FOV = 90;
         public static final int IMG_WIDTH = 960;
         public static final int IMG_HEIGHT = 720;
     }

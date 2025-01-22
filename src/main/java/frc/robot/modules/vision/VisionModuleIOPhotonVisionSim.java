@@ -14,7 +14,7 @@ import frc.robot.Constants.VisionConstants;
 /**
  * 
  */
-public class VisionModuleIOSim extends VisionModuleIOPhotonVision {
+public class VisionModuleIOPhotonVisionSim extends VisionModuleIOPhotonVision {
     private final PhotonCameraSim photonCameraSim;
     private final VisionSystemSim visionSystemSim;
     private final Supplier<Pose2d> poseSupplier;
@@ -22,7 +22,7 @@ public class VisionModuleIOSim extends VisionModuleIOPhotonVision {
     /**
      * 
      */
-    public VisionModuleIOSim(Camera camera, Supplier<Pose2d> poseSupplier) {
+    public VisionModuleIOPhotonVisionSim(Camera camera, Supplier<Pose2d> poseSupplier) {
         super(camera);
 
         this.poseSupplier = poseSupplier;

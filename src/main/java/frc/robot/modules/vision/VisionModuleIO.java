@@ -4,7 +4,6 @@ import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.lib.camera.Camera;
 
 /**
  * 
@@ -16,6 +15,8 @@ public interface VisionModuleIO {
         public TargetObservation latestTargetObservation = new TargetObservation(new Rotation2d(), new Rotation2d());
         public PoseObservation[] poseObservations = new PoseObservation[0];
         public int[] tagIds = new int[0];
+        public int bestTargetId = 0;
+        public Pose3d bestTargetPose = new Pose3d();
     }
 
     /**
@@ -39,6 +40,19 @@ public interface VisionModuleIO {
     /**
      * 
      */
+    public static record BestTargetId(int bestTargetId) {
+    }
+
+    /**
+     * 
+     */
+    public static record BestTargetPose(Pose3d bestTargetPose) {
+
+    }
+
+    /**
+     * 
+     */
     public static enum PoseObservationType {
         MEGATAG_1,
         MEGATAG_2,
@@ -48,7 +62,18 @@ public interface VisionModuleIO {
     /**
      * 
      */
-    abstract public Camera getCamera();
+    abstract public Object getBestTarget();
+
+    /**
+     * 
+     */
+    abstract public double getHeight();
+
+    abstract public String getName();
+
+    abstract public double getPitch();
+
+    abstract public double getYaw();
 
     /**
      * 
