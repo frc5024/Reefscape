@@ -77,9 +77,9 @@ public final class Constants {
      * 
      */
     public static class FieldConstants {
-        public static final double LENGTH_METERS = Units.inchesToMeters(689.0);
-        public static final double WIDTH_METERS = Units.inchesToMeters(323.0);
-        public static final double REEF_POLE_OFFSET = Units.inchesToMeters(12); // TODO: set actual distance
+        public static final double LENGTH_METERS = Units.inchesToMeters(693.0);
+        public static final double WIDTH_METERS = Units.inchesToMeters(318.0);
+        public static final double REEF_POLE_OFFSET = Units.inchesToMeters(6.47);
 
         // starting poses for game mode for blue alliance station 1, 2, 3
         public static final Pose2d[] STATION_POSES = new Pose2d[] {
@@ -102,43 +102,13 @@ public final class Constants {
         };
 
         // starts with one closest to driver station and rotates clockwise
-        public static final Pose2d[][] REEF_POSES = new Pose2d[][] {
-                // station 1
-                new Pose2d[] {
-                        new Pose2d(3.17, 4.03 + REEF_POLE_OFFSET, Rotation2d.fromDegrees(0.0)),
-                        new Pose2d(3.17, 4.03, Rotation2d.fromDegrees(0.0)),
-                        new Pose2d(3.17, 4.03 - REEF_POLE_OFFSET, Rotation2d.fromDegrees(0.0))
-                },
-                // station 2
-                new Pose2d[] {
-                        new Pose2d(3.81, 5.16, Rotation2d.fromDegrees(120.0)),
-                        new Pose2d(3.81, 5.16, Rotation2d.fromDegrees(120.0)),
-                        new Pose2d(3.81, 5.16, Rotation2d.fromDegrees(120.0))
-                },
-                // station 3
-                new Pose2d[] {
-                        new Pose2d(5.16, 5.16, Rotation2d.fromDegrees(60.0)),
-                        new Pose2d(5.16, 5.16, Rotation2d.fromDegrees(60.0)),
-                        new Pose2d(5.16, 5.16, Rotation2d.fromDegrees(60.0))
-                },
-                // station 4
-                new Pose2d[] {
-                        new Pose2d(5.81, 4.03 - REEF_POLE_OFFSET, Rotation2d.fromDegrees(180.0)),
-                        new Pose2d(5.81, 4.03, Rotation2d.fromDegrees(180.0)),
-                        new Pose2d(5.81, 4.03 + REEF_POLE_OFFSET, Rotation2d.fromDegrees(180.0))
-                },
-                // station 5
-                new Pose2d[] {
-                        new Pose2d(5.16, 2.85, Rotation2d.fromDegrees(-60.0)),
-                        new Pose2d(5.16, 2.85, Rotation2d.fromDegrees(-60.0)),
-                        new Pose2d(5.16, 2.85, Rotation2d.fromDegrees(-60.0))
-                },
-                // station 6
-                new Pose2d[] {
-                        new Pose2d(3.81, 2.85, Rotation2d.fromDegrees(-120.0)),
-                        new Pose2d(3.81, 2.85, Rotation2d.fromDegrees(-120.0)),
-                        new Pose2d(3.81, 2.85, Rotation2d.fromDegrees(-120.0))
-                }
+        public static final Pose2d[] REEF_POSES = new Pose2d[] {
+                new Pose2d(Units.inchesToMeters(144.00), Units.inchesToMeters(158.50), Rotation2d.fromDegrees(0.0)), // Tag-18
+                new Pose2d(Units.inchesToMeters(160.39), Units.inchesToMeters(186.83), Rotation2d.fromDegrees(120.0)), // Tag-19
+                new Pose2d(Units.inchesToMeters(193.10), Units.inchesToMeters(186.83), Rotation2d.fromDegrees(60.0)), // Tag-20
+                new Pose2d(Units.inchesToMeters(209.49), Units.inchesToMeters(158.50), Rotation2d.fromDegrees(180.0)), // Tag-21
+                new Pose2d(Units.inchesToMeters(193.10), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(-60.0)), // Tag-22
+                new Pose2d(Units.inchesToMeters(160.39), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(-120.0)) // Tag-17
         };
     }
 

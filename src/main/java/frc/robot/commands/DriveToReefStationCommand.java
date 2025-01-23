@@ -6,11 +6,16 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PIDConstants;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.TeleopConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.utils.AllianceFlipUtil;
@@ -23,14 +28,14 @@ public class DriveToReefStationCommand extends Command {
     private final Supplier<Pose2d> poseProvider;
     private final Supplier<Integer> stationProvider;
     private final Supplier<Integer> poleProvider;
-    private Pose2d goalPose;
+    private Pose3d goalPose;
 
     private final ProfiledPIDController xController;
     private final ProfiledPIDController yController;
     private final ProfiledPIDController omegaController;
 
     /**
-     * 
+     * Drives to reef station based on pose and pole selection from elastic input
      */
     public DriveToReefStationCommand(SwerveDriveSubsystem swerveDriveSubsystem, Supplier<Pose2d> poseProvider,
             Supplier<Integer> stationProvider, Supplier<Integer> poleProvider) {
@@ -91,14 +96,18 @@ public class DriveToReefStationCommand extends Command {
         int stationId = this.stationProvider.get().intValue();
         int poleId = this.poleProvider.get().intValue();
 
-        this.goalPose = FieldConstants.REEF_POSES[stationId][poleId];
+        this.goalPose = new Pose3d(FieldConstants.REEF_POSES[stationId]);
+        double offset = poleId == 1 ? -FieldConstants.REEF_POLE_OFFSET : FieldConstants.REEF_POLE_OFFSET;
+        Transform3d polePose = new Transform3d(new Translation3d(RobotConstants.LENGTH_METERS / 2, offset, 0.0),
+                new Rotation3d(0.0, 0.0, 0.0));
+        Pose2d driveToPose = this.goalPose.transformBy(polePose).toPose2d();
 
         // Flip pose if red alliance
-        this.goalPose = AllianceFlipUtil.apply(goalPose);
+        driveToPose = AllianceFlipUtil.apply(driveToPose);
 
-        this.xController.setGoal(this.goalPose.getX());
-        this.yController.setGoal(this.goalPose.getY());
-        this.omegaController.setGoal(this.goalPose.getRotation().getRadians());
+        this.xController.setGoal(driveToPose.getX());
+        this.yController.setGoal(driveToPose.getY());
+        this.omegaController.setGoal(driveToPose.getRotation().getRadians());
 
         Logger.recordOutput("Commands/Active Command", this.getName());
     }

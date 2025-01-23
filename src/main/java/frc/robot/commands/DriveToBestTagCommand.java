@@ -13,7 +13,9 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PIDConstants;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.TeleopConstants;
 import frc.robot.modules.vision.VisionModuleIO;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -24,6 +26,7 @@ public class DriveToBestTagCommand extends Command {
     private final VisionSubsystem visionSubsystem;
     private final Supplier<Pose2d> poseProvider;
     private final String cameraName;
+    private final int poleId;
 
     private final ProfiledPIDController xController;
     private final ProfiledPIDController yController;
@@ -32,14 +35,15 @@ public class DriveToBestTagCommand extends Command {
     private Transform3d ROBOT_TO_TAG;
 
     /**
-     * Drive to a set distance (tag offset) away from vision system best tag
+     * Drive to best tag plus any pole offset
      */
     public DriveToBestTagCommand(SwerveDriveSubsystem swerveDriveSubsystem, VisionSubsystem visionSubsystem,
-            Supplier<Pose2d> poseProvider, String cameraName) {
+            Supplier<Pose2d> poseProvider, String cameraName, int... poleId) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.visionSubsystem = visionSubsystem;
         this.poseProvider = poseProvider;
         this.cameraName = cameraName;
+        this.poleId = poleId.length > 0 ? poleId[0] : 0;
 
         double[] driveXPIDs = PIDConstants.getDriveXPIDs();
         double[] driveYPIDs = PIDConstants.getDriveXPIDs();
@@ -125,8 +129,11 @@ public class DriveToBestTagCommand extends Command {
         double cameraYaw = visionModuleIO.getYaw();
         // double xMetersFromTag =
         // this.visionSubsystem.getTagOffset(target.getFiducialId());
+        double offset = this.poleId == 0 ? 0.0
+                : this.poleId == 1 ? -FieldConstants.REEF_POLE_OFFSET : FieldConstants.REEF_POLE_OFFSET;
 
-        this.ROBOT_TO_TAG = new Transform3d(new Translation3d(0.5, 0.0, 0.0), new Rotation3d(0.0, 0.0, cameraYaw));
+        this.ROBOT_TO_TAG = new Transform3d(new Translation3d(RobotConstants.LENGTH_METERS / 2, offset, 0.0),
+                new Rotation3d(0.0, 0.0, cameraYaw));
 
         return targetPose.transformBy(ROBOT_TO_TAG).toPose2d();
     }

@@ -60,7 +60,7 @@ abstract public class RobotContainer {
         SmartDashboard.putData(this.reefStationChooser);
 
         this.reefPoleChooser = new SendableChooser<>();
-        this.reefPoleChooser.setDefaultOption("Left", 0);
+        this.reefPoleChooser.setDefaultOption("Left", 1);
         this.reefPoleChooser.addOption("Right", 2);
         SmartDashboard.putData(this.reefPoleChooser);
     }
@@ -92,8 +92,7 @@ abstract public class RobotContainer {
                         () -> -controller.getRightX()));
 
         // Lock to 0° when A button is held
-        controller
-                .a()
+        controller.a()
                 .whileTrue(
                         SwerveDriveCommands.joystickDriveAtAngle(
                                 swerveDriveSubsystem,
@@ -102,11 +101,11 @@ abstract public class RobotContainer {
                                 () -> new Rotation2d()));
 
         // Switch to X pattern when X button is pressed
-        controller.x().onTrue(Commands.runOnce(swerveDriveSubsystem::stopWithX, swerveDriveSubsystem));
+        // controller.x().onTrue(Commands.runOnce(swerveDriveSubsystem::stopWithX,
+        // swerveDriveSubsystem));
 
         // Reset gyro to 0° when B button is pressed
-        controller
-                .b()
+        controller.b()
                 .onTrue(
                         Commands.runOnce(
                                 () -> swerveDriveSubsystem.setPose(
@@ -115,26 +114,27 @@ abstract public class RobotContainer {
                                 .ignoringDisable(true));
 
         // Drive to nearest coral station
-        controller
-                .x()
+        controller.x()
                 .whileTrue(new DriveNearestCoralStationCommand(this.swerveDriveSubsystem));
 
         // Drive to processor station
-        controller
-                .y()
+        controller.y()
                 .whileTrue(new DriveProcessorCommand(this.swerveDriveSubsystem));
 
         // Drive to selected reef station
-        controller
-                .rightTrigger()
+        controller.rightTrigger()
                 .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem, this.swerveDriveSubsystem::getPose,
                         this.reefStationChooser::getSelected, this.reefPoleChooser::getSelected));
 
-        // Drive to best apriltag
-        controller
-                .rightBumper()
+        // Drive to right pole of best apriltag
+        controller.rightBumper()
                 .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
-                        this.swerveDriveSubsystem::getPose, VisionConstants.DATA_FROM_CAMERA));
+                        this.swerveDriveSubsystem::getPose, VisionConstants.DATA_FROM_CAMERA, 2));
+
+        // Drive to left pole of best apriltag
+        controller.leftBumper()
+                .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                        this.swerveDriveSubsystem::getPose, VisionConstants.DATA_FROM_CAMERA, 1));
     }
 
     /**
