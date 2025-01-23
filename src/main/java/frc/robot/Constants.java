@@ -95,10 +95,10 @@ public final class Constants {
                 new Pose2d(8.217, 5.074, Rotation2d.fromDegrees(180.0))
         };
 
-        // left and right coral station poses
+        // left and right coral station poses as seen from driver's station
         public static final Pose2d[] CORAL_STATION_POSES = new Pose2d[] {
-                new Pose2d(1.227, 7.034, Rotation2d.fromDegrees(0.0)),
-                new Pose2d(1.185, 1.016, Rotation2d.fromDegrees(0.0))
+                new Pose2d(Units.inchesToMeters(33.51), Units.inchesToMeters(291.20), Rotation2d.fromDegrees(306.0)),
+                new Pose2d(Units.inchesToMeters(33.51), Units.inchesToMeters(25.80), Rotation2d.fromDegrees(54.0))
         };
 
         // starts with one closest to driver station and rotates clockwise
