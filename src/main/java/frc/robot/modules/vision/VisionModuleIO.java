@@ -62,11 +62,6 @@ public interface VisionModuleIO {
     /**
      * 
      */
-    abstract public Object getBestTarget();
-
-    /**
-     * 
-     */
     abstract public double getHeight();
 
     abstract public String getName();

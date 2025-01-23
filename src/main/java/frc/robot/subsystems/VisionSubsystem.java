@@ -140,8 +140,8 @@ public class VisionSubsystem extends SubsystemBase {
             // Update disconnected alert
             String name = visionModuleIO.getName();
             VisionIOInputsAutoLogged inputs = this.inputs.get(name);
-            Alert disconnectedAlert = this.disconnectedAlerts.get(name);
 
+            Alert disconnectedAlert = this.disconnectedAlerts.get(name);
             disconnectedAlert.set(!inputs.connected);
 
             // Initialize logging values

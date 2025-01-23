@@ -11,7 +11,6 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -47,11 +46,6 @@ public class VisionModuleIOPhotonVision implements VisionModuleIO {
         }
 
         this.atomicEstimatedRobotPose = new AtomicReference<EstimatedRobotPose>();
-    }
-
-    @Override
-    public PhotonTrackedTarget getBestTarget() {
-        return null;
     }
 
     @Override

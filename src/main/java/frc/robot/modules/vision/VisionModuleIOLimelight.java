@@ -17,8 +17,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.lib.camera.Camera;
-import frc.robot.utils.LimelightHelpers;
-import frc.robot.utils.LimelightHelpers.LimelightResults;
 
 /** IO implementation for real Limelight hardware. */
 public class VisionModuleIOLimelight implements VisionModuleIO {
@@ -50,17 +48,6 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
         this.tySubscriber = table.getDoubleTopic("ty").subscribe(0.0);
         this.megatag1Subscriber = table.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[] {});
         this.megatag2Subscriber = table.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(new double[] {});
-    }
-
-    @Override
-    public Object getBestTarget() {
-        LimelightResults results = LimelightHelpers.getLatestResults(this.camera.getName());
-
-        if (results != null && results.targets_Fiducials.length != 0) {
-            return results.targets_Fiducials[results.targets_Fiducials.length - 1];
-        }
-
-        return null;
     }
 
     @Override
