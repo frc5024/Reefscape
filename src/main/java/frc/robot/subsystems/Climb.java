@@ -11,18 +11,27 @@ public class Climb extends SubsystemBase {
 
     private TalonFX climbMotor;
     private DigitalInput linebreak;
+    private DigitalInput limitSwitch;
 
     public Climb() {
         climbMotor = new TalonFX(7);
         // linebreak = new DigitalInput(7);
+        limitSwitch = new DigitalInput(1);
+
     }
 
     public void startMotor(double speed) {
-        climbMotor.set(speed);
+        if (limitSwitch.get()) {
+            // We are going up and limit is tripped so stop
+        } else {
+            System.out.println("LIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMIT");
+            // We are going up but limit is not tripped so go at commanded speed
+        }
+        // climbMotor.set(speed);
     }
 
     public void stopMotor() {
-        climbMotor.set(0);
+        // climbMotor.set(0);
     }
 
     // public void linebreak() {
