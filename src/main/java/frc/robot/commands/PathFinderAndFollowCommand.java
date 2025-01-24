@@ -37,7 +37,8 @@ public class PathFinderAndFollowCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        this.commandGroup.cancel();
+        if (this.commandGroup != null)
+            this.commandGroup.cancel();
         this.swerveDrive.resetDrivePID();
 
         Logger.recordOutput("Commands/Active Command", "");
@@ -59,7 +60,13 @@ public class PathFinderAndFollowCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return followPathCommand.isFinished();
+        try {
+
+            return followPathCommand.isFinished();
+
+        } catch (Exception e) {
+            return true;
+        }
     }
 
     /** Runs a new autonomous path based on the current drive mode. */

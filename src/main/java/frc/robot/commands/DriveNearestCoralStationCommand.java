@@ -35,7 +35,8 @@ public class DriveNearestCoralStationCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        this.commandGroup.cancel();
+        if (this.commandGroup != null)
+            this.commandGroup.cancel();
         this.swerveDriveSubsystem.resetDrivePID();
 
         Logger.recordOutput("Commands/Active Command", "");
@@ -57,7 +58,13 @@ public class DriveNearestCoralStationCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return followPathCommand.isFinished();
+        try {
+
+            return followPathCommand.isFinished();
+
+        } catch (Exception e) {
+            return true;
+        }
     }
 
     /**
@@ -86,6 +93,7 @@ public class DriveNearestCoralStationCommand extends Command {
         double rightStationDistance = Math.hypot(currentPose.getX() - FieldConstants.CORAL_STATION_POSES[1].getX(),
                 currentPose.getY() - FieldConstants.CORAL_STATION_POSES[1].getY());
 
-        return leftStationDistance < rightStationDistance ? "DriveLeftStation - Path" : "DriveRightStation - Path";
+        return leftStationDistance < rightStationDistance ? "DriveLeftCoraltation - Path"
+                : "DriveRightCoralStation - Path";
     }
 }

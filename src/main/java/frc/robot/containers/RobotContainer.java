@@ -7,8 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -21,6 +19,7 @@ import frc.robot.commands.DriveNearestCoralStationCommand;
 import frc.robot.commands.DriveProcessorCommand;
 import frc.robot.commands.DriveToBestTagCommand;
 import frc.robot.commands.DriveToReefStationCommand;
+import frc.robot.commands.SetReefPositionCommand;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -41,32 +40,20 @@ abstract public class RobotContainer {
     AutoBuilder autoBuilder;
     LoggedDashboardChooser<Command> autonomousChooser;
 
-    /* */
-    private SendableChooser<Integer> reefStationChooser;
-    private SendableChooser<Integer> reefPoleChooser;
+    /* Index to hold which station/pole to drive to */
+    private int reefStationIndex;
+    private int reefPoleIndex;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        //
-        this.reefStationChooser = new SendableChooser<>();
-        this.reefStationChooser.setDefaultOption("Position 1", 0);
-        this.reefStationChooser.addOption("Position 2", 1);
-        this.reefStationChooser.addOption("Position 3", 2);
-        this.reefStationChooser.addOption("Position 4", 3);
-        this.reefStationChooser.addOption("Position 5", 4);
-        this.reefStationChooser.addOption("Position 6", 5);
-        SmartDashboard.putData(this.reefStationChooser);
-
-        this.reefPoleChooser = new SendableChooser<>();
-        this.reefPoleChooser.setDefaultOption("Left", 1);
-        this.reefPoleChooser.addOption("Right", 2);
-        SmartDashboard.putData(this.reefPoleChooser);
+        setReefStationIndex(1);
+        setReefPoleIndex(1);
     }
 
     /**
-     * 
+     * ; *
      */
     protected void configureAutoBuilder() {
         this.autoBuilder = new AutoBuilder(this.swerveDriveSubsystem);
@@ -124,7 +111,7 @@ abstract public class RobotContainer {
         // Drive to selected reef station
         controller.rightTrigger()
                 .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem, this.swerveDriveSubsystem::getPose,
-                        this.reefStationChooser::getSelected, this.reefPoleChooser::getSelected));
+                        this::getReefStationIndex, this::getReefPoleIndex));
 
         // Drive to right pole of best apriltag
         controller.rightBumper()
@@ -135,6 +122,16 @@ abstract public class RobotContainer {
         controller.leftBumper()
                 .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
                         this.swerveDriveSubsystem::getPose, VisionConstants.DATA_FROM_CAMERA, 1));
+
+        // Set reef position
+        controller.povUp().onTrue(new SetReefPositionCommand(this::getReefStationIndex, this::getReefPoleIndex,
+                this::setReefStationIndex, this::setReefPoleIndex, 1, 0));
+        controller.povDown().onTrue(new SetReefPositionCommand(this::getReefStationIndex, this::getReefPoleIndex,
+                this::setReefStationIndex, this::setReefPoleIndex, -1, 0));
+        controller.povLeft().onTrue(new SetReefPositionCommand(this::getReefStationIndex, this::getReefPoleIndex,
+                this::setReefStationIndex, this::setReefPoleIndex, 0, -1));
+        controller.povRight().onTrue(new SetReefPositionCommand(this::getReefStationIndex, this::getReefPoleIndex,
+                this::setReefStationIndex, this::setReefPoleIndex, 0, 1));
     }
 
     /**
@@ -167,4 +164,23 @@ abstract public class RobotContainer {
     abstract public void displaySimFieldToAdvantageScope();
 
     abstract public void resetSimulationField(Pose2d pose2d);
+
+    /**
+     * Getters and Setters
+     */
+    public int getReefStationIndex() {
+        return reefStationIndex;
+    }
+
+    public void setReefStationIndex(int reefStationIndex) {
+        this.reefStationIndex = reefStationIndex;
+    }
+
+    public int getReefPoleIndex() {
+        return reefPoleIndex;
+    }
+
+    public void setReefPoleIndex(int reefPoleChooserIndex) {
+        this.reefPoleIndex = reefPoleChooserIndex;
+    }
 }

@@ -33,7 +33,8 @@ public class DriveProcessorCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        this.commandGroup.cancel();
+        if (this.commandGroup != null)
+            this.commandGroup.cancel();
         this.swerveDriveSubsystem.resetDrivePID();
 
         Logger.recordOutput("Commands/Active Command", "");
@@ -55,7 +56,13 @@ public class DriveProcessorCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return followPathCommand.isFinished();
+        try {
+
+            return followPathCommand.isFinished();
+
+        } catch (Exception e) {
+            return true;
+        }
     }
 
     /**

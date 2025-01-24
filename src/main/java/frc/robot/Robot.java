@@ -164,6 +164,9 @@ public class Robot extends LoggedRobot {
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
+        Logger.recordOutput("LoggedRobot/Reef Position", this.robotContainer.getReefStationIndex());
+        Logger.recordOutput("LoggedRobot/Pole Position",
+                this.robotContainer.getReefPoleIndex() == 1 ? "LEFT" : "RIGHT");
     }
 
     @Override
