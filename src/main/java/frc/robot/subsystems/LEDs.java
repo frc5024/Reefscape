@@ -1,18 +1,14 @@
 package frc.robot.subsystems;
 
-import frc.robot.subsystems.LEDController;
-import frc.robot.subsystems.LEDPreset;
-
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.Test5024LEDs;
+import frc.robot.commands.TestFlashLEDs;
 
 public class LEDs extends SubsystemBase {
     private static LEDs mInstance = null;
     private LEDController ledController;
-
-    private Timer timer = new Timer();
-    private int flashCount = 0;
 
     public static LEDs getInstance() {
         if (mInstance == null) {
@@ -20,12 +16,21 @@ public class LEDs extends SubsystemBase {
         }
         return mInstance;
     }
-    private LEDs(){
+
+    private LEDs() {
         ledController = new LEDController(Constants.LEDs.ledPort);
     }
 
-    public void setLEDS(ILEDPreset colour){
+    public void setLEDS(ILEDPreset colour) {
         ledController.set(colour);
     }
+
+    public Command flashLEDS(ILEDPreset colour, int flashMiliseconds) {
+        return new TestFlashLEDs(this, colour, flashMiliseconds);
+    }
+
+    public Command E5024LEDS(int flashMiliseconds) {
+        return new Test5024LEDs(this, flashMiliseconds);
+    }
+
 }
- 

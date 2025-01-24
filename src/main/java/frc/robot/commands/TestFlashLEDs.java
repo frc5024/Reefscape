@@ -1,15 +1,22 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ILEDPreset;
 import frc.robot.subsystems.LEDPreset;
-import frc.robot.subsystems.LEDs;
-import edu.wpi.first.wpilibj.Timer;;
+import frc.robot.subsystems.LEDs;;
 
-public class TestFlashLEDs extends Command{
+public class TestFlashLEDs extends Command {
     private LEDs leds;
-    public TestFlashLEDs(){
-        leds = LEDs.getInstance();
-    } 
+    private ILEDPreset colour;
+    private int flashMiliseconds;
+
+    public TestFlashLEDs(LEDs leds, ILEDPreset colour, int flashMiliseconds) {
+        this.leds = leds;
+        this.colour = colour;
+        this.flashMiliseconds = flashMiliseconds;
+    }
+
     private Timer timer = new Timer();
     private int flashCount = 0;
 
@@ -22,16 +29,16 @@ public class TestFlashLEDs extends Command{
 
     @Override
     public void execute() {
-        if(flashCount< 1000){
+        if (flashCount < flashMiliseconds) {
             if (timer.hasElapsed(0.1)) {
                 flashCount++;
                 timer.restart();
             }
 
             if (flashCount % 2 == 0) {
-                leds.setLEDS(LEDPreset.Solid.kDarkRed);
+                leds.setLEDS(colour);
             } else {
-                leds.setLEDS(LEDPreset.Solid.kDarkBlue);
+                leds.setLEDS(LEDPreset.Solid.kBlack);
             }
         }
     }

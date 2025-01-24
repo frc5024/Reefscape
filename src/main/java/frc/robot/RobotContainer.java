@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Autos;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.TestFlashLEDs;
 import frc.robot.commands.TestLEDs;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LEDs;
@@ -46,7 +45,6 @@ public class RobotContainer {
 
     private void configureBindings() {
         changeRainbow.whileTrue(new TestLEDs());
-        testFlash.whileTrue(new TestFlashLEDs());
         driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
     }
 

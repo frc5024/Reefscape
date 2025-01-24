@@ -14,6 +14,7 @@ public class Shooter extends SubsystemBase {
     private static Shooter mInstance = null;
     public boolean sensorOutput;
     private LEDs LEDS = LEDs.getInstance();
+    private boolean isRunning;
 
     public static final Shooter getInstance() {
         if (mInstance == null) {
@@ -57,25 +58,35 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
 
-        if (linebreak.get() == true) {
+        if (linebreak.get()) {
+            isRunning = false;
             sensorOutput = false;
             System.out.println("Linebreak: " + sensorOutput);
+            LEDS.setLEDS(LEDPreset.Solid.kRed);
 
         } else {
-            sensorOutput = true;
-            System.out.println("Linebreak: " + sensorOutput);
+            if (!isRunning) {
+                sensorOutput = true;
+                System.out.println("Linebreak: " + sensorOutput);
+                LEDS.E5024LEDS(50).schedule();
+                isRunning = true;
+            }
         }
 
-        if (limSwInput.get() == true) {
+        if (limSwInput.get()) {
             // maybe don't invert this. will have to test with an actual sensor.
+            isRunning = false;
             sensorOutput = false;
             System.out.println("Limit Switch: " + sensorOutput);
             LEDS.setLEDS(LEDPreset.Solid.kRed);
         } else {
-            sensorOutput = true;
-            System.out.println("Limit Switch: " + sensorOutput);
-            LEDS.setLEDS(LEDPreset.Solid.kGreen);
-
+            if (!isRunning) {
+                sensorOutput = true;
+                System.out.println("Limit Switch: " + sensorOutput);
+                System.out.println("Limit Broken");
+                LEDS.flashLEDS(LEDPreset.Solid.kGreen, 50).schedule();
+                isRunning = true;
+            }
         }
     }
 
