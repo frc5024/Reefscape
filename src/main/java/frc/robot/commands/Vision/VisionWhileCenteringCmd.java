@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Vision;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,10 +10,7 @@ public class VisionWhileCenteringCmd extends Command {
     private final Limelight limelight;
     private final Swerve swerveDrive;
 
-    private final double targetID = 3;
-
-    private boolean shot = false;
-    private boolean newWarm = false;
+    private final double targetID = 5;
 
     double strafePidOutput = 0;
     double rotationPidOutput = 0;
@@ -23,21 +20,19 @@ public class VisionWhileCenteringCmd extends Command {
     private PIDController rotationPidController;
     private PIDController translationPidController;
 
-    // double desiredz = 1.92; // in meters
+    double desiredz = 0.97; // in meters
 
     boolean xPos = false;
     boolean rotationPos = false;
-    // boolean zPos = false;
+    boolean zPos = false;
 
-    // Sets up variables that are used elsewhere to be used here and PIDs
     public VisionWhileCenteringCmd(Limelight limelight, Swerve swerveDrive) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
 
-        this.strafePidController = new PIDController(0.3, 0, 0.0007);
-        this.translationPidController = new PIDController(0.1, 0, 0.0007);
-
-        this.rotationPidController = new PIDController(0.004, 0.00, 0.0001);
+        this.strafePidController = new PIDController(0.7, 0, 0.05);
+        this.translationPidController = new PIDController(0.7, 0, 0.05);
+        this.rotationPidController = new PIDController(0.008, 0.00, 0.0005);
 
         addRequirements(limelight);
     }
@@ -52,11 +47,10 @@ public class VisionWhileCenteringCmd extends Command {
     @Override
     public void execute() {
 
-        // checks apriltag in view
         if (limelight.getAprilTagID() == targetID) {
             double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
 
-            double x = limelight.getX(); // Get X offset
+            double x = limelight.getX();
             double yawDeg = botPose[4];
 
             double zDis = botPose[2];
@@ -65,14 +59,12 @@ public class VisionWhileCenteringCmd extends Command {
             double atRad = Math.toRadians(atDeg);
             double atXDis = zDis * (Math.tan(atRad));
 
-            // double zDiff = desiredz - zDis;
+            double robotHeading = swerveDrive.getGyroYaw().getDegrees();
 
-            // System.out.println(zDiff);
+            double zDiff = desiredz - zDis;
 
-            // Chceks to see if the desired distance is withing the tolerance and adjusts
-            // location
-            if (Math.abs(yawDeg) > 1) { // Adjust tolerance as needed
-                rotationPidOutput = rotationPidController.calculate(yawDeg / 2, 0);
+            if (Math.abs(robotHeading) > 1) { // Adjust tolerance as needed
+                rotationPidOutput = rotationPidController.calculate(robotHeading, 0);
                 rotationPidOutput = rotationPidOutput * 1; // Speed multiplier
                 rotationPos = false;
             } else {
@@ -80,8 +72,7 @@ public class VisionWhileCenteringCmd extends Command {
                 rotationPos = true;
             }
 
-            // ~~
-            if (Math.abs(atXDis) > 0.05) { // In meters
+            if (Math.abs(atXDis) > 0.015) { // In meters
                 strafePidOutput = strafePidController.calculate(atXDis, 0);
                 strafePidOutput = -strafePidOutput * 1; // Speed multiplier
                 xPos = false;
@@ -90,12 +81,18 @@ public class VisionWhileCenteringCmd extends Command {
                 xPos = true;
             }
 
-            // moves the robot in proper direction and locks controller input
+            // if (Math.abs(zDiff) > 0.03) { // In meters
+            // translationPidOutput = translationPidController.calculate(zDiff, 0);
+            // translationPidOutput = translationPidOutput * 0.5; // Speed multiplier
+            // zPos = false;
+            // } else {
+            // translationPidOutput = 0;
+            // zPos = true;
+            // }
+
             swerveDrive.visionStrafeVal(strafePidOutput, true);
             swerveDrive.visionRotationVal(rotationPidOutput, true);
-            // swerveDrive.visionTranslationalVal(0, true);
-
-            System.out.println(yawDeg);
+            // swerveDrive.visionTranslationalVal(translationPidOutput, true);
         } else {
             swerveDrive.visionTranslationalVal(0, false);
             swerveDrive.visionStrafeVal(0, false);

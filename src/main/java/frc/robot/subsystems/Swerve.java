@@ -29,6 +29,8 @@ public class Swerve extends SubsystemBase {
     boolean lockStrafe = false;
     boolean lockTranslation = false;
 
+    public final double scaleValue = 3600.0 / 3831.020004272461;
+
     private static Swerve mInstance;
 
     public static Swerve getInstance() {
@@ -44,15 +46,18 @@ public class Swerve extends SubsystemBase {
 
         speedModifier = 1;
         mSwerveMods = new SwerveModule[] {
-            new SwerveModule(0, Constants.Swerve.Mod0.constants), new SwerveModule(1, Constants.Swerve.Mod1.constants),
-            new SwerveModule(2, Constants.Swerve.Mod2.constants), new SwerveModule(3, Constants.Swerve.Mod3.constants)
+                new SwerveModule(0, Constants.Swerve.Mod0.constants),
+                new SwerveModule(1, Constants.Swerve.Mod1.constants),
+                new SwerveModule(2, Constants.Swerve.Mod2.constants),
+                new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
 
     }
 
-    // takes priority over controller input - call lockController to remove controller access to movement value
+    // takes priority over controller input - call lockController to remove
+    // controller access to movement value
     public void visionTranslationalVal(double translationSpeed, boolean lockController) {
         if (lockController) {
             translationVal = translationSpeed;
@@ -103,7 +108,7 @@ public class Swerve extends SubsystemBase {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     translationVal * Constants.Swerve.maxSpeed * speedModifier,
                     strafeVal * Constants.Swerve.maxSpeed * speedModifier,
-                    rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier, getHeading());
+                    rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier, getGyroYaw());
         } else {
             chassisSpeeds = new ChassisSpeeds(translationVal * Constants.Swerve.maxSpeed * speedModifier,
                     strafeVal * Constants.Swerve.maxSpeed * speedModifier,
@@ -168,14 +173,33 @@ public class Swerve extends SubsystemBase {
                 new Pose2d(getPose().getTranslation(), heading));
     }
 
+    // public void zeroHeading() {
+    // swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
+    // new Pose2d(getPose().getTranslation(), new Rotation2d()));
+    // }
+
     public void zeroHeading() {
-        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
-                new Pose2d(getPose().getTranslation(), new Rotation2d()));
+        gyro.reset();
     }
 
     public Rotation2d getGyroYaw() {
+        // return Rotation2d.fromDegrees(-gyro.getYaw());
+        // return Rotation2d.fromDegrees(gyro.getAngle() * scaleValue);
+        double angle = (gyro.getAngle() * scaleValue) % 360.0;
+        if (angle > 180) {
+            angle = angle - 360;
+        }
+        return Rotation2d.fromDegrees(-angle);
+    }
+
+    public void zeroHeadingWithOffset(double degOffset) {
+        swerveOdometry.resetPosition(getGyroYawWithOffset(degOffset), getModulePositions(),
+                new Pose2d(getPose().getTranslation(), new Rotation2d()));
+    }
+
+    public Rotation2d getGyroYawWithOffset(double degOffset) {
         // negative to fix field relative
-        return Rotation2d.fromDegrees(-gyro.getYaw());
+        return Rotation2d.fromDegrees((-gyro.getYaw()) - degOffset);
 
     }
 
@@ -208,9 +232,13 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("Gyro", getGyroYaw().getDegrees());
         SmartDashboard.putNumber("Heading", getHeading().getDegrees());
 
+        SmartDashboard.putNumber("RawAngle", gyro.getAngle());
+
+        SmartDashboard.putNumber("scale value", (scaleValue));
+
         // Log subsystem to AK
         double[] acceleration = new double[] {
-            this.gyro.getWorldLinearAccelX(), this.gyro.getWorldLinearAccelY()
+                this.gyro.getWorldLinearAccelX(), this.gyro.getWorldLinearAccelY()
         };
     }
 }
