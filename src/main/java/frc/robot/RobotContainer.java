@@ -45,7 +45,12 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    driver.b().onTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
+    driver.b().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
+    driver.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
+    driver.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2point5position));
+    driver.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
+    operator.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3point5position));
+    operator.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
     //driver.x().whileTrue(new elevatorCmd(elevatorSubsystem, true) );
     //driver.a().whileTrue(new elevatorCmd(elevatorSubsystem, false));
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));

@@ -25,6 +25,11 @@ public final class Constants {
         public static final double kD = 0;
 
         public static final double L1Position = Units.degreesToRadians(100);
+        public static final double L2Position =Units.degreesToRadians(200);
+        public static final double L2point5position = Units.degreesToRadians(250);
+        public static final double L3position = Units.degreesToRadians(300);
+        public static final double L3point5position = Units.degreesToRadians(350);
+        public static final double L4position = Units.degreesToRadians(400);
 
   }
   public static final double stickDeadband = 0.1;

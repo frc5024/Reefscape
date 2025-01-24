@@ -21,11 +21,13 @@ public class SetElevatorSetpointCmd extends Command{
     @Override
     public void initialize() {
         elevatorSubsystem.setSetPoint(setpoint);
+        elevatorSubsystem.motorOn(true);
 
     }
 
     @Override
     public void end(boolean interrupted) {
+        elevatorSubsystem.motorOn(false);
     }
 
    
