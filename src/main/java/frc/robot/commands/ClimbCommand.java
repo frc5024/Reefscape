@@ -19,17 +19,17 @@ public class ClimbCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void initialize() {
-    ClimbSubsystem.ultrasonic();
 
   }
 
   public void execute() {
+    // ClimbSubsystem.ultrasonic();
     ClimbSubsystem.startMotor(speed);
   }
 
   @Override
   public void end(boolean interrupted) {
-
+    ClimbSubsystem.stopMotor();
   }
 
   // Returns true when the command should end.
