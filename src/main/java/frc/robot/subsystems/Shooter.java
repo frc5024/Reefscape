@@ -36,8 +36,9 @@ public class Shooter extends SubsystemBase {
 
     }
 
-    public void setSpeed(double speed) {
+    public void setSpeed(Double speed) {
         motor1.set(speed);
+        System.out.println(motor1.get());
         motor2.set(speed);
 
     }

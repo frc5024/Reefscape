@@ -27,8 +27,7 @@ public class ShooterCommand extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double motor1Speed = -outPower.getAsDouble() + inPower.getAsDouble();
-        System.out.println(motor1Speed);
+        double motor1Speed = (outPower.getAsDouble() / 2) + (-inPower.getAsDouble() / 2);
         m_shooter.setSpeed(motor1Speed);
 
     }
