@@ -1,7 +1,7 @@
 package frc.robot.commands.Vision;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
@@ -40,14 +40,17 @@ public class DistanceTestingCmd extends Command {
 
         if (limelight.getAprilTagID() == targetID) {
             double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
-            double robotHeading = normalizeHeading(SmartDashboard.getNumber("Heading", 0)); // 0-360 range
-            double Dis = botPose[2];
+            Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
+
+            double robotHeading = swerveDrive.getGyroYaw().getDegrees();
+            double Dis = -botPose3D.getZ();
 
             double zDis = Dis * Math.cos(Math.toRadians(robotHeading));
 
             double zDiff = desiredz - zDis;
 
-            System.out.println(zDiff);
+            // System.out.println(botPose[2]);
+            // System.out.println(botPose3D.getZ());
 
             if (Math.abs(zDiff) > 0.01) { // In meters
                 translationPidOutput = translationPidController.calculate(zDiff, 0);
@@ -65,10 +68,6 @@ public class DistanceTestingCmd extends Command {
             swerveDrive.visionRotationVal(0, false);
 
         }
-    }
-
-    private double normalizeHeading(double heading) {
-        return (heading >= 0) ? heading : (360 + heading);
     }
 
     @Override

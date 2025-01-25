@@ -1,9 +1,14 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.PathFinderAndFollowCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Vision.DistanceTestingCmd;
 import frc.robot.commands.Vision.FaceHeadingCmd;
@@ -23,6 +28,8 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
+    private final SendableChooser<Command> autoChooser;
+
     public RobotContainer() {
 
         s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, () -> -driver.getRawAxis(translationAxis),
@@ -32,6 +39,10 @@ public class RobotContainer {
         ));
 
         configureBindings();
+
+        autoChooser = AutoBuilder.buildAutoChooser();
+
+        SmartDashboard.putData("Auto/Chooser", autoChooser);
 
     }
 
@@ -44,9 +55,11 @@ public class RobotContainer {
 
         driver.a().whileTrue(new FaceHeadingCmd(s_Swerve));
 
+        driver.rightBumper().onTrue(new PathFinderAndFollowCommand(s_Swerve, "Forward 1 meter"));
+
     }
 
     public Command getAutonomousCommand() {
-        return null;
+        return autoChooser.getSelected();
     }
 }

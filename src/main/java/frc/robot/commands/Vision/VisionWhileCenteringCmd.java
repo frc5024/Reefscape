@@ -1,6 +1,7 @@
 package frc.robot.commands.Vision;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
@@ -32,7 +33,7 @@ public class VisionWhileCenteringCmd extends Command {
 
         this.strafePidController = new PIDController(0.7, 0, 0.05);
         this.translationPidController = new PIDController(0.7, 0, 0.05);
-        this.rotationPidController = new PIDController(0.008, 0.00, 0.0005);
+        this.rotationPidController = new PIDController(0.008, 0, 0.0005);
 
         addRequirements(limelight);
     }
@@ -49,17 +50,17 @@ public class VisionWhileCenteringCmd extends Command {
 
         if (limelight.getAprilTagID() == targetID) {
             double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
-
+            Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
+            double robotHeading = swerveDrive.getGyroYaw().getDegrees();
             double x = limelight.getX();
             double yawDeg = botPose[4];
+            double Dis = -botPose3D.getZ();
 
-            double zDis = botPose[2];
+            double zDis = Dis * Math.cos(Math.toRadians(robotHeading));
 
             double atDeg = yawDeg - x;
             double atRad = Math.toRadians(atDeg);
             double atXDis = zDis * (Math.tan(atRad));
-
-            double robotHeading = swerveDrive.getGyroYaw().getDegrees();
 
             double zDiff = desiredz - zDis;
 
@@ -81,18 +82,18 @@ public class VisionWhileCenteringCmd extends Command {
                 xPos = true;
             }
 
-            // if (Math.abs(zDiff) > 0.03) { // In meters
-            // translationPidOutput = translationPidController.calculate(zDiff, 0);
-            // translationPidOutput = translationPidOutput * 0.5; // Speed multiplier
-            // zPos = false;
-            // } else {
-            // translationPidOutput = 0;
-            // zPos = true;
-            // }
+            if (Math.abs(zDiff) > 0.015) { // In meters
+                translationPidOutput = translationPidController.calculate(zDiff, 0);
+                translationPidOutput = translationPidOutput * 1; // Speed multiplier
+                zPos = false;
+            } else {
+                translationPidOutput = 0;
+                zPos = true;
+            }
 
             swerveDrive.visionStrafeVal(strafePidOutput, true);
             swerveDrive.visionRotationVal(rotationPidOutput, true);
-            // swerveDrive.visionTranslationalVal(translationPidOutput, true);
+            swerveDrive.visionTranslationalVal(translationPidOutput, true);
         } else {
             swerveDrive.visionTranslationalVal(0, false);
             swerveDrive.visionStrafeVal(0, false);
