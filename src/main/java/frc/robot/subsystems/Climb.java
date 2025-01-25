@@ -1,14 +1,20 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Climb extends SubsystemBase {
-
+    private final MedianFilter m_filter = new MedianFilter(5);
+    private DigitalOutput kUltrasonicPingPort;
+    private DigitalInput kUltrasonicEchoPort;
+    private final Ultrasonic m_ultrasonic = new Ultrasonic(kUltrasonicPingPort, kUltrasonicEchoPort);
     private TalonFX climbMotor;
     private DigitalInput linebreak;
     private DigitalInput limitSwitch;
@@ -22,16 +28,18 @@ public class Climb extends SubsystemBase {
 
     public void startMotor(double speed) {
         if (limitSwitch.get()) {
-            // We are going up and limit is tripped so stop
+            climbMotor.set(speed); 
+            // We are going up but limit is not tripped so go at commanded speed
         } else {
             System.out.println("LIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMITLIMIT");
-            // We are going up but limit is not tripped so go at commanded speed
+            climbMotor.set(0);
+            // We are going up and limit is tripped so stop
         }
-        // climbMotor.set(speed);
+       
     }
 
     public void stopMotor() {
-        // climbMotor.set(0);
+        climbMotor.set(0);
     }
 
     // public void linebreak() {
@@ -39,5 +47,12 @@ public class Climb extends SubsystemBase {
     // System.out.println("LINE BROKEN");
     // }
     // }
+    public void ultrasonic() {
+        double measurement = m_ultrasonic.getRangeMM();
+        double filteredMeasurement = m_filter.calculate(measurement);
+        if (filteredMeasurement < 100) {
+            System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        }
+    }
 
 }
