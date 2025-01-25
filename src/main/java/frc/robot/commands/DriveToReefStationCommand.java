@@ -7,6 +7,7 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -17,6 +18,7 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.TeleopConstants;
+import frc.robot.controls.GameData.DriveMode;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.utils.AllianceFlipUtil;
 
@@ -28,6 +30,7 @@ public class DriveToReefStationCommand extends Command {
     private final Supplier<Pose2d> poseProvider;
     private final Supplier<Integer> stationProvider;
     private final Supplier<Integer> poleProvider;
+    private final Supplier<DriveMode> driveModeSupplier;
     private Pose3d goalPose;
 
     private final ProfiledPIDController xController;
@@ -38,11 +41,12 @@ public class DriveToReefStationCommand extends Command {
      * Drives to reef station based on pose and pole selection from elastic input
      */
     public DriveToReefStationCommand(SwerveDriveSubsystem swerveDriveSubsystem, Supplier<Pose2d> poseProvider,
-            Supplier<Integer> stationProvider, Supplier<Integer> poleProvider) {
+            Supplier<Integer> stationProvider, Supplier<Integer> poleProvider, Supplier<DriveMode> driveModeSupplier) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.poseProvider = poseProvider;
         this.stationProvider = stationProvider;
         this.poleProvider = poleProvider;
+        this.driveModeSupplier = driveModeSupplier;
 
         double[] driveXPIDs = PIDConstants.getDriveXPIDs();
         double[] driveYPIDs = PIDConstants.getDriveXPIDs();
@@ -95,9 +99,13 @@ public class DriveToReefStationCommand extends Command {
 
         int stationId = this.stationProvider.get().intValue();
         int poleId = this.poleProvider.get().intValue();
+        DriveMode driveMode = this.driveModeSupplier.get();
 
+        // Determine which reef pole to drive to
         this.goalPose = new Pose3d(FieldConstants.REEF_POSES[stationId - 1]);
         double offset = poleId == 1 ? FieldConstants.REEF_POLE_OFFSET : -FieldConstants.REEF_POLE_OFFSET;
+        double robotYaw = driveMode == DriveMode.CORAL ? 0.0 : 180.0;
+
         Transform3d polePose = new Transform3d(new Translation3d(-RobotConstants.LENGTH_METERS / 2, offset, 0.0),
                 new Rotation3d(0.0, 0.0, 0.0));
         Pose2d driveToPose = this.goalPose.transformBy(polePose).toPose2d();
@@ -107,7 +115,7 @@ public class DriveToReefStationCommand extends Command {
 
         this.xController.setGoal(driveToPose.getX());
         this.yController.setGoal(driveToPose.getY());
-        this.omegaController.setGoal(driveToPose.getRotation().getRadians());
+        this.omegaController.setGoal(driveToPose.getRotation().rotateBy(Rotation2d.fromDegrees(robotYaw)).getRadians());
 
         Logger.recordOutput("Commands/Active Command", this.getName());
     }

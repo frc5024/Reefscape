@@ -1,5 +1,7 @@
 package frc.robot.containers;
 
+import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -8,7 +10,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.RobotConstants;
@@ -19,8 +20,8 @@ import frc.robot.commands.DriveNearestCoralStationCommand;
 import frc.robot.commands.DriveProcessorCommand;
 import frc.robot.commands.DriveToBestTagCommand;
 import frc.robot.commands.DriveToReefStationCommand;
-import frc.robot.commands.SetReefPositionCommand;
 import frc.robot.commands.SwerveDriveCommands;
+import frc.robot.controls.GameData;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utils.AllianceFlipUtil;
@@ -40,16 +41,11 @@ abstract public class RobotContainer {
     AutoBuilder autoBuilder;
     LoggedDashboardChooser<Command> autonomousChooser;
 
-    /* Index to hold which station/pole to drive to */
-    private int reefStationIndex;
-    private int reefPoleIndex;
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        setReefStationIndex(1);
-        setReefPoleIndex(1);
+        GameData.getInstance().setReefIndexes(1, 1);
     }
 
     /**
@@ -78,6 +74,10 @@ abstract public class RobotContainer {
                         () -> -controller.getLeftX(),
                         () -> -controller.getRightX()));
 
+        // Toggle game piece modes
+        controller.back()
+                .whileTrue(runOnce(() -> GameData.getInstance().toggleDriveMode()));
+
         // Lock to 0° when A button is held
         controller.a()
                 .whileTrue(
@@ -93,12 +93,10 @@ abstract public class RobotContainer {
 
         // Reset gyro to 0° when B button is pressed
         controller.b()
-                .onTrue(
-                        Commands.runOnce(
-                                () -> swerveDriveSubsystem.setPose(
-                                        new Pose2d(swerveDriveSubsystem.getPose().getTranslation(), new Rotation2d())),
-                                swerveDriveSubsystem)
-                                .ignoringDisable(true));
+                .onTrue(runOnce(() -> swerveDriveSubsystem.setPose(
+                        new Pose2d(swerveDriveSubsystem.getPose().getTranslation(), new Rotation2d())),
+                        swerveDriveSubsystem)
+                        .ignoringDisable(true));
 
         // Drive to nearest coral station
         controller.x()
@@ -111,7 +109,8 @@ abstract public class RobotContainer {
         // Drive to selected reef station
         controller.rightTrigger()
                 .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem, this.swerveDriveSubsystem::getPose,
-                        this::getReefStationIndex, this::getReefPoleIndex));
+                        GameData.getInstance()::getReefStationIndex, GameData.getInstance()::getReefPoleIndex,
+                        GameData.getInstance().getDriveMode()));
 
         // Drive to right pole of best apriltag
         controller.rightBumper()
@@ -124,14 +123,10 @@ abstract public class RobotContainer {
                         this.swerveDriveSubsystem::getPose, VisionConstants.DATA_FROM_CAMERA, 1));
 
         // Set reef position
-        controller.povUp().onTrue(new SetReefPositionCommand(this::getReefStationIndex, this::getReefPoleIndex,
-                this::setReefStationIndex, this::setReefPoleIndex, 1, 0));
-        controller.povDown().onTrue(new SetReefPositionCommand(this::getReefStationIndex, this::getReefPoleIndex,
-                this::setReefStationIndex, this::setReefPoleIndex, -1, 0));
-        controller.povLeft().onTrue(new SetReefPositionCommand(this::getReefStationIndex, this::getReefPoleIndex,
-                this::setReefStationIndex, this::setReefPoleIndex, 0, -1));
-        controller.povRight().onTrue(new SetReefPositionCommand(this::getReefStationIndex, this::getReefPoleIndex,
-                this::setReefStationIndex, this::setReefPoleIndex, 0, 1));
+        controller.povUp().onTrue(runOnce(() -> GameData.getInstance().setReefIndexes(1, 0)));
+        controller.povDown().onTrue(runOnce(() -> GameData.getInstance().setReefIndexes(-1, 0)));
+        controller.povLeft().onTrue(runOnce(() -> GameData.getInstance().setReefIndexes(0, -1)));
+        controller.povRight().onTrue(runOnce(() -> GameData.getInstance().setReefIndexes(0, 1)));
     }
 
     /**
@@ -164,46 +159,4 @@ abstract public class RobotContainer {
     abstract public void displaySimFieldToAdvantageScope();
 
     abstract public void resetSimulationField(Pose2d pose2d);
-
-    /**
-     * Getters and Setters
-     */
-    public int getReefStationIndex() {
-        return reefStationIndex;
-    }
-
-    public String getReefStationIndexAsString() {
-        switch (this.reefStationIndex) {
-            case 1:
-                return "ONE";
-            case 2:
-                return "TWO";
-            case 3:
-                return "THREE";
-            case 4:
-                return "FOUR";
-            case 5:
-                return "FIVE";
-            case 6:
-                return "SIX";
-            default:
-                return "";
-        }
-    }
-
-    public void setReefStationIndex(int reefStationIndex) {
-        this.reefStationIndex = reefStationIndex;
-    }
-
-    public int getReefPoleIndex() {
-        return reefPoleIndex;
-    }
-
-    public String getReefPoleIndexAsString() {
-        return this.reefPoleIndex == 1 ? "LEFT" : "RIGHT";
-    }
-
-    public void setReefPoleIndex(int reefPoleChooserIndex) {
-        this.reefPoleIndex = reefPoleChooserIndex;
-    }
 }

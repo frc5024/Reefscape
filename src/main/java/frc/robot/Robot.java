@@ -18,6 +18,7 @@ import frc.robot.Constants.RobotConstants;
 import frc.robot.containers.MapleSimRobotContainer;
 import frc.robot.containers.ReefscapeRobotContainer;
 import frc.robot.containers.RobotContainer;
+import frc.robot.controls.GameData;
 
 /**
  * The methods in this class are called automatically corresponding to each
@@ -164,8 +165,9 @@ public class Robot extends LoggedRobot {
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
-        Logger.recordOutput("LoggedRobot/Reef Position", this.robotContainer.getReefStationIndexAsString());
-        Logger.recordOutput("LoggedRobot/Pole Position", this.robotContainer.getReefPoleIndexAsString());
+        Logger.recordOutput("GameData/Drive Mode", GameData.getInstance().getDriveModeAsString());
+        Logger.recordOutput("GameData/Pole Position", GameData.getInstance().getReefPoleIndexAsString());
+        Logger.recordOutput("GameData/Reef Position", GameData.getInstance().getReefStationIndexAsString());
     }
 
     @Override

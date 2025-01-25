@@ -133,7 +133,7 @@ public class DriveToBestTagCommand extends Command {
                 : this.poleId == 1 ? -FieldConstants.REEF_POLE_OFFSET : FieldConstants.REEF_POLE_OFFSET;
 
         this.ROBOT_TO_TAG = new Transform3d(new Translation3d(RobotConstants.LENGTH_METERS / 2, offset, 0.0),
-                new Rotation3d(0.0, 0.0, cameraYaw));
+                new Rotation3d(0.0, 0.0, 0.0));
 
         return targetPose.transformBy(ROBOT_TO_TAG).toPose2d();
     }

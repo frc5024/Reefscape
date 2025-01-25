@@ -79,10 +79,11 @@ public final class Constants {
     public static class FieldConstants {
         public static final double LENGTH_METERS = Units.inchesToMeters(693.0);
         public static final double WIDTH_METERS = Units.inchesToMeters(318.0);
-        public static final double REEF_POLE_OFFSET = Units.inchesToMeters(6.47);
+        public static final double REEF_POLE_OFFSET = Units.inchesToMeters(12.94 / 2);
 
         // starting poses for game mode for blue alliance station 1, 2, 3
         public static final Pose2d[] STATION_POSES = new Pose2d[] {
+                // new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
                 new Pose2d(8.217, 7.272, Rotation2d.fromDegrees(180.0)),
                 new Pose2d(8.217, 6.166, Rotation2d.fromDegrees(180.0)),
                 new Pose2d(8.217, 5.074, Rotation2d.fromDegrees(180.0))
@@ -110,6 +111,13 @@ public final class Constants {
                 new Pose2d(Units.inchesToMeters(193.10), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(120.0)), // Tag-22
                 new Pose2d(Units.inchesToMeters(160.39), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(60.0)) // Tag-17
         };
+    }
+
+    /**
+     * Gyro Constants
+     */
+    public static class GyroContants {
+        public static final double SCALE_VALUE = 3600.0 / 3831.020004272461;
     }
 
     /**

@@ -19,32 +19,6 @@
               "period": 0.06,
               "sort_options": false
             }
-          },
-          {
-            "title": "Reef Position",
-            "x": 256.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "ComboBox Chooser",
-            "properties": {
-              "topic": "/SmartDashboard/SendableChooser[0]",
-              "period": 0.06,
-              "sort_options": false
-            }
-          },
-          {
-            "title": "Pole",
-            "x": 512.0,
-            "y": 0.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "ComboBox Chooser",
-            "properties": {
-              "topic": "/SmartDashboard/SendableChooser[1]",
-              "period": 0.06,
-              "sort_options": false
-            }
           }
         ]
       }
