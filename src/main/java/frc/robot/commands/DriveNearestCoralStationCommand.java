@@ -93,7 +93,6 @@ public class DriveNearestCoralStationCommand extends Command {
         double rightStationDistance = Math.hypot(currentPose.getX() - FieldConstants.CORAL_STATION_POSES[1].getX(),
                 currentPose.getY() - FieldConstants.CORAL_STATION_POSES[1].getY());
 
-        return leftStationDistance < rightStationDistance ? "DriveLeftCoraltation - Path"
-                : "DriveRightCoralStation - Path";
+        return leftStationDistance < rightStationDistance ? "DriveLeftStation - Path" : "DriveRightStation - Path";
     }
 }

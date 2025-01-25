@@ -44,9 +44,9 @@ public class SetReefPositionCommand extends Command {
     public void initialize() {
         int stationValue = this.reefStationSupplier.get().intValue() + this.newStationValue;
         if (stationValue > 6)
-            stationValue = 1;
-        if (stationValue < 1)
             stationValue = 6;
+        if (stationValue < 1)
+            stationValue = 1;
 
         int poleValue = this.reefPoleSupplier.get().intValue() + this.newPoleValue;
         if (poleValue > 2)

@@ -172,12 +172,35 @@ abstract public class RobotContainer {
         return reefStationIndex;
     }
 
+    public String getReefStationIndexAsString() {
+        switch (this.reefStationIndex) {
+            case 1:
+                return "ONE";
+            case 2:
+                return "TWO";
+            case 3:
+                return "THREE";
+            case 4:
+                return "FOUR";
+            case 5:
+                return "FIVE";
+            case 6:
+                return "SIX";
+            default:
+                return "";
+        }
+    }
+
     public void setReefStationIndex(int reefStationIndex) {
         this.reefStationIndex = reefStationIndex;
     }
 
     public int getReefPoleIndex() {
         return reefPoleIndex;
+    }
+
+    public String getReefPoleIndexAsString() {
+        return this.reefPoleIndex == 1 ? "LEFT" : "RIGHT";
     }
 
     public void setReefPoleIndex(int reefPoleChooserIndex) {
