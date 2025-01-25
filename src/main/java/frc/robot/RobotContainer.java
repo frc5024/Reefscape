@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TestFlashLEDs;
 import frc.robot.commands.TestLEDs;
@@ -40,6 +41,9 @@ public class RobotContainer {
 
         ));
 
+        s_Shooter.setDefaultCommand(
+                new ShooterCommand(s_Shooter, () -> driver.getLeftTriggerAxis(), () -> driver.getRightTriggerAxis()));
+
         configureBindings();
 
     }
@@ -48,6 +52,7 @@ public class RobotContainer {
         changeRainbow.whileTrue(new TestLEDs());
         testFlash.whileTrue(new TestFlashLEDs());
         driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+
     }
 
     public Command getAutonomousCommand() {

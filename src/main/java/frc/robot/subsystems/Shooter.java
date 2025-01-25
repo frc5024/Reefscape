@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,6 +17,8 @@ public class Shooter extends SubsystemBase {
     private static Shooter mInstance = null;
     public boolean sensorOutput;
     private LEDs LEDS = LEDs.getInstance();
+    private SparkMax motor1;
+    private SparkMax motor2;
 
     public static final Shooter getInstance() {
         if (mInstance == null) {
@@ -24,8 +29,17 @@ public class Shooter extends SubsystemBase {
     }
 
     private Shooter() {
-        linebreak = new DigitalInput(6);
-        limSwInput = new DigitalInput(5);
+        // linebreak = new DigitalInput(6);
+        // limSwInput = new DigitalInput(5);
+        motor1 = new SparkMax(3, MotorType.kBrushless);
+        motor2 = new SparkMax(62, MotorType.kBrushless);
+
+    }
+
+    public void setSpeed(double speed) {
+        motor1.set(speed);
+        motor2.set(speed);
+
     }
 
     /**
@@ -57,26 +71,35 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
 
-        if (linebreak.get() == true) {
-            sensorOutput = true;
-            System.out.println("Linebreak: " + sensorOutput);
+        // if (linebreak.get() == true) {
+        // sensorOutput = true;
+        // System.out.println("Linebreak: " + sensorOutput);
 
-        } else {
-            sensorOutput = false;
-            System.out.println("Linebreak: " + sensorOutput);
-        }
+        // } else {
+        // sensorOutput = false;
+        // System.out.println("Linebreak: " + sensorOutput);
+        // }
 
-        if (limSwInput.get() == true) {
-            // maybe don't invert this. will have to test with an actual sensor.
-            sensorOutput = false;
-            System.out.println("Limit Switch: " + sensorOutput);
-            LEDS.setLEDS(LEDPreset.Solid.kRed);
-        } else {
-            sensorOutput = true;
-            System.out.println("Limit Switch: " + sensorOutput);
-            LEDS.setLEDS(LEDPreset.Solid.kGreen);
+        // if (limSwInput.get() == true) {
+        // // maybe don't invert this. will have to test with an actual sensor.
+        // sensorOutput = false;
+        // System.out.println("Limit Switch: " + sensorOutput);
+        // LEDS.setLEDS(LEDPreset.Solid.kRed);
+        // } else {
+        // sensorOutput = true;
+        // System.out.println("Limit Switch: " + sensorOutput);
+        // LEDS.setLEDS(LEDPreset.Solid.kGreen);
 
-        }
+        // }
+
+        // if (motor1.get() < 0.01) {
+        // LEDS.setLEDS(LEDPreset.Solid.kBlue);
+        // }
+
+        // if (motor1.get() > 0.01) {
+        // LEDS.setLEDS(LEDPreset.Solid.kViolet);
+        // }
+
     }
 
     @Override
