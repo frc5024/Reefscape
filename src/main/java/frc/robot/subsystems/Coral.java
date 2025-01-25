@@ -4,6 +4,10 @@ import frc.robot.Constants;
 
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
+
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -20,14 +24,21 @@ public class Coral extends SubsystemBase{
     private SparkFlex coralMotor;
 
     //all constants for coral
-    int coralChannel = Constants.coralConstants.coralChannel;
-    int linebreakChannel = Constants.coralConstants.linebreakChannel;
+    int coralMotorChannel = Constants.coralConstants.coralMotorChannel;
+    int linebreakTopChannel = Constants.coralConstants.linebreakTopChannel;
+    int linebreakBottomChannel = Constants.coralConstants.linebreakBottomChannel;
     double intakeSpeed = Constants.coralConstants.intakeSpeed;
     double outtakeSpeed = Constants.outtakeConstants.outtakeSpeed;
 
+    ShuffleboardTab tab = Shuffleboard.getTab("CoralMotors");
+    GenericEntry intakeMotorSpeedEntry = tab.add("SET intake speed", intakeSpeed).getEntry();
+    GenericEntry outtakeMotorSpeedEntry = tab.add("SET outtake speed", outtakeSpeed).getEntry();
+
     //constructor for coralMotor
     public Coral() {
-        coralMotor = new SparkFlex(coralChannel, SparkLowLevel.MotorType.kBrushless);
+        coralMotor = new SparkFlex(coralMotorChannel, SparkLowLevel.MotorType.kBrushless);
+
+        tab.addDouble("intake motor speed", () -> coralMotor.get());
         
     }
     // method for intaking coral, takes in a boolean to determine if the coral should intake
