@@ -98,7 +98,7 @@ public class DriveToReefStationCommand extends Command {
 
         this.goalPose = new Pose3d(FieldConstants.REEF_POSES[stationId - 1]);
         double offset = poleId == 1 ? FieldConstants.REEF_POLE_OFFSET : -FieldConstants.REEF_POLE_OFFSET;
-        Transform3d polePose = new Transform3d(new Translation3d(RobotConstants.LENGTH_METERS / 2, offset, 0.0),
+        Transform3d polePose = new Transform3d(new Translation3d(-RobotConstants.LENGTH_METERS / 2, offset, 0.0),
                 new Rotation3d(0.0, 0.0, 0.0));
         Pose2d driveToPose = this.goalPose.transformBy(polePose).toPose2d();
 
