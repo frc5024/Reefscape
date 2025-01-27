@@ -166,7 +166,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopPeriodic() {
         Logger.recordOutput("GameData/Drive Mode", GameData.getInstance().getDriveModeAsString());
-        Logger.recordOutput("GameData/Pole Position", GameData.getInstance().getReefPoleIndexAsString());
+        Logger.recordOutput("GameData/Pole Position", GameData.getInstance().getCoralPoleAsString());
         Logger.recordOutput("GameData/Reef Position", GameData.getInstance().getReefStationIndexAsString());
     }
 

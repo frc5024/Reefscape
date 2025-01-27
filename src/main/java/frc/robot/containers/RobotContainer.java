@@ -22,6 +22,7 @@ import frc.robot.commands.DriveToBestTagCommand;
 import frc.robot.commands.DriveToReefStationCommand;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.controls.GameData;
+import frc.robot.controls.GameData.CoralPole;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utils.AllianceFlipUtil;
@@ -45,7 +46,6 @@ abstract public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        GameData.getInstance().setReefIndexes(1, 1);
     }
 
     /**
@@ -109,24 +109,28 @@ abstract public class RobotContainer {
         // Drive to selected reef station
         controller.rightTrigger()
                 .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem, this.swerveDriveSubsystem::getPose,
-                        GameData.getInstance()::getReefStationIndex, GameData.getInstance()::getReefPoleIndex,
+                        GameData.getInstance()::getReefStationIndex, GameData.getInstance().getCoralPole(),
                         GameData.getInstance().getDriveMode()));
 
         // Drive to right pole of best apriltag
         controller.rightBumper()
                 .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
-                        this.swerveDriveSubsystem::getPose, VisionConstants.DATA_FROM_CAMERA, 2));
+                        this.swerveDriveSubsystem::getPose, VisionConstants.DATA_FROM_CAMERA,
+                        GameData.getInstance().getCoralPole(),
+                        GameData.getInstance().getDriveMode()));
 
         // Drive to left pole of best apriltag
         controller.leftBumper()
                 .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
-                        this.swerveDriveSubsystem::getPose, VisionConstants.DATA_FROM_CAMERA, 1));
+                        this.swerveDriveSubsystem::getPose, VisionConstants.DATA_FROM_CAMERA,
+                        GameData.getInstance().getCoralPole(),
+                        GameData.getInstance().getDriveMode()));
 
         // Set reef position
-        controller.povUp().onTrue(runOnce(() -> GameData.getInstance().setReefIndexes(1, 0)));
-        controller.povDown().onTrue(runOnce(() -> GameData.getInstance().setReefIndexes(-1, 0)));
-        controller.povLeft().onTrue(runOnce(() -> GameData.getInstance().setReefIndexes(0, -1)));
-        controller.povRight().onTrue(runOnce(() -> GameData.getInstance().setReefIndexes(0, 1)));
+        controller.povUp().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(1)));
+        controller.povDown().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(-1)));
+        controller.povLeft().onTrue(runOnce(() -> GameData.getInstance().setCoralPole(CoralPole.LEFT)));
+        controller.povRight().onTrue(runOnce(() -> GameData.getInstance().setCoralPole(CoralPole.RIGHT)));
     }
 
     /**

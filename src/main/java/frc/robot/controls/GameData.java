@@ -6,17 +6,20 @@ import java.util.function.Supplier;
  * 
  */
 public class GameData {
-    public static GameData instance;
-
-    /* Index to hold which station/pole to drive to */
-    private int reefStationIndex;
-    private int reefPoleIndex;
+    /* Drive to which coral pole */
+    public enum CoralPole {
+        LEFT, RIGHT
+    }
 
     /* Drive for which game piece */
     public enum DriveMode {
         ALGAE, CORAL
     }
 
+    public static GameData instance;
+
+    private int reefStationIndex = 1;
+    private CoralPole coralPole = CoralPole.LEFT;
     private DriveMode driveMode = DriveMode.CORAL;
 
     /**
@@ -28,15 +31,6 @@ public class GameData {
         }
 
         return instance;
-    }
-
-    /**
-     * Gets the current game piece mode.
-     *
-     * @return The supplier that provides the current game piece mode.
-     */
-    public Supplier<DriveMode> getDriveMode() {
-        return () -> this.driveMode;
     }
 
     /**
@@ -53,8 +47,29 @@ public class GameData {
     /**
      * Getters and Setters
      */
+    public Supplier<CoralPole> getCoralPole() {
+        return () -> this.coralPole;
+    }
+
+    public Supplier<DriveMode> getDriveMode() {
+        return () -> this.driveMode;
+    }
+
+    public String getCoralPoleAsString() {
+        switch (this.coralPole) {
+            case LEFT:
+                return "LEFT";
+
+            case RIGHT:
+                return "RIGHT";
+
+            default:
+                return "";
+        }
+    }
+
     public String getDriveModeAsString() {
-        switch (getDriveMode().get()) {
+        switch (this.driveMode) {
             case ALGAE:
                 return "ALGAE";
 
@@ -66,16 +81,8 @@ public class GameData {
         }
     }
 
-    public int getReefPoleIndex() {
-        return reefPoleIndex;
-    }
-
     public int getReefStationIndex() {
         return reefStationIndex;
-    }
-
-    public String getReefPoleIndexAsString() {
-        return this.reefPoleIndex == 1 ? "LEFT" : "RIGHT";
     }
 
     public String getReefStationIndexAsString() {
@@ -97,22 +104,20 @@ public class GameData {
         }
     }
 
+    public void setCoralPole(CoralPole coralPole) {
+        this.coralPole = coralPole;
+    }
+
     public void setDriveMode(DriveMode driveMode) {
         this.driveMode = driveMode;
     }
 
-    public void setReefIndexes(int reefStationIndex, int reefPoleIndex) {
+    public void setReefStationIndex(int reefStationIndex) {
         this.reefStationIndex += reefStationIndex;
-        this.reefPoleIndex += reefPoleIndex;
 
         if (this.reefStationIndex > 6)
             this.reefStationIndex = 6;
         if (this.reefStationIndex < 1)
             this.reefStationIndex = 1;
-
-        if (this.reefPoleIndex > 2)
-            this.reefPoleIndex = 2;
-        if (this.reefPoleIndex < 1)
-            this.reefPoleIndex = 1;
     }
 }
