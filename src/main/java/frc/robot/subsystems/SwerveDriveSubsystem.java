@@ -94,7 +94,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
                         null,
                         null,
                         null,
-                        (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
+                        (state) -> Logger.recordOutput("SwerveDrive/SysIdState", state.toString())),
                 new SysIdRoutine.Mechanism(
                         (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
     }
@@ -109,7 +109,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public void periodic() {
         odometryLock.lock(); // Prevents odometry updates while reading data
         this.gyroIO.updateInputs(gyroInputs);
-        Logger.processInputs("Drive/Gyro", gyroInputs);
+        Logger.processInputs("SwerveDrive/Gyro", gyroInputs);
         for (var module : swerveModules) {
             module.periodic();
         }
@@ -124,8 +124,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
         // Log empty setpoint states when disabled
         if (DriverStation.isDisabled()) {
-            Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
-            Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
+            Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", new SwerveModuleState[] {});
+            Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
         }
 
         // Update odometry
@@ -181,8 +181,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
 
         // Log unoptimized setpoints and setpoint speeds
-        Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
-        Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
+        Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", setpointStates);
+        Logger.recordOutput("Subsystems/SwerveDrive/SwerveChassisSpeeds/Setpoints", discreteSpeeds);
 
         // Send setpoints to modules
         for (int i = 0; i < 4; i++) {
@@ -190,7 +190,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         }
 
         // Log optimized setpoints (runSetpoint mutates each state)
-        Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
+        Logger.recordOutput("Subsystems/SwerveDriveSwerveStates/SetpointsOptimized", setpointStates);
     }
 
     /** Runs the drive in a straight line with the specified drive output. */
@@ -238,7 +238,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      * Returns the module states (turn angles and drive velocities) for all of the
      * modules.
      */
-    @AutoLogOutput(key = "SwerveStates/Measured")
+    @AutoLogOutput(key = "Subsystems/SwerveDrive/SwerveStates/Measured")
     private SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (int i = 0; i < 4; i++) {
@@ -262,7 +262,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     /**
      * Returns the measured chassis speeds of the robot.
      */
-    @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
+    @AutoLogOutput(key = "Subsystems/SwerveDrive/SwerveChassisSpeeds/Measured")
     public ChassisSpeeds getChassisSpeeds() {
         return kinematics.toChassisSpeeds(getModuleStates());
     }

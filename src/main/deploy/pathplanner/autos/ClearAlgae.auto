@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A3 to S5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S5 Rotate"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S5 to S6"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

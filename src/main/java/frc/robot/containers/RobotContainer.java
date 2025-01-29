@@ -23,6 +23,7 @@ import frc.robot.commands.DriveToReefStationCommand;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.controls.GameData;
 import frc.robot.controls.GameData.CoralPole;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utils.AllianceFlipUtil;
@@ -32,6 +33,7 @@ import frc.robot.utils.AllianceFlipUtil;
  */
 abstract public class RobotContainer {
     /* Subsystems */
+    protected AlgaeIntakeSubsystem algaeIntakeSubsystem;
     protected SwerveDriveSubsystem swerveDriveSubsystem;
     protected VisionSubsystem visionSubsystem;
 
@@ -52,7 +54,7 @@ abstract public class RobotContainer {
      * ; *
      */
     protected void configureAutoBuilder() {
-        this.autoBuilder = new AutoBuilder(this.swerveDriveSubsystem);
+        this.autoBuilder = new AutoBuilder(this.swerveDriveSubsystem, this.algaeIntakeSubsystem);
         this.autoBuilder.configureAutonomous();
         this.autonomousChooser = autoBuilder.getAutonomousChooser();
     }

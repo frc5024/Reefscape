@@ -17,6 +17,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.commands.FeedForwardCharacterizationCommand;
 import frc.robot.commands.WheelRadiusCharacterizationCommand;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.utils.LocalADStarAK;
 
@@ -26,6 +27,7 @@ import frc.robot.utils.LocalADStarAK;
 public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
     /* Subsystems */
     private final SwerveDriveSubsystem swerveDriveSubsystem;
+    private final AlgaeIntakeSubsystem algaeIntakeSubsystem;
 
     /* Autonomous Chooser */
     private LoggedDashboardChooser<Command> autonomousChooser;
@@ -33,8 +35,9 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
     /**
      * 
      */
-    public AutoBuilder(SwerveDriveSubsystem swerveDriveSubsystem) {
+    public AutoBuilder(SwerveDriveSubsystem swerveDriveSubsystem, AlgaeIntakeSubsystem algaeIntakeSubsystem) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
+        this.algaeIntakeSubsystem = algaeIntakeSubsystem;
     }
 
     /**
@@ -75,7 +78,9 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
         }
 
         // Load Game Autos
-        this.autonomousChooser.addOption("DriveAway", new PathPlannerAuto("DriveAway"));
+        this.autonomousChooser.addOption("Drive Away", new PathPlannerAuto("DriveAway"));
+        this.autonomousChooser.addOption("Clear Algae", new ClearAlgae(this.algaeIntakeSubsystem).getAutoCommand());
+        this.autonomousChooser.addOption("Grab Algae", new GrabAlgae(this.algaeIntakeSubsystem).getAutoCommand());
     }
 
     /**

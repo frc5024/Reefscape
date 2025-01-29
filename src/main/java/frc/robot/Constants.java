@@ -41,6 +41,7 @@ public final class Constants {
     public static final class RobotConstants {
         public static final double LENGTH_INCHES = 38;
         public static final double LENGTH_METERS = Units.inchesToMeters(LENGTH_INCHES);
+        public static final double LOOP_PERIOD_SECS = 0.02;
 
         // Set to true to use FeedForwardCharacterization and
         // WheelRadiusCharacterization auto commands
