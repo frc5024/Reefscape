@@ -107,8 +107,17 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     /**
      * 
      */
+    public boolean hasEjected() {
+        return !hasAlgae();
+    }
+
+    /**
+     * 
+     */
     private boolean isActionComplete() {
         switch (this.stateMachine.getCurrentState()) {
+            case EJECT:
+                return !this.stateTimer.isRunning() || hasEjected();
             case INTAKE:
                 return !this.stateTimer.isRunning() || hasAlgae();
             default:

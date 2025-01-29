@@ -18,8 +18,8 @@ import edu.wpi.first.units.measure.Angle;
 import frc.robot.Constants.MapleSimConstants;
 
 public class MapleSimUtil {
-    public static SwerveDriveSimulation swerveDriveSimulation;
-    public static IntakeSimulation intakeSimulation;
+    private static SwerveDriveSimulation swerveDriveSimulation;
+    private static IntakeSimulation intakeSimulation;
 
     /**
      * 
@@ -38,8 +38,8 @@ public class MapleSimUtil {
      */
     public static IntakeSimulation getIntakeSimulation() {
         if (intakeSimulation == null) {
-            intakeSimulation = IntakeSimulation.OverTheBumperIntake("Algae", getSwerveDriveSimulation(), Meters.of(0.4),
-                    Meters.of(0.2), IntakeSimulation.IntakeSide.BACK, 1);
+            intakeSimulation = IntakeSimulation.OverTheBumperIntake("Algae", getSwerveDriveSimulation(), Meters.of(0.5),
+                    Meters.of(0.4), IntakeSimulation.IntakeSide.BACK, 1);
         }
 
         return intakeSimulation;
@@ -56,9 +56,10 @@ public class MapleSimUtil {
                         getSwerveDriveSimulation().getSimulatedDriveTrainPose().getTranslation(),
                         new Translation2d(),
                         getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),
-                        getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation(),
+                        getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation()
+                                .minus(new Rotation2d(180)),
                         Meters.of(0.4), // initial height of the ball, in meters
-                        MetersPerSecond.of(9), // initial velocity, in m/s
+                        MetersPerSecond.of(3), // initial velocity, in m/s
                         Angle.ofRelativeUnits(0, Units.Degrees)) // shooter angle
                         .withProjectileTrajectoryDisplayCallBack(
                                 (poses) -> Logger.recordOutput("successfulShotsTrajectory",

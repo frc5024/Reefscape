@@ -21,6 +21,12 @@
           "data": {
             "pathName": "S5 to S6"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S6 to S1"
+          }
         }
       ]
     }

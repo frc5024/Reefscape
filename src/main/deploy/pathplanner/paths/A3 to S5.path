@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.51389802631579,
-        "y": 2.870394736842105
+        "x": 6.965984792628171,
+        "y": 5.0737664473684205
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.243832236842105,
-        "y": 2.7356907894736846
+        "x": 5.224588815789473,
+        "y": 2.793421052631579
       },
       "prevControl": {
-        "x": 6.177138157894737,
-        "y": 2.196875
+        "x": 6.4850328947368405,
+        "y": 1.590707236842105
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 121.827446576673
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "Algae Paths",
+  "folder": "ClearAlgae",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

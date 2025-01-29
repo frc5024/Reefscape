@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 
@@ -46,7 +48,7 @@ public class ClearAlgae {
                 Commands.print("*** Starting ClearAlgae ***"),
 
                 AutoBuilder.followPath(pathGroup.get(0)),
-                // new WaitUntilCommand(3), // Drop Coral
+                new WaitCommand(0.5),
                 new ParallelCommandGroup(
                         AutoBuilder.followPath(pathGroup.get(1))
                 /* Move Elevator to Low Position */
@@ -57,9 +59,24 @@ public class ClearAlgae {
                 new WaitUntilCommand(this.algaeIntakeSubsystem::hasAlgae),
                 new ParallelCommandGroup(
                         AutoBuilder.followPath(pathGroup.get(2)),
-                        new InstantCommand(() -> {
-                            this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.EJECT);
-                        })),
+                        new SequentialCommandGroup(
+                                new WaitCommand(1),
+                                new InstantCommand(() -> {
+                                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.EJECT);
+                                }))),
+                new WaitUntilCommand(this.algaeIntakeSubsystem::hasEjected),
+                new InstantCommand(() -> {
+                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.INTAKE);
+                }),
+                new WaitUntilCommand(this.algaeIntakeSubsystem::hasAlgae),
+                new ParallelCommandGroup(
+                        AutoBuilder.followPath(pathGroup.get(3)),
+                        new SequentialCommandGroup(
+                                new WaitCommand(1),
+                                new InstantCommand(() -> {
+                                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.EJECT);
+                                }))),
+                new WaitUntilCommand(this.algaeIntakeSubsystem::hasEjected),
                 new InstantCommand(() -> {
                     this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.INTAKE);
                 }),

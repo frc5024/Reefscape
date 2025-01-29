@@ -3,7 +3,8 @@
   "robotLength": 0.61,
   "holonomicMode": true,
   "pathFolders": [
-    "Algae Paths"
+    "GrabAlgae",
+    "ClearAlgae"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
