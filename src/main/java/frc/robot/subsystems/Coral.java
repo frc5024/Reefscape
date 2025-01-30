@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLowLevel;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -20,6 +19,7 @@ public class Coral extends SubsystemBase{
         HOLDING,
         DROPPING,
     }
+      
     // motor controller for coral
     private SparkFlex coralMotor;
 
@@ -28,7 +28,7 @@ public class Coral extends SubsystemBase{
     int linebreakTopChannel = Constants.coralConstants.linebreakTopChannel;
     int linebreakBottomChannel = Constants.coralConstants.linebreakBottomChannel;
     double intakeSpeed = Constants.coralConstants.intakeSpeed;
-    double outtakeSpeed = Constants.outtakeConstants.outtakeSpeed;
+    double outtakeSpeed = Constants.coralConstants.outtakeSpeed;
 
     ShuffleboardTab tab = Shuffleboard.getTab("CoralMotors");
     GenericEntry intakeMotorSpeedEntry = tab.add("SET intake speed", intakeSpeed).getEntry();
@@ -36,12 +36,20 @@ public class Coral extends SubsystemBase{
 
     //constructor for coralMotor
     public Coral() {
-        coralMotor = new SparkFlex(coralMotorChannel, SparkLowLevel.MotorType.kBrushless);
+        coralMotor = new SparkFlex(coralMotorChannel, SparkFlex.MotorType.kBrushless);
 
         tab.addDouble("intake motor speed", () -> coralMotor.get());
         
     }
     // method for intaking coral, takes in a boolean to determine if the coral should intake
+
+    @Override
+    public void periodic() {
+        intakeSpeed = intakeMotorSpeedEntry.getDouble(intakeSpeed);
+        outtakeSpeed = outtakeMotorSpeedEntry.getDouble(outtakeSpeed);
+    }
+
+
     public void startIntake(boolean intaking) {
         if(intaking) {
             coralMotor.set(intakeSpeed);
@@ -59,7 +67,7 @@ public class Coral extends SubsystemBase{
     public void startOuttake(boolean outtaking) {
         //if outtaking true, set outtakeSpeed, if not, set motor to 0
         if(outtaking) {
-            coralMotor.set(outtakeSpeed);
+            coralMotor.set(0.6);
         }
         else {
             coralMotor.set(0);

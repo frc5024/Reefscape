@@ -17,9 +17,9 @@ public class OuttakeCommand extends Command {
 
     //constructor for OuttakeCommand
     public OuttakeCommand(Coral coralSubsystem) {
-        this.coralSubsystem = coralSubsystem;
-        linebreakTop = new DigitalInput(Constants.coralConstants.linebreakTopChannel);
-        linebreakBottom = new DigitalInput(Constants.coralConstants.linebreakBottomChannel);
+        this.coralSubsystem = coralSubsystem; 
+        //linebreakTop = new DigitalInput(Constants.coralConstants.linebreakTopChannel);
+        //linebreakBottom = new DigitalInput(Constants.coralConstants.linebreakBottomChannel);
 
         addRequirements(coralSubsystem);
     }
@@ -34,12 +34,12 @@ public class OuttakeCommand extends Command {
         activeOuttake(false);
 
     }
-    //execute, if line is not broken, and timer is greater than 0.5, set activeOuttake to false and state to IDLE
+    //execute, if line is not broken, and t2nd linebreak not broken, set activeOuttake to false and state to IDLE
     @Override
     public void execute() {
         if(!isTopLineBroken()) {
             if(!isBottomLineBroken()) {
-                activeOuttake(false);
+                activeOuttake(true);
                 coralSubsystem.state = coralState.IDLE;
                 coralSubsystem.setIdle();
             }
