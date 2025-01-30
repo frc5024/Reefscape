@@ -10,22 +10,22 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMetadata;
-import frc.robot.modules.algae.AlgaeIntakeIOInputsAutoLogged;
-import frc.robot.modules.algae.AlgaeIntakeModuleIO;
+import frc.robot.modules.elevator.ElevatorIOInputsAutoLogged;
+import frc.robot.modules.elevator.ElevatorModuleIO;
 
 /**
  * 
  */
-public class AlgaeIntakeSubsystem extends SubsystemBase {
-    private final String NAME = "AlgaeIntake";
+public class ElevatorSubsystem extends SubsystemBase {
+    private final String NAME = "Elevator";
     private final Alert disconnected;
 
     public static enum Action {
-        STOP, EJECT, INTAKE
+        HOLD, MOVE_TO_IDLE, MOVE_TO_CORAL_1, MOVE_TO_CORAL_2, MOVE_TO_CORAL_3
     }
 
-    private final AlgaeIntakeModuleIO intakeModule;
-    protected final AlgaeIntakeIOInputsAutoLogged inputs = new AlgaeIntakeIOInputsAutoLogged();
+    private final ElevatorModuleIO elevatorModule;
+    protected final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
     protected final Timer stateTimer = new Timer();
 
     private final StateMachine<Action> stateMachine;
@@ -34,15 +34,15 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     /**
      * 
      */
-    public AlgaeIntakeSubsystem(AlgaeIntakeModuleIO intakeModule) {
-        this.intakeModule = intakeModule;
+    public ElevatorSubsystem(ElevatorModuleIO elevatorModule) {
+        this.elevatorModule = elevatorModule;
         this.disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
         // Sets states for the arm, and what methods.
         this.stateMachine = new StateMachine<>(NAME);
-        this.stateMachine.setDefaultState(Action.STOP, this::handleStop);
-        this.stateMachine.addState(Action.EJECT, this::handleEject);
-        this.stateMachine.addState(Action.INTAKE, this::handleIntake);
+        this.stateMachine.setDefaultState(Action.MOVE_TO_IDLE, this::handleMoveToIdle);
+        this.stateMachine.addState(Action.HOLD, this::handleHold);
+        this.stateMachine.addState(Action.MOVE_TO_CORAL_1, this::handleMoveToCoral1);
 
         this.actionQueue = new LinkedList<Action>();
 
@@ -66,31 +66,9 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     /**
      * 
      */
-    protected void handleEject(StateMetadata<Action> stateMetadata) {
+    protected void handleHold(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            this.stateTimer.reset();
-            this.stateTimer.start();
-            this.intakeModule.eject();
-        }
-    }
-
-    /**
-     * 
-     */
-    protected void handleIntake(StateMetadata<Action> stateMetadata) {
-        if (stateMetadata.isFirstRun()) {
-            this.stateTimer.reset();
-            this.stateTimer.start();
-            this.intakeModule.intake();
-        }
-    }
-
-    /**
-     * 
-     */
-    protected void handleStop(StateMetadata<Action> stateMetadata) {
-        if (stateMetadata.isFirstRun()) {
-            this.intakeModule.stop();
+            this.elevatorModule.stop();
             this.stateTimer.stop();
         }
     }
@@ -98,15 +76,21 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     /**
      * 
      */
-    public boolean hasAlgae() {
-        return false;
+    protected void handleMoveToIdle(StateMetadata<Action> stateMetadata) {
+        if (stateMetadata.isFirstRun()) {
+            this.elevatorModule.stop();
+            this.stateTimer.stop();
+        }
     }
 
     /**
      * 
      */
-    public boolean hasEjected() {
-        return !hasAlgae();
+    protected void handleMoveToCoral1(StateMetadata<Action> stateMetadata) {
+        if (stateMetadata.isFirstRun()) {
+            this.elevatorModule.stop();
+            this.stateTimer.stop();
+        }
     }
 
     /**
@@ -114,10 +98,6 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
      */
     private boolean isActionComplete() {
         switch (this.stateMachine.getCurrentState()) {
-            case EJECT:
-                return !this.stateTimer.isRunning() || hasEjected();
-            case INTAKE:
-                return !this.stateTimer.isRunning() || hasAlgae();
             default:
                 return !this.stateTimer.isRunning();
         }
@@ -129,7 +109,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     public void periodic() {
         this.stateMachine.update();
 
-        this.intakeModule.updateInputs(this.inputs);
+        this.elevatorModule.updateInputs(this.inputs);
         Logger.processInputs(this.NAME, this.inputs);
 
         this.disconnected.set(!this.inputs.connected);
@@ -140,11 +120,11 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
         }
 
         if (isActionComplete()) {
-            this.stateMachine.setState(Action.STOP);
+            this.stateMachine.setState(Action.HOLD);
         }
 
         // Run any action in the queue
-        if (this.stateMachine.getCurrentState() == Action.STOP && this.actionQueue.size() > 0) {
+        if (this.stateMachine.getCurrentState() == Action.HOLD && this.actionQueue.size() > 0) {
             try {
                 Action nextAction = this.actionQueue.removeFirst();
                 this.stateMachine.setState(nextAction);
@@ -153,6 +133,5 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
         }
 
         Logger.recordOutput("Subsystems/" + this.NAME + "/Current State", this.stateMachine.getCurrentState());
-        Logger.recordOutput("Subsystems/" + this.NAME + "/Has Algae", hasAlgae());
     }
 }

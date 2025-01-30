@@ -7,8 +7,10 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.modules.algae.AlgaeIntakeModuleIOSim;
+import frc.robot.modules.elevator.ElevatorModuleIOSim;
 import frc.robot.modules.gyro.GyroModuleIOSim;
 import frc.robot.modules.swerve.SwerveModuleIOMapleSim;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.simulation.AlgaeIntakeSubsystemSim;
@@ -39,6 +41,7 @@ public class MapleSimRobotContainer extends RobotContainer {
                 swerveDriveSimulation::getSimulatedDriveTrainPose, this.swerveDriveSubsystem::getRotation);
 
         this.algaeIntakeSubsystem = new AlgaeIntakeSubsystemSim(new AlgaeIntakeModuleIOSim());
+        this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim());
 
         configureAutoBuilder();
         configureButtonBindings();

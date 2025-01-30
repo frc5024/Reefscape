@@ -12,6 +12,7 @@ import java.util.List;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
@@ -24,6 +25,8 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.lib.camera.Camera;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -73,6 +76,14 @@ public final class Constants {
                     TunerConstants.FrontLeft.SlipCurrent,
                     1),
             SwerveDriveSubsystem.getModuleTranslations());
+
+    /**
+     * 
+     */
+    public static class ElevatorConstants {
+        public static final double HEIGHT_IN_METERS = 3.0;
+        public static final Rotation2d ANGLE = Rotation2d.fromDegrees(82.0);
+    }
 
     /**
      * 
@@ -150,6 +161,15 @@ public final class Constants {
                         Meters.of(TunerConstants.FrontLeft.WheelRadius),
                         KilogramSquareMeters.of(0.02),
                         WHEEL_COF));
+    }
+
+    /**
+     * 
+     */
+    public static final class MechanismConstants {
+        public static final double CANVAS_SIZE_METERS = Units.inchesToMeters(98);
+        public static final LoggedMechanism2d CANVAS = new LoggedMechanism2d(CANVAS_SIZE_METERS, CANVAS_SIZE_METERS,
+                new Color8Bit(Color.kWheat));
     }
 
     /**

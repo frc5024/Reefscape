@@ -24,6 +24,7 @@ import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.controls.GameData;
 import frc.robot.controls.GameData.CoralPole;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utils.AllianceFlipUtil;
@@ -34,6 +35,7 @@ import frc.robot.utils.AllianceFlipUtil;
 abstract public class RobotContainer {
     /* Subsystems */
     protected AlgaeIntakeSubsystem algaeIntakeSubsystem;
+    protected ElevatorSubsystem elevatorSubsystem;
     protected SwerveDriveSubsystem swerveDriveSubsystem;
     protected VisionSubsystem visionSubsystem;
 
