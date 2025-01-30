@@ -7,7 +7,9 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.ClimbUltrasonic;
 import frc.robot.subsystems.Swerve;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,11 +19,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Climb m_climbSubsystem = new Climb();
+  private final ClimbUltrasonic m_Ultrasonic = ClimbUltrasonic.getInstance();
 
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
 
-  private final Swerve s_Swerve = Swerve.getInstance();
+  // private final Swerve s_Swerve = Swerve.getInstance();
 
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -29,17 +32,17 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    s_Swerve.setDefaultCommand(
-        new TeleopSwerve(
-            s_Swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis),
-            () -> false // true = robotcentric
+    // s_Swerve.setDefaultCommand(
+    // new TeleopSwerve(
+    // s_Swerve,
+    // () -> -driver.getRawAxis(translationAxis),
+    // () -> -driver.getRawAxis(strafeAxis),
+    // () -> -driver.getRawAxis(rotationAxis),
+    // () -> false // true = robotcentric
 
-        ));
+    // ));
 
-    configureBindings();
+    // configureBindings();
 
   }
 
@@ -47,7 +50,7 @@ public class RobotContainer {
 
     driver.a().whileTrue(new ClimbCommand(m_climbSubsystem, 0.2));
     driver.b().whileTrue(new ClimbCommand(m_climbSubsystem, -0.2));
-    driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+    // driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
 
   public Command getAutonomousCommand() {

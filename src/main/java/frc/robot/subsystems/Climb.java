@@ -17,6 +17,7 @@ public class Climb extends SubsystemBase {
     // private final MedianFilter m_filter;
     // private final DigitalInput kUltrasonicEchoPort;
     // private final DigitalOutput kUltrasonicPingPort;
+    // private final Ultrasonic m_ultrasonic;
 
     public Climb() {
         climbMotor = new TalonFX(7);
@@ -44,4 +45,5 @@ public class Climb extends SubsystemBase {
     public void stopMotor() {
         climbMotor.set(0);
     }
+
 }
