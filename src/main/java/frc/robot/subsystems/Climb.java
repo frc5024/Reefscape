@@ -14,7 +14,7 @@ public class Climb extends SubsystemBase {
     private TalonFX climbMotor;
 
     // private DigitalInput limitSwitch;
-    // private final MedianFilter m_filter;
+    private final MedianFilter m_filter;
     // private final DigitalInput kUltrasonicEchoPort;
     // private final DigitalOutput kUltrasonicPingPort;
     // private final Ultrasonic m_ultrasonic;
@@ -24,7 +24,7 @@ public class Climb extends SubsystemBase {
         // kUltrasonicEchoPort = new DigitalInput(8);
         // kUltrasonicPingPort = new DigitalOutput(9);
         // m_ultrasonic = new Ultrasonic(9, 8);
-        // m_filter = new MedianFilter(5);
+        m_filter = new MedianFilter(5);
 
         // linebreak = new DigitalInput(7);
         // limitSwitch = new DigitalInput(1);
