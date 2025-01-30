@@ -14,16 +14,17 @@ public class Climb extends SubsystemBase {
     private TalonFX climbMotor;
 
     // private DigitalInput limitSwitch;
-    // private final MedianFilter m_filter;
+    private final MedianFilter m_filter;
     // private final DigitalInput kUltrasonicEchoPort;
     // private final DigitalOutput kUltrasonicPingPort;
+    private final Ultrasonic m_ultrasonic;
 
     public Climb() {
         climbMotor = new TalonFX(7);
         // kUltrasonicEchoPort = new DigitalInput(8);
         // kUltrasonicPingPort = new DigitalOutput(9);
-        // m_ultrasonic = new Ultrasonic(9, 8);
-        // m_filter = new MedianFilter(5);
+        m_ultrasonic = new Ultrasonic(9, 8);
+        m_filter = new MedianFilter(5);
 
         // linebreak = new DigitalInput(7);
         // limitSwitch = new DigitalInput(1);
@@ -43,5 +44,10 @@ public class Climb extends SubsystemBase {
 
     public void stopMotor() {
         climbMotor.set(0);
+    }
+
+    public void ultrasonic(){
+        double measurement = m_ultrasonic.getRangeMM();
+       System.out.println(measurement);
     }
 }
