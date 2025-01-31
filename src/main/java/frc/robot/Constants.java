@@ -20,15 +20,25 @@ public final class Constants {
         public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
 
-        public static final double kP = 0;
+        public static final double kP =0.073;
         public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kD = 0.00001;
+
+        //public static final double radianstoCM(double CM) {
+                //double radians;
+                //radians = Units.degreesToRadians(CM/1.4765*360);
+                //return(radians);
+        //}
+        
+        //one rotation equals 1.4765 cm
+
+        
 
         public static final double L1Position = Units.degreesToRadians(100);
         public static final double L2Position =Units.degreesToRadians(200);
-        public static final double L2point5position = Units.degreesToRadians(250);
+        public static final double Algae1 = Units.degreesToRadians(250);
         public static final double L3position = Units.degreesToRadians(300);
-        public static final double L3point5position = Units.degreesToRadians(350);
+        public static final double Algae2 = Units.degreesToRadians(350);
         public static final double L4position = Units.degreesToRadians(400);
 
   }

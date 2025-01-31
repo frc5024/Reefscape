@@ -22,6 +22,7 @@ public class SetElevatorSetpointCmd extends Command{
     public void initialize() {
         elevatorSubsystem.setSetPoint(setpoint);
         elevatorSubsystem.motorOn(true);
+        System.out.println("aaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
     }
 
