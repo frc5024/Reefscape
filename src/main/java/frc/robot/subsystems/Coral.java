@@ -22,8 +22,10 @@ public class Coral extends SubsystemBase{
       
     // motor controller for coral
     private SparkFlex coralMotor;
+    private SparkFlex coralMotor1;
 
     //all constants for coral
+    int coralMotor1Channel = Constants.coralConstants.coralMotorChannel;
     int coralMotorChannel = Constants.coralConstants.coralMotorChannel;
     int linebreakTopChannel = Constants.coralConstants.linebreakTopChannel;
     int linebreakBottomChannel = Constants.coralConstants.linebreakBottomChannel;
@@ -39,8 +41,15 @@ public class Coral extends SubsystemBase{
         coralMotor = new SparkFlex(coralMotorChannel, SparkFlex.MotorType.kBrushless);
 
         tab.addDouble("intake motor speed", () -> coralMotor.get());
+
+        coralMotor1 = new SparkFlex(coralMotor1Channel, SparkFlex.MotorType.kBrushless);
+
+        tab.addDouble("intake motor speed", () -> coralMotor1.get());
+    };
+    
+      
         
-    }
+    
     // method for intaking coral, takes in a boolean to determine if the coral should intake
 
     @Override
@@ -53,14 +62,17 @@ public class Coral extends SubsystemBase{
     public void startIntake(boolean intaking) {
         if(intaking) {
             coralMotor.set(intakeSpeed);
+            coralMotor1.set(intakeSpeed * -1);
         }
         else {
             coralMotor.set(0);
+            coralMotor1.set(0);
         }
     }
     //idle state, set motor to 0
     public void setIdle() {
         coralMotor.set(0);
+        coralMotor1.set(0);
     }
 
     // method for outtaking coral, takes in a boolean to determine if the coral should outtake
@@ -68,9 +80,11 @@ public class Coral extends SubsystemBase{
         //if outtaking true, set outtakeSpeed, if not, set motor to 0
         if(outtaking) {
             coralMotor.set(0.6);
+            coralMotor1.set (0.6 * -1);
         }
         else {
             coralMotor.set(0);
+            coralMotor1.set (0);
         }
     }
     
