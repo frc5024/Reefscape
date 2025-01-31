@@ -22,12 +22,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.RobotController;
-import frc.robot.generated.TunerConstants;
 
 /**
  * Provides an interface for asynchronously reading high-frequency measurements
@@ -43,8 +41,9 @@ import frc.robot.generated.TunerConstants;
  * time synchronization.
  */
 public class PhoenixOdometryThread extends Thread {
-    public static final double ODOMETRY_FREQUENCY = new CANBus(TunerConstants.DrivetrainConstants.CANBusName)
-            .isNetworkFD() ? 250.0 : 100.0;
+    public static final double ODOMETRY_FREQUENCY = 100.0; // new
+                                                           // CANBus(TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD()
+                                                           // ? 250.0 : 100.0;
     public static final Lock odometryLock = new ReentrantLock();
 
     private final Lock signalsLock = new ReentrantLock(); // Prevents conflicts when registering signals
@@ -54,7 +53,7 @@ public class PhoenixOdometryThread extends Thread {
     private final List<Queue<Double>> genericQueues = new ArrayList<>();
     private final List<Queue<Double>> timestampQueues = new ArrayList<>();
 
-    private static boolean isCANFD = new CANBus(TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD();
+    private static boolean isCANFD = false; // new CANBus(TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD();
     private static PhoenixOdometryThread instance = null;
 
     public static PhoenixOdometryThread getInstance() {

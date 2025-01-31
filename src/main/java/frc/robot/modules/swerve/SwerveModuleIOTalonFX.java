@@ -90,9 +90,9 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     public SwerveModuleIOTalonFX(
             SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants) {
         this.constants = constants;
-        driveTalon = new TalonFX(constants.DriveMotorId, TunerConstants.DrivetrainConstants.CANBusName);
-        turnTalon = new TalonFX(constants.SteerMotorId, TunerConstants.DrivetrainConstants.CANBusName);
-        cancoder = new CANcoder(constants.EncoderId, TunerConstants.DrivetrainConstants.CANBusName);
+        driveTalon = new TalonFX(constants.DriveMotorId); // , TunerConstants.DrivetrainConstants.CANBusName);
+        turnTalon = new TalonFX(constants.SteerMotorId); // , TunerConstants.DrivetrainConstants.CANBusName);
+        cancoder = new CANcoder(constants.EncoderId); // , TunerConstants.DrivetrainConstants.CANBusName);
 
         // Configure drive motor
         var driveConfig = constants.DriveMotorInitialConfigs;

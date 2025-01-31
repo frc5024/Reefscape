@@ -19,8 +19,8 @@ import frc.robot.utils.PhoenixOdometryThread;
  * 
  */
 public class GyroModuleIOPigeon2 implements GyroModuleIO {
-    private final Pigeon2 pigeon = new Pigeon2(TunerConstants.DrivetrainConstants.Pigeon2Id,
-            TunerConstants.DrivetrainConstants.CANBusName);
+    private final Pigeon2 pigeon = new Pigeon2(TunerConstants.DrivetrainConstants.Pigeon2Id); // ,
+                                                                                              // TunerConstants.DrivetrainConstants.CANBusName);
     private final StatusSignal<Angle> yaw = pigeon.getYaw();
     private final Queue<Double> yawPositionQueue;
     private final Queue<Double> yawTimestampQueue;
