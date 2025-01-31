@@ -12,13 +12,25 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Algae extends SubsystemBase {
+
+    final double motorspeedintake = 0.5;
+    final double motorspeedouttake = -0.5;
+    final double motorspeedidle = 0;
     private DigitalInput linebreak;
-    private DigitalInput limSwInput;
     private static Algae mInstance = null;
     public boolean sensorOutput;
-    private LEDs LEDS = LEDs.getInstance();
+    // private LEDs LEDS = LEDs.getInstance();
     private SparkMax motor1;
     private SparkMax motor2;
+
+    private enum states {
+        idle,
+        intaking,
+        holding,
+        outaking
+    }
+
+    private states currentstate = states.idle;
 
     public static final Algae getInstance() {
         if (mInstance == null) {
@@ -29,14 +41,25 @@ public class Algae extends SubsystemBase {
     }
 
     private Algae() {
-        // linebreak = new DigitalInput(6);
+        linebreak = new DigitalInput(6);
         // limSwInput = new DigitalInput(5);
         motor1 = new SparkMax(3, MotorType.kBrushless);
         motor2 = new SparkMax(62, MotorType.kBrushless);
 
     }
-    // Assigns sparkmax motors to variables
 
+    public int checkPressTime(int presstime, double buttonaxis) {
+
+        if ((buttonaxis) > 0.1) {
+            presstime += 1;
+        } else {
+            presstime = 0;
+        }
+
+        return presstime;
+    }
+
+    // Assigns sparkmax motors to variables
     public void setSpeed(Double speed) {
         motor1.set(speed);
         motor2.set(speed);
@@ -49,6 +72,46 @@ public class Algae extends SubsystemBase {
      *
      * @return a command
      */
+
+    public void motorSpeedStateMachine(int presstime) {
+
+        // When algae is detected inside robot and robot is not outaking, set state to
+        // holding
+        if ((linebreak.get() == true) && (currentstate != states.outaking)) {
+            setSpeed(motorspeedidle);
+            currentstate = states.holding;
+        }
+
+        // When algae is not detected inside robot and robot is not intaking, set state
+        // to idle
+        if ((linebreak.get() == false) && (currentstate != states.intaking)) {
+            setSpeed(motorspeedidle);
+            currentstate = states.idle;
+        }
+        // When button is pressed
+        if ((presstime == 1)) {
+
+            // When idling, sets state to intaking and enables motors
+            if (currentstate == states.idle) {
+                setSpeed(motorspeedintake);
+                currentstate = states.intaking;
+            }
+
+            // When intaking, sets state to idle and disables motors
+            else if (currentstate == states.intaking) {
+                setSpeed(motorspeedidle);
+                currentstate = states.idle;
+            }
+
+            // When holding an algae, sets state to outtaking and enables motors in reverse
+            else if (currentstate == states.holding) {
+                setSpeed(motorspeedouttake);
+                currentstate = states.outaking;
+            }
+
+        }
+
+    }
 
     public Command exampleMethodCommand() {
         // Inline construction of command goes here.

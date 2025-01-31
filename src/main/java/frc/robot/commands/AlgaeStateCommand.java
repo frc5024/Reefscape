@@ -5,18 +5,18 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Algae;
 
-public class AlgaeCommand extends Command {
+public class AlgaeStateCommand extends Command {
     private final Algae m_algae;
-    private DoubleSupplier outPower;
-    private DoubleSupplier inPower;
+    private DoubleSupplier buttonAxis;
+    private int presstime = 0;
 
-    public AlgaeCommand(Algae algae, DoubleSupplier outPower, DoubleSupplier inPower) {
-        m_algae = algae;
-        this.outPower = outPower;
-        this.inPower = inPower;
+    public AlgaeStateCommand(Algae algae, DoubleSupplier buttonAxis) {
+        this.m_algae = algae;
+        this.buttonAxis = buttonAxis;
         addRequirements(m_algae);
 
     }
+
     // Reads values from triggers and assigns them to variables
 
     // Called when the command is initially scheduled.
@@ -28,8 +28,9 @@ public class AlgaeCommand extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double algaeMotorSpeed = (outPower.getAsDouble() * 0.5) + (-inPower.getAsDouble() * 0.5);
-        m_algae.setSpeed(algaeMotorSpeed);
+        // Sets presstime to number of frames button has been held for
+        presstime = m_algae.checkPressTime(presstime, buttonAxis.getAsDouble());
+        m_algae.motorSpeedStateMachine(presstime);
 
     }
     // Halfes the trigger values and adds them, then assigns them to m_algae as
