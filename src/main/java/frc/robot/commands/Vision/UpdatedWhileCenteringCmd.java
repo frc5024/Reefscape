@@ -1,18 +1,18 @@
 package frc.robot.commands.Vision;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
-public class VisionWhileCenteringCmd extends Command {
+public class UpdatedWhileCenteringCmd extends Command {
     private final Limelight limelight;
     private final Swerve swerveDrive;
-
-    private final double targetID = 5;
 
     double strafePidOutput = 0;
     double rotationPidOutput = 0;
@@ -23,17 +23,16 @@ public class VisionWhileCenteringCmd extends Command {
     private PIDController translationPidController;
 
     double desiredz = 0.97; // in meters
-    double tagAngle = 0;
 
     boolean xPos = false;
     boolean rotationPos = false;
     boolean zPos = false;
 
-    public VisionWhileCenteringCmd(Limelight limelight, Swerve swerveDrive) {
+    public UpdatedWhileCenteringCmd(Limelight limelight, Swerve swerveDrive) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
 
-        this.strafePidController = new PIDController(0.7, 0, 0.045);
+        this.strafePidController = new PIDController(0.7, 0, 0.05);
         this.translationPidController = new PIDController(0.7, 0, 0.05);
         this.rotationPidController = new PIDController(0.008, 0, 0.0005);
 
@@ -47,39 +46,46 @@ public class VisionWhileCenteringCmd extends Command {
         rotationPidController.reset();
     }
 
+    Set<Integer> validTagIDs = new HashSet<>(
+            Set.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22));
+
     @Override
     public void execute() {
+        double detectedTagID = limelight.getAprilTagID();
+        double tagAngle = 0;
 
-        if (limelight.getAprilTagID() == targetID) {
-            // at___ = AprilTag____
+        if (detectedTagID == 5) {
+            tagAngle = 0;
+        } else if (detectedTagID == 7) {
+            tagAngle = -30;
+        }
 
+        if (detectedTagID == 5) {
             double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
             Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
             double robotHeading = swerveDrive.getGyroYaw().getDegrees();
-            double x = limelight.getX(); // degrees from LL to the tag
-            double yawDeg = botPose[4]; // degrees from the LL to the tags yaw
-            double Dis = -botPose3D.getZ(); // Distance from LL to tag
+            double x = limelight.getX();
+            double yawDeg = botPose[4];
+            double Dis = -botPose3D.getZ();
 
-            double[] targetPoseValues = LimelightHelpers.getTargetPose_RobotSpace("");
-            Translation2d targetPose_relBot = new Translation2d(targetPoseValues[0], targetPoseValues[1]);
-            Translation2d targetPose_relField = targetPose_relBot.rotateBy(swerveDrive.getGyroYaw());
+            double zDis = Dis * Math.cos(Math.toRadians(robotHeading));
 
-            System.out.println(yawDeg);
+            double atDeg = yawDeg - x;
+            double atRad = Math.toRadians(atDeg);
+            double atXDis = zDis * (Math.tan(atRad));
 
-            double rotationToTag = robotHeading - tagAngle;
+            double zDiff = desiredz - zDis;
 
-            double zDis = Dis * Math.cos(Math.toRadians(robotHeading)); // Distance from robot to tag in relation of the
-            // field (Adjacent)
+            double tagYawRad = Math.toRadians(yawDeg); // Convert tag yaw to radians
 
-            double atDeg = yawDeg - x; // Difference from the LL to the tag
-            double atXDis = zDis * (Math.tan(Math.toRadians(atDeg)));
+            double tagRotation = robotHeading + tagAngle;
 
-            // Left/Right
-            double translationDiff = targetPose_relField.getY() - desiredz;
-            double strafeDiff = -targetPose_relField.getX();
+            // Convert robot's desired movement into the tag's coordinate system
+            double tagRelativeX = atXDis * Math.cos(tagYawRad) + zDis * Math.sin(tagYawRad);
+            double tagRelativeZ = zDis * Math.cos(tagYawRad) - atXDis * Math.sin(tagYawRad);
 
-            if (Math.abs(rotationToTag) > 1) { // Adjust tolerance as needed
-                rotationPidOutput = rotationPidController.calculate(rotationToTag, 0);
+            if (Math.abs(tagRotation) > 1) { // Adjust tolerance as needed
+                rotationPidOutput = rotationPidController.calculate(tagRotation, 0);
                 rotationPidOutput = rotationPidOutput * 1; // Speed multiplier
                 rotationPos = false;
             } else {
@@ -87,17 +93,17 @@ public class VisionWhileCenteringCmd extends Command {
                 rotationPos = true;
             }
 
-            if (Math.abs(strafeDiff) > 0.015) { // In meters
-                strafePidOutput = strafePidController.calculate(strafeDiff, 0);
-                strafePidOutput = strafePidOutput * 1; // Speed multiplier
+            if (Math.abs(atXDis) > 0.015) { // In meters
+                strafePidOutput = strafePidController.calculate(tagRelativeX, 0);
+                strafePidOutput = -strafePidOutput * 1; // Speed multiplier
                 xPos = false;
             } else {
                 strafePidOutput = 0;
                 xPos = true;
             }
 
-            if (Math.abs(translationDiff) > 0.015) { // In meters
-                translationPidOutput = translationPidController.calculate(translationDiff, 0);
+            if (Math.abs(zDiff) > 0.015) { // In meters
+                translationPidOutput = translationPidController.calculate(tagRelativeZ, 0);
                 translationPidOutput = translationPidOutput * 1; // Speed multiplier
                 zPos = false;
             } else {

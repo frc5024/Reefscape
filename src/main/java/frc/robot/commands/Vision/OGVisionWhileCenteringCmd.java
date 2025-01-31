@@ -2,13 +2,20 @@ package frc.robot.commands.Vision;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
-public class VisionWhileCenteringCmd extends Command {
+public class OGVisionWhileCenteringCmd extends Command {
+    static ShuffleboardTab tab = Shuffleboard.getTab("Tag");
+    GenericEntry pEntry = tab.add("SET P", 0.7).getEntry();
+    GenericEntry dEntry = tab.add("SET D", 0.05).getEntry();
+    GenericEntry iEntry = tab.add("SET I", 0).getEntry();
+
     private final Limelight limelight;
     private final Swerve swerveDrive;
 
@@ -22,18 +29,18 @@ public class VisionWhileCenteringCmd extends Command {
     private PIDController rotationPidController;
     private PIDController translationPidController;
 
-    double desiredz = 0.97; // in meters
+    double desiredz = 1; // in meters
     double tagAngle = 0;
 
     boolean xPos = false;
     boolean rotationPos = false;
     boolean zPos = false;
 
-    public VisionWhileCenteringCmd(Limelight limelight, Swerve swerveDrive) {
+    public OGVisionWhileCenteringCmd(Limelight limelight, Swerve swerveDrive) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
 
-        this.strafePidController = new PIDController(0.7, 0, 0.045);
+        this.strafePidController = new PIDController(0.7, 0, 0.05);
         this.translationPidController = new PIDController(0.7, 0, 0.05);
         this.rotationPidController = new PIDController(0.008, 0, 0.0005);
 
@@ -52,31 +59,31 @@ public class VisionWhileCenteringCmd extends Command {
 
         if (limelight.getAprilTagID() == targetID) {
             // at___ = AprilTag____
+            translationPidController.setP(pEntry.getDouble(0));
+            translationPidController.setI(iEntry.getDouble(0));
+            translationPidController.setD(dEntry.getDouble(0));
+
+            strafePidController.setP(pEntry.getDouble(0));
+            strafePidController.setI(iEntry.getDouble(0));
+            strafePidController.setD(dEntry.getDouble(0));
 
             double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
             Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
             double robotHeading = swerveDrive.getGyroYaw().getDegrees();
-            double x = limelight.getX(); // degrees from LL to the tag
-            double yawDeg = botPose[4]; // degrees from the LL to the tags yaw
+            double x = limelight.getX();
+            double yawDeg = botPose[4];
             double Dis = -botPose3D.getZ(); // Distance from LL to tag
-
-            double[] targetPoseValues = LimelightHelpers.getTargetPose_RobotSpace("");
-            Translation2d targetPose_relBot = new Translation2d(targetPoseValues[0], targetPoseValues[1]);
-            Translation2d targetPose_relField = targetPose_relBot.rotateBy(swerveDrive.getGyroYaw());
-
-            System.out.println(yawDeg);
 
             double rotationToTag = robotHeading - tagAngle;
 
             double zDis = Dis * Math.cos(Math.toRadians(robotHeading)); // Distance from robot to tag in relation of the
-            // field (Adjacent)
+                                                                        // field
 
-            double atDeg = yawDeg - x; // Difference from the LL to the tag
+            double atDeg = yawDeg - x;
             double atXDis = zDis * (Math.tan(Math.toRadians(atDeg)));
 
             // Left/Right
-            double translationDiff = targetPose_relField.getY() - desiredz;
-            double strafeDiff = -targetPose_relField.getX();
+            double zDiff = desiredz - zDis;
 
             if (Math.abs(rotationToTag) > 1) { // Adjust tolerance as needed
                 rotationPidOutput = rotationPidController.calculate(rotationToTag, 0);
@@ -87,17 +94,17 @@ public class VisionWhileCenteringCmd extends Command {
                 rotationPos = true;
             }
 
-            if (Math.abs(strafeDiff) > 0.015) { // In meters
-                strafePidOutput = strafePidController.calculate(strafeDiff, 0);
-                strafePidOutput = strafePidOutput * 1; // Speed multiplier
+            if (Math.abs(atXDis) > 0.015) { // In meters
+                strafePidOutput = strafePidController.calculate(atXDis, 0);
+                strafePidOutput = -strafePidOutput * 1; // Speed multiplier
                 xPos = false;
             } else {
                 strafePidOutput = 0;
                 xPos = true;
             }
 
-            if (Math.abs(translationDiff) > 0.015) { // In meters
-                translationPidOutput = translationPidController.calculate(translationDiff, 0);
+            if (Math.abs(zDiff) > 0.015) { // In meters
+                translationPidOutput = translationPidController.calculate(zDiff, 0);
                 translationPidOutput = translationPidOutput * 1; // Speed multiplier
                 zPos = false;
             } else {
