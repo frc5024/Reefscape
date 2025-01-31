@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDPreset;
 import frc.robot.subsystems.LEDs;
-import edu.wpi.first.wpilibj.Timer;;
 
 public class TestLEDs extends Command {
   private LEDs leds;
