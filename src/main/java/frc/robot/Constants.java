@@ -24,6 +24,7 @@ public final class Constants {
                 public static final int coralMotorChannel = 62;
                 public static final int linebreakTopChannel = 8;
                 public static final int linebreakBottomChannel = 9;
+                public static final int servoChannel = 0;
                 public static final double intakeSpeed = 0.6;
                 public static final double outtakeSpeed = -0.6;
         }

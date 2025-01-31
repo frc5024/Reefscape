@@ -59,7 +59,7 @@ public class OuttakeCommand extends Command {
     }
 
     public static boolean isTopLineBroken() {
-        return linebreakTop.get();
+        return linebreakTop.get(); 
     }
 
     public static boolean isBottomLineBroken() {
