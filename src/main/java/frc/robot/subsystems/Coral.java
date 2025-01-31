@@ -5,6 +5,7 @@ import frc.robot.Constants;
 import com.revrobotics.spark.SparkFlex;
 
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,6 +30,7 @@ public class Coral extends SubsystemBase{
     int coralMotorChannel = Constants.coralConstants.coralMotorChannel;
     int linebreakTopChannel = Constants.coralConstants.linebreakTopChannel;
     int linebreakBottomChannel = Constants.coralConstants.linebreakBottomChannel;
+    int servoChannel = Constants.coralConstants.servoChannel;
     double intakeSpeed = Constants.coralConstants.intakeSpeed;
     double outtakeSpeed = Constants.coralConstants.outtakeSpeed;
 
@@ -50,6 +52,7 @@ public class Coral extends SubsystemBase{
       
         
     
+
     // method for intaking coral, takes in a boolean to determine if the coral should intake
 
     @Override
