@@ -19,8 +19,14 @@ import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -81,8 +87,32 @@ public final class Constants {
      * 
      */
     public static class ElevatorConstants {
-        public static final double HEIGHT_IN_METERS = 1.0;
-        public static final Rotation2d ANGLE = Rotation2d.fromDegrees(82.0);
+        public static final double HEIGHT_IN_METERS = 2.0;
+        public static final double MAX_TORQUE = 20.0;
+        public static final Rotation2d ANGLE = Rotation2d.fromDegrees(90.0);
+        public static final double kS = 5.0;
+        public static final double kG = 50.0;
+
+        public static final double CORAL_LEVEL_0 = Units.inchesToMeters(0.0);
+        public static final double CORAL_LEVEL_1 = Units.inchesToMeters(6.0);
+        public static final double CORAL_LEVEL_2 = Units.inchesToMeters(12.0);
+        public static final double CORAL_LEVEL_3 = Units.inchesToMeters(18.0);
+
+        public static final double drumRadiusMeters = Units.inchesToMeters(6.0);
+        public static final double reduction = 5.0;
+        public static final double carriageMassKg = Units.lbsToKilograms(6.0);
+        public static final double stagesMassKg = Units.lbsToKilograms(12.0);
+        public static final DCMotor gearbox = DCMotor.getKrakenX60Foc(2).withReduction(reduction);
+
+        public static final Matrix<N2, N2> A = MatBuilder.fill(Nat.N2(), Nat.N2(), 0, 1, 0,
+                -gearbox.KtNMPerAmp
+                        / (gearbox.rOhms
+                                * Math.pow(drumRadiusMeters, 2)
+                                * (carriageMassKg + stagesMassKg)
+                                * gearbox.KvRadPerSecPerVolt));
+
+        public static final Vector<N2> B = VecBuilder.fill(
+                0.0, gearbox.KtNMPerAmp / (drumRadiusMeters * (carriageMassKg + stagesMassKg)));
     }
 
     /**
@@ -210,6 +240,11 @@ public final class Constants {
         public static final double SIM_SWERVE_DRIVE_OMEGA_KP = 25.0;
         public static final double SIM_SWERVE_DRIVE_OMEGA_KI = 0.0;
         public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 2.0;
+
+        // PID constants for elevator
+        public static final double ELEVATOR_KP = 5000.0;
+        public static final double ELEVATOR_KI = 0.0;
+        public static final double ELEVATOR_KD = 2000.0;
 
         /**
          * Should only be call by simulation as TunerContants has real values

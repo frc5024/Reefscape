@@ -22,7 +22,7 @@ public class ElevatorMechanism {
     private final double MIDDLE_RAIL = Units.inchesToMeters(35.0);
     private final double INNER_RAIL = Units.inchesToMeters(35.0);
     private final double BOX_RAIL = Units.inchesToMeters(12.0);
-    private static final double kElevatorMinimumLength = 0.0;
+    private static final double MIN_LENGTH = 0.01;
 
     private final Color8Bit OUTER_COLOR = new Color8Bit(Color.kPurple);
     private final Color8Bit MIDDLE_COLOR = new Color8Bit(Color.kAliceBlue);
@@ -54,7 +54,7 @@ public class ElevatorMechanism {
                 "OuterBottomLeftRail", OUTER_BOTTOM_RAIL / 2, 180, THICKNESS, OUTER_COLOR);
         obrLigament = new LoggedMechanismLigament2d(
                 "OuterBottomRightRail", OUTER_BOTTOM_RAIL / 2, 0, THICKNESS, OUTER_COLOR);
-        osLigament = new LoggedMechanismLigament2d("OuterShaft", kElevatorMinimumLength, 90, THICKNESS, SHAFT_COLOR);
+        osLigament = new LoggedMechanismLigament2d("OuterShaft", MIN_LENGTH, 90, THICKNESS, SHAFT_COLOR);
 
         oblLigament.append(
                 new LoggedMechanismLigament2d("LeftExtension", BOTTOM_RAIL_EXTENSION, 0, THICKNESS, OUTER_COLOR));
@@ -70,7 +70,7 @@ public class ElevatorMechanism {
         mbrLigament = new LoggedMechanismLigament2d("MiddleBottomRightRail", MIDDLE_BOTTOM_RAIL / 2, -90, THICKNESS,
                 MIDDLE_COLOR);
 
-        msLigament = new LoggedMechanismLigament2d("MiddleShaft", kElevatorMinimumLength, 0, THICKNESS, SHAFT_COLOR);
+        msLigament = new LoggedMechanismLigament2d("MiddleShaft", MIN_LENGTH, 0, THICKNESS, SHAFT_COLOR);
 
         mblLigament.append(new LoggedMechanismLigament2d("MiddleLeftRail", MIDDLE_RAIL, -90, THICKNESS, MIDDLE_COLOR));
         mbrLigament.append(new LoggedMechanismLigament2d("MiddleRightRail", MIDDLE_RAIL, 90, THICKNESS, MIDDLE_COLOR));
@@ -84,7 +84,7 @@ public class ElevatorMechanism {
         ibrLigament = new LoggedMechanismLigament2d("InnerBottomRightRail", INNER_BOTTOM_RAIL / 2, -90, THICKNESS,
                 INNER_COLOR);
 
-        isLigament = new LoggedMechanismLigament2d("InnerShaft", kElevatorMinimumLength, 0, THICKNESS, SHAFT_COLOR);
+        isLigament = new LoggedMechanismLigament2d("InnerShaft", MIN_LENGTH, 0, THICKNESS, SHAFT_COLOR);
 
         iblLigament.append(new LoggedMechanismLigament2d("InnerLeftRail", INNER_RAIL, -90, THICKNESS, INNER_COLOR));
         ibrLigament.append(new LoggedMechanismLigament2d("InnerRightRail", INNER_RAIL, 90, THICKNESS, INNER_COLOR));
@@ -115,11 +115,11 @@ public class ElevatorMechanism {
     /**
      * 
      */
-    public void update(double length) {
+    public void setLength(double length) {
         if (length < 0)
-            length = 0.01;
-        this.osLigament.setLength(kElevatorMinimumLength + length);
-        this.msLigament.setLength(kElevatorMinimumLength + (length * 1.5));
-        this.isLigament.setLength(kElevatorMinimumLength + (length * 2.0));
+            length = 0.0;
+        this.osLigament.setLength(MIN_LENGTH + length);
+        this.msLigament.setLength(MIN_LENGTH + (length * 1.5));
+        this.isLigament.setLength(MIN_LENGTH + (length * 2.0));
     }
 }

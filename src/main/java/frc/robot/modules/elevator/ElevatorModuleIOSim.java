@@ -1,114 +1,133 @@
 package frc.robot.modules.elevator;
 
-import org.littletonrobotics.junction.Logger;
-
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-import edu.wpi.first.wpilibj.simulation.BatterySim;
-import edu.wpi.first.wpilibj.simulation.ElevatorSim;
-import edu.wpi.first.wpilibj.simulation.EncoderSim;
-import edu.wpi.first.wpilibj.simulation.PWMSim;
-import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.NumericalIntegration;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.PIDConstants;
+import frc.robot.Constants.RobotConstants;
 
 /**
  * 
  */
 public class ElevatorModuleIOSim implements ElevatorModuleIO {
-    // This gearbox represents a gearbox containing 4 Vex 775pro motors.
-    private final DCMotor m_elevatorGearbox = DCMotor.getVex775Pro(4);
+    // State given by elevator carriage position and velocity
+    // Input given by torque current to motor
+    private Vector<N2> simState;
+    private double inputTorqueCurrent = 0.0;
+    private double appliedVolts = 0.0;
 
-    // Standard classes for controlling our elevator
-    private final ProfiledPIDController m_controller = new ProfiledPIDController(
-            SimConstants.kElevatorKp,
-            SimConstants.kElevatorKi,
-            SimConstants.kElevatorKd,
-            new TrapezoidProfile.Constraints(2.45, 2.45));
-    ElevatorFeedforward m_feedforward = new ElevatorFeedforward(
-            SimConstants.kElevatorkS,
-            SimConstants.kElevatorkG,
-            SimConstants.kElevatorkV,
-            SimConstants.kElevatorkA);
-    private final Encoder m_encoder = new Encoder(SimConstants.kEncoderAChannel, SimConstants.kEncoderBChannel);
-    private final PWMSparkMax m_motor = new PWMSparkMax(SimConstants.kMotorPort);
-
-    // Simulation classes help us simulate what's going on, including gravity.
-    private final ElevatorSim m_elevatorSim = new ElevatorSim(
-            m_elevatorGearbox,
-            SimConstants.kElevatorGearing,
-            SimConstants.kCarriageMass,
-            SimConstants.kElevatorDrumRadius,
-            SimConstants.kMinElevatorHeightMeters,
-            SimConstants.kMaxElevatorHeightMeters,
-            true,
-            0,
-            0.01,
-            0.0);
-    private final EncoderSim m_encoderSim = new EncoderSim(m_encoder);
-    private final PWMSim m_motorSim = new PWMSim(m_motor);
-
-    private final ElevatorMechanism elevatorMechanism = new ElevatorMechanism();
+    private final PIDController controller;
+    private boolean closedLoop = false;
+    private double feedforward = 0.0;
 
     /**
      * 
      */
     public ElevatorModuleIOSim() {
-        m_encoder.setDistancePerPulse(SimConstants.kElevatorEncoderDistPerPulse);
+        this.simState = VecBuilder.fill(0.0, 0.0);
+        this.controller = new PIDController(PIDConstants.ELEVATOR_KP, PIDConstants.ELEVATOR_KI,
+                PIDConstants.ELEVATOR_KD);
     }
 
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
-        // With the setpoint value we run PID control like normal
-        double pidOutput = m_controller.calculate(m_encoder.getDistance());
-        double feedforwardOutput = m_feedforward.calculate(m_controller.getSetpoint().velocity);
-        m_motor.setVoltage(pidOutput + feedforwardOutput);
+        if (!closedLoop) {
+            controller.reset();
+            update(RobotConstants.LOOP_PERIOD_SECS);
+        } else {
+            // Run control at 1khz
+            for (int i = 0; i < RobotConstants.LOOP_PERIOD_SECS / (1.0 / 1000.0); i++) {
+                setInputTorqueCurrent(
+                        controller.calculate(simState.get(0) / ElevatorConstants.drumRadiusMeters) + feedforward);
+                update(1.0 / 1000.0);
+            }
+        }
 
-        m_elevatorSim.setInput(m_motorSim.getSpeed() * RobotController.getBatteryVoltage());
-        m_elevatorSim.update(0.020);
-
-        m_encoderSim.setDistance(m_elevatorSim.getPositionMeters());
-        elevatorMechanism.update(m_elevatorSim.getPositionMeters());
-
-        RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(m_elevatorSim.getCurrentDrawAmps()));
-
-        Logger.recordOutput("Subsystems/Elevator/PositionMeters", m_elevatorSim.getPositionMeters());
-    }
-
-    @Override
-    public boolean isAtDistance() {
-        return m_controller.atGoal();
+        inputs.connected = true;
+        inputs.positionRad = this.simState.get(0) / ElevatorConstants.drumRadiusMeters;
+        inputs.velocityRadPerSec = this.simState.get(1) / ElevatorConstants.drumRadiusMeters;
+        inputs.appliedVolts = new double[] { this.appliedVolts };
+        inputs.currentAmps = new double[] { Math.copySign(this.inputTorqueCurrent, this.appliedVolts) };
     }
 
     @Override
     public void runOpenLoop(double output) {
-        m_controller.setGoal(output);
-
-        // // With the setpoint value we run PID control like normal
-        // double pidOutput = m_controller.calculate(m_encoder.getDistance());
-        // double feedforwardOutput =
-        // m_feedforward.calculate(m_controller.getSetpoint().velocity);
-        // m_motor.setVoltage(pidOutput + feedforwardOutput);
-    }
-
-    @Override
-    public void runVolts(double volts) {
-    }
-
-    @Override
-    public void stop() {
-        m_controller.setGoal(0.0);
-        m_motor.set(0.0);
+        closedLoop = false;
+        setInputTorqueCurrent(output);
     }
 
     @Override
     public void runPosition(double positionRad, double feedforward) {
+        closedLoop = true;
+        controller.setSetpoint(positionRad);
+        this.feedforward = feedforward;
     }
 
     @Override
-    public void setPID(double kP, double kI, double kD) {
+    public void runVolts(double volts) {
+        closedLoop = false;
+        setInputVoltage(volts);
+    }
+
+    @Override
+    public void stop() {
+        runOpenLoop(0.0);
+    }
+
+    /**
+     * 
+     */
+    private void setInputTorqueCurrent(double torqueCurrent) {
+        this.inputTorqueCurrent = torqueCurrent;
+        this.appliedVolts = ElevatorConstants.gearbox.getVoltage(
+                ElevatorConstants.gearbox.getTorque(this.inputTorqueCurrent),
+                simState.get(1, 0) / ElevatorConstants.drumRadiusMeters);
+        this.appliedVolts = MathUtil.clamp(this.appliedVolts, -12.0, 12.0);
+    }
+
+    /**
+     * 
+     */
+    private void setInputVoltage(double voltage) {
+        setInputTorqueCurrent(
+                ElevatorConstants.gearbox.getCurrent(this.simState.get(1) / ElevatorConstants.drumRadiusMeters,
+                        voltage));
+    }
+
+    /**
+     * 
+     */
+    private void update(double dt) {
+        this.inputTorqueCurrent = MathUtil.clamp(
+                this.inputTorqueCurrent, -ElevatorConstants.gearbox.stallCurrentAmps / 2.0,
+                ElevatorConstants.gearbox.stallCurrentAmps / 2.0);
+
+        Matrix<N2, N1> updatedState = NumericalIntegration.rkdp(
+                (Matrix<N2, N1> x, Matrix<N1, N1> u) -> ElevatorConstants.A.times(x)
+                        .plus(ElevatorConstants.B.times(u))
+                        .plus(VecBuilder.fill(0.0, -9.807 * ElevatorConstants.ANGLE.getSin())),
+                this.simState,
+                MatBuilder.fill(Nat.N1(), Nat.N1(), this.inputTorqueCurrent),
+                dt);
+
+        // Apply limits
+        this.simState = VecBuilder.fill(updatedState.get(0, 0), updatedState.get(1, 0));
+        if (this.simState.get(0) <= 0.0) {
+            this.simState.set(1, 0, 0.0);
+            this.simState.set(0, 0, 0.0);
+        }
+
+        if (this.simState.get(0) >= ElevatorConstants.HEIGHT_IN_METERS) {
+            this.simState.set(1, 0, 0.0);
+            this.simState.set(0, 0, ElevatorConstants.HEIGHT_IN_METERS);
+        }
     }
 }
