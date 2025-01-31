@@ -17,9 +17,14 @@ public final class Constants {
   }
 
   public static class elevatorConstants {
+        //elevator values
         public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
+        public static final double elevatorMaxSpeed = 1;
+        public static final double zeroPosition = 0;
+        public static final int motorID = 60;
 
+        //values for PID
         public static final double kP =0.073;
         public static final double kI = 0;
         public static final double kD = 0.00001;

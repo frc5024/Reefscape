@@ -3,10 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
 
-public class SetElevatorSetpointCmd extends Command{
-
+public class SetElevatorSetpointCmd extends Command {
     public final Elevator elevatorSubsystem;
-    public boolean forward;
+
+    //creates a variable called setpoint
     public double setpoint;
 
     public SetElevatorSetpointCmd(Elevator elevatorSubsystem, double setpoint) {
@@ -17,15 +17,18 @@ public class SetElevatorSetpointCmd extends Command{
 
     }
 
-
+    //once controller button is pressed, "initialize" is called
     @Override
     public void initialize() {
+        //sets the setpoint to the position that is assigned to the button
         elevatorSubsystem.setSetPoint(setpoint);
+        //sets enabled to true
         elevatorSubsystem.motorOn(true);
         System.out.println("aaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
     }
 
+    //"end" is called when the button is no longer being pressed
     @Override
     public void end(boolean interrupted) {
         elevatorSubsystem.motorOn(false);
