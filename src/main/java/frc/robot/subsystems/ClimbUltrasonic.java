@@ -28,7 +28,17 @@ public class ClimbUltrasonic extends SubsystemBase {
     public void periodic() {
         distanceMillimetres = m_ultrasonic.getRangeMM();
         double measurement = filter.calculate(distanceMillimetres);
+        boolean overThreshold;
         // double filteredMeasurement = m_filter.calculate(measurement);
+        if (measurement >= 100) {
+            overThreshold = true;
+        }
+        else {
+            overThreshold = false;
+        }
+
+        SmartDashboard.putBoolean("Over Threshold", overThreshold);
         SmartDashboard.putNumber("Ultrasonic", measurement);
+        
     }
 }

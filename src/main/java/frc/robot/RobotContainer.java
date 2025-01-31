@@ -11,6 +11,7 @@ import frc.robot.subsystems.ClimbUltrasonic;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -41,15 +42,16 @@ public class RobotContainer {
     // () -> false // true = robotcentric
 
     // ));
+    
 
-    // configureBindings();
+    configureBindings();
 
   }
 
   private void configureBindings() {
 
-    driver.a().whileTrue(new ClimbCommand(m_climbSubsystem, 0.2));
-    driver.b().whileTrue(new ClimbCommand(m_climbSubsystem, -0.2));
+    driver.a().whileTrue(new ClimbCommand(m_climbSubsystem, 0.35));
+    driver.b().whileTrue(new ClimbCommand(m_climbSubsystem, -0.35));
     // driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
 
