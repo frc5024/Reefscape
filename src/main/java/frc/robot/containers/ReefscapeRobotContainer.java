@@ -2,12 +2,9 @@ package frc.robot.containers;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.generated.TunerConstants;
-import frc.robot.modules.algae.AlgaeintakeModuleIOSparkMax;
 import frc.robot.modules.gyro.GyroModuleIONavX;
 import frc.robot.modules.swerve.SwerveModuleIOTalonFX;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 
 /**
  * 
@@ -26,10 +23,12 @@ public class ReefscapeRobotContainer extends RobotContainer {
                 new SwerveModuleIOTalonFX(TunerConstants.BackLeft),
                 new SwerveModuleIOTalonFX(TunerConstants.BackRight));
 
-        this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem, this.swerveDriveSubsystem::getPose,
-                this.swerveDriveSubsystem::getRotation);
+        // this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
+        // this.swerveDriveSubsystem::getPose,
+        // this.swerveDriveSubsystem::getRotation);
 
-        this.algaeIntakeSubsystem = new AlgaeIntakeSubsystem(new AlgaeintakeModuleIOSparkMax());
+        // this.algaeIntakeSubsystem = new AlgaeIntakeSubsystem(new
+        // AlgaeintakeModuleIOSparkMax());
 
         configureAutoBuilder();
         configureButtonBindings();

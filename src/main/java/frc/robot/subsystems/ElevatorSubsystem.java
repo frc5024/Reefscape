@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,8 +26,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     private final ElevatorModuleIO elevatorModule;
-    protected final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
-    protected final Timer stateTimer = new Timer();
+    protected final ElevatorIOInputsAutoLogged inputs;
+    protected final Timer stateTimer;
 
     private final StateMachine<Action> stateMachine;
     private final LinkedList<Action> actionQueue;
@@ -36,6 +37,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     public ElevatorSubsystem(ElevatorModuleIO elevatorModule) {
         this.elevatorModule = elevatorModule;
+        this.inputs = new ElevatorIOInputsAutoLogged();
         this.disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
         // Sets states for the arm, and what methods.
@@ -46,7 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         this.actionQueue = new LinkedList<Action>();
 
-        this.stateTimer.start();
+        this.stateTimer = new Timer();
     }
 
     /**
@@ -67,20 +69,12 @@ public class ElevatorSubsystem extends SubsystemBase {
      * 
      */
     protected void handleHold(StateMetadata<Action> stateMetadata) {
-        if (stateMetadata.isFirstRun()) {
-            this.elevatorModule.stop();
-            this.stateTimer.stop();
-        }
     }
 
     /**
      * 
      */
     protected void handleMoveToIdle(StateMetadata<Action> stateMetadata) {
-        if (stateMetadata.isFirstRun()) {
-            this.elevatorModule.stop();
-            this.stateTimer.stop();
-        }
     }
 
     /**
@@ -88,8 +82,8 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToCoral1(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            this.elevatorModule.stop();
-            this.stateTimer.stop();
+            this.elevatorModule.runOpenLoop(Units.inchesToMeters(5));
+            this.stateTimer.start();
         }
     }
 
@@ -99,7 +93,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private boolean isActionComplete() {
         switch (this.stateMachine.getCurrentState()) {
             default:
-                return !this.stateTimer.isRunning();
+                return this.elevatorModule.isAtDistance() || !this.stateTimer.isRunning();
         }
     }
 

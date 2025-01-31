@@ -19,6 +19,10 @@ public interface ElevatorModuleIO {
     default void updateInputs(ElevatorIOInputs inputs) {
     }
 
+    default boolean isAtDistance() {
+        return true;
+    }
+
     default void runOpenLoop(double output) {
     }
 

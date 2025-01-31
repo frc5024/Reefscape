@@ -81,7 +81,7 @@ public final class Constants {
      * 
      */
     public static class ElevatorConstants {
-        public static final double HEIGHT_IN_METERS = 3.0;
+        public static final double HEIGHT_IN_METERS = 1.0;
         public static final Rotation2d ANGLE = Rotation2d.fromDegrees(82.0);
     }
 
@@ -295,14 +295,21 @@ public final class Constants {
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(19.0), Units.inchesToMeters(0.0), Units.inchesToMeters(6.0),
                 0.0, Units.degreesToRadians(0), 0.0);
+
         public static final Camera REAR_CAMERA = new Camera("Arducam_OV9281-1",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(0.0), Units.inchesToMeters(0), Units.inchesToMeters(6.0),
                 0.0, Units.degreesToRadians(0), Math.PI);
+
         public static final Camera GAME_PIECE_CAMERA = new Camera("WebCam",
                 Camera.Type.COLOURED_SHAPE, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(0.0), 0.0, Units.inchesToMeters(0.0),
                 0.0, Units.degreesToRadians(0), 0.0);
+
+        public static final Camera LIMELIGHT_CAMERA = new Camera("Limelight",
+                Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
+                Units.inchesToMeters(11.0), 0.0, Units.inchesToMeters(0.0),
+                0.0, Units.degreesToRadians(30), 0.0);
 
         /**
          * TODO: set list of enabled camera

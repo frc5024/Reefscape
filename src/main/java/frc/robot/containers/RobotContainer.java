@@ -25,6 +25,7 @@ import frc.robot.controls.GameData;
 import frc.robot.controls.GameData.CoralPole;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.Action;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utils.AllianceFlipUtil;
@@ -83,13 +84,16 @@ abstract public class RobotContainer {
                 .whileTrue(runOnce(() -> GameData.getInstance().toggleDriveMode()));
 
         // Lock to 0° when A button is held
+        // controller.a()
+        // .whileTrue(
+        // SwerveDriveCommands.joystickDriveAtAngle(
+        // swerveDriveSubsystem,
+        // () -> -controller.getLeftY(),
+        // () -> -controller.getLeftX(),
+        // () -> new Rotation2d()));
+
         controller.a()
-                .whileTrue(
-                        SwerveDriveCommands.joystickDriveAtAngle(
-                                swerveDriveSubsystem,
-                                () -> -controller.getLeftY(),
-                                () -> -controller.getLeftX(),
-                                () -> new Rotation2d()));
+                .whileTrue(runOnce(() -> this.elevatorSubsystem.addAction(Action.MOVE_TO_CORAL_1)));
 
         // Switch to X pattern when X button is pressed
         // controller.x().onTrue(Commands.runOnce(swerveDriveSubsystem::stopWithX,

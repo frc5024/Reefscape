@@ -25,8 +25,8 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     }
 
     private final AlgaeIntakeModuleIO intakeModule;
-    protected final AlgaeIntakeIOInputsAutoLogged inputs = new AlgaeIntakeIOInputsAutoLogged();
-    protected final Timer stateTimer = new Timer();
+    protected final AlgaeIntakeIOInputsAutoLogged inputs;
+    protected final Timer stateTimer;
 
     private final StateMachine<Action> stateMachine;
     private final LinkedList<Action> actionQueue;
@@ -36,6 +36,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
      */
     public AlgaeIntakeSubsystem(AlgaeIntakeModuleIO intakeModule) {
         this.intakeModule = intakeModule;
+        this.inputs = new AlgaeIntakeIOInputsAutoLogged();
         this.disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
         // Sets states for the arm, and what methods.
@@ -46,7 +47,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
         this.actionQueue = new LinkedList<Action>();
 
-        this.stateTimer.start();
+        this.stateTimer = new Timer();
     }
 
     /**
