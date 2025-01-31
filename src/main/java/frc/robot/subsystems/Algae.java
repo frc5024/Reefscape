@@ -11,37 +11,38 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Shooter extends SubsystemBase {
+public class Algae extends SubsystemBase {
     private DigitalInput linebreak;
     private DigitalInput limSwInput;
-    private static Shooter mInstance = null;
+    private static Algae mInstance = null;
     public boolean sensorOutput;
     private LEDs LEDS = LEDs.getInstance();
     private SparkMax motor1;
     private SparkMax motor2;
 
-    public static final Shooter getInstance() {
+    public static final Algae getInstance() {
         if (mInstance == null) {
-            mInstance = new Shooter();
+            mInstance = new Algae();
         }
 
         return mInstance;
     }
 
-    private Shooter() {
+    private Algae() {
         // linebreak = new DigitalInput(6);
         // limSwInput = new DigitalInput(5);
         motor1 = new SparkMax(3, MotorType.kBrushless);
         motor2 = new SparkMax(62, MotorType.kBrushless);
 
     }
+    // Assigns sparkmax motors to variables
 
     public void setSpeed(Double speed) {
         motor1.set(speed);
-        System.out.println(motor1.get());
         motor2.set(speed);
 
     }
+    // Sets the motors speed to the setSpeed value
 
     /**
      * Example command factory method.

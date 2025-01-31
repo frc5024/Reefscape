@@ -5,14 +5,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AlgaeCommand;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TestFlashLEDs;
 import frc.robot.commands.TestLEDs;
+import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LEDs;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
@@ -23,7 +23,7 @@ public class RobotContainer {
 
     private final Swerve s_Swerve = Swerve.getInstance();
     private final LEDs s_LEDs = LEDs.getInstance();
-    private final Shooter s_Shooter = Shooter.getInstance();
+    private final Algae s_Algae = Algae.getInstance();
 
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -41,10 +41,11 @@ public class RobotContainer {
 
         ));
 
-        s_Shooter.setDefaultCommand(
-                new ShooterCommand(s_Shooter, () -> driver.getLeftTriggerAxis(), () -> driver.getRightTriggerAxis()));
+        s_Algae.setDefaultCommand(
+                new AlgaeCommand(s_Algae, () -> driver.getLeftTriggerAxis(), () -> driver.getRightTriggerAxis()));
 
         configureBindings();
+        // Sets the controllers triggers to be used by algae command
 
     }
 

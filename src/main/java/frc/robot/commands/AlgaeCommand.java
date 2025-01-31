@@ -3,20 +3,21 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Algae;
 
-public class ShooterCommand extends Command {
-    private final Shooter m_shooter;
+public class AlgaeCommand extends Command {
+    private final Algae m_algae;
     private DoubleSupplier outPower;
     private DoubleSupplier inPower;
 
-    public ShooterCommand(Shooter shooter, DoubleSupplier outPower, DoubleSupplier inPower) {
-        m_shooter = shooter;
+    public AlgaeCommand(Algae algae, DoubleSupplier outPower, DoubleSupplier inPower) {
+        m_algae = algae;
         this.outPower = outPower;
         this.inPower = inPower;
-        addRequirements(m_shooter);
+        addRequirements(m_algae);
 
     }
+    // Reads values from triggers and assigns them to variables
 
     // Called when the command is initially scheduled.
     @Override
@@ -27,10 +28,12 @@ public class ShooterCommand extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double motor1Speed = (outPower.getAsDouble() / 2) + (-inPower.getAsDouble() / 2);
-        m_shooter.setSpeed(motor1Speed);
+        double algaeMotorSpeed = (outPower.getAsDouble() * 0.5) + (-inPower.getAsDouble() * 0.5);
+        m_algae.setSpeed(algaeMotorSpeed);
 
     }
+    // Halfes the trigger values and adds them, then assigns them to m_algae as
+    // setSpeed
 
     // Called once the command ends or is interrupted.
     @Override
