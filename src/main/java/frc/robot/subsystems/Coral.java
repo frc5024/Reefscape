@@ -25,6 +25,7 @@ public class Coral extends SubsystemBase{
     private SparkFlex coralMotorReversed;
 
     //all constants for coral
+    int coralMotor1Channel = Constants.coralConstants.coralMotorChannel;
     int coralMotorChannel = Constants.coralConstants.coralMotorChannel;
     int coralMotorReversedChannel = Constants.coralConstants.coralMotorReversedChannel;
     int linebreakChannel = Constants.coralConstants.linebreakChannel;
