@@ -3,21 +3,21 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ServoTest;
 
-public class Servo180 extends Command {
+public class ServoDesired extends Command {
     private ServoTest servo;
+    private int finalAngle;
 
-    public Servo180() {
+    public ServoDesired(int Angle) {
         servo = ServoTest.getInstance();
+        finalAngle = Angle;
     }
 
     @Override
     public void initialize() {
-
     }
 
     @Override
     public void execute() {
-        servo.setServo(180);
-        System.out.println("Turn 180");
+        servo.setServo(finalAngle);
     }
 }

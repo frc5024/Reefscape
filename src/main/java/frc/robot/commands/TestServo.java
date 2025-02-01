@@ -5,7 +5,6 @@ import frc.robot.subsystems.ServoTest;
 
 public class TestServo extends Command {
     private ServoTest servo;
-    public boolean running90;
 
     public TestServo() {
         servo = ServoTest.getInstance();
@@ -13,14 +12,12 @@ public class TestServo extends Command {
 
     @Override
     public void initialize() {
-
     }
 
     @Override
     public void execute() {
-        running90 = true;
-        servo.setServo(90);
-        System.out.println("Turn 90");
-        running90 = false;
+        servo.setServo(90);// Testing sets to an angle
+        // System.out.println("Turn 90");
+
     }
 }

@@ -5,8 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Autos;
-import frc.robot.commands.Servo0;
-import frc.robot.commands.Servo90;
+import frc.robot.commands.ServoDesired;
 import frc.robot.commands.ServoEase;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -35,14 +34,14 @@ public class RobotContainer {
     // this case x
     // pressed in order for the Command to funtion
     // private final Trigger testFlash = driver.y();
-    private final Trigger Servo90 = driver.a();
-    private final Trigger Servo0 = driver.b();
-    private final Trigger Servo180 = driver.x();
-    private final Trigger ServoEase = driver.y();
+    private final Trigger Servo90 = driver.a();//Sets to controller A
+    private final Trigger Servo0 = driver.b();//Sets to controller B
+    private final Trigger Servo180 = driver.x();//Sets to X
+    private final Trigger ServoEase = driver.y();//Sets to Y
     // private final Trigger LED1 = driver.x();
-    // private final Trigger LED2 = driver.x();
-    // private final Trigger LED3 = driver.x();
-    // private final Trigger LED4 = driver.x();
+    // private final Trigger LED2 = driver.y();
+    // private final Trigger LED3 = driver.a();
+    // private final Trigger LED4 = driver.b();
 
     public RobotContainer() {
 
@@ -59,9 +58,9 @@ public class RobotContainer {
     private void configureBindings() {
         // changeRainbow.whileTrue(new TestLEDs());
         // driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        Servo0.whileTrue(new Servo0());
-        Servo90.whileTrue(new Servo90());
-        Servo180.whileTrue(new ServoEase(90));
+        Servo0.whileTrue(new ServoDesired(0));
+        Servo90.whileTrue(new ServoDesired(90));
+        Servo180.whileTrue(new ServoDesired(180));
         ServoEase.whileTrue(new ServoEase(180));
         // LED1.whileTrue(new TestFlashLEDs(s_LEDs, LEDPreset.Solid.kRed, 1000));
         // LED2.whileTrue(new TestFlashLEDs(s_LEDs, LEDPreset.Solid.kLawnGreen, 1000));

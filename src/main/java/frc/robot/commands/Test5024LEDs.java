@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ILEDPreset;
 import frc.robot.subsystems.LEDPreset;
 import frc.robot.subsystems.LEDs;;
 
@@ -34,10 +33,10 @@ public class Test5024LEDs extends Command {
                 timer.restart();
             }
 
-            if (flashCount % 2 == 0) {
-                leds.setLEDS(LEDPreset.Solid.kYellow);
-            } else {
-                leds.setLEDS(LEDPreset.Solid.kBlue);
+            if (flashCount % 2 == 0) {//If counter is even
+                leds.setLEDS(LEDPreset.Solid.kYellow);//set colour to yellow
+            } else {//else
+                leds.setLEDS(LEDPreset.Solid.kBlue);//set colour to blue
             }
         }
     }
