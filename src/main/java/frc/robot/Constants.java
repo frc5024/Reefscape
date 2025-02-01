@@ -149,13 +149,13 @@ public final class Constants {
 
         public final class ClimbConstants {
 
-                //Ultrasonic
+                // Ultrasonic
                 public static final int pingID = 5;
                 public static final int echoID = 4;
                 public static final int filterValue = 5;
                 public static final int ultrasonicThreshold = 100;
 
-                //Motor
+                // Motor
                 public static final int climbMotorID = 7;
                 public static final double encoderEndValue = 0;
         }

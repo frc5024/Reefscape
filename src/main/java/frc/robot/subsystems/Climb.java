@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.filter.MedianFilter;
@@ -21,7 +20,8 @@ public class Climb extends SubsystemBase {
     GenericEntry climbSpeed = tab.add("climbSpeed", .35).getEntry();
 
     // Ultrasonic
-    private final Ultrasonic m_ultrasonic = new Ultrasonic(Constants.ClimbConstants.pingID,Constants.ClimbConstants.echoID);
+    private final Ultrasonic m_ultrasonic = new Ultrasonic(Constants.ClimbConstants.pingID,
+            Constants.ClimbConstants.echoID);
     double distanceMillimetres;
     double measurement;
     MedianFilter filter = new MedianFilter(Constants.ClimbConstants.filterValue);
@@ -58,8 +58,10 @@ public class Climb extends SubsystemBase {
         SmartDashboard.putBoolean("Over Threshold", overThreshold());
         SmartDashboard.putNumber("Ultrasonic", measurement);
     }
+
     public boolean overThreshold() {
-        // Returns true if the Ultrasonic sensor detects that it is a certain distance above the ground
+        // Returns true if the Ultrasonic sensor detects that it is a certain distance
+        // above the ground
         if (measurement >= Constants.ClimbConstants.ultrasonicThreshold) {
             return true;
         } else {
