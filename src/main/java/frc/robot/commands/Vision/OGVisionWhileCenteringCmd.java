@@ -59,6 +59,7 @@ public class OGVisionWhileCenteringCmd extends Command {
 
         if (limelight.getAprilTagID() == targetID) {
             // at___ = AprilTag____
+
             translationPidController.setP(pEntry.getDouble(0));
             translationPidController.setI(iEntry.getDouble(0));
             translationPidController.setD(dEntry.getDouble(0));
@@ -70,6 +71,7 @@ public class OGVisionWhileCenteringCmd extends Command {
             double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
             Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
             double robotHeading = swerveDrive.getGyroYaw().getDegrees();
+            double robotHeading360 = swerveDrive.getGyroYaw360().getDegrees();
             double x = limelight.getX();
             double yawDeg = botPose[4];
             double Dis = -botPose3D.getZ(); // Distance from LL to tag

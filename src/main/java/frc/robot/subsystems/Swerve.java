@@ -239,6 +239,11 @@ public class Swerve extends SubsystemBase {
         return Rotation2d.fromDegrees(-angle);
     }
 
+    public Rotation2d getGyroYaw360() {
+        double angle = (gyro.getAngle() * scaleValue) % 360.0;
+        return Rotation2d.fromDegrees(-angle);
+    }
+
     public void zeroHeadingWithOffset(double degOffset) {
         swerveOdometry.resetPosition(getGyroYawWithOffset(degOffset), getModulePositions(),
                 new Pose2d(getPose().getTranslation(), new Rotation2d()));
