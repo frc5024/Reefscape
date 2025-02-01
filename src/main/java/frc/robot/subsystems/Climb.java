@@ -20,7 +20,8 @@ public class Climb extends SubsystemBase {
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
     GenericEntry climbSpeed = tab.add("climbSpeed", .35).getEntry();
 
-    private final Ultrasonic m_ultrasonic = new Ultrasonic(5, 4);
+    private final Ultrasonic m_ultrasonic = new Ultrasonic(Constants.ClimbConstants.pingID,
+            Constants.ClimbConstants.echoID);
     double distanceMillimetres;
     double measurement;
     MedianFilter filter = new MedianFilter(5);
@@ -33,7 +34,7 @@ public class Climb extends SubsystemBase {
     }
 
     private Climb() {
-        climbMotor = new TalonFX(7);
+        climbMotor = new TalonFX(Constants.ClimbConstants.climbMotorID);
         tab.addDouble("encoder value", () -> climbMotor.getPosition().getValueAsDouble());
 
     }
