@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.modules.algae.AlgaeIntakeModuleIOSim;
+import frc.robot.modules.coral.CoralIntakeModuleIOSim;
 import frc.robot.modules.elevator.ElevatorModuleIOSim;
 import frc.robot.modules.gyro.GyroModuleIOSim;
 import frc.robot.modules.swerve.SwerveModuleIOMapleSim;
@@ -18,6 +19,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.simulation.AlgaeIntakeSubsystemSim;
+import frc.robot.subsystems.simulation.CoralIntakeSubsystemSim;
 import frc.robot.utils.MapleSimUtil;
 
 /**
@@ -45,6 +47,7 @@ public class MapleSimRobotContainer extends RobotContainer {
                 swerveDriveSimulation::getSimulatedDriveTrainPose, this.swerveDriveSubsystem::getRotation);
 
         this.algaeIntakeSubsystem = new AlgaeIntakeSubsystemSim(new AlgaeIntakeModuleIOSim());
+        this.coralIntakeSubsystem = new CoralIntakeSubsystemSim(new CoralIntakeModuleIOSim());
         this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim());
 
         registerNamedCommands();

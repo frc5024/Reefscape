@@ -7,6 +7,7 @@ import org.ironmaple.simulation.IntakeSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeAlgaeOnFly;
+import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -53,6 +54,26 @@ public class MapleSimUtil {
 
         SimulatedArena.getInstance()
                 .addGamePieceProjectile(new ReefscapeAlgaeOnFly(
+                        getSwerveDriveSimulation().getSimulatedDriveTrainPose().getTranslation(),
+                        new Translation2d(),
+                        getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),
+                        getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation()
+                                .minus(new Rotation2d(180)),
+                        Meters.of(0.4), // initial height of the ball, in meters
+                        MetersPerSecond.of(3), // initial velocity, in m/s
+                        Angle.ofRelativeUnits(0, Units.Degrees)) // shooter angle
+                        .withProjectileTrajectoryDisplayCallBack(
+                                (poses) -> Logger.recordOutput("successfulShotsTrajectory",
+                                        poses.toArray(Pose3d[]::new)),
+                                (poses) -> Logger.recordOutput("missedShotsTrajectory", poses.toArray(Pose3d[]::new))));
+    }
+
+    /**
+     * 
+     */
+    public static void ejectCoral() {
+        SimulatedArena.getInstance()
+                .addGamePieceProjectile(new ReefscapeCoralOnFly(
                         getSwerveDriveSimulation().getSimulatedDriveTrainPose().getTranslation(),
                         new Translation2d(),
                         getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),

@@ -15,6 +15,7 @@ import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.controls.ButtonBindings;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -26,6 +27,7 @@ import frc.robot.utils.AllianceFlipUtil;
 abstract public class RobotContainer {
     /* Subsystems */
     protected AlgaeIntakeSubsystem algaeIntakeSubsystem;
+    protected CoralIntakeSubsystem coralIntakeSubsystem;
     protected ElevatorSubsystem elevatorSubsystem;
     protected SwerveDriveSubsystem swerveDriveSubsystem;
     protected VisionSubsystem visionSubsystem;
