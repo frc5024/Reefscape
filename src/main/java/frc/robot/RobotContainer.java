@@ -7,7 +7,6 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Climb;
-import frc.robot.subsystems.ClimbUltrasonic;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.XboxController;
@@ -19,8 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final Climb m_climbSubsystem = new Climb();
-  private final ClimbUltrasonic m_Ultrasonic = ClimbUltrasonic.getInstance();
+  private final Climb m_climbSubsystem = Climb.getInstance();
 
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -42,7 +40,6 @@ public class RobotContainer {
     // () -> false // true = robotcentric
 
     // ));
-    
 
     configureBindings();
 
