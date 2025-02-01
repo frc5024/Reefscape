@@ -4,12 +4,16 @@ import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.modules.algae.AlgaeIntakeModuleIOSim;
 import frc.robot.modules.elevator.ElevatorModuleIOSim;
 import frc.robot.modules.gyro.GyroModuleIOSim;
 import frc.robot.modules.swerve.SwerveModuleIOMapleSim;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -43,6 +47,7 @@ public class MapleSimRobotContainer extends RobotContainer {
         this.algaeIntakeSubsystem = new AlgaeIntakeSubsystemSim(new AlgaeIntakeModuleIOSim());
         this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim());
 
+        registerNamedCommands();
         configureAutoBuilder();
         configureButtonBindings();
     }
@@ -58,6 +63,40 @@ public class MapleSimRobotContainer extends RobotContainer {
                 MapleSimUtil.getSwerveDriveSimulation().getSimulatedDriveTrainPose());
         Logger.recordOutput("FieldSimulation/Coral", SimulatedArena.getInstance().getGamePiecesArrayByType("Coral"));
         Logger.recordOutput("FieldSimulation/Algae", SimulatedArena.getInstance().getGamePiecesArrayByType("Algae"));
+    }
+
+    @Override
+    public void registerNamedCommands() {
+        /* Algae Subsystem Commands */
+        NamedCommands.registerCommand("Intake Algae",
+                new InstantCommand(() -> {
+                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.INTAKE);
+                }));
+        NamedCommands.registerCommand("Eject Algae",
+                new InstantCommand(() -> {
+                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.EJECT);
+                }));
+
+        /* Coral Subsystem Commands */
+
+        /* Elevator Subsystem Commands */
+        NamedCommands.registerCommand("Move Elevator to Idle",
+                new InstantCommand(() -> {
+                    this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_IDLE);
+                }));
+        NamedCommands.registerCommand("Move Elevator to Coral 1",
+                new InstantCommand(() -> {
+                    this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_1);
+                }));
+        NamedCommands.registerCommand("Move Elevator to Coral 2",
+                new InstantCommand(() -> {
+                    this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_2);
+                }));
+        NamedCommands.registerCommand("Move Elevator to Coral 3",
+                new InstantCommand(() -> {
+                    this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_3);
+                }));
+
     }
 
     /**

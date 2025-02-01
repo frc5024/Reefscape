@@ -100,6 +100,8 @@ abstract public class RobotContainer {
         resetSimulationField(pose2d);
     }
 
+    abstract public void registerNamedCommands();
+
     /**
      * Maple Sim Routines
      */

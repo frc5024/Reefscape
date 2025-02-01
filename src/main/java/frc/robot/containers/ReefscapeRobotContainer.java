@@ -31,8 +31,13 @@ public class ReefscapeRobotContainer extends RobotContainer {
         // this.algaeIntakeSubsystem = new AlgaeIntakeSubsystem(new
         // AlgaeintakeModuleIOSparkMax());
 
+        registerNamedCommands();
         // configureAutoBuilder();
         configureButtonBindings();
+    }
+
+    @Override
+    public void registerNamedCommands() {
     }
 
     /**

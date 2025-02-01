@@ -34,8 +34,13 @@ public class SimulatedRobotContainer extends RobotContainer {
         this.algaeIntakeSubsystem = new AlgaeIntakeSubsystem(new AlgaeIntakeModuleIOSim());
         this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim());
 
+        registerNamedCommands();
         configureAutoBuilder();
         configureButtonBindings();
+    }
+
+    @Override
+    public void registerNamedCommands() {
     }
 
     @Override
