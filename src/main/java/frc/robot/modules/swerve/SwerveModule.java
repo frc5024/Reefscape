@@ -75,45 +75,45 @@ public class SwerveModule {
         state.cosineScale(inputs.turnPosition);
 
         // Apply setpoints
-        swerveModuleIO.setDriveVelocity(state.speedMetersPerSecond / constants.WheelRadius);
-        swerveModuleIO.setTurnPosition(state.angle);
+        swerveModuleIO.runDriveVelocity(state.speedMetersPerSecond / constants.WheelRadius);
+        swerveModuleIO.runTurnPosition(state.angle);
     }
 
     /**
      * Runs the module with the specified output while controlling to zero degrees.
      */
     public void runCharacterization(double output) {
-        swerveModuleIO.setDriveOpenLoop(output);
-        swerveModuleIO.setTurnPosition(new Rotation2d());
+        swerveModuleIO.runDriveOpenLoop(output);
+        swerveModuleIO.runTurnPosition(new Rotation2d());
     }
 
     /**
      * Disables all outputs to motors.
      */
     public void stop() {
-        swerveModuleIO.setDriveOpenLoop(0.0);
-        swerveModuleIO.setTurnOpenLoop(0.0);
+        swerveModuleIO.runDriveOpenLoop(0.0);
+        swerveModuleIO.runTurnOpenLoop(0.0);
     }
 
     /**
      * Returns the current turn angle of the module.
      */
     public Rotation2d getAngle() {
-        return inputs.turnPosition;
+        return this.inputs.turnPosition;
     }
 
     /**
      * Returns the current drive position of the module in meters.
      */
     public double getPositionMeters() {
-        return inputs.drivePositionRad * constants.WheelRadius;
+        return this.inputs.drivePositionRad * this.constants.WheelRadius;
     }
 
     /**
      * Returns the current drive velocity of the module in meters per second.
      */
     public double getVelocityMetersPerSec() {
-        return inputs.driveVelocityRadPerSec * constants.WheelRadius;
+        return inputs.driveVelocityRadPerSec * this.constants.WheelRadius;
     }
 
     /**
@@ -141,21 +141,21 @@ public class SwerveModule {
      * Returns the timestamps of the samples received this cycle.
      */
     public double[] getOdometryTimestamps() {
-        return inputs.odometryTimestamps;
+        return this.inputs.odometryTimestamps;
     }
 
     /**
      * Returns the module position in radians.
      */
     public double getWheelRadiusCharacterizationPosition() {
-        return inputs.drivePositionRad;
+        return this.inputs.drivePositionRad;
     }
 
     /**
      * Returns the module velocity in rotations/sec (Phoenix native units).
      */
     public double getFFCharacterizationVelocity() {
-        return Units.radiansToRotations(inputs.driveVelocityRadPerSec);
+        return Units.radiansToRotations(this.inputs.driveVelocityRadPerSec);
     }
 
     /**
@@ -168,14 +168,22 @@ public class SwerveModule {
     /**
      * 
      */
-    public void updateDrivePID(double kP, double kI, double kD) {
-        this.swerveModuleIO.updateDrivePID(kP, kI, kD);
+    public void setDrivePID(double kP, double kI, double kD) {
+        this.swerveModuleIO.setDrivePID(kP, kI, kD);
     }
 
     /**
      * 
      */
-    public void updateTurnPID(double kP, double kI, double kD) {
-        this.swerveModuleIO.updateTurnPID(kP, kI, kD);
+    public void setTurnPID(double kP, double kI, double kD) {
+        this.swerveModuleIO.setTurnPID(kP, kI, kD);
+    }
+
+    /**
+     * 
+     */
+    public void updateInputs() {
+        this.swerveModuleIO.updateInputs(this.inputs);
+        Logger.processInputs("Drive/Module" + this.index, this.inputs);
     }
 }

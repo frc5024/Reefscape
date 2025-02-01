@@ -108,16 +108,21 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     @Override
     public void periodic() {
         odometryLock.lock(); // Prevents odometry updates while reading data
-        this.gyroIO.updateInputs(gyroInputs);
-        Logger.processInputs("SwerveDrive/Gyro", gyroInputs);
-        for (var module : swerveModules) {
-            module.periodic();
+        this.gyroIO.updateInputs(this.gyroInputs);
+        Logger.processInputs("SwerveDrive/Gyro", this.gyroInputs);
+
+        for (SwerveModule swerveModule : this.swerveModules) {
+            swerveModule.updateInputs();
         }
         odometryLock.unlock();
 
+        for (SwerveModule swerveModule : this.swerveModules) {
+            swerveModule.periodic();
+        }
+
         // Stop moving when disabled
         if (DriverStation.isDisabled()) {
-            for (var module : swerveModules) {
+            for (var module : this.swerveModules) {
                 module.stop();
             }
         }
@@ -146,7 +151,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
             // Update gyro angle
             if (gyroInputs.connected) {
-                // Use the real gyro angle
                 rawGyroRotation = gyroInputs.odometryYawPositions[i];
             } else {
                 // Use the angle delta from the kinematics and module deltas
@@ -186,7 +190,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
         // Send setpoints to modules
         for (int i = 0; i < 4; i++) {
-            swerveModules[i].runSetpoint(setpointStates[i]);
+            this.swerveModules[i].runSetpoint(setpointStates[i]);
         }
 
         // Log optimized setpoints (runSetpoint mutates each state)
@@ -196,7 +200,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     /** Runs the drive in a straight line with the specified drive output. */
     public void runCharacterization(double output) {
         for (int i = 0; i < 4; i++) {
-            swerveModules[i].runCharacterization(output);
+            this.swerveModules[i].runCharacterization(output);
         }
     }
 
@@ -242,7 +246,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     private SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (int i = 0; i < 4; i++) {
-            states[i] = swerveModules[i].getState();
+            states[i] = this.swerveModules[i].getState();
         }
         return states;
     }
@@ -254,7 +258,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     private SwerveModulePosition[] getModulePositions() {
         SwerveModulePosition[] states = new SwerveModulePosition[4];
         for (int i = 0; i < 4; i++) {
-            states[i] = swerveModules[i].getPosition();
+            states[i] = this.swerveModules[i].getPosition();
         }
         return states;
     }
@@ -271,7 +275,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public double[] getWheelRadiusCharacterizationPositions() {
         double[] values = new double[4];
         for (int i = 0; i < 4; i++) {
-            values[i] = swerveModules[i].getWheelRadiusCharacterizationPosition();
+            values[i] = this.swerveModules[i].getWheelRadiusCharacterizationPosition();
         }
         return values;
     }
@@ -283,7 +287,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public double getFFCharacterizationVelocity() {
         double output = 0.0;
         for (int i = 0; i < 4; i++) {
-            output += swerveModules[i].getFFCharacterizationVelocity() / 4.0;
+            output += this.swerveModules[i].getFFCharacterizationVelocity() / 4.0;
         }
         return output;
     }
@@ -361,7 +365,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      */
     public void updateDrivePID(double kP, double kI, double kD) {
         for (SwerveModule swerveModule : this.swerveModules) {
-            swerveModule.updateDrivePID(kP, kI, kD);
+            swerveModule.setDrivePID(kP, kI, kD);
         }
     }
 
@@ -370,7 +374,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      */
     public void updateTurnPID(double kP, double kI, double kD) {
         for (SwerveModule swerveModule : this.swerveModules) {
-            swerveModule.updateTurnPID(kP, kI, kD);
+            swerveModule.setTurnPID(kP, kI, kD);
         }
     }
 
@@ -379,7 +383,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      */
     public void zeroDrivePID() {
         for (SwerveModule swerveModule : this.swerveModules) {
-            swerveModule.updateDrivePID(0.0, 0.0, 0.0);
+            swerveModule.setDrivePID(0.0, 0.0, 0.0);
         }
     }
 }
