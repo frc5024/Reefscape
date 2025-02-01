@@ -41,6 +41,10 @@ public class RobotContainer {
 
         ));
 
+        // Testing Algae Command - Uncomment this for manual control of Algae subsystem
+        // s_Algae.setDefaultCommand(new AlgaeManualCommand(s_Algae, () ->
+        // driver.getLeftTriggerAxis(), () -> driver.getRightTriggerAxis()));
+
         s_Algae.setDefaultCommand(
                 new AlgaeStateCommand(s_Algae, () -> driver.getRightTriggerAxis()));
 
