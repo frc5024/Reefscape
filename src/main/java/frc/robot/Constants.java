@@ -22,7 +22,8 @@ public final class Constants {
         public static final double elevatorOff = 0;
         public static final double elevatorMaxSpeed = 1;
         public static final double zeroPosition = 0;
-        public static final int motorID = 60;
+        public static final int motorID1 = 60;
+        public static final int motorID2 = 61;
 
         //values for PID
         public static final double kP =0.073;
@@ -38,7 +39,7 @@ public final class Constants {
         //one rotation equals 1.4765 cm
 
         
-
+        public static final double rootPosition = Units.degreesToRadians(0);
         public static final double L1Position = Units.degreesToRadians(100);
         public static final double L2Position =Units.degreesToRadians(200);
         public static final double Algae1 = Units.degreesToRadians(250);

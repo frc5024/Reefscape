@@ -31,6 +31,7 @@ public class SetElevatorSetpointCmd extends Command {
     //"end" is called when the button is no longer being pressed
     @Override
     public void end(boolean interrupted) {
+        elevatorSubsystem.controlMotor(0);
         elevatorSubsystem.motorOn(false);
     }
 
