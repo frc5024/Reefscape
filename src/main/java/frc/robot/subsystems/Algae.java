@@ -8,13 +8,14 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Algae extends SubsystemBase {
 
-    final double motorspeedintake = 0.5;
-    final double motorspeedouttake = -0.5;
+    final double motorspeedintake = -0.5;
+    final double motorspeedouttake = 0.5;
     final double motorspeedidle = 0;
     private DigitalInput linebreak;
     private static Algae mInstance = null;
@@ -22,6 +23,8 @@ public class Algae extends SubsystemBase {
     // private LEDs LEDS = LEDs.getInstance();
     private SparkMax motor1;
     private SparkMax motor2;
+    private Timer algaeOuttakeTimer;
+    // private Servo motorarm;
 
     private enum states {
         idle,
@@ -41,10 +44,12 @@ public class Algae extends SubsystemBase {
     }
 
     private Algae() {
-        linebreak = new DigitalInput(6);
+        linebreak = new DigitalInput(0);
         // limSwInput = new DigitalInput(5);
         motor1 = new SparkMax(3, MotorType.kBrushless);
         motor2 = new SparkMax(62, MotorType.kBrushless);
+        // motorarm = new Servo(Constants.Algae.AlgaeArmPort);
+        algaeOuttakeTimer = new Timer();
 
     }
 
@@ -65,6 +70,10 @@ public class Algae extends SubsystemBase {
         motor2.set(speed);
 
     }
+
+    // public void setArmMotorAngle(Double angle){
+    // motorarm.setangle(angle);
+    // }
     // Sets the motors speed to the setSpeed value
 
     /**
@@ -84,9 +93,11 @@ public class Algae extends SubsystemBase {
 
         // When algae is not detected inside robot and robot is not intaking, set state
         // to idle
-        if ((linebreak.get() == false) && (currentstate != states.intaking)) {
+        if ((linebreak.get() == false)
+                && (currentstate != states.intaking) && (algaeOuttakeTimer.hasElapsed(1.5))) {
             setSpeed(motorspeedidle);
             currentstate = states.idle;
+            algaeOuttakeTimer.stop();
         }
         // When button is pressed
         if ((presstime == 1)) {
@@ -107,6 +118,7 @@ public class Algae extends SubsystemBase {
             else if (currentstate == states.holding) {
                 setSpeed(motorspeedouttake);
                 currentstate = states.outaking;
+                algaeOuttakeTimer.restart();
             }
 
         }

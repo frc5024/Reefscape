@@ -17,6 +17,10 @@ public final class Constants {
         public final static int ledPort = 9;
     }
 
+    public static class Algae {
+        public final static int AlgaeArmPort = 8;
+    }
+
     // AdvantageKit simulation
     public static final Mode simMode = Mode.SIM;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
