@@ -59,7 +59,7 @@ public class Climb extends SubsystemBase {
     }
 
     public boolean overThreshold() {
-        if (measurement >= 100) {
+        if (measurement >= Constants.ClimbConstants.ultrasonicThreshold) {
             return true;
         } else {
             return false;
