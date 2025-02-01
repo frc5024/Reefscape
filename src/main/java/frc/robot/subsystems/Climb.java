@@ -20,11 +20,11 @@ public class Climb extends SubsystemBase {
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
     GenericEntry climbSpeed = tab.add("climbSpeed", .35).getEntry();
 
-    private final Ultrasonic m_ultrasonic = new Ultrasonic(Constants.ClimbConstants.pingID,
-            Constants.ClimbConstants.echoID);
+    // Ultrasonic
+    private final Ultrasonic m_ultrasonic = new Ultrasonic(Constants.ClimbConstants.pingID,Constants.ClimbConstants.echoID);
     double distanceMillimetres;
     double measurement;
-    MedianFilter filter = new MedianFilter(5);
+    MedianFilter filter = new MedianFilter(Constants.ClimbConstants.filterValue);
 
     public static Climb getInstance() {
         if (mInstance == null) {
@@ -52,13 +52,14 @@ public class Climb extends SubsystemBase {
     @Override
     public void periodic() {
         distanceMillimetres = m_ultrasonic.getRangeMM();
+        // Calculates the average of the given values from the Ultrasonic sensor
         measurement = filter.calculate(distanceMillimetres);
 
         SmartDashboard.putBoolean("Over Threshold", overThreshold());
         SmartDashboard.putNumber("Ultrasonic", measurement);
     }
-
     public boolean overThreshold() {
+        // Returns true if the Ultrasonic sensor detects that it is a certain distance above the ground
         if (measurement >= Constants.ClimbConstants.ultrasonicThreshold) {
             return true;
         } else {
@@ -67,7 +68,8 @@ public class Climb extends SubsystemBase {
     }
 
     public boolean isClimbPosition() {
-        if (climbMotor.getPosition().getValueAsDouble() >= 0) {
+        // Returns true if the Encoder detects the motor is at end position
+        if (climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.encoderEndValue) {
             return true;
         } else {
             return false;
