@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -82,7 +83,7 @@ public class WheelRadiusCharacterizationCommand {
                                                 wheelDelta += Math.abs(positions[i] - state.positions[i]) / 4.0;
                                             }
                                             double wheelRadius = (state.gyroDelta
-                                                    * SwerveDriveSubsystem.DRIVE_BASE_RADIUS) / wheelDelta;
+                                                    * SwerveConstants.DRIVE_BASE_RADIUS) / wheelDelta;
 
                                             NumberFormat formatter = new DecimalFormat("#0.000");
                                             System.out.println(

@@ -1,5 +1,6 @@
 package frc.robot.controls;
 
+import static edu.wpi.first.wpilibj2.command.Commands.either;
 import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -56,6 +57,13 @@ public class ButtonBindings {
         this.driverController.back()
                 .whileTrue(runOnce(() -> GameData.getInstance().toggleDriveMode()));
 
+        // switch from robot relative to field relative
+        this.driverController.start()
+                .whileTrue(either(
+                        runOnce(this.swerveDriveSubsystem::disableFieldRelative, this.swerveDriveSubsystem),
+                        runOnce(this.swerveDriveSubsystem::enableFieldRelative, this.swerveDriveSubsystem),
+                        this.swerveDriveSubsystem::isFieldRelative));
+
         // Lock to 0° when A button is held
         // this.driverController.a()
         // .whileTrue(
@@ -71,9 +79,9 @@ public class ButtonBindings {
 
         // Reset gyro to 0° when B button is pressed
         this.driverController.b()
-                .onTrue(runOnce(() -> swerveDriveSubsystem.setPose(
-                        new Pose2d(swerveDriveSubsystem.getPose().getTranslation(), new Rotation2d())),
-                        swerveDriveSubsystem)
+                .onTrue(runOnce(() -> this.swerveDriveSubsystem.setPose(
+                        new Pose2d(this.swerveDriveSubsystem.getPose().getTranslation(), new Rotation2d())),
+                        this.swerveDriveSubsystem)
                         .ignoringDisable(true));
 
         // Drive to nearest coral station

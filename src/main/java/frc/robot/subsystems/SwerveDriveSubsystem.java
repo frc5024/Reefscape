@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.modules.gyro.GyroIOInputsAutoLogged;
 import frc.robot.modules.gyro.GyroModuleIO;
@@ -42,20 +43,14 @@ import frc.robot.utils.PhoenixOdometryThread;
  * 
  */
 public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsystem.VisionConsumer {
-    // TunerConstants doesn't include these constants, so they are declared locally
-    public static final double DRIVE_BASE_RADIUS = Math.max(
-            Math.max(
-                    Math.hypot(TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
-                    Math.hypot(TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY)),
-            Math.max(
-                    Math.hypot(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
-                    Math.hypot(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)));
-
     static final Lock odometryLock = new ReentrantLock();
+
     private final GyroModuleIO gyroIO;
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+
     private final SwerveModule[] swerveModules = new SwerveModule[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
+
     private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.",
             AlertType.kError);
 
@@ -70,6 +65,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
             };
     private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(kinematics, rawGyroRotation,
             lastModulePositions, new Pose2d());
+    private boolean isFieldRelative;
 
     /**
      * 
@@ -97,12 +93,25 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
                         (state) -> Logger.recordOutput("SwerveDrive/SysIdState", state.toString())),
                 new SysIdRoutine.Mechanism(
                         (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+
+        this.isFieldRelative = true;
     }
 
     /** Adds a new timestamped vision measurement. */
     @Override
     public void accept(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
         this.poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+    }
+
+    /**
+     * 
+     */
+    public void disableFieldRelative() {
+        setIsFieldRelative(false);
+    }
+
+    public void enableFieldRelative() {
+        setIsFieldRelative(true);
     }
 
     @Override
@@ -164,6 +173,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
         // Update gyro alert
         gyroDisconnectedAlert.set(!gyroInputs.connected && RobotConstants.currentMode != RobotConstants.Mode.SIM);
+
+        Logger.recordOutput("Subsystems/SwerveDrive/IsFieldOriented", this.isFieldRelative);
     }
 
     /**
@@ -195,6 +206,15 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
         // Log optimized setpoints (runSetpoint mutates each state)
         Logger.recordOutput("Subsystems/SwerveDriveSwerveStates/SetpointsOptimized", setpointStates);
+    }
+
+    /**
+     * 
+     */
+    public void runRobotRelativeVelocity(double xVelocity, double yVelocity, double rVelocity, Rotation2d angle) {
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
+
+        runVelocity(chassisSpeeds);
     }
 
     /** Runs the drive in a straight line with the specified drive output. */
@@ -336,7 +356,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      * Returns the maximum angular speed in radians per sec.
      */
     public double getMaxAngularSpeedRadPerSec() {
-        return getMaxLinearSpeedMetersPerSec() / DRIVE_BASE_RADIUS;
+        return getMaxLinearSpeedMetersPerSec() / SwerveConstants.DRIVE_BASE_RADIUS;
     }
 
     /**
@@ -385,5 +405,14 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         for (SwerveModule swerveModule : this.swerveModules) {
             swerveModule.setDrivePID(0.0, 0.0, 0.0);
         }
+    }
+
+    /** Getters and Setters */
+    public boolean isFieldRelative() {
+        return this.isFieldRelative;
+    }
+
+    public void setIsFieldRelative(boolean isFieldRelative) {
+        this.isFieldRelative = isFieldRelative;
     }
 }

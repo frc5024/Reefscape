@@ -54,11 +54,8 @@ public class SwerveDriveCommands {
      * Field relative drive command using two joysticks (controlling linear and
      * angular velocities).
      */
-    public static Command joystickDrive(
-            SwerveDriveSubsystem swerveDriveSubsystem,
-            DoubleSupplier xSupplier,
-            DoubleSupplier ySupplier,
-            DoubleSupplier omegaSupplier) {
+    public static Command joystickDrive(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier xSupplier,
+            DoubleSupplier ySupplier, DoubleSupplier omegaSupplier) {
         return Commands.run(
                 () -> {
                     // Get linear velocity
@@ -76,14 +73,18 @@ public class SwerveDriveCommands {
                             linearVelocity.getX() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
                             linearVelocity.getY() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
                             omega * swerveDriveSubsystem.getMaxAngularSpeedRadPerSec());
+
                     boolean isFlipped = DriverStation.getAlliance().isPresent()
                             && DriverStation.getAlliance().get() == Alliance.Red;
+
                     swerveDriveSubsystem.runVelocity(
-                            ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    speeds,
-                                    isFlipped
-                                            ? swerveDriveSubsystem.getRotation().plus(new Rotation2d(Math.PI))
-                                            : swerveDriveSubsystem.getRotation()));
+                            swerveDriveSubsystem.isFieldRelative()
+                                    ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                                            speeds,
+                                            isFlipped
+                                                    ? swerveDriveSubsystem.getRotation().plus(new Rotation2d(Math.PI))
+                                                    : swerveDriveSubsystem.getRotation())
+                                    : new ChassisSpeeds(linearVelocity.getX(), linearVelocity.getY(), omega));
                 },
                 swerveDriveSubsystem);
     }

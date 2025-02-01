@@ -93,9 +93,9 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     public SwerveModuleIOTalonFX(
             SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants) {
         this.constants = constants;
-        this.driveTalon = new TalonFX(constants.DriveMotorId, "*");
-        this.turnTalon = new TalonFX(constants.SteerMotorId, "*");
-        this.cancoder = new CANcoder(constants.EncoderId, "*");
+        this.driveTalon = new TalonFX(constants.DriveMotorId, "rio");
+        this.turnTalon = new TalonFX(constants.SteerMotorId, "rio");
+        this.cancoder = new CANcoder(constants.EncoderId, "rio");
 
         // Configure drive motor
         this.driveConfig = new TalonFXConfiguration();
