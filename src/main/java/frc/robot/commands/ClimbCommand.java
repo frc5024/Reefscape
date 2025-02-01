@@ -18,11 +18,14 @@ public class ClimbCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void initialize() {
-
   }
 
   public void execute() {
-    ClimbSubsystem.startMotor(speed);
+    if (ClimbSubsystem.overThreshold() == true && ClimbSubsystem.isClimbPosition() == true) {
+      ClimbSubsystem.stopMotor();
+    } else {
+      ClimbSubsystem.startMotor(speed);
+    }
   }
 
   @Override
