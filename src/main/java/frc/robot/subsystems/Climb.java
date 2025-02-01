@@ -1,10 +1,14 @@
 
 package frc.robot.subsystems;
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Climb extends SubsystemBase {
@@ -14,9 +18,9 @@ public class Climb extends SubsystemBase {
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
     GenericEntry climbSpeed = tab.add("climbSpeed", .35).getEntry();
 
-    private final Ultrasonic m_ultrasonic = new Ultrasonic(5, 4);
+    private final Ultrasonic m_ultrasonic = new Ultrasonic(Constants.ClimbConstants.pingID,Constants.ClimbConstants.echoID);
     double distanceMillimetres;
-    MedianFilter filter = new MedianFilter(5);
+    MedianFilter filter = new MedianFilter(Constants.ClimbConstants.filterValue);
 
     public static Climb getInstance() {
         if (mInstance == null) {
@@ -26,7 +30,7 @@ public class Climb extends SubsystemBase {
     }
 
     private Climb() {
-        climbMotor = new TalonFX(7);
+        climbMotor = new TalonFX(Constants.ClimbConstants.climbMotorID);
         tab.addDouble("encoder value", () ->climbMotor.getPosition().getValueAsDouble());
         
     }
@@ -47,7 +51,7 @@ public class Climb extends SubsystemBase {
         double measurement = filter.calculate(distanceMillimetres);
         boolean overThreshold;
 
-        if (measurement >= 100) {
+        if (measurement >= Constants.ClimbConstants.ultrasonicThreshold) {
             overThreshold = true;
         } else {
             overThreshold = false;
