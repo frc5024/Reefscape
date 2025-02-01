@@ -21,6 +21,7 @@ public class ClimbCommand extends Command {
   }
 
   public void execute() {
+    // Stops motor when Ultrasonic sensor and Encoder detect end position
     if (ClimbSubsystem.overThreshold() == true && ClimbSubsystem.isClimbPosition() == true) {
       ClimbSubsystem.stopMotor();
     } else {
