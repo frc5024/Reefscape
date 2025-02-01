@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Climb;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ClimbCommand extends Command {
@@ -23,7 +22,6 @@ public class ClimbCommand extends Command {
   }
 
   public void execute() {
-    // ClimbSubsystem.ultrasonic();
     ClimbSubsystem.startMotor(speed);
   }
 
