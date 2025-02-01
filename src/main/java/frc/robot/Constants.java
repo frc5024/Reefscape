@@ -22,15 +22,13 @@ public final class Constants {
         //constants for intake and channels
         public static final class coralConstants {
                 public static final int coralMotorChannel = 62;
-                public static final int linebreakTopChannel = 8;
+                public static final int coralMotorReversedChannel = 61;
+                public static final int linebreakChannel = 8;
                 public static final int linebreakBottomChannel = 9;
                 public static final int servoChannel = 0;
-                public static final double intakeSpeed = 0.6;
-                public static final double outtakeSpeed = -0.6;
-        }
-        //outtaketime (how long to run motors for) and outtakespeed (negative of intakeSpeed)
-        public static final class outtakeConstants {
-                public static final int outtakeTime = 1;
+                public static double intakeSpeed = -0.4;
+                public static double outtakeSpeed = -0.4;
+                public static double outtakeTime = 0.5;
                 
         }
 

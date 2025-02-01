@@ -4,22 +4,24 @@ import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Coral.coralState;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 
 
 public class OuttakeCommand extends Command { 
 
     private final Coral coralSubsystem;
-    private static DigitalInput linebreakTop;
-    private static DigitalInput linebreakBottom;
+    private final Timer outtakeTimer;
+    private static DigitalInput linebreak;
     
     //constants for outtakeTime
-    int outtakeTime = Constants.outtakeConstants.outtakeTime;
+    double outtakeTime = Constants.coralConstants.outtakeTime;
 
     //constructor for OuttakeCommand
     public OuttakeCommand(Coral coralSubsystem) {
         this.coralSubsystem = coralSubsystem; 
-        //linebreakTop = new DigitalInput(Constants.coralConstants.linebreakTopChannel);
-        //linebreakBottom = new DigitalInput(Constants.coralConstants.linebreakBottomChannel);
+
+        linebreak = new DigitalInput(Constants.coralConstants.linebreakChannel);
+        outtakeTimer = new Timer();
 
         addRequirements(coralSubsystem);
     }
@@ -27,8 +29,10 @@ public class OuttakeCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        if(IntakeCommand.isTopLineBroken()) {
+        if(IntakeCommand.isLineBroken()) {
             coralSubsystem.state = coralState.HOLDING;
+            outtakeTimer.reset();
+            outtakeTimer.start();
         }
 
         activeOuttake(false);
@@ -37,11 +41,12 @@ public class OuttakeCommand extends Command {
     //execute, if line is not broken, and t2nd linebreak not broken, set activeOuttake to false and state to IDLE
     @Override
     public void execute() {
-        if(!isTopLineBroken()) {
-            if(!isBottomLineBroken()) {
+        if(!isLineBroken()) {
+            if(outtakeTimer.get() >= outtakeTime) {
                 activeOuttake(true);
                 coralSubsystem.state = coralState.IDLE;
                 coralSubsystem.setIdle();
+                cancel();
             }
         }
     }
@@ -58,17 +63,14 @@ public class OuttakeCommand extends Command {
         return false;
     }
 
-    public static boolean isTopLineBroken() {
-        return linebreakTop.get(); 
+    public static boolean isLineBroken() {
+        return linebreak.get(); 
     }
 
-    public static boolean isBottomLineBroken() {
-        return linebreakBottom.get();
-    }
     //method for activeOuttake, 
     public void activeOuttake(boolean outtaking) {
         //if line is broken and outtaking is true, start outtake and set state to DROPPING
-        if(isTopLineBroken() && isBottomLineBroken() && outtaking) {
+        if(isLineBroken() && outtaking) {
             coralSubsystem.startOuttake(true);
             coralSubsystem.state = coralState.DROPPING;
         }

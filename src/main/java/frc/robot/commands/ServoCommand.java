@@ -24,4 +24,15 @@ public class ServoCommand extends Command {
     public void set90() {
         rampServo.set(0.5);
     }
+
+    @Override
+    public void end(boolean interrupted) {
+        rampServo.set(0);
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
