@@ -15,6 +15,7 @@ import frc.robot.modules.elevator.ElevatorModuleIOSim;
 import frc.robot.modules.gyro.GyroModuleIOSim;
 import frc.robot.modules.swerve.SwerveModuleIOMapleSim;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -81,6 +82,14 @@ public class MapleSimRobotContainer extends RobotContainer {
                 }));
 
         /* Coral Subsystem Commands */
+        NamedCommands.registerCommand("Intake Coral",
+                new InstantCommand(() -> {
+                    this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.INTAKE);
+                }));
+        NamedCommands.registerCommand("Eject Coral",
+                new InstantCommand(() -> {
+                    this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.EJECT);
+                }));
 
         /* Elevator Subsystem Commands */
         NamedCommands.registerCommand("Move Elevator to Idle",
