@@ -71,9 +71,14 @@ public class Elevator extends SubsystemBase{
         //max speed
         if (speed >= maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed)) {
             elevatorMotor.set(maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed));
+        } else if (speed <= -maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed)) {
+            elevatorMotor.set(-maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed));
         } else {
             elevatorMotor.set(speed);
         }
+
+        checkTopLimitSwitch();
+        zeroingEncoder();
     }
 
     //gets the position from the SetElevatorSetpointCmd
@@ -105,7 +110,7 @@ public class Elevator extends SubsystemBase{
     }
 
     //stop the motor if the the top limit switch is triggered
-    public void stopMotor () {
+    public void checkTopLimitSwitch () {
         if (isTopLimitSwitchBroken()) {
             elevatorMotor.set(0);
         }
