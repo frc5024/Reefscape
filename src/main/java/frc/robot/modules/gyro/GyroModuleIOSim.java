@@ -23,7 +23,7 @@ public class GyroModuleIOSim implements GyroModuleIO {
 
     @Override
     public void updateInputs(GyroIOInputs inputs) {
-        inputs.connected = true;
+        inputs.connected = this.gyroSimulation != null;
         inputs.yawPosition = this.gyroSimulation != null ? this.gyroSimulation.getGyroReading() : new Rotation2d();
         inputs.yawVelocityRadPerSec = this.gyroSimulation != null ? Units.degreesToRadians(
                 gyroSimulation.getMeasuredAngularVelocity().in(RadiansPerSecond)) : 0.0;

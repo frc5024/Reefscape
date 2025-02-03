@@ -8,6 +8,7 @@ import frc.robot.modules.gyro.GyroModuleIOSim;
 import frc.robot.modules.swerve.SwerveModuleIOSim;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
@@ -37,6 +38,10 @@ public class SimulatedRobotContainer extends RobotContainer {
         registerNamedCommands();
         configureAutoBuilder();
         configureButtonBindings();
+
+        // Initiate the LEDSubsystem
+        LEDSubsystem.getInstance();
+
     }
 
     @Override

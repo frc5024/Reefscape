@@ -35,6 +35,7 @@ abstract public class RobotContainer {
     /* Controllers */
     private CommandXboxController driverController;
     private CommandXboxController operatorController;
+    private CommandXboxController buttonTestController;
 
     /* Autonomous */
     AutoBuilder autoBuilder;
@@ -68,6 +69,7 @@ abstract public class RobotContainer {
                 this.elevatorSubsystem, this.visionSubsystem);
         this.driverController = buttonBindings.getDriverController();
         this.operatorController = buttonBindings.getOperatorController();
+        this.buttonTestController = buttonBindings.getButtonTestController();
 
         // Default command, normal field-relative drive
         swerveDriveSubsystem.setDefaultCommand(

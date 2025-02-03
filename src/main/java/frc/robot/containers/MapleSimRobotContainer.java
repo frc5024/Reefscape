@@ -17,6 +17,7 @@ import frc.robot.modules.swerve.SwerveModuleIOMapleSim;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.simulation.AlgaeIntakeSubsystemSim;
@@ -54,6 +55,10 @@ public class MapleSimRobotContainer extends RobotContainer {
         registerNamedCommands();
         configureAutoBuilder();
         configureButtonBindings();
+
+        // Initiate the LEDSubsystem
+        LEDSubsystem.getInstance();
+
     }
 
     /**
