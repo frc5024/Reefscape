@@ -18,8 +18,8 @@ import frc.lib.statemachine.StateMetadata;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.modules.elevator.ElevatorIOInputsAutoLogged;
-import frc.robot.modules.elevator.ElevatorMechanism;
 import frc.robot.modules.elevator.ElevatorModuleIO;
+import frc.robot.modules.elevator.ElevatorVisualizer;
 import frc.robot.utils.EqualsUtil;
 
 /**
@@ -38,7 +38,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     protected final Timer stateTimer;
 
     /* Mechanisim2d Display for Monitoring the Elevator Position */
-    private final ElevatorMechanism elevatorMechanism = new ElevatorMechanism();
+    private final ElevatorVisualizer elevatorVisualizer = new ElevatorVisualizer("Measured");
 
     private final StateMachine<Action> stateMachine;
     private final LinkedList<Action> actionQueue;
@@ -51,17 +51,18 @@ public class ElevatorSubsystem extends SubsystemBase {
      * 
      */
     public ElevatorSubsystem(ElevatorModuleIO elevatorModule) {
+
         this.elevatorModule = elevatorModule;
         this.inputs = new ElevatorIOInputsAutoLogged();
         this.disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
         // Sets states for the arm, and what methods.
         this.stateMachine = new StateMachine<>(NAME);
-        this.stateMachine.setDefaultState(Action.MOVE_TO_IDLE, this::handleMoveToIdle);
+        this.stateMachine.setDefaultState(Action.MOVE_TO_IDLE, this::handleMoveToCoral1);
         this.stateMachine.addState(Action.HOLD, this::handleHold);
-        this.stateMachine.addState(Action.MOVE_TO_CORAL_1, this::handleMoveToCoral1);
-        this.stateMachine.addState(Action.MOVE_TO_CORAL_2, this::handleMoveToCoral2);
-        this.stateMachine.addState(Action.MOVE_TO_CORAL_3, this::handleMoveToCoral3);
+        this.stateMachine.addState(Action.MOVE_TO_CORAL_1, this::handleMoveToCoral2);
+        this.stateMachine.addState(Action.MOVE_TO_CORAL_2, this::handleMoveToCoral3);
+        this.stateMachine.addState(Action.MOVE_TO_CORAL_3, this::handleMoveToCoral4);
 
         this.actionQueue = new LinkedList<Action>();
 
@@ -96,19 +97,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     /**
      * 
      */
-    protected void handleMoveToIdle(StateMetadata<Action> stateMetadata) {
-        if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.CORAL_LEVEL_0);
-            this.stateTimer.start();
-        }
-    }
-
-    /**
-     * 
-     */
     protected void handleMoveToCoral1(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.CORAL_LEVEL_1);
+            setGoal(ElevatorConstants.CoralLevel.L1.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -118,7 +109,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToCoral2(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.CORAL_LEVEL_2);
+            setGoal(ElevatorConstants.CoralLevel.L2.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -128,7 +119,17 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToCoral3(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.CORAL_LEVEL_3);
+            setGoal(ElevatorConstants.CoralLevel.L3.heightInMeters);
+            this.stateTimer.start();
+        }
+    }
+
+    /**
+     * 
+     */
+    protected void handleMoveToCoral4(StateMetadata<Action> stateMetadata) {
+        if (stateMetadata.isFirstRun()) {
+            setGoal(ElevatorConstants.CoralLevel.L4.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -185,7 +186,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             }
         }
 
-        this.elevatorMechanism.setLength(getPositionMeters());
+        this.elevatorVisualizer.update(getPositionMeters());
 
         Logger.recordOutput("Subsystems/" + this.NAME + "/AtGoal", this.atGoal);
         Logger.recordOutput("Subsystems/" + this.NAME + "/Current State", this.stateMachine.getCurrentState());

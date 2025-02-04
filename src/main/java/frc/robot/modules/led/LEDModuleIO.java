@@ -28,6 +28,9 @@ public interface LEDModuleIO {
     /**
      * 
      */
+    public default void solidAqua() {
+    }
+
     public default void solidBlack() {
     }
 
@@ -41,5 +44,8 @@ public interface LEDModuleIO {
     }
 
     public default void solidYellow() {
+    }
+
+    public default void strobeAqua() {
     }
 }

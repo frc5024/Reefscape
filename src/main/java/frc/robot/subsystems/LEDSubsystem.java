@@ -35,6 +35,17 @@ public class LEDSubsystem {
     /**
      * 
      */
+    public void set(IBlinkinPreset preset) {
+        this.ledModuleIO.set(preset);
+    }
+
+    /**
+     * 
+     */
+    public void solidAqua() {
+        this.ledModuleIO.solidAqua();
+    }
+
     public void solidBlack() {
         this.ledModuleIO.solidBlack();
     }
@@ -55,10 +66,7 @@ public class LEDSubsystem {
         this.ledModuleIO.solidYellow();
     }
 
-    /**
-     * 
-     */
-    public void set(IBlinkinPreset preset) {
-        this.ledModuleIO.set(preset);
+    public void strobeAqua() {
+        this.ledModuleIO.strobeAqua();
     }
 }

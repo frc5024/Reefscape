@@ -83,6 +83,8 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
             this.stateTimer.reset();
             this.stateTimer.start();
             this.intakeModule.intake();
+
+            LEDSubsystem.getInstance().strobeAqua();
         }
     }
 
@@ -93,6 +95,12 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.intakeModule.stop();
             this.stateTimer.stop();
+
+            if (hasAlgae()) {
+                LEDSubsystem.getInstance().solidAqua();
+            } else {
+                LEDSubsystem.getInstance().solidBlack();
+            }
         }
     }
 
@@ -100,7 +108,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
      * 
      */
     public boolean hasAlgae() {
-        return false;
+        return this.intakeModule.hasAlgae();
     }
 
     /**

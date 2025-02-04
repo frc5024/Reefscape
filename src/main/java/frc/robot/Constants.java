@@ -93,10 +93,21 @@ public final class Constants {
         public static final double kS = 5.0;
         public static final double kG = 50.0;
 
-        public static final double CORAL_LEVEL_0 = Units.inchesToMeters(0.0);
-        public static final double CORAL_LEVEL_1 = Units.inchesToMeters(6.0);
-        public static final double CORAL_LEVEL_2 = Units.inchesToMeters(12.0);
-        public static final double CORAL_LEVEL_3 = Units.inchesToMeters(18.0);
+        // Distance elevator must travel to align with coral post
+        public enum CoralLevel {
+            L1(Units.inchesToMeters(0), 0.0),
+            L2(Units.inchesToMeters(6.0), -35.0),
+            L3(Units.inchesToMeters(12.0), -35.0),
+            L4(Units.inchesToMeters(18.0), -90.0);
+
+            CoralLevel(double heightInMeters, double angleInDegrees) {
+                this.heightInMeters = heightInMeters;
+                this.angleInDegrees = angleInDegrees;
+            }
+
+            public final double heightInMeters;
+            public final double angleInDegrees;
+        }
 
         public static final double drumRadiusMeters = Units.inchesToMeters(6.0);
         public static final double reduction = 5.0;
@@ -140,17 +151,22 @@ public final class Constants {
 
         // left and right coral station poses as seen from driver's station
         public static final Pose2d[] CORAL_STATION_POSES = new Pose2d[] {
-                new Pose2d(Units.inchesToMeters(33.51), Units.inchesToMeters(291.20), Rotation2d.fromDegrees(306.0)),
+                new Pose2d(Units.inchesToMeters(33.51), Units.inchesToMeters(291.20),
+                        Rotation2d.fromDegrees(306.0)),
                 new Pose2d(Units.inchesToMeters(33.51), Units.inchesToMeters(25.80), Rotation2d.fromDegrees(54.0))
         };
 
         // starts with one closest to driver station and rotates clockwise
         public static final Pose2d[] REEF_POSES = new Pose2d[] {
                 new Pose2d(Units.inchesToMeters(144.00), Units.inchesToMeters(158.50), Rotation2d.fromDegrees(0.0)), // Tag-18
-                new Pose2d(Units.inchesToMeters(160.39), Units.inchesToMeters(186.83), Rotation2d.fromDegrees(-60.0)), // Tag-19
-                new Pose2d(Units.inchesToMeters(193.10), Units.inchesToMeters(186.83), Rotation2d.fromDegrees(-120.0)), // Tag-20
-                new Pose2d(Units.inchesToMeters(209.49), Units.inchesToMeters(158.50), Rotation2d.fromDegrees(180.0)), // Tag-21
-                new Pose2d(Units.inchesToMeters(193.10), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(120.0)), // Tag-22
+                new Pose2d(Units.inchesToMeters(160.39), Units.inchesToMeters(186.83),
+                        Rotation2d.fromDegrees(-60.0)), // Tag-19
+                new Pose2d(Units.inchesToMeters(193.10), Units.inchesToMeters(186.83),
+                        Rotation2d.fromDegrees(-120.0)), // Tag-20
+                new Pose2d(Units.inchesToMeters(209.49), Units.inchesToMeters(158.50),
+                        Rotation2d.fromDegrees(180.0)), // Tag-21
+                new Pose2d(Units.inchesToMeters(193.10), Units.inchesToMeters(130.17),
+                        Rotation2d.fromDegrees(120.0)), // Tag-22
                 new Pose2d(Units.inchesToMeters(160.39), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(60.0)) // Tag-17
         };
     }
@@ -242,15 +258,20 @@ public final class Constants {
         public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 2.0;
 
         // PID constants for elevator
-        public static final double ELEVATOR_KP = 5000.0;
+        public static final double ELEVATOR_KP = 0.073;
         public static final double ELEVATOR_KI = 0.0;
-        public static final double ELEVATOR_KD = 2000.0;
+        public static final double ELEVATOR_KD = 0.00001;
+
+        public static final double SIM_ELEVATOR_KP = 5000.0;
+        public static final double SIM_ELEVATOR_KI = 0.0;
+        public static final double SIM_ELEVATOR_KD = 2000.0;
 
         /**
          * Should only be call by simulation as TunerContants has real values
          */
         public static final double[] getDrivePIDs() {
-            return new double[] { SIM_SWERVE_MODULE_DRIVE_KP, SIM_SWERVE_MODULE_DRIVE_KI, SIM_SWERVE_MODULE_DRIVE_KD };
+            return new double[] { SIM_SWERVE_MODULE_DRIVE_KP, SIM_SWERVE_MODULE_DRIVE_KI,
+                    SIM_SWERVE_MODULE_DRIVE_KD };
         }
 
         /**
@@ -284,7 +305,17 @@ public final class Constants {
         public static final double[] getDriveOmegaPIDs() {
             return Robot.isReal()
                     ? new double[] { SWERVE_DRIVE_OMEGA_KP, SWERVE_DRIVE_OMEGA_KI, SWERVE_DRIVE_OMEGA_KD }
-                    : new double[] { SIM_SWERVE_DRIVE_OMEGA_KP, SIM_SWERVE_DRIVE_OMEGA_KI, SIM_SWERVE_DRIVE_OMEGA_KD };
+                    : new double[] { SIM_SWERVE_DRIVE_OMEGA_KP, SIM_SWERVE_DRIVE_OMEGA_KI,
+                            SIM_SWERVE_DRIVE_OMEGA_KD };
+        }
+
+        /**
+         * 
+         */
+        public static final double[] getElevatorPIDs() {
+            return Robot.isReal()
+                    ? new double[] { ELEVATOR_KP, ELEVATOR_KI, ELEVATOR_KD }
+                    : new double[] { SIM_ELEVATOR_KP, SIM_ELEVATOR_KI, SIM_ELEVATOR_KD };
         }
     }
 
@@ -326,7 +357,8 @@ public final class Constants {
 
         public static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(4.5, 4);
         public static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(4.5, 4);
-        public static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(10, 10);
+        public static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(10,
+                10);
     }
 
     /**
@@ -378,7 +410,8 @@ public final class Constants {
 
         // Multipliers to apply for MegaTag 2 observations
         public static double LINEAR_STD_DEV_MEGATAG2_FACTOR = 0.5; // More stable than full 3D solve
-        public static double ANGULAR_STD_DEV_MEGATAG2_FACTOR = Double.POSITIVE_INFINITY; // No rotation data available
+        public static double ANGULAR_STD_DEV_MEGATAG2_FACTOR = Double.POSITIVE_INFINITY; // No rotation data
+                                                                                         // available
 
         // Standard deviation multipliers for each camera
         // (Adjust to trust some cameras more than others)

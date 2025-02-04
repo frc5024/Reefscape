@@ -14,8 +14,8 @@ import frc.robot.commands.DriveToBestTagCommand;
 import frc.robot.commands.DriveToReefStationCommand;
 import frc.robot.controls.GameData.CoralPole;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem.Action;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -36,6 +36,7 @@ public class ButtonBindings {
     /* Subsystems */
     private final SwerveDriveSubsystem swerveDriveSubsystem;
     private final AlgaeIntakeSubsystem algaeIntakeSubsystem;
+    private final CoralIntakeSubsystem coralIntakeSubsystem;
     private final ElevatorSubsystem elevatorSubsystem;
     private final VisionSubsystem visionSubsystem;
 
@@ -43,9 +44,11 @@ public class ButtonBindings {
      * 
      */
     public ButtonBindings(SwerveDriveSubsystem swerveDriveSubsystem, AlgaeIntakeSubsystem algaeIntakeSubsystem,
+            CoralIntakeSubsystem coralIntakeSubsystem,
             ElevatorSubsystem elevatorSubsystem, VisionSubsystem visionSubsystem) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.algaeIntakeSubsystem = algaeIntakeSubsystem;
+        this.coralIntakeSubsystem = coralIntakeSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;
         this.visionSubsystem = visionSubsystem;
 
@@ -137,13 +140,25 @@ public class ButtonBindings {
         CommandXboxController commandXboxController = new CommandXboxController(OPERATOR_PORT);
 
         commandXboxController.a()
-                .whileTrue(runOnce(() -> this.elevatorSubsystem.addAction(Action.MOVE_TO_IDLE)));
+                .whileTrue(runOnce(() -> this.elevatorSubsystem
+                        .addAction(frc.robot.subsystems.ElevatorSubsystem.Action.MOVE_TO_IDLE)));
         commandXboxController.x()
-                .whileTrue(runOnce(() -> this.elevatorSubsystem.addAction(Action.MOVE_TO_CORAL_1)));
+                .whileTrue(runOnce(() -> this.elevatorSubsystem
+                        .addAction(frc.robot.subsystems.ElevatorSubsystem.Action.MOVE_TO_CORAL_1)));
         commandXboxController.b()
-                .whileTrue(runOnce(() -> this.elevatorSubsystem.addAction(Action.MOVE_TO_CORAL_2)));
+                .whileTrue(runOnce(() -> this.elevatorSubsystem
+                        .addAction(frc.robot.subsystems.ElevatorSubsystem.Action.MOVE_TO_CORAL_2)));
         commandXboxController.y()
-                .whileTrue(runOnce(() -> this.elevatorSubsystem.addAction(Action.MOVE_TO_CORAL_3)));
+                .whileTrue(runOnce(() -> this.elevatorSubsystem
+                        .addAction(frc.robot.subsystems.ElevatorSubsystem.Action.MOVE_TO_CORAL_3)));
+
+        commandXboxController.rightTrigger()
+                .whileTrue(runOnce(() -> this.algaeIntakeSubsystem
+                        .addAction(frc.robot.subsystems.AlgaeIntakeSubsystem.Action.INTAKE)));
+
+        commandXboxController.leftTrigger()
+                .whileTrue(runOnce(() -> this.algaeIntakeSubsystem
+                        .addAction(frc.robot.subsystems.AlgaeIntakeSubsystem.Action.EJECT)));
 
         return commandXboxController;
     }

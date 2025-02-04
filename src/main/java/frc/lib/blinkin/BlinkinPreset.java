@@ -203,6 +203,7 @@ public class BlinkinPreset {
     }
 
     public enum Strobe implements IBlinkinPreset {
+        kAqua(0.81),
         kRed(-0.11),
         kBlue(-0.09),
         kGold(-0.07),

@@ -110,6 +110,11 @@ public class LEDModuleIOSim implements LEDModuleIO {
     }
 
     @Override
+    public void solidAqua() {
+        this.set(Effect.SOLID, Color.kAqua);
+    }
+
+    @Override
     public void solidBlack() {
         this.set(Effect.SOLID, Color.kBlack);
     }
@@ -132,6 +137,11 @@ public class LEDModuleIOSim implements LEDModuleIO {
     @Override
     public void solidYellow() {
         this.set(Effect.SOLID, Color.kYellow);
+    }
+
+    @Override
+    public void strobeAqua() {
+        this.set(Effect.STROBE, Color.kAqua);
     }
 
     /**

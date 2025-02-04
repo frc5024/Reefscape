@@ -12,17 +12,17 @@ import frc.robot.Constants.MechanismConstants;
  * 
  */
 public class ElevatorMechanism {
-    private final double THICKNESS = 5;
+    private final double THICKNESS = 10;
     private final double OUTER_BOTTOM_RAIL = Units.inchesToMeters(19.0);
     private final double MIDDLE_BOTTOM_RAIL = Units.inchesToMeters(17.0);
     private final double INNER_BOTTOM_RAIL = Units.inchesToMeters(14.5);
-    private final double BOX_BOTTOM_RAIL = Units.inchesToMeters(10.0);
+    private final double BOX_BOTTOM_RAIL = Units.inchesToMeters(12.0);
     private final double BOTTOM_RAIL_EXTENSION = Units.inchesToMeters(3.125);
-    private final double OUTER_RAIL = Units.inchesToMeters(34.0);
-    private final double MIDDLE_RAIL = Units.inchesToMeters(35.0);
-    private final double INNER_RAIL = Units.inchesToMeters(35.0);
+    private final double OUTER_RAIL = Units.inchesToMeters(35.0);
+    private final double MIDDLE_RAIL = Units.inchesToMeters(37.0);
+    private final double INNER_RAIL = Units.inchesToMeters(36.0);
     private final double BOX_RAIL = Units.inchesToMeters(12.0);
-    private static final double MIN_LENGTH = 0.01;
+    private static final double MIN_LENGTH = Units.inchesToMeters(1.0);
 
     private final Color8Bit OUTER_COLOR = new Color8Bit(Color.kPurple);
     private final Color8Bit MIDDLE_COLOR = new Color8Bit(Color.kAliceBlue);
@@ -42,6 +42,7 @@ public class ElevatorMechanism {
     private final LoggedMechanismLigament2d isLigament;
     private final LoggedMechanismLigament2d bblLigament;
     private final LoggedMechanismLigament2d bbrLigament;
+    private final LoggedMechanismLigament2d blrLigament;
 
     /**
      * 
@@ -54,7 +55,7 @@ public class ElevatorMechanism {
                 "OuterBottomLeftRail", OUTER_BOTTOM_RAIL / 2, 180, THICKNESS, OUTER_COLOR);
         obrLigament = new LoggedMechanismLigament2d(
                 "OuterBottomRightRail", OUTER_BOTTOM_RAIL / 2, 0, THICKNESS, OUTER_COLOR);
-        osLigament = new LoggedMechanismLigament2d("OuterShaft", MIN_LENGTH, 90, THICKNESS, SHAFT_COLOR);
+        osLigament = new LoggedMechanismLigament2d("OuterShaft", 0.0, 90, THICKNESS, SHAFT_COLOR);
 
         oblLigament.append(
                 new LoggedMechanismLigament2d("LeftExtension", BOTTOM_RAIL_EXTENSION, 0, THICKNESS, OUTER_COLOR));
@@ -99,8 +100,10 @@ public class ElevatorMechanism {
         bbrLigament = new LoggedMechanismLigament2d("BoxBottomRightRail", BOX_BOTTOM_RAIL / 2, -90, THICKNESS,
                 BOX_COLOR);
 
-        bblLigament.append(new LoggedMechanismLigament2d("BoxLeftRail", BOX_RAIL, -90, THICKNESS, BOX_COLOR));
+        blrLigament = new LoggedMechanismLigament2d("BoxLeftRail", BOX_RAIL, -90, THICKNESS, BOX_COLOR);
+        blrLigament.append(new LoggedMechanismLigament2d("BoxTopRail", BOX_RAIL, -90, THICKNESS, BOX_COLOR));
         bbrLigament.append(new LoggedMechanismLigament2d("BoxRightRail", BOX_RAIL, 90, THICKNESS, BOX_COLOR));
+        bblLigament.append(blrLigament);
 
         isLigament.append(bblLigament);
         isLigament.append(bbrLigament);

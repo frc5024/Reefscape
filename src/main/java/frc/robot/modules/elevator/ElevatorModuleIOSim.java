@@ -40,13 +40,14 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
         if (!closedLoop) {
-            controller.reset();
+            this.controller.reset();
             update(RobotConstants.LOOP_PERIOD_SECS);
         } else {
             // Run control at 1khz
             for (int i = 0; i < RobotConstants.LOOP_PERIOD_SECS / (1.0 / 1000.0); i++) {
                 setInputTorqueCurrent(
-                        controller.calculate(simState.get(0) / ElevatorConstants.drumRadiusMeters) + feedforward);
+                        this.controller.calculate(simState.get(0) / ElevatorConstants.drumRadiusMeters)
+                                + this.feedforward);
                 update(1.0 / 1000.0);
             }
         }
@@ -67,7 +68,7 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
     @Override
     public void runPosition(double positionRad, double feedforward) {
         closedLoop = true;
-        controller.setSetpoint(positionRad);
+        this.controller.setSetpoint(positionRad);
         this.feedforward = feedforward;
     }
 

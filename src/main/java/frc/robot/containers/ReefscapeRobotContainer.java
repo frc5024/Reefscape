@@ -30,6 +30,10 @@ public class ReefscapeRobotContainer extends RobotContainer {
 
         // this.algaeIntakeSubsystem = new AlgaeIntakeSubsystem(new
         // AlgaeintakeModuleIOSparkMax());
+        // this.coralIntakeSubsystem = new CoralIntakeSubsystem(new
+        // CoralintakeModuleIOSparkFlex());
+        // this.elevatorSubsystem = new ElevatorSubsystem(new
+        // ElevatorModuleIOSparkMax());
 
         registerNamedCommands();
         // configureAutoBuilder();
