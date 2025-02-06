@@ -30,6 +30,8 @@ import frc.robot.controls.GameData;
  */
 public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;
+    public static final CTREConfigs ctreConfigs = new CTREConfigs();
+
     private Command autonomousCommand;
 
     // Variables used in simulation to set robot starting position
