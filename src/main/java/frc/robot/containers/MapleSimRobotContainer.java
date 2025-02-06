@@ -102,6 +102,14 @@ public class MapleSimRobotContainer extends RobotContainer {
                 new InstantCommand(() -> {
                     this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_IDLE);
                 }));
+        NamedCommands.registerCommand("Move Elevator to Algae 1",
+                new InstantCommand(() -> {
+                    this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_1);
+                }));
+        NamedCommands.registerCommand("Move Elevator to Algae 2",
+                new InstantCommand(() -> {
+                    this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_2);
+                }));
         NamedCommands.registerCommand("Move Elevator to Coral 1",
                 new InstantCommand(() -> {
                     this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_1);
@@ -113,6 +121,10 @@ public class MapleSimRobotContainer extends RobotContainer {
         NamedCommands.registerCommand("Move Elevator to Coral 3",
                 new InstantCommand(() -> {
                     this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_3);
+                }));
+        NamedCommands.registerCommand("Move Elevator to Coral 4",
+                new InstantCommand(() -> {
+                    this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_4);
                 }));
 
     }

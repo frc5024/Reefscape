@@ -7,6 +7,7 @@ import org.dyn4j.geometry.Circle;
 import org.ironmaple.simulation.gamepieces.GamePieceOnFieldSimulation;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
@@ -32,5 +33,9 @@ public class ReefscapeAlgaeOnField extends GamePieceOnFieldSimulation {
 
     public ReefscapeAlgaeOnField(Pose2d pose) {
         super(REEFSCAPE_ALGAE_INFO, pose);
+    }
+
+    public ReefscapeAlgaeOnField(Pose3d pose) {
+        super(REEFSCAPE_ALGAE_INFO, pose::getZ, pose.toPose2d(), new Translation2d());
     }
 }

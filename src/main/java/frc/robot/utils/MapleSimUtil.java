@@ -65,18 +65,20 @@ public class MapleSimUtil {
     /**
      * 
      */
-    public static void ejectAlgae(Transform3d algaeTransform) {
+    public static void ejectAlgae(Pose3d algaePose) {
         ReefscapeAlgaeOnFly.setHitNetCallBack(() -> System.out.println("ALGAE hits NET!"));
+
+        Transform3d algaeTransform = new Transform3d(
+                new Pose3d(getSwerveDriveSimulation().getSimulatedDriveTrainPose()), algaePose);
 
         SimulatedArena.getInstance()
                 .addGamePieceProjectile(new ReefscapeAlgaeOnFly(
                         getSwerveDriveSimulation().getSimulatedDriveTrainPose().getTranslation(),
                         new Translation2d(algaeTransform.getX(), algaeTransform.getY()),
                         getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),
-                        getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation()
-                                .minus(new Rotation2d(180)),
+                        getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation(),
                         Meters.of(algaeTransform.getZ()), // initial height of the ball, in meters
-                        MetersPerSecond.of(1), // initial velocity, in m/s
+                        MetersPerSecond.of(2), // initial velocity, in m/s
                         Angle.ofRelativeUnits(0, Units.Degrees)) // shooter angle
                         .withProjectileTrajectoryDisplayCallBack(
                                 (poses) -> Logger.recordOutput("successfulShotsTrajectory",
@@ -87,16 +89,18 @@ public class MapleSimUtil {
     /**
      * 
      */
-    public static void ejectCoral() {
+    public static void ejectCoral(Pose3d coralPose) {
+        Transform3d coralTransform = new Transform3d(
+                new Pose3d(getSwerveDriveSimulation().getSimulatedDriveTrainPose()), coralPose);
+
         SimulatedArena.getInstance()
                 .addGamePieceProjectile(new ReefscapeCoralOnFly(
                         getSwerveDriveSimulation().getSimulatedDriveTrainPose().getTranslation(),
-                        new Translation2d(),
+                        new Translation2d(coralTransform.getX(), coralTransform.getY()),
                         getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),
-                        getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation()
-                                .minus(new Rotation2d(180)),
-                        Meters.of(0.4), // initial height of the ball, in meters
-                        MetersPerSecond.of(3), // initial velocity, in m/s
+                        getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation(),
+                        Meters.of(coralTransform.getZ()), // initial height of the ball, in meters
+                        MetersPerSecond.of(2), // initial velocity, in m/s
                         Angle.ofRelativeUnits(0, Units.Degrees)) // shooter angle
                         .withProjectileTrajectoryDisplayCallBack(
                                 (poses) -> Logger.recordOutput("successfulShotsTrajectory",

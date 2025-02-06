@@ -56,6 +56,11 @@ public class LEDModuleIOBlinkin implements LEDModuleIO {
     }
 
     @Override
+    public void solidWhite() {
+        this.set(BlinkinPreset.Solid.kWhite);
+    }
+
+    @Override
     public void solidYellow() {
         this.set(BlinkinPreset.Solid.kYellow);
     }
@@ -63,5 +68,10 @@ public class LEDModuleIOBlinkin implements LEDModuleIO {
     @Override
     public void strobeAqua() {
         this.set(BlinkinPreset.Strobe.kAqua);
+    }
+
+    @Override
+    public void strobeWhite() {
+        this.set(BlinkinPreset.Strobe.kWhite);
     }
 }

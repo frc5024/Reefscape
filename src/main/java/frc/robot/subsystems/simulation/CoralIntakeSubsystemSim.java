@@ -2,6 +2,7 @@ package frc.robot.subsystems.simulation;
 
 import frc.lib.statemachine.StateMetadata;
 import frc.robot.modules.coral.CoralIntakeModuleIO;
+import frc.robot.modules.elevator.ElevatorVisualizer;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.utils.MapleSimUtil;
 
@@ -18,8 +19,9 @@ public class CoralIntakeSubsystemSim extends CoralIntakeSubsystem {
         super.handleEject(stateMetadata);
 
         if (stateMetadata.isFirstRun()) {
-            MapleSimUtil.getCoralIntakeSimulation().obtainGamePieceFromIntake();
-            MapleSimUtil.ejectCoral();
+            if (MapleSimUtil.getCoralIntakeSimulation().obtainGamePieceFromIntake()) {
+                MapleSimUtil.ejectCoral(ElevatorVisualizer.getCoralPose("Measured"));
+            }
         }
     }
 
@@ -55,7 +57,10 @@ public class CoralIntakeSubsystemSim extends CoralIntakeSubsystem {
      * Used in autonomous simulations
      */
     public void setHasCoral(boolean has_coral) {
-        boolean added = MapleSimUtil.getCoralIntakeSimulation().addGamePieceToIntake();
-        super.setHasCoral(added);
+        boolean added = false;
+        if (has_coral) {
+            added = MapleSimUtil.getCoralIntakeSimulation().addGamePieceToIntake();
+        }
+        super.setHasCoral(has_coral && added);
     }
 }

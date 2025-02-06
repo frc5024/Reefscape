@@ -23,13 +23,18 @@ public class ElevatorVisualizer {
             elevatorOrigin2d.getY());
 
     private final String name;
-    private Transform3d algaeTransform;
+
+    private Pose3d algaeIntakePose;
+    private Pose3d coralIntakePose;
 
     /**
      * 
      */
     private ElevatorVisualizer(String name) {
         this.name = name;
+
+        this.algaeIntakePose = new Pose3d();
+        this.coralIntakePose = new Pose3d();
     }
 
     /**
@@ -67,39 +72,47 @@ public class ElevatorVisualizer {
                 });
 
         /* Algae Intake Subsystem */
-        Pose3d algaeIntakePose = new Pose3d();
-
         if (hasAlgae) {
-            Pose2d robotPose = MapleSimUtil.getSwerveDriveSimulation().getSimulatedDriveTrainPose();
-            this.algaeTransform = new Transform3d(Units.inchesToMeters(-11.5), 0.0,
-                    heights[2] + Units.inchesToMeters(16),
+            Pose2d robotPoseA = MapleSimUtil.getSwerveDriveSimulation().getSimulatedDriveTrainPose();
+            Transform3d algaeTransform = new Transform3d(Units.inchesToMeters(-13.5), 0.0,
+                    heights[2] + Units.inchesToMeters(14.5),
                     new Rotation3d());
 
-            algaeIntakePose = new Pose3d(robotPose).transformBy(this.algaeTransform);
+            this.algaeIntakePose = new Pose3d(robotPoseA).transformBy(algaeTransform);
+        } else {
+            this.algaeIntakePose = new Pose3d();
         }
 
-        Logger.recordOutput("FieldSimulation/Algae Intake Pose", algaeIntakePose);
+        Logger.recordOutput("FieldSimulation/Algae Intake Pose", this.algaeIntakePose);
 
         /* Coral Intake Subsystem */
-        Pose3d coralIntakePose = new Pose3d();
-
         if (hasCoral) {
             Pose2d robotPose = MapleSimUtil.getSwerveDriveSimulation().getSimulatedDriveTrainPose();
             Transform3d transform3d = new Transform3d(Units.inchesToMeters(11.5), 0.025,
                     heights[2] + Units.inchesToMeters(18),
                     new Rotation3d(0.0, Units.degreesToRadians(35), 0.0));
 
-            coralIntakePose = new Pose3d(robotPose).transformBy(transform3d);
+            this.coralIntakePose = new Pose3d(robotPose).transformBy(transform3d);
+        } else {
+            this.coralIntakePose = new Pose3d();
         }
 
-        Logger.recordOutput("FieldSimulation/Coral Intake Pose", coralIntakePose);
+        Logger.recordOutput("FieldSimulation/Coral Intake Pose", this.coralIntakePose);
     }
 
     /**
      * 
      */
-    public static Transform3d getAlgaeTransform(String name) {
+    public static Pose3d getAlgaePose(String name) {
         ElevatorVisualizer elevatorVisualizer = ElevatorVisualizer.getInstance(name);
-        return elevatorVisualizer.algaeTransform;
+        return elevatorVisualizer.algaeIntakePose;
+    }
+
+    /**
+     * 
+     */
+    public static Pose3d getCoralPose(String name) {
+        ElevatorVisualizer elevatorVisualizer = ElevatorVisualizer.getInstance(name);
+        return elevatorVisualizer.coralIntakePose;
     }
 }

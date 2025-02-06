@@ -168,7 +168,7 @@ public class Robot extends LoggedRobot {
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
-        Logger.recordOutput("GameData/Drive Mode", GameData.getInstance().getDriveModeAsString());
+        Logger.recordOutput("GameData/Drive Mode", GameData.getInstance().getGamePieceModeAsString());
         Logger.recordOutput("GameData/Pole Position", GameData.getInstance().getCoralPoleAsString());
         Logger.recordOutput("GameData/Reef Position", GameData.getInstance().getReefStationIndexAsString());
     }

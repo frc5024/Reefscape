@@ -55,17 +55,25 @@ public class ClearAlgae {
         // If simulation set coral in
         if (Robot.isSimulation()) {
             this.coralIntakeSubsystem.setHasCoral(true);
+            this.algaeIntakeSubsystem.setHasAlgae(false);
         }
 
         Command command = Commands.sequence(
                 Commands.print("*** Starting ClearAlgae ***"),
 
-                AutoBuilder.followPath(pathGroup.get(0)),
-                new WaitCommand(0.5),
+                new ParallelCommandGroup(
+                        AutoBuilder.followPath(pathGroup.get(0)),
+                        new InstantCommand(() -> {
+                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_1);
+                        })),
+                new InstantCommand(() -> {
+                    this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.EJECT);
+                }),
+                new WaitUntilCommand(this.coralIntakeSubsystem::hasEjected),
                 new ParallelCommandGroup(
                         AutoBuilder.followPath(pathGroup.get(1)),
                         new InstantCommand(() -> {
-                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_1);
+                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_2);
                         })),
                 new InstantCommand(() -> {
                     this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.INTAKE);
@@ -74,7 +82,7 @@ public class ClearAlgae {
                 new ParallelCommandGroup(
                         AutoBuilder.followPath(pathGroup.get(2)),
                         new InstantCommand(() -> {
-                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_2);
+                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_1);
                         }),
                         new SequentialCommandGroup(
                                 new WaitCommand(1),
@@ -89,7 +97,7 @@ public class ClearAlgae {
                 new ParallelCommandGroup(
                         AutoBuilder.followPath(pathGroup.get(3)),
                         new InstantCommand(() -> {
-                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_1);
+                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_2);
                         }),
                         new SequentialCommandGroup(
                                 new WaitCommand(1),

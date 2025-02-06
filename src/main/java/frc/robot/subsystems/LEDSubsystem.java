@@ -62,11 +62,19 @@ public class LEDSubsystem {
         this.ledModuleIO.solidRed();
     }
 
+    public void solidWhite() {
+        this.ledModuleIO.solidWhite();
+    }
+
     public void solidYellow() {
         this.ledModuleIO.solidYellow();
     }
 
     public void strobeAqua() {
         this.ledModuleIO.strobeAqua();
+    }
+
+    public void strobeWhite() {
+        this.ledModuleIO.strobeWhite();
     }
 }

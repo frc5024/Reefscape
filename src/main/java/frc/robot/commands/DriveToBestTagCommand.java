@@ -18,8 +18,9 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.TeleopConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.controls.GameData.CoralPole;
-import frc.robot.controls.GameData.DriveMode;
+import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utils.AllianceFlipUtil;
@@ -28,9 +29,8 @@ public class DriveToBestTagCommand extends Command {
     private final SwerveDriveSubsystem swerveDriveSubsystem;
     private final VisionSubsystem visionSubsystem;
     private final Supplier<Pose2d> poseProvider;
-    private final String cameraName;
     private final Supplier<CoralPole> poleSupplier;
-    private final Supplier<DriveMode> driveModeSupplier;
+    private final Supplier<GamePieceMode> gamePieceModeSupplier;
 
     private final ProfiledPIDController xController;
     private final ProfiledPIDController yController;
@@ -40,14 +40,13 @@ public class DriveToBestTagCommand extends Command {
      * Drive to best tag plus any pole offset
      */
     public DriveToBestTagCommand(SwerveDriveSubsystem swerveDriveSubsystem, VisionSubsystem visionSubsystem,
-            Supplier<Pose2d> poseProvider, String cameraName, Supplier<CoralPole> poleSupplier,
-            Supplier<DriveMode> driveModeSupplier) {
+            Supplier<Pose2d> poseProvider, Supplier<CoralPole> poleSupplier,
+            Supplier<GamePieceMode> gamePieceModeSupplier) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.visionSubsystem = visionSubsystem;
         this.poseProvider = poseProvider;
-        this.cameraName = cameraName;
         this.poleSupplier = poleSupplier;
-        this.driveModeSupplier = driveModeSupplier;
+        this.gamePieceModeSupplier = gamePieceModeSupplier;
 
         double[] driveXPIDs = PIDConstants.getDriveXPIDs();
         double[] driveYPIDs = PIDConstants.getDriveXPIDs();
@@ -112,10 +111,10 @@ public class DriveToBestTagCommand extends Command {
         goalPose = AllianceFlipUtil.apply(goalPose);
 
         // Determine if we want to drive to coral pole or algae
-        DriveMode driveMode = this.driveModeSupplier.get();
-        double robotYaw = 180.0;
-        if (driveMode == DriveMode.CORAL) {
-            robotYaw = 0.0;
+        GamePieceMode driveMode = this.gamePieceModeSupplier.get();
+        double robotYaw = 0.0;
+        if (driveMode == GamePieceMode.CORAL) {
+            robotYaw = 180.0;
         }
 
         this.xController.setGoal(goalPose.getX());
@@ -134,18 +133,21 @@ public class DriveToBestTagCommand extends Command {
      * 
      */
     private Pose2d getBestTagPose(Pose3d currentPose) {
-        Pose3d targetPose = this.visionSubsystem.getBestTargetPose(this.cameraName);
+        String cameraName = this.gamePieceModeSupplier.get() == GamePieceMode.ALGAE
+                ? VisionConstants.REAR_CAMERA.getName()
+                : VisionConstants.FRONT_CAMERA.getName();
+        Pose3d targetPose = this.visionSubsystem.getBestTargetPose(cameraName);
 
         if (targetPose == null) {
             return null;
         }
 
         CoralPole poleId = this.poleSupplier.get();
-        DriveMode driveMode = this.driveModeSupplier.get();
+        GamePieceMode gamePieceMode = this.gamePieceModeSupplier.get();
 
-        // Determine if we want to drive to coral pole or algae
+        // Set pole offset if Coral
         double offset = 0.0;
-        if (driveMode == DriveMode.CORAL) {
+        if (gamePieceMode == GamePieceMode.CORAL) {
             offset = poleId == CoralPole.LEFT ? FieldConstants.REEF_POLE_OFFSET : -FieldConstants.REEF_POLE_OFFSET;
         }
 

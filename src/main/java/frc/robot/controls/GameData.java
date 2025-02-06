@@ -12,7 +12,7 @@ public class GameData {
     }
 
     /* Drive for which game piece */
-    public enum DriveMode {
+    public enum GamePieceMode {
         ALGAE, CORAL
     }
 
@@ -20,7 +20,7 @@ public class GameData {
 
     private int reefStationIndex = 1;
     private CoralPole coralPole = CoralPole.LEFT;
-    private DriveMode driveMode = DriveMode.CORAL;
+    private GamePieceMode gamePieceMode = GamePieceMode.CORAL;
 
     /**
      * 
@@ -36,11 +36,11 @@ public class GameData {
     /**
      * Toggles the game piece mode between ALGAE and CORAL.
      */
-    public void toggleDriveMode() {
-        if (this.driveMode == DriveMode.ALGAE) {
-            this.driveMode = DriveMode.CORAL;
+    public void toggleGamePieceMode() {
+        if (this.gamePieceMode == GamePieceMode.ALGAE) {
+            this.gamePieceMode = GamePieceMode.CORAL;
         } else {
-            this.driveMode = DriveMode.ALGAE;
+            this.gamePieceMode = GamePieceMode.ALGAE;
         }
     }
 
@@ -51,8 +51,8 @@ public class GameData {
         return () -> this.coralPole;
     }
 
-    public Supplier<DriveMode> getDriveMode() {
-        return () -> this.driveMode;
+    public Supplier<GamePieceMode> getGamePieceMode() {
+        return () -> this.gamePieceMode;
     }
 
     public String getCoralPoleAsString() {
@@ -68,8 +68,8 @@ public class GameData {
         }
     }
 
-    public String getDriveModeAsString() {
-        switch (this.driveMode) {
+    public String getGamePieceModeAsString() {
+        switch (this.gamePieceMode) {
             case ALGAE:
                 return "ALGAE";
 
@@ -108,8 +108,8 @@ public class GameData {
         this.coralPole = coralPole;
     }
 
-    public void setDriveMode(DriveMode driveMode) {
-        this.driveMode = driveMode;
+    public void setGamePieceMode(GamePieceMode driveMode) {
+        this.gamePieceMode = driveMode;
     }
 
     public void setReefStationIndex(int reefStationIndex) {

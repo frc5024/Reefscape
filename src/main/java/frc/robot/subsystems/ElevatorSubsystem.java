@@ -31,7 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public static enum Action {
         HOLD, MOVE_TO_IDLE, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1, MOVE_TO_CORAL_2,
-        MOVE_TO_CORAL_3
+        MOVE_TO_CORAL_3, MOVE_TO_CORAL_4
     }
 
     private final ElevatorModuleIO elevatorModule;

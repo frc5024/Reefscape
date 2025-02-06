@@ -83,6 +83,8 @@ public class CoralIntakeSubsystem extends SubsystemBase {
             this.stateTimer.reset();
             this.stateTimer.start();
             this.intakeModule.intake();
+
+            LEDSubsystem.getInstance().strobeWhite();
         }
     }
 
@@ -93,6 +95,12 @@ public class CoralIntakeSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.intakeModule.stop();
             this.stateTimer.stop();
+
+            if (hasCoral()) {
+                LEDSubsystem.getInstance().solidWhite();
+            } else {
+                LEDSubsystem.getInstance().solidBlack();
+            }
         }
     }
 

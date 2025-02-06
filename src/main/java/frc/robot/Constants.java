@@ -95,8 +95,8 @@ public final class Constants {
 
         // Distance elevator must travel to align with coral post
         public enum ElevatorLevels {
-            AlgaeL1(Units.inchesToMeters(8.0), 0.0),
-            AlgaeL2(Units.inchesToMeters(14.0), 0.0),
+            AlgaeL1(Units.inchesToMeters(10.5), 0.0),
+            AlgaeL2(Units.inchesToMeters(18.0), 0.0),
             Processor(Units.inchesToMeters(0.0), 0.0),
 
             CoralL1(Units.inchesToMeters(0), 0.0),
@@ -401,7 +401,6 @@ public final class Constants {
          */
         // public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT_CAMERA);
         public static final List<Camera> CAMERAS = Arrays.asList(FRONT_CAMERA, REAR_CAMERA);
-        public static final String DATA_FROM_CAMERA = FRONT_CAMERA.getName();
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;

@@ -97,7 +97,8 @@ public class Arena2025Reefscape extends SimulatedArena {
             super.addGamePiece(new ReefscapeCoralAlgaeStack(position));
 
         for (Pose3d pose : AlgaeReefPoses.getPoses()) {
-            super.addGamePiece(new ReefscapeAlgaeOnField(pose.toPose2d()));
+            super.addGamePiece(new ReefscapeAlgaeOnField(pose));
+            // super.addGamePiece(new ReefscapeAlgaeOnField(pose.toPose2d()));
         }
     }
 
@@ -106,10 +107,9 @@ public class Arena2025Reefscape extends SimulatedArena {
         List<Pose3d> poses = super.getGamePiecesByType(type);
 
         // add algae and coral stack
-        if (type.equals("Algae")) {
+        if (type.equals("Algae"))
             poses.addAll(ReefscapeCoralAlgaeStack.getStackedAlgaePoses());
-            // poses.addAll(AlgaeReefPoses.getPoses());
-        } else if (type.equals("Coral")) {
+        else if (type.equals("Coral")) {
             poses.addAll(ReefscapeCoralAlgaeStack.getStackedCoralPoses());
             reefSimulation.addCoralsOnReefForDisplay(poses);
         }

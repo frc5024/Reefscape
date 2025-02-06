@@ -7,12 +7,12 @@ import static edu.wpi.first.wpilibj2.command.Commands.startEnd;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.DriveNearestCoralStationCommand;
 import frc.robot.commands.DriveProcessorCommand;
 import frc.robot.commands.DriveToBestTagCommand;
 import frc.robot.commands.DriveToReefStationCommand;
 import frc.robot.controls.GameData.CoralPole;
+import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -67,7 +67,7 @@ public class ButtonBindings {
 
         // Toggle game piece modes
         commandXboxController.back()
-                .whileTrue(runOnce(() -> GameData.getInstance().toggleDriveMode()));
+                .whileTrue(runOnce(() -> GameData.getInstance().toggleGamePieceMode()));
 
         // switch from robot relative to field relative
         commandXboxController.start()
@@ -108,21 +108,21 @@ public class ButtonBindings {
         commandXboxController.rightTrigger()
                 .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem, this.swerveDriveSubsystem::getPose,
                         GameData.getInstance()::getReefStationIndex, GameData.getInstance().getCoralPole(),
-                        GameData.getInstance().getDriveMode()));
+                        GameData.getInstance().getGamePieceMode()));
 
         // Drive to right pole of best apriltag
         commandXboxController.rightBumper()
                 .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
-                        this.swerveDriveSubsystem::getPose, VisionConstants.DATA_FROM_CAMERA,
+                        this.swerveDriveSubsystem::getPose,
                         GameData.getInstance().getCoralPole(),
-                        GameData.getInstance().getDriveMode()));
+                        GameData.getInstance().getGamePieceMode()));
 
         // Drive to left pole of best apriltag
         commandXboxController.leftBumper()
                 .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
-                        this.swerveDriveSubsystem::getPose, VisionConstants.DATA_FROM_CAMERA,
+                        this.swerveDriveSubsystem::getPose,
                         GameData.getInstance().getCoralPole(),
-                        GameData.getInstance().getDriveMode()));
+                        GameData.getInstance().getGamePieceMode()));
 
         // Set reef position
         commandXboxController.povUp().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(1)));
@@ -139,15 +139,23 @@ public class ButtonBindings {
     private CommandXboxController setOperatorBindingsController() {
         CommandXboxController commandXboxController = new CommandXboxController(OPERATOR_PORT);
 
+        // Toggle game piece modes
+        commandXboxController.back()
+                .whileTrue(runOnce(() -> GameData.getInstance().toggleGamePieceMode()));
+
         commandXboxController.a()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
                         .addAction(ElevatorSubsystem.Action.MOVE_TO_IDLE)));
         commandXboxController.x()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
-                        .addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_1)));
+                        .addAction(GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE
+                                ? ElevatorSubsystem.Action.MOVE_TO_ALGAE_1
+                                : ElevatorSubsystem.Action.MOVE_TO_CORAL_1)));
         commandXboxController.b()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
-                        .addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_2)));
+                        .addAction(GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE
+                                ? ElevatorSubsystem.Action.MOVE_TO_ALGAE_2
+                                : ElevatorSubsystem.Action.MOVE_TO_CORAL_2)));
         commandXboxController.y()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
                         .addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_3)));

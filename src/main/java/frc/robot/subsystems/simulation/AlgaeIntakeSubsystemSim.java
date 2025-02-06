@@ -19,8 +19,9 @@ public class AlgaeIntakeSubsystemSim extends AlgaeIntakeSubsystem {
         super.handleEject(stateMetadata);
 
         if (stateMetadata.isFirstRun()) {
-            MapleSimUtil.getAlgaeIntakeSimulation().obtainGamePieceFromIntake();
-            MapleSimUtil.ejectAlgae(ElevatorVisualizer.getAlgaeTransform("Measured"));
+            if (MapleSimUtil.getAlgaeIntakeSimulation().obtainGamePieceFromIntake()) {
+                MapleSimUtil.ejectAlgae(ElevatorVisualizer.getAlgaePose("Measured"));
+            }
         }
     }
 
@@ -57,7 +58,10 @@ public class AlgaeIntakeSubsystemSim extends AlgaeIntakeSubsystem {
      * Used in autonomous simulations
      */
     public void setHasAlgae(boolean has_algae) {
-        boolean added = MapleSimUtil.getAlgaeIntakeSimulation().addGamePieceToIntake();
-        super.setHasAlgae(added);
+        boolean added = false;
+        if (has_algae) {
+            added = MapleSimUtil.getAlgaeIntakeSimulation().addGamePieceToIntake();
+        }
+        super.setHasAlgae(has_algae && added);
     }
 }
