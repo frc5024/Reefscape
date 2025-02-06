@@ -11,16 +11,17 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Algae extends SubsystemBase {
 
     final double motorspeedintake = -0.5;
-    final double motorspeedouttake = 0.5;
+    final double motorspeedouttake = 0.1;
     final double motorspeedidle = 0;
     private DigitalInput linebreak;
     private static Algae mInstance = null;
     public boolean sensorOutput;
-    // private LEDs LEDS = LEDs.getInstance();
+    private LEDs LEDS = LEDs.getInstance();
     private SparkMax motor1;
     private SparkMax motor2;
     private Timer algaeOuttakeTimer;
@@ -44,10 +45,10 @@ public class Algae extends SubsystemBase {
     }
 
     private Algae() {
-        linebreak = new DigitalInput(0);
+        linebreak = new DigitalInput(Constants.Algaes.linebreakPort);
         // limSwInput = new DigitalInput(5);
-        motor1 = new SparkMax(3, MotorType.kBrushless);
-        motor2 = new SparkMax(62, MotorType.kBrushless);
+        motor1 = new SparkMax(Constants.Algaes.motor1Port, MotorType.kBrushless);
+        motor2 = new SparkMax(Constants.Algaes.motor2Port, MotorType.kBrushless);
         // motorarm = new Servo(Constants.Algae.AlgaeArmPort);
         algaeOuttakeTimer = new Timer();
 
@@ -71,6 +72,21 @@ public class Algae extends SubsystemBase {
 
     }
 
+    public void setLEDColor(states state) {
+
+        if (state == states.idle) {
+            LEDS.setLEDS(LEDPreset.Solid.kWhite);
+        }
+        if (state == states.intaking) {
+            LEDS.setLEDS(LEDPreset.Solid.kGreen);
+        }
+        if (state == states.outaking) {
+            LEDS.setLEDS(LEDPreset.Solid.kRed);
+        }
+        if (state == states.holding) {
+            LEDS.setLEDS(LEDPreset.Solid.kBlue);
+        }
+    }
     // public void setArmMotorAngle(Double angle){
     // motorarm.setangle(angle);
     // }
@@ -87,7 +103,7 @@ public class Algae extends SubsystemBase {
         // When algae is detected inside robot and robot is not outaking, set state to
         // holding
         if ((linebreak.get() == true) && (currentstate != states.outaking)) {
-            setSpeed(motorspeedidle);
+            setSpeed(0.0);
             currentstate = states.holding;
         }
 
@@ -95,7 +111,7 @@ public class Algae extends SubsystemBase {
         // to idle
         if ((linebreak.get() == false)
                 && (currentstate != states.intaking) && (algaeOuttakeTimer.hasElapsed(1.5))) {
-            setSpeed(motorspeedidle);
+            setSpeed(0.0);
             currentstate = states.idle;
             algaeOuttakeTimer.stop();
         }
@@ -104,24 +120,30 @@ public class Algae extends SubsystemBase {
 
             // When idling, sets state to intaking and enables motors
             if (currentstate == states.idle) {
-                setSpeed(motorspeedintake);
+                setSpeed(Constants.Algaes.intakeSpeed);
                 currentstate = states.intaking;
             }
 
             // When intaking, sets state to idle and disables motors
             else if (currentstate == states.intaking) {
-                setSpeed(motorspeedidle);
+                setSpeed(0.0);
                 currentstate = states.idle;
             }
 
             // When holding an algae, sets state to outtaking and enables motors in reverse
             else if (currentstate == states.holding) {
-                setSpeed(motorspeedouttake);
+                setSpeed(Constants.Algaes.outtakespeed);
                 currentstate = states.outaking;
                 algaeOuttakeTimer.restart();
             }
 
         }
+
+        // White is idle
+        // Red is holding
+        // Green is intaking
+        // Blue is outtaking
+        setLEDColor(currentstate);
 
     }
 
