@@ -108,6 +108,51 @@ public class ClearAlgae {
                 new InstantCommand(() -> {
                     this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.INTAKE);
                 }),
+                new WaitUntilCommand(this.algaeIntakeSubsystem::hasAlgae),
+                new ParallelCommandGroup(
+                        AutoBuilder.followPath(pathGroup.get(4)),
+                        new InstantCommand(() -> {
+                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_1);
+                        }),
+                        new SequentialCommandGroup(
+                                new WaitCommand(1),
+                                new InstantCommand(() -> {
+                                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.EJECT);
+                                }))),
+                new WaitUntilCommand(this.algaeIntakeSubsystem::hasEjected),
+                new InstantCommand(() -> {
+                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.INTAKE);
+                }),
+                new WaitUntilCommand(this.algaeIntakeSubsystem::hasAlgae),
+                new ParallelCommandGroup(
+                        AutoBuilder.followPath(pathGroup.get(5)),
+                        new InstantCommand(() -> {
+                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_2);
+                        }),
+                        new SequentialCommandGroup(
+                                new WaitCommand(1),
+                                new InstantCommand(() -> {
+                                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.EJECT);
+                                }))),
+                new WaitUntilCommand(this.algaeIntakeSubsystem::hasEjected),
+                new InstantCommand(() -> {
+                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.INTAKE);
+                }),
+                new WaitUntilCommand(this.algaeIntakeSubsystem::hasAlgae),
+                new ParallelCommandGroup(
+                        AutoBuilder.followPath(pathGroup.get(6)),
+                        new InstantCommand(() -> {
+                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_2);
+                        }),
+                        new SequentialCommandGroup(
+                                new WaitCommand(1),
+                                new InstantCommand(() -> {
+                                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.EJECT);
+                                }))),
+                new WaitUntilCommand(this.algaeIntakeSubsystem::hasEjected),
+                new InstantCommand(() -> {
+                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.INTAKE);
+                }),
 
                 Commands.print("*** Finished ClearAlgae ***"));
 
