@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
@@ -63,6 +64,11 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
     @Override
     public double getPitch() {
         return this.camera.getPitch();
+    }
+
+    @Override
+    public Transform3d getRobotToCamera() {
+        return this.camera.getRobotToCamera();
     }
 
     @Override

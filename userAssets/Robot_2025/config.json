@@ -21,17 +21,25 @@
     ],
     "cameras": [
         {
-            "name": "Arducam_OV9281-2",
+            "name": "FrontCam",
             "rotations": [
                 {
+                    "axis": "x",
+                    "degrees": 0
+                },
+                {
                     "axis": "y",
-                    "degrees": -40
+                    "degrees": -25
+                },
+                {
+                    "axis": "z",
+                    "degrees": 0
                 }
             ],
             "position": [
-                0.254,
-                0.15875,
-                0.60325
+                0.3556,
+                0.0,
+                0.1524
             ],
             "resolution": [
                 960,
@@ -40,11 +48,11 @@
             "fov": 70
         },
         {
-            "name": "Arducam_OV9281-1",
+            "name": "RearCam",
             "rotations": [
                 {
                     "axis": "y",
-                    "degrees": -40
+                    "degrees": -25
                 },
                 {
                     "axis": "z",
@@ -52,28 +60,9 @@
                 }
             ],
             "position": [
-                0.3048,
-                0.15875,
-                0.60325
-            ],
-            "resolution": [
-                960,
-                720
-            ],
-            "fov": 70
-        },
-        {
-            "name": "WebCam",
-            "rotations": [
-                {
-                    "axis": "y",
-                    "degrees": 40
-                }
-            ],
-            "position": [
-                0.4064,
+                -0.3556,
                 0.0,
-                0.4064
+                0.1524
             ],
             "resolution": [
                 960,

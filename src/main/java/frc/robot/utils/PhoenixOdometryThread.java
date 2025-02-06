@@ -1,15 +1,9 @@
-// Copyright 2021-2025 FRC 6328
+// Copyright (c) 2025 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
 package frc.robot.utils;
 
@@ -26,6 +20,7 @@ import com.ctre.phoenix6.StatusSignal;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
  * Provides an interface for asynchronously reading high-frequency measurements
@@ -44,8 +39,6 @@ public class PhoenixOdometryThread extends Thread {
     public static final double ODOMETRY_FREQUENCY = 100.0; // new
                                                            // CANBus(TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD()
                                                            // ? 250.0 : 100.0;
-    public static final Lock odometryLock = new ReentrantLock();
-
     private final Lock signalsLock = new ReentrantLock(); // Prevents conflicts when registering signals
     private BaseStatusSignal[] phoenixSignals = new BaseStatusSignal[0];
     private final List<DoubleSupplier> genericSignals = new ArrayList<>();
@@ -53,7 +46,7 @@ public class PhoenixOdometryThread extends Thread {
     private final List<Queue<Double>> genericQueues = new ArrayList<>();
     private final List<Queue<Double>> timestampQueues = new ArrayList<>();
 
-    private static boolean isCANFD = false; // new CANBus(TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD();
+    private static boolean isCANFD = false; // new CANBus("*").isNetworkFD();
     private static PhoenixOdometryThread instance = null;
 
     public static PhoenixOdometryThread getInstance() {
@@ -79,7 +72,7 @@ public class PhoenixOdometryThread extends Thread {
     public Queue<Double> registerSignal(StatusSignal<Angle> signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(20);
         signalsLock.lock();
-        odometryLock.lock();
+        SwerveDriveSubsystem.odometryLock.lock();
         try {
             BaseStatusSignal[] newSignals = new BaseStatusSignal[phoenixSignals.length + 1];
             System.arraycopy(phoenixSignals, 0, newSignals, 0, phoenixSignals.length);
@@ -88,7 +81,7 @@ public class PhoenixOdometryThread extends Thread {
             phoenixQueues.add(queue);
         } finally {
             signalsLock.unlock();
-            odometryLock.unlock();
+            SwerveDriveSubsystem.odometryLock.unlock();
         }
         return queue;
     }
@@ -97,13 +90,13 @@ public class PhoenixOdometryThread extends Thread {
     public Queue<Double> registerSignal(DoubleSupplier signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(20);
         signalsLock.lock();
-        odometryLock.lock();
+        SwerveDriveSubsystem.odometryLock.lock();
         try {
             genericSignals.add(signal);
             genericQueues.add(queue);
         } finally {
             signalsLock.unlock();
-            odometryLock.unlock();
+            SwerveDriveSubsystem.odometryLock.unlock();
         }
         return queue;
     }
@@ -111,11 +104,11 @@ public class PhoenixOdometryThread extends Thread {
     /** Returns a new queue that returns timestamp values for each sample. */
     public Queue<Double> makeTimestampQueue() {
         Queue<Double> queue = new ArrayBlockingQueue<>(20);
-        odometryLock.lock();
+        SwerveDriveSubsystem.odometryLock.lock();
         try {
             timestampQueues.add(queue);
         } finally {
-            odometryLock.unlock();
+            SwerveDriveSubsystem.odometryLock.unlock();
         }
         return queue;
     }
@@ -143,7 +136,7 @@ public class PhoenixOdometryThread extends Thread {
             }
 
             // Save new data to queues
-            odometryLock.lock();
+            SwerveDriveSubsystem.odometryLock.lock();
             try {
                 // Sample timestamp is current FPGA time minus average CAN latency
                 // Default timestamps from Phoenix are NOT compatible with
@@ -168,7 +161,7 @@ public class PhoenixOdometryThread extends Thread {
                     timestampQueues.get(i).offer(timestamp);
                 }
             } finally {
-                odometryLock.unlock();
+                SwerveDriveSubsystem.odometryLock.unlock();
             }
         }
     }

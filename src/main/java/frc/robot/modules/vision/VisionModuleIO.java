@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 
 /**
  * 
@@ -67,6 +68,8 @@ public interface VisionModuleIO {
     abstract public String getName();
 
     abstract public double getPitch();
+
+    abstract public Transform3d getRobotToCamera();
 
     abstract public double getYaw();
 

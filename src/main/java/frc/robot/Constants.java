@@ -399,8 +399,9 @@ public final class Constants {
         /**
          * TODO: set list of enabled camera
          */
-        // public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT_CAMERA);
-        public static final List<Camera> CAMERAS = Arrays.asList(FRONT_CAMERA, REAR_CAMERA);
+        public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT_CAMERA);
+        // public static final List<Camera> CAMERAS = Arrays.asList(FRONT_CAMERA,
+        // REAR_CAMERA);
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;

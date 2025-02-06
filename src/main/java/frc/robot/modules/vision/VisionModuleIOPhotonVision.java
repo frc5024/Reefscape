@@ -64,6 +64,11 @@ public class VisionModuleIOPhotonVision implements VisionModuleIO {
     }
 
     @Override
+    public Transform3d getRobotToCamera() {
+        return this.camera.getRobotToCamera();
+    }
+
+    @Override
     public double getYaw() {
         return this.camera.getYaw();
     }

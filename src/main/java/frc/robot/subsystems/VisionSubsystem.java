@@ -106,6 +106,15 @@ public class VisionSubsystem extends SubsystemBase {
     /**
      * 
      */
+    public Transform3d getRobotToCamera(String cameraName) {
+        VisionModuleIO visionModule = getVisionModuleByName(cameraName);
+
+        return visionModule == null ? null : visionModule.getRobotToCamera();
+    }
+
+    /**
+     * 
+     */
     public VisionModuleIO getVisionModuleByName(String cameraName) {
         if (this.visionModules.isEmpty())
             return null;
@@ -251,7 +260,8 @@ public class VisionSubsystem extends SubsystemBase {
                         new Translation3d(currentPose.getX(), currentPose.getY(), visionModule.getHeight()),
                         new Rotation3d(0, visionModule.getPitch(), currentPose.getRotation().getRadians()));
 
-                Logger.recordOutput("Subsystems/Vision/Views/" + visionModule.getName(), cameraView);
+                // Logger.recordOutput("Subsystems/Vision/Views/" + visionModule.getName(),
+                // cameraView);
                 // Logger.recordOutput("Vision/Views/" + visionModule.getCamera().getName(),
                 // visionModule.getCamera().getRobotToCamera());
             }

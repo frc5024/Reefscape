@@ -117,6 +117,12 @@ public class ButtonBindings {
                         GameData.getInstance().getCoralPole(),
                         GameData.getInstance().getGamePieceMode()));
 
+        // commandXboxController.rightBumper()
+        // .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem,
+        // this.visionSubsystem,
+        // this.swerveDriveSubsystem::getPose,
+        // new Translation3d(0.76, -FieldConstants.POLE_STRAFE_DISTANCE, 0.0), false));
+
         // Drive to left pole of best apriltag
         commandXboxController.leftBumper()
                 .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
