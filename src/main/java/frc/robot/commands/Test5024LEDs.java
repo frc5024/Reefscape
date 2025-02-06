@@ -5,10 +5,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDPreset;
 import frc.robot.subsystems.LEDs;;
 
+//A for fun thing I did
 public class Test5024LEDs extends Command {
     private LEDs leds;
     private int flashMiliseconds;
-
 
     public Test5024LEDs(LEDs leds, int flashMiliseconds) {
         this.leds = leds;
@@ -33,10 +33,10 @@ public class Test5024LEDs extends Command {
                 timer.restart();
             }
 
-            if (flashCount % 2 == 0) {//If counter is even
-                leds.setLEDS(LEDPreset.Solid.kYellow);//set colour to yellow
-            } else {//else
-                leds.setLEDS(LEDPreset.Solid.kBlue);//set colour to blue
+            if (flashCount % 2 == 0) {// If counter is even
+                leds.setLEDS(LEDPreset.Solid.kYellow);// set colour to yellow
+            } else {// else
+                leds.setLEDS(LEDPreset.Solid.kBlue);// set colour to blue
             }
         }
     }

@@ -5,33 +5,36 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ILEDPreset;
 import frc.robot.subsystems.LEDPreset;
 import frc.robot.subsystems.LEDs;
 
 public class TestLEDs extends Command {
     private LEDs leds;
+    private ILEDPreset colour;
 
-    public TestLEDs() {
-        leds = LEDs.getInstance();
+    public TestLEDs(LEDs leds, ILEDPreset colour) {
+        this.leds = leds;
+        this.colour = colour;
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        // leds.setLEDS(LEDPreset.Solid.kOrange);//Is automaticly overrun by execute
+        // leds.setLEDS(LEDPreset.Solid.kOrange);//Is automaticly overrun by execute,
+        // best used for values needed to defalt to a certain number
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        leds.setLEDS(LEDPreset.Solid.kYellow);
-        // leds.setLEDS(LEDPreset.Color1And2.kNoBlend);//Current Funtion
+        leds.setLEDS(colour);// Sets to colour imputed
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        leds.setLEDS(LEDPreset.Solid.kBlack);
+        leds.setLEDS(LEDPreset.Solid.kBlack);// if interupted, set light to black/off
     }
 
     // Returns true when the command should end.

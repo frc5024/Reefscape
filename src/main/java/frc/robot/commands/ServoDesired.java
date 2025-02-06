@@ -7,17 +7,14 @@ public class ServoDesired extends Command {
     private ServoTest servo;
     private int finalAngle;
 
-    public ServoDesired(int Angle) {
+    public ServoDesired(int Angle) {// Gets angle imputed
         servo = ServoTest.getInstance();
         finalAngle = Angle;
     }
 
     @Override
-    public void initialize() {
-    }
-
-    @Override
-    public void execute() {
-        servo.setServo(finalAngle);
+    public void execute() {// Commands Servo to go to angle imputed in RobotContainer
+        servo.setServo(finalAngle);// Does it very quickly use Ease for a slower one (or quicker one it can be set
+                                   // to any amount of time)
     }
 }

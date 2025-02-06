@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
             if (!isRunning) {
                 sensorOutput = true;
                 System.out.println("Linebreak: " + sensorOutput);
-                LEDS.E5024LEDS(50).schedule();
+                LEDS.flashLEDS(LEDPreset.Solid.kGreen, 50).schedule();
                 isRunning = true;
             }
         }

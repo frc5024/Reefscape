@@ -17,23 +17,25 @@ public class ServoEase extends Command {
 
     @Override
     public void initialize() {
-        currentAngle = 0;//Can be set to whatever you want, it will be the starting angle
+        currentAngle = 0;
         timer.reset();
         timer.restart();
         servo.setServo(currentAngle);
     }
 
     @Override
-    public void execute() {
-        if (currentAngle < finalAngle) {//if the starting angle is less than the final angle do addition
-            if (timer.hasElapsed(2 / finalAngle)) {//Sets total time to 2 seconds (ish) can be changed
-                currentAngle++;//Updates current angle by 1 additon
-                timer.restart();//reset and restart the timer 
-                servo.setServo(currentAngle);//Sets to current angle
+    public void execute() {// Checks where the starting point is (Larger or Smaller), changes the servo
+                           // angle
+        if (currentAngle < finalAngle) {
+            if (timer.hasElapsed(2 / finalAngle)) {// Total time will be around 2 seconds, as the "time" in the bracket
+                                                   // is in seconds
+                currentAngle++;
+                timer.restart();
+                servo.setServo(currentAngle);
             }
-        } else if (currentAngle > finalAngle) {//if the starting angle is greater than the final angle do subtraction
+        } else if (currentAngle > finalAngle) {
             if (timer.hasElapsed(2 / finalAngle)) {
-                currentAngle--;//Updates current angle by 1 subtraction
+                currentAngle--;
                 timer.restart();
                 servo.setServo(currentAngle);
             }

@@ -17,7 +17,5 @@ public class TestServo extends Command {
     @Override
     public void execute() {
         servo.setServo(90);// Testing sets to an angle
-        // System.out.println("Turn 90");
-
     }
 }

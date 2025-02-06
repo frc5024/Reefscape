@@ -19,7 +19,7 @@ public class ServoTest extends SubsystemBase {
         exampleServo = new Servo(Constants.Servo.servoPort);
     }
 
-    public void setServo(double angle) {
+    public void setServo(double angle) {// Sets to angle imputed, used in commands
         exampleServo.setAngle(angle);
     }
 }

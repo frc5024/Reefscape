@@ -18,9 +18,10 @@ public class LEDs extends SubsystemBase {
     }
 
     private LEDs() {
-        ledController = new LEDController(Constants.LEDs.ledPort);
+        ledController = new LEDController(Constants.LEDs.ledPort);// Sets which motor we are using, currently port 9
     }
 
+    // COMMANDS
     public void setLEDS(ILEDPreset colour) {
         ledController.set(colour);
     }
