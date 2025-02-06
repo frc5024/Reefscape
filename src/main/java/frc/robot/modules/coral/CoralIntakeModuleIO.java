@@ -28,6 +28,9 @@ public interface CoralIntakeModuleIO {
     default void intake() {
     }
 
+    default void setHasCoral(boolean has_coral) {
+    }
+
     default void stop() {
     }
 }

@@ -3,10 +3,12 @@ package frc.robot.containers;
 import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.generated.TunerConstants;
 import frc.robot.modules.algae.AlgaeIntakeModuleIOSim;
+import frc.robot.modules.coral.CoralIntakeModuleIOSim;
 import frc.robot.modules.elevator.ElevatorModuleIOSim;
 import frc.robot.modules.gyro.GyroModuleIOSim;
 import frc.robot.modules.swerve.SwerveModuleIOSim;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -33,7 +35,9 @@ public class SimulatedRobotContainer extends RobotContainer {
                 this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
 
         this.algaeIntakeSubsystem = new AlgaeIntakeSubsystem(new AlgaeIntakeModuleIOSim());
-        this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim());
+        this.coralIntakeSubsystem = new CoralIntakeSubsystem(new CoralIntakeModuleIOSim());
+        this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim(), this.algaeIntakeSubsystem::hasAlgae,
+                this.coralIntakeSubsystem::hasCoral);
 
         registerNamedCommands();
         configureAutoBuilder();

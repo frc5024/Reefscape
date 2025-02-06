@@ -164,4 +164,11 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
         Logger.recordOutput("Subsystems/" + this.NAME + "/Current State", this.stateMachine.getCurrentState());
         Logger.recordOutput("Subsystems/" + this.NAME + "/Has Algae", hasAlgae());
     }
+
+    /**
+     * Used in autonomous simulations
+     */
+    public void setHasAlgae(boolean has_algae) {
+        this.intakeModule.setHasAlgae(has_algae);
+    }
 }

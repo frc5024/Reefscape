@@ -141,24 +141,32 @@ public class ButtonBindings {
 
         commandXboxController.a()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
-                        .addAction(frc.robot.subsystems.ElevatorSubsystem.Action.MOVE_TO_IDLE)));
+                        .addAction(ElevatorSubsystem.Action.MOVE_TO_IDLE)));
         commandXboxController.x()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
-                        .addAction(frc.robot.subsystems.ElevatorSubsystem.Action.MOVE_TO_CORAL_1)));
+                        .addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_1)));
         commandXboxController.b()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
-                        .addAction(frc.robot.subsystems.ElevatorSubsystem.Action.MOVE_TO_CORAL_2)));
+                        .addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_2)));
         commandXboxController.y()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
-                        .addAction(frc.robot.subsystems.ElevatorSubsystem.Action.MOVE_TO_CORAL_3)));
-
-        commandXboxController.rightTrigger()
-                .whileTrue(runOnce(() -> this.algaeIntakeSubsystem
-                        .addAction(frc.robot.subsystems.AlgaeIntakeSubsystem.Action.INTAKE)));
+                        .addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_3)));
 
         commandXboxController.leftTrigger()
                 .whileTrue(runOnce(() -> this.algaeIntakeSubsystem
-                        .addAction(frc.robot.subsystems.AlgaeIntakeSubsystem.Action.EJECT)));
+                        .addAction(AlgaeIntakeSubsystem.Action.EJECT)));
+
+        commandXboxController.rightTrigger()
+                .whileTrue(runOnce(() -> this.algaeIntakeSubsystem
+                        .addAction(AlgaeIntakeSubsystem.Action.INTAKE)));
+
+        commandXboxController.leftBumper()
+                .whileTrue(runOnce(() -> this.coralIntakeSubsystem
+                        .addAction(CoralIntakeSubsystem.Action.EJECT)));
+
+        commandXboxController.rightBumper()
+                .whileTrue(runOnce(() -> this.coralIntakeSubsystem
+                        .addAction(CoralIntakeSubsystem.Action.INTAKE)));
 
         return commandXboxController;
     }

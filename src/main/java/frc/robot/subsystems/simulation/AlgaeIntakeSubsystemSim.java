@@ -1,14 +1,8 @@
 package frc.robot.subsystems.simulation;
 
-import org.littletonrobotics.junction.Logger;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.util.Units;
 import frc.lib.statemachine.StateMetadata;
 import frc.robot.modules.algae.AlgaeIntakeModuleIO;
+import frc.robot.modules.elevator.ElevatorVisualizer;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.utils.MapleSimUtil;
 
@@ -20,62 +14,50 @@ public class AlgaeIntakeSubsystemSim extends AlgaeIntakeSubsystem {
         super(intakeModule);
     }
 
-    /**
-     * 
-     */
+    @Override
     protected void handleEject(StateMetadata<Action> stateMetadata) {
         super.handleEject(stateMetadata);
 
         if (stateMetadata.isFirstRun()) {
-            MapleSimUtil.ejectAlgae();
+            MapleSimUtil.getAlgaeIntakeSimulation().obtainGamePieceFromIntake();
+            MapleSimUtil.ejectAlgae(ElevatorVisualizer.getAlgaeTransform("Measured"));
         }
     }
 
-    /**
-     * 
-     */
+    @Override
     protected void handleIntake(StateMetadata<Action> stateMetadata) {
         super.handleIntake(stateMetadata);
 
         if (stateMetadata.isFirstRun()) {
-            MapleSimUtil.getIntakeSimulation().startIntake();
+            MapleSimUtil.getAlgaeIntakeSimulation().startIntake();
         }
     }
 
-    /**
-     * 
-     */
+    @Override
     protected void handleStop(StateMetadata<Action> stateMetadata) {
         super.handleStop(stateMetadata);
 
         if (stateMetadata.isFirstRun()) {
-            MapleSimUtil.getIntakeSimulation().stopIntake();
+            MapleSimUtil.getAlgaeIntakeSimulation().stopIntake();
         }
     }
 
     @Override
     public boolean hasAlgae() {
-        return MapleSimUtil.getIntakeSimulation().getGamePiecesAmount() != 0;
+        return MapleSimUtil.getAlgaeIntakeSimulation().getGamePiecesAmount() != 0;
     }
 
     @Override
     public boolean hasEjected() {
-        MapleSimUtil.getIntakeSimulation().obtainGamePieceFromIntake();
-        return !hasAlgae();
+        MapleSimUtil.getAlgaeIntakeSimulation().obtainGamePieceFromIntake();
+        return !this.hasAlgae();
     }
 
-    @Override
-    public void simulationPeriodic() {
-        Pose3d algaeIntakePose = new Pose3d();
-
-        if (hasAlgae()) {
-            Pose2d robotPose = MapleSimUtil.getSwerveDriveSimulation().getSimulatedDriveTrainPose();
-            Transform3d transform3d = new Transform3d(Units.inchesToMeters(-11.5), 0.0, Units.inchesToMeters(16.0),
-                    new Rotation3d());
-
-            algaeIntakePose = new Pose3d(robotPose).transformBy(transform3d);
-        }
-
-        Logger.recordOutput("FieldSimulation/Algae Intake Pose", algaeIntakePose);
+    /**
+     * Used in autonomous simulations
+     */
+    public void setHasAlgae(boolean has_algae) {
+        boolean added = MapleSimUtil.getAlgaeIntakeSimulation().addGamePieceToIntake();
+        super.setHasAlgae(added);
     }
 }

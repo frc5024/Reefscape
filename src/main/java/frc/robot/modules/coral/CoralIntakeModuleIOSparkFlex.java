@@ -8,6 +8,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /**
@@ -40,6 +41,7 @@ public class CoralIntakeModuleIOSparkFlex implements CoralIntakeModuleIO {
     /* Hardware */
     private final SparkFlex topMotor;
     private final SparkFlex bottomMotor;
+    private final DigitalInput topLimitSwitch;
 
     /* Variables */
     private double appliedVoltage = 0.0;
@@ -53,6 +55,8 @@ public class CoralIntakeModuleIOSparkFlex implements CoralIntakeModuleIO {
 
         this.topMotor.configure(TOP_MOTOR_CONFIG, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         this.bottomMotor.configure(BOTTOM_MOTOR_CONFIG, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        this.topLimitSwitch = new DigitalInput(TOP_LINEBREAK_CHANNEL);
     }
 
     @Override
@@ -72,6 +76,11 @@ public class CoralIntakeModuleIOSparkFlex implements CoralIntakeModuleIO {
         this.appliedVoltage = MathUtil.clamp(MOTOR_EJECT_SPEED * 12, -12.0, 12.0);
         this.topMotor.setVoltage(this.appliedVoltage);
         this.bottomMotor.setVoltage(this.appliedVoltage);
+    }
+
+    @Override
+    public boolean hasCoral() {
+        return this.topLimitSwitch.get();
     }
 
     @Override

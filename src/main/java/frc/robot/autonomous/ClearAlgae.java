@@ -12,19 +12,27 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Robot;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 /**
  * 
  */
 public class ClearAlgae {
     private final AlgaeIntakeSubsystem algaeIntakeSubsystem;
+    private final CoralIntakeSubsystem coralIntakeSubsystem;
+    private final ElevatorSubsystem elevatorSubsystem;
 
     /**
      * 
      */
-    public ClearAlgae(AlgaeIntakeSubsystem algaeIntakeSubsystem) {
+    public ClearAlgae(AlgaeIntakeSubsystem algaeIntakeSubsystem, CoralIntakeSubsystem coralIntakeSubsystem,
+            ElevatorSubsystem elevatorSubsystem) {
         this.algaeIntakeSubsystem = algaeIntakeSubsystem;
+        this.coralIntakeSubsystem = coralIntakeSubsystem;
+        this.elevatorSubsystem = elevatorSubsystem;
     }
 
     /**
@@ -44,21 +52,30 @@ public class ClearAlgae {
             return Commands.print("*** Failed to build ClearAlgae");
         }
 
+        // If simulation set coral in
+        if (Robot.isSimulation()) {
+            this.coralIntakeSubsystem.setHasCoral(true);
+        }
+
         Command command = Commands.sequence(
                 Commands.print("*** Starting ClearAlgae ***"),
 
                 AutoBuilder.followPath(pathGroup.get(0)),
                 new WaitCommand(0.5),
                 new ParallelCommandGroup(
-                        AutoBuilder.followPath(pathGroup.get(1))
-                /* Move Elevator to Low Position */
-                ),
+                        AutoBuilder.followPath(pathGroup.get(1)),
+                        new InstantCommand(() -> {
+                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_1);
+                        })),
                 new InstantCommand(() -> {
                     this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.INTAKE);
                 }),
                 new WaitUntilCommand(this.algaeIntakeSubsystem::hasAlgae),
                 new ParallelCommandGroup(
                         AutoBuilder.followPath(pathGroup.get(2)),
+                        new InstantCommand(() -> {
+                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_2);
+                        }),
                         new SequentialCommandGroup(
                                 new WaitCommand(1),
                                 new InstantCommand(() -> {
@@ -71,6 +88,9 @@ public class ClearAlgae {
                 new WaitUntilCommand(this.algaeIntakeSubsystem::hasAlgae),
                 new ParallelCommandGroup(
                         AutoBuilder.followPath(pathGroup.get(3)),
+                        new InstantCommand(() -> {
+                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_1);
+                        }),
                         new SequentialCommandGroup(
                                 new WaitCommand(1),
                                 new InstantCommand(() -> {

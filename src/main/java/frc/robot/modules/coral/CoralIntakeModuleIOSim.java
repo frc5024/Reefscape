@@ -18,6 +18,7 @@ public class CoralIntakeModuleIOSim implements CoralIntakeModuleIO {
     private final DCMotorSim dcMotorSim;
 
     private double appliedVoltage = 0.0;
+    private boolean has_coral = false;
 
     /**
      * 
@@ -43,12 +44,24 @@ public class CoralIntakeModuleIOSim implements CoralIntakeModuleIO {
     public void eject() {
         this.appliedVoltage = MathUtil.clamp(MOTOR_EJECT_SPEED * 12, -12.0, 12.0);
         this.dcMotorSim.setInputVoltage(this.appliedVoltage);
+        this.has_coral = false;
+    }
+
+    @Override
+    public boolean hasCoral() {
+        return this.has_coral;
     }
 
     @Override
     public void intake() {
         this.appliedVoltage = MathUtil.clamp(MOTOR_INTAKE_SPEED * 12, -12.0, 12.0);
         this.dcMotorSim.setInputVoltage(this.appliedVoltage);
+        this.has_coral = true;
+    }
+
+    @Override
+    public void setHasCoral(boolean has_coral) {
+        this.has_coral = has_coral;
     }
 
     @Override

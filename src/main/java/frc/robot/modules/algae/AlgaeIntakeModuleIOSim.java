@@ -21,6 +21,7 @@ public class AlgaeIntakeModuleIOSim implements AlgaeIntakeModuleIO {
     private final DCMotorSim dcMotorSim;
 
     private double appliedVoltage = 0.0;
+    private boolean has_algae = false;
 
     /**
      * 
@@ -46,12 +47,24 @@ public class AlgaeIntakeModuleIOSim implements AlgaeIntakeModuleIO {
     public void eject() {
         this.appliedVoltage = MathUtil.clamp(MOTOR_EJECT_SPEED * 12, -12.0, 12.0);
         this.dcMotorSim.setInputVoltage(this.appliedVoltage);
+        this.has_algae = false;
+    }
+
+    @Override
+    public boolean hasAlgae() {
+        return this.has_algae;
     }
 
     @Override
     public void intake() {
         this.appliedVoltage = MathUtil.clamp(MOTOR_INTAKE_SPEED * 12, -12.0, 12.0);
         this.dcMotorSim.setInputVoltage(this.appliedVoltage);
+        this.has_algae = true;
+    }
+
+    @Override
+    public void setHasAlgae(boolean has_algae) {
+        this.has_algae = has_algae;
     }
 
     @Override

@@ -30,7 +30,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final Alert disconnected;
 
     public static enum Action {
-        HOLD, MOVE_TO_IDLE, MOVE_TO_CORAL_1, MOVE_TO_CORAL_2, MOVE_TO_CORAL_3
+        HOLD, MOVE_TO_IDLE, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1, MOVE_TO_CORAL_2,
+        MOVE_TO_CORAL_3
     }
 
     private final ElevatorModuleIO elevatorModule;
@@ -38,7 +39,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     protected final Timer stateTimer;
 
     /* Mechanisim2d Display for Monitoring the Elevator Position */
-    private final ElevatorVisualizer elevatorVisualizer = new ElevatorVisualizer("Measured");
+    private final ElevatorVisualizer elevatorVisualizer = ElevatorVisualizer.getInstance("Measured");
 
     private final StateMachine<Action> stateMachine;
     private final LinkedList<Action> actionQueue;
@@ -47,12 +48,18 @@ public class ElevatorSubsystem extends SubsystemBase {
     private boolean atGoal;
     private State setpoint;
 
+    private final Supplier<Boolean> hasAlgaSupplier;
+    private final Supplier<Boolean> hasCoralSupplier;
+
     /**
      * 
      */
-    public ElevatorSubsystem(ElevatorModuleIO elevatorModule) {
-
+    public ElevatorSubsystem(ElevatorModuleIO elevatorModule, Supplier<Boolean> hasAlgaSupplier,
+            Supplier<Boolean> hasCoralSupplier) {
         this.elevatorModule = elevatorModule;
+        this.hasAlgaSupplier = hasAlgaSupplier;
+        this.hasCoralSupplier = hasCoralSupplier;
+
         this.inputs = new ElevatorIOInputsAutoLogged();
         this.disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
@@ -60,6 +67,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.stateMachine = new StateMachine<>(NAME);
         this.stateMachine.setDefaultState(Action.MOVE_TO_IDLE, this::handleMoveToCoral1);
         this.stateMachine.addState(Action.HOLD, this::handleHold);
+        this.stateMachine.addState(Action.MOVE_TO_ALGAE_1, this::handleMoveToAlgae1);
+        this.stateMachine.addState(Action.MOVE_TO_ALGAE_2, this::handleMoveToAlgae2);
+        this.stateMachine.addState(Action.MOVE_TO_PROCESSOR, this::handleMoveToProcessor);
         this.stateMachine.addState(Action.MOVE_TO_CORAL_1, this::handleMoveToCoral2);
         this.stateMachine.addState(Action.MOVE_TO_CORAL_2, this::handleMoveToCoral3);
         this.stateMachine.addState(Action.MOVE_TO_CORAL_3, this::handleMoveToCoral4);
@@ -97,9 +107,39 @@ public class ElevatorSubsystem extends SubsystemBase {
     /**
      * 
      */
+    protected void handleMoveToAlgae1(StateMetadata<Action> stateMetadata) {
+        if (stateMetadata.isFirstRun()) {
+            setGoal(ElevatorConstants.ElevatorLevels.AlgaeL1.heightInMeters);
+            this.stateTimer.start();
+        }
+    }
+
+    /**
+     * 
+     */
+    protected void handleMoveToAlgae2(StateMetadata<Action> stateMetadata) {
+        if (stateMetadata.isFirstRun()) {
+            setGoal(ElevatorConstants.ElevatorLevels.AlgaeL2.heightInMeters);
+            this.stateTimer.start();
+        }
+    }
+
+    /**
+     * 
+     */
+    protected void handleMoveToProcessor(StateMetadata<Action> stateMetadata) {
+        if (stateMetadata.isFirstRun()) {
+            setGoal(ElevatorConstants.ElevatorLevels.Processor.heightInMeters);
+            this.stateTimer.start();
+        }
+    }
+
+    /**
+     * 
+     */
     protected void handleMoveToCoral1(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.CoralLevel.L1.heightInMeters);
+            setGoal(ElevatorConstants.ElevatorLevels.CoralL1.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -109,7 +149,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToCoral2(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.CoralLevel.L2.heightInMeters);
+            setGoal(ElevatorConstants.ElevatorLevels.CoralL2.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -119,7 +159,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToCoral3(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.CoralLevel.L3.heightInMeters);
+            setGoal(ElevatorConstants.ElevatorLevels.CoralL3.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -129,7 +169,7 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToCoral4(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.CoralLevel.L4.heightInMeters);
+            setGoal(ElevatorConstants.ElevatorLevels.CoralL4.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -186,7 +226,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             }
         }
 
-        this.elevatorVisualizer.update(getPositionMeters());
+        this.elevatorVisualizer.update(getPositionMeters(), this.hasAlgaSupplier.get(), this.hasCoralSupplier.get());
 
         Logger.recordOutput("Subsystems/" + this.NAME + "/AtGoal", this.atGoal);
         Logger.recordOutput("Subsystems/" + this.NAME + "/Current State", this.stateMachine.getCurrentState());

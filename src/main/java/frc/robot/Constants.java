@@ -94,13 +94,17 @@ public final class Constants {
         public static final double kG = 50.0;
 
         // Distance elevator must travel to align with coral post
-        public enum CoralLevel {
-            L1(Units.inchesToMeters(0), 0.0),
-            L2(Units.inchesToMeters(6.0), -35.0),
-            L3(Units.inchesToMeters(12.0), -35.0),
-            L4(Units.inchesToMeters(18.0), -90.0);
+        public enum ElevatorLevels {
+            AlgaeL1(Units.inchesToMeters(8.0), 0.0),
+            AlgaeL2(Units.inchesToMeters(14.0), 0.0),
+            Processor(Units.inchesToMeters(0.0), 0.0),
 
-            CoralLevel(double heightInMeters, double angleInDegrees) {
+            CoralL1(Units.inchesToMeters(0), 0.0),
+            CoralL2(Units.inchesToMeters(6.0), -35.0),
+            CoralL3(Units.inchesToMeters(12.0), -35.0),
+            CoralL4(Units.inchesToMeters(18.0), -90.0);
+
+            ElevatorLevels(double heightInMeters, double angleInDegrees) {
                 this.heightInMeters = heightInMeters;
                 this.angleInDegrees = angleInDegrees;
             }

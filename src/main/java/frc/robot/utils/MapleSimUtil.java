@@ -13,6 +13,7 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -20,7 +21,8 @@ import frc.robot.Constants.MapleSimConstants;
 
 public class MapleSimUtil {
     private static SwerveDriveSimulation swerveDriveSimulation;
-    private static IntakeSimulation intakeSimulation;
+    private static IntakeSimulation algaeIntakeSimulation;
+    private static IntakeSimulation coralIntakeSimulation;
 
     /**
      * 
@@ -37,30 +39,44 @@ public class MapleSimUtil {
     /**
      * 
      */
-    public static IntakeSimulation getIntakeSimulation() {
-        if (intakeSimulation == null) {
-            intakeSimulation = IntakeSimulation.OverTheBumperIntake("Algae", getSwerveDriveSimulation(), Meters.of(0.5),
+    public static IntakeSimulation getAlgaeIntakeSimulation() {
+        if (algaeIntakeSimulation == null) {
+            algaeIntakeSimulation = IntakeSimulation.OverTheBumperIntake("Algae", getSwerveDriveSimulation(),
+                    Meters.of(0.5),
                     Meters.of(0.4), IntakeSimulation.IntakeSide.BACK, 1);
         }
 
-        return intakeSimulation;
+        return algaeIntakeSimulation;
     }
 
     /**
      * 
      */
-    public static void ejectAlgae() {
+    public static IntakeSimulation getCoralIntakeSimulation() {
+        if (coralIntakeSimulation == null) {
+            coralIntakeSimulation = IntakeSimulation.OverTheBumperIntake("Coral", getSwerveDriveSimulation(),
+                    Meters.of(0.5),
+                    Meters.of(0.4), IntakeSimulation.IntakeSide.FRONT, 1);
+        }
+
+        return coralIntakeSimulation;
+    }
+
+    /**
+     * 
+     */
+    public static void ejectAlgae(Transform3d algaeTransform) {
         ReefscapeAlgaeOnFly.setHitNetCallBack(() -> System.out.println("ALGAE hits NET!"));
 
         SimulatedArena.getInstance()
                 .addGamePieceProjectile(new ReefscapeAlgaeOnFly(
                         getSwerveDriveSimulation().getSimulatedDriveTrainPose().getTranslation(),
-                        new Translation2d(),
+                        new Translation2d(algaeTransform.getX(), algaeTransform.getY()),
                         getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),
                         getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation()
                                 .minus(new Rotation2d(180)),
-                        Meters.of(0.4), // initial height of the ball, in meters
-                        MetersPerSecond.of(3), // initial velocity, in m/s
+                        Meters.of(algaeTransform.getZ()), // initial height of the ball, in meters
+                        MetersPerSecond.of(1), // initial velocity, in m/s
                         Angle.ofRelativeUnits(0, Units.Degrees)) // shooter angle
                         .withProjectileTrajectoryDisplayCallBack(
                                 (poses) -> Logger.recordOutput("successfulShotsTrajectory",

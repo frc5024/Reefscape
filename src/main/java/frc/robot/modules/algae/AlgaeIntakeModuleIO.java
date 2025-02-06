@@ -28,6 +28,9 @@ public interface AlgaeIntakeModuleIO {
     default void intake() {
     }
 
+    default void setHasAlgae(boolean has_algae) {
+    }
+
     default void stop() {
     }
 }

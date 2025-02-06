@@ -118,6 +118,13 @@ public class ElevatorMechanism {
     /**
      * 
      */
+    public double[] getShaftLengths() {
+        return new double[] { osLigament.getLength(), msLigament.getLength(), isLigament.getLength() };
+    }
+
+    /**
+     * 
+     */
     public void setLength(double length) {
         if (length < 0)
             length = 0.0;

@@ -100,7 +100,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
      * 
      */
     public boolean hasCoral() {
-        return false;
+        return this.intakeModule.hasCoral();
     }
 
     /**
@@ -154,6 +154,13 @@ public class CoralIntakeSubsystem extends SubsystemBase {
         }
 
         Logger.recordOutput("Subsystems/" + this.NAME + "/Current State", this.stateMachine.getCurrentState());
-        Logger.recordOutput("Subsystems/" + this.NAME + "/Has Coral", hasCoral());
+        Logger.recordOutput("Subsystems/" + this.NAME + "/Has Coral", this.hasCoral());
+    }
+
+    /**
+     * Used in autonomous simulations
+     */
+    public void setHasCoral(boolean has_coral) {
+        this.intakeModule.setHasCoral(has_coral);
     }
 }

@@ -50,7 +50,8 @@ public class MapleSimRobotContainer extends RobotContainer {
 
         this.algaeIntakeSubsystem = new AlgaeIntakeSubsystemSim(new AlgaeIntakeModuleIOSim());
         this.coralIntakeSubsystem = new CoralIntakeSubsystemSim(new CoralIntakeModuleIOSim());
-        this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim());
+        this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim(), this.algaeIntakeSubsystem::hasAlgae,
+                this.coralIntakeSubsystem::hasCoral);
 
         registerNamedCommands();
         configureAutoBuilder();

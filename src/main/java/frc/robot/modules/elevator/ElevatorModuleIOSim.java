@@ -33,8 +33,9 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
      */
     public ElevatorModuleIOSim() {
         this.simState = VecBuilder.fill(0.0, 0.0);
-        this.controller = new PIDController(PIDConstants.ELEVATOR_KP, PIDConstants.ELEVATOR_KI,
-                PIDConstants.ELEVATOR_KD);
+
+        double[] elevatorPIDs = PIDConstants.getElevatorPIDs();
+        this.controller = new PIDController(elevatorPIDs[0], elevatorPIDs[1], elevatorPIDs[2]);
     }
 
     @Override
