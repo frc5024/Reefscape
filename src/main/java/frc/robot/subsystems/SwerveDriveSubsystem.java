@@ -117,12 +117,12 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     @Override
     public void periodic() {
         odometryLock.lock(); // Prevents odometry updates while reading data
-        this.gyroIO.updateInputs(this.gyroInputs);
-        Logger.processInputs("SwerveDrive/Gyro", this.gyroInputs);
-
         for (SwerveModule swerveModule : this.swerveModules) {
             swerveModule.updateInputs();
         }
+
+        this.gyroIO.updateInputs(this.gyroInputs);
+        Logger.processInputs("Subsystems/SwerveDrive/Gyro", this.gyroInputs);
         odometryLock.unlock();
 
         for (SwerveModule swerveModule : this.swerveModules) {
@@ -155,7 +155,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
                         modulePositions[moduleIndex].distanceMeters
                                 - this.lastModulePositions[moduleIndex].distanceMeters,
                         modulePositions[moduleIndex].angle);
-                lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
+                this.lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
             }
 
             // Update gyro angle

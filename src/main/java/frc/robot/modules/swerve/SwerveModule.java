@@ -47,26 +47,19 @@ public class SwerveModule {
      * 
      */
     public void periodic() {
-        swerveModuleIO.updateInputs(inputs);
-        Logger.processInputs("SwerveDrive/Module" + Integer.toString(index), inputs);
-
         // Calculate positions for odometry
         int sampleCount = inputs.odometryTimestamps.length; // All signals are sampled together
-        odometryPositions = new SwerveModulePosition[sampleCount];
+        this.odometryPositions = new SwerveModulePosition[sampleCount];
         for (int i = 0; i < sampleCount; i++) {
-            try {
-                double positionMeters = inputs.odometryDrivePositionsRad[i] * constants.WheelRadius;
-                Rotation2d angle = inputs.odometryTurnPositions[i];
-                odometryPositions[i] = new SwerveModulePosition(positionMeters, angle);
-            } catch (Exception e) {
-
-            }
+            double positionMeters = inputs.odometryDrivePositionsRad[i] * constants.WheelRadius;
+            Rotation2d angle = inputs.odometryTurnPositions[i];
+            this.odometryPositions[i] = new SwerveModulePosition(positionMeters, angle);
         }
 
         // Update alerts
-        driveDisconnectedAlert.set(!inputs.driveConnected);
-        turnDisconnectedAlert.set(!inputs.turnConnected);
-        turnEncoderDisconnectedAlert.set(!inputs.turnEncoderConnected);
+        this.driveDisconnectedAlert.set(!inputs.driveConnected);
+        this.turnDisconnectedAlert.set(!inputs.turnConnected);
+        this.turnEncoderDisconnectedAlert.set(!inputs.turnEncoderConnected);
     }
 
     /**
@@ -188,6 +181,7 @@ public class SwerveModule {
      */
     public void updateInputs() {
         this.swerveModuleIO.updateInputs(this.inputs);
-        Logger.processInputs("Drive/Module" + this.index, this.inputs);
+
+        Logger.processInputs("Subsystems/SwerveDrive/Module" + Integer.toString(index), inputs);
     }
 }
