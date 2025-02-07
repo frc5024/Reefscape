@@ -11,14 +11,18 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
+import frc.robot.subsystems.LEDPreset;
 
 public final class Constants {
     public static class LEDs {
         public final static int ledPort = 9;
+        public final static LEDPreset.Solid defaultLED = LEDPreset.Solid.kGold;
     }
-    public static class Servo{
+
+    public static class Servo {
         public final static int servoPort = 8;
     }
+
     // AdvantageKit simulation
     public static final Mode simMode = Mode.SIM;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
