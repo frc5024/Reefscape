@@ -9,9 +9,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Coral;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.OuttakeCommand;
-import frc.robot.commands.testIntakeCommand;
 import frc.robot.commands.ServoCommand;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -53,7 +51,6 @@ public class RobotContainer {
 
     driver.a().whileTrue(new IntakeCommand(coralSubsystem));
     driver.b().onTrue(new OuttakeCommand(coralSubsystem));
-    driver.x().whileTrue(new testIntakeCommand(coralSubsystem));
     driver.rightBumper().onTrue(new ServoCommand(coralSubsystem));
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
