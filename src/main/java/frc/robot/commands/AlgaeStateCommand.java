@@ -8,14 +8,14 @@ import frc.robot.subsystems.Algae;
 public class AlgaeStateCommand extends Command {
     private final Algae m_algae;
     private DoubleSupplier buttonAxis;
-    private DoubleSupplier servobuttonaxis;
+    // private DoubleSupplier servobuttonaxis;
 
     private int presstime = 0;
 
-    public AlgaeStateCommand(Algae algae, DoubleSupplier buttonAxis, DoubleSupplier servobuttonaxis) {
+    public AlgaeStateCommand(Algae algae, DoubleSupplier buttonAxis) {
         this.m_algae = algae;
         this.buttonAxis = buttonAxis;
-        this.servobuttonaxis = servobuttonaxis;
+        // this.servobuttonaxis = servobuttonaxis;
         addRequirements(m_algae);
     }
 
@@ -33,7 +33,7 @@ public class AlgaeStateCommand extends Command {
         // Sets presstime to number of frames button has been held for
         presstime = m_algae.checkPressTime(presstime, buttonAxis.getAsDouble());
         m_algae.motorSpeedStateMachine(presstime);
-        m_algae.setServoSpeed(servobuttonaxis);
+        // m_algae.setServoSpeed(servobuttonaxis);
 
     }
     // Halfes the trigger values and adds them, then assigns them to m_algae as
