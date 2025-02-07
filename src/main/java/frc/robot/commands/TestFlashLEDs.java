@@ -22,22 +22,22 @@ public class TestFlashLEDs extends Command {
 
     @Override
     public void initialize() {
-        flashCount = 0;//Resets count just to be safe
-        timer.reset();//Resets timer
-        timer.restart();//Starts timer
+        flashCount = 0;// Resets count just to be safe
+        timer.reset();// Resets timer
+        timer.restart();// Starts timer
     }
 
     @Override
     public void execute() {
         if (flashCount < flashMiliseconds) {
-            if (timer.hasElapsed(0.1)) {//Number in brackets is in seconds
-                flashCount++;//Updates the LED every 0.1 seconds
+            if (timer.hasElapsed(0.1)) {// Number in brackets is in seconds
+                flashCount++;// Updates the LED every 0.1 seconds
                 timer.restart();
             }
 
-            if (flashCount % 2 == 0) {//If count is even set to the colour
+            if (flashCount % 2 == 0) {// If count is even set to the colour
                 leds.setLEDS(colour);
-            } else {//Else set to black
+            } else {// Else set to black
                 leds.setLEDS(LEDPreset.Solid.kBlack);
             }
         }
