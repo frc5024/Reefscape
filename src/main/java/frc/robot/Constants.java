@@ -17,8 +17,14 @@ public final class Constants {
         public final static int ledPort = 9;
     }
 
-    public static class Algae {
-        public final static int AlgaeArmPort = 8;
+    public static class Algaes {
+        public final static int algaeArmPort = 8;
+        public final static int linebreakPort = 9;
+        public final static int motor1Port = 3;
+        public final static int motor2Port = 62;
+        public final static double intakeSpeed = -0.5;
+        public final static double outtakespeed = 0.5;
+
     }
 
     // AdvantageKit simulation
