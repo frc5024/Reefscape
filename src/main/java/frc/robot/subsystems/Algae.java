@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,6 +24,7 @@ public class Algae extends SubsystemBase {
     // private LEDs LEDS = LEDs.getInstance();
     private SparkMax motor1;
     private SparkMax motor2;
+    private Servo pinMotor;
     private Timer algaeOuttakeTimer;
     // private Servo motorarm;
 
@@ -44,6 +46,7 @@ public class Algae extends SubsystemBase {
     }
 
     private Algae() {
+        pinMotor = new Servo(2);
         linebreak = new DigitalInput(0);
         // limSwInput = new DigitalInput(5);
         motor1 = new SparkMax(3, MotorType.kBrushless);
@@ -68,6 +71,13 @@ public class Algae extends SubsystemBase {
     public void setSpeed(Double speed) {
         motor1.set(speed);
         motor2.set(speed);
+
+    }
+
+    // Sets the speed of the servo controlling the pin
+    public void setPin(int pinDir) {
+
+        pinMotor.set(pinDir);
 
     }
 

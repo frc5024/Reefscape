@@ -63,4 +63,17 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return Autos.exampleAuto(m_exampleSubsystem);
     }
+
+    public void algaeReleasePin() {
+
+        s_Algae.setPin(1);
+
+    };
+
+    public void algaeStopRelease() {
+
+        s_Algae.setPin(0);
+
+    }
+
 }
