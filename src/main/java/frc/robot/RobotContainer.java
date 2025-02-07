@@ -66,13 +66,13 @@ public class RobotContainer {
 
     public void algaeReleasePin() {
 
-        s_Algae.setPin(1);
+        s_Algae.setPin(Constants.Algaes.pinRelease);
 
     };
 
     public void algaeStopRelease() {
 
-        s_Algae.setPin(0);
+        s_Algae.setPin(Constants.Algaes.pinStop);
 
     }
 

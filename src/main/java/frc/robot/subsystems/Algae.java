@@ -47,7 +47,7 @@ public class Algae extends SubsystemBase {
     }
 
     private Algae() {
-        pinMotor = new Servo(2);
+        pinMotor = new Servo(Constants.Algaes.pinMotorPort);
         linebreak = new DigitalInput(Constants.Algaes.linebreakPort);
         // limSwInput = new DigitalInput(5);
         motor1 = new SparkMax(Constants.Algaes.motor1Port, MotorType.kBrushless);
@@ -78,9 +78,9 @@ public class Algae extends SubsystemBase {
     // Sets the speed of the servo controlling the pin
 
     // Sets the speed of the servo controlling the pin
-    public void setPin(int pinDir) {
+    public void setPin(int pinDirection) {
 
-        pinMotor.set(pinDir);
+        pinMotor.set(pinDirection);
 
     }
 
