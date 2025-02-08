@@ -1,5 +1,11 @@
-package frc.robot.subsystems;
+package frc.lib.leds;
 
+//Presets!
+//use functions via LEDPreset.___.___
+//i.e. LEDPreset.Rainbow.kRainbow
+//or LEDPreset.Solid.kRed
+//for the first imput will be the same as the enum and the second will be one of them in the enums
+//See Doc for more info
 public class LEDPreset {
     public enum Rainbow implements ILEDPreset {
         kRainbow(-0.99),

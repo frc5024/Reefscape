@@ -9,16 +9,20 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
+import frc.lib.leds.LEDPreset;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static class LEDs {
-        public final static int ledPort = 9;
+        public final static int ledPort = 9; // Port for LED, Make sure it is PWM not DIO
+        public final static LEDPreset.Solid defaultLED = LEDPreset.Solid.kGold;// Default Colour
     }
-    public static class Servo{
-        public final static int servoPort = 8;
+
+    public static class Servo {
+        public final static int servoPort = 8;// Port for Servo, Make sure it is PWM not DIO
     }
+
     // AdvantageKit simulation
     public static final Mode simMode = Mode.SIM;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
