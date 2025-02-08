@@ -6,11 +6,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ClimbCommand extends Command {
 
   private Climb climbSubsystem;
-  private double speed;
 
-  public ClimbCommand(Climb climbSubsystem, double speed) {
+  public ClimbCommand(Climb climbSubsystem) {
     this.climbSubsystem = climbSubsystem;
-    this.speed = speed;
 
     addRequirements(climbSubsystem);
   }
@@ -23,15 +21,15 @@ public class ClimbCommand extends Command {
   public void execute() {
     // Stops motor when Ultrasonic sensor and Encoder detect end position
     if (climbSubsystem.overThreshold() && climbSubsystem.isClimbPosition()) {
-      cancel();
+      climbSubsystem.stopMotor();
     } else {
-      climbSubsystem.startMotor(speed);
+      climbSubsystem.climbing();
     }
   }
 
   @Override
   public void end(boolean interrupted) {
-    climbSubsystem.stopMotor();
+    climbSubsystem.cancel();
   }
 
   // Returns true when the command should end.

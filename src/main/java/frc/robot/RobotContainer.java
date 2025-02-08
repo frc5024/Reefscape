@@ -3,6 +3,8 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ClimbCommand;
+import frc.robot.commands.ClimbExtendoCommand;
+import frc.robot.commands.ClimbCancelCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -47,7 +49,9 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    driver.a().whileTrue(new ClimbCommand(m_climbSubsystem, 0.35));
+    driver.a().onTrue(new ClimbCommand(m_climbSubsystem));
+    driver.x().onTrue(new ClimbExtendoCommand(m_climbSubsystem));
+    driver.b().onTrue(new ClimbCancelCommand(m_climbSubsystem));
     // driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
 

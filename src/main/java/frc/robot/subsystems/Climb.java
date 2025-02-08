@@ -12,12 +12,12 @@ import frc.robot.Constants;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Climb extends SubsystemBase {
-    private static Climb mInstance = null;
+    public static Climb mInstance = null;
 
     private TalonFX climbMotor;
 
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
-    GenericEntry climbSpeed = tab.add("climbSpeed", .35).getEntry();
+    GenericEntry encoder = tab.add("climbSpeed", .35).getEntry();
 
     // Ultrasonic
     private final Ultrasonic m_ultrasonic = new Ultrasonic(Constants.ClimbConstants.pingID,
@@ -39,10 +39,18 @@ public class Climb extends SubsystemBase {
 
     }
 
-    public void startMotor(double speed) {
+    public void climbing() {
+        // speed = encoder.getDouble(0);
+        climbMotor.set(Constants.ClimbConstants.climbSpeed);
+    }
 
-        speed = climbSpeed.getDouble(0);
-        climbMotor.set(speed);
+    public void extending() {
+        // speed = encoder.getDouble(0);
+        climbMotor.set(Constants.ClimbConstants.extendoSpeed);
+    }
+
+    public void cancel() {
+        climbMotor.set(Constants.ClimbConstants.cancelSpeed);
     }
 
     public void stopMotor() {
@@ -71,7 +79,16 @@ public class Climb extends SubsystemBase {
 
     public boolean isClimbPosition() {
         // Returns true if the Encoder detects the motor is at end position
-        if (climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.encoderEndValue) {
+        if (climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.endPosition) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isExtendoPosition() {
+        // Returns true if the Encoder detects the motor is at end position
+        if (climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.extendoPosition) {
             return true;
         } else {
             return false;

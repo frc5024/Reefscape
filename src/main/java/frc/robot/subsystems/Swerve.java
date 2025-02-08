@@ -54,7 +54,8 @@ public class Swerve extends SubsystemBase {
 
     }
 
-    // takes priority over controller input - call lockController to remove controller access to movement value
+    // takes priority over controller input - call lockController to remove
+    // controller access to movement value
     public void visionTranslationalVal(double translationSpeed, boolean lockController) {
         if (lockController) {
             translationVal = translationSpeed;
@@ -78,7 +79,7 @@ public class Swerve extends SubsystemBase {
 
     // Controller called values - only call when lockController isnt true
     public void controllerTranslationalVal(double translationOutput) {
-        if (!lockTranslation){
+        if (!lockTranslation) {
             translationVal = translationOutput;
         }
     }
@@ -98,7 +99,7 @@ public class Swerve extends SubsystemBase {
     /**
      * 
      */
-    public void drive( boolean fieldRelative, boolean isOpenLoop) {
+    public void drive(boolean fieldRelative, boolean isOpenLoop) {
         ChassisSpeeds chassisSpeeds = null;
 
         if (fieldRelative) {
