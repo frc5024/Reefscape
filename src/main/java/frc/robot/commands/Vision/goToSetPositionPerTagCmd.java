@@ -32,7 +32,7 @@ public class goToSetPositionPerTagCmd extends Command {
     private PIDController translationPidController;
 
     double desiredz = 1; // in meters
-    double desiredx = 0.3; // in meters (+ right)?
+    double desiredx = 0; // in meters? (+ right)?
 
     double tagAngle = 0;
 
@@ -80,7 +80,7 @@ public class goToSetPositionPerTagCmd extends Command {
             if (detectedTagID == 18 || detectedTagID == 7) {
                 tagAngle = 0;
             } else if (detectedTagID == 10 || detectedTagID == 21) {
-                tagAngle = -180;
+                tagAngle = -179.5;
             } else if (detectedTagID == 3 || detectedTagID == 16) {
                 tagAngle = -90; // change back to 90
             } else {
@@ -118,20 +118,20 @@ public class goToSetPositionPerTagCmd extends Command {
 
         double rotationToTag = robotHeading + tagAngle;
 
-        double zDis = Dis * Math.cos(Math.toRadians(robotHeading)); // Distance from robot to tag in relation of the
-                                                                    // field
+        double zDis = Dis * Math.cos(Math.toRadians(rotationToTag)); // Distance from robot to tag in relation of the
+                                                                     // field
 
         double atDeg = yawDeg - x;
         double xDis = zDis * (Math.tan(Math.toRadians(atDeg)));
 
         // Left/Right
-        double zDiff = desiredz - zDis;
+        double zDiff = zDis - desiredz;
 
         // forward/back
         double xDiff = xDis + xOffset;
 
         rotateToTag(rotationToTag);
-        // translateToTag(zDiff);
+        translateToTag(zDiff);
         strafeToTag(xDiff);
 
         setDrive();
@@ -151,7 +151,7 @@ public class goToSetPositionPerTagCmd extends Command {
     public void translateToTag(double zDiff) {
         if (Math.abs(zDiff) > 0.015) { // In meters
             translationPidOutput = translationPidController.calculate(zDiff, 0);
-            translationPidOutput = translationPidOutput * 1; // Speed multiplier
+            translationPidOutput = -translationPidOutput * 1; // Speed multiplier
             zPos = false;
         } else {
             translationPidOutput = 0;
@@ -174,13 +174,12 @@ public class goToSetPositionPerTagCmd extends Command {
         swerveDrive.isFieldRelative(false);
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
-        // swerveDrive.visionTranslationalVal(translationPidOutput, true);
+        swerveDrive.visionTranslationalVal(translationPidOutput, true);
         swerveDrive.visionStrafeVal(strafePidOutput, true);
     }
 
     @Override
     public boolean isFinished() {
-        swerveDrive.isFieldRelative(true);
         return false; // Stop when aligned
     }
 

@@ -149,6 +149,15 @@ public class Swerve extends SubsystemBase {
 
     public void isFieldRelative(boolean isFieldRelative) {
         fieldRelative = isFieldRelative;
+        if (fieldRelative) {
+            System.out.println("FR");
+        } else if (!fieldRelative) {
+            System.out.println("RR");
+        }
+    }
+
+    public boolean getFieldRelative() {
+        return fieldRelative;
     }
 
     /**
@@ -156,6 +165,7 @@ public class Swerve extends SubsystemBase {
      */
     public void drive(boolean isOpenLoop) {
         ChassisSpeeds chassisSpeeds = null;
+        fieldRelative = getFieldRelative();
 
         if (fieldRelative) {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
