@@ -79,9 +79,9 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
 
         if (RobotConstants.TUNING_MODE) {
             this.autonomousChooser.addOption("Drive Characterization",
-                    FeedForwardCharacterizationCommand.get(this.swerveDriveSubsystem));
+                    new FeedForwardCharacterizationCommand(this.swerveDriveSubsystem).get());
             this.autonomousChooser.addOption("Wheel Radius Characterization",
-                    WheelRadiusCharacterizationCommand.get(this.swerveDriveSubsystem));
+                    new WheelRadiusCharacterizationCommand(this.swerveDriveSubsystem).get());
         }
 
         // Load Game Autos

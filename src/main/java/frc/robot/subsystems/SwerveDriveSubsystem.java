@@ -16,7 +16,6 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -31,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.Constants.Swerve;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.modules.gyro.GyroIOInputsAutoLogged;
@@ -54,7 +54,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.",
             AlertType.kError);
 
-    private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
     private Rotation2d rawGyroRotation = new Rotation2d();
     private SwerveModulePosition[] lastModulePositions = // For delta tracking
             new SwerveModulePosition[] {
@@ -63,7 +62,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
                     new SwerveModulePosition(),
                     new SwerveModulePosition()
             };
-    private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(kinematics, rawGyroRotation,
+    private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(Swerve.swerveDriveKinematics,
+            rawGyroRotation,
             lastModulePositions, new Pose2d());
     private boolean isFieldRelative;
 
@@ -73,10 +73,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public SwerveDriveSubsystem(GyroModuleIO gyroIO, SwerveModuleIO flModuleIO, SwerveModuleIO frModuleIO,
             SwerveModuleIO blModuleIO, SwerveModuleIO brModuleIO) {
         this.gyroIO = gyroIO;
-        this.swerveModules[0] = new SwerveModule(flModuleIO, 0, TunerConstants.FrontLeft);
-        this.swerveModules[1] = new SwerveModule(frModuleIO, 1, TunerConstants.FrontRight);
-        this.swerveModules[2] = new SwerveModule(blModuleIO, 2, TunerConstants.BackLeft);
-        this.swerveModules[3] = new SwerveModule(brModuleIO, 3, TunerConstants.BackRight);
+        this.swerveModules[0] = new SwerveModule(flModuleIO, 0);
+        this.swerveModules[1] = new SwerveModule(frModuleIO, 1);
+        this.swerveModules[2] = new SwerveModule(blModuleIO, 2);
+        this.swerveModules[3] = new SwerveModule(brModuleIO, 3);
 
         // Usage reporting for swerve template
         HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
@@ -163,7 +163,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
                 rawGyroRotation = gyroInputs.odometryYawPositions[i];
             } else {
                 // Use the angle delta from the kinematics and module deltas
-                Twist2d twist = kinematics.toTwist2d(moduleDeltas);
+                Twist2d twist = Swerve.swerveDriveKinematics.toTwist2d(moduleDeltas);
                 rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
             }
 
@@ -192,7 +192,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public void runVelocity(ChassisSpeeds speeds) {
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
-        SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
+        SwerveModuleState[] setpointStates = Swerve.swerveDriveKinematics.toSwerveModuleStates(discreteSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
 
         // Log unoptimized setpoints and setpoint speeds
@@ -200,8 +200,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         Logger.recordOutput("Subsystems/SwerveDrive/SwerveChassisSpeeds/Setpoints", discreteSpeeds);
 
         // Send setpoints to modules
-        for (int i = 0; i < 4; i++) {
-            this.swerveModules[i].runSetpoint(setpointStates[i]);
+        for (SwerveModule swerveModule : this.swerveModules) {
+            swerveModule.runSetpoint(setpointStates[swerveModule.getIndex()]);
         }
 
         // Log optimized setpoints (runSetpoint mutates each state)
@@ -240,9 +240,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public void stopWithX() {
         Rotation2d[] headings = new Rotation2d[4];
         for (int i = 0; i < 4; i++) {
-            headings[i] = getModuleTranslations()[i].getAngle();
+            headings[i] = Swerve.moduleTranslations[i].getAngle();
         }
-        kinematics.resetHeadings(headings);
+        Swerve.swerveDriveKinematics.resetHeadings(headings);
         stop();
     }
 
@@ -288,7 +288,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      */
     @AutoLogOutput(key = "Subsystems/SwerveDrive/SwerveChassisSpeeds/Measured")
     public ChassisSpeeds getChassisSpeeds() {
-        return kinematics.toChassisSpeeds(getModuleStates());
+        return Swerve.swerveDriveKinematics.toChassisSpeeds(getModuleStates());
     }
 
     /** Returns the position of each module in radians. */
@@ -357,18 +357,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      */
     public double getMaxAngularSpeedRadPerSec() {
         return getMaxLinearSpeedMetersPerSec() / SwerveConstants.DRIVE_BASE_RADIUS;
-    }
-
-    /**
-     * Returns an array of module translations.
-     */
-    public static Translation2d[] getModuleTranslations() {
-        return new Translation2d[] {
-                new Translation2d(TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
-                new Translation2d(TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY),
-                new Translation2d(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
-                new Translation2d(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
-        };
     }
 
     /**

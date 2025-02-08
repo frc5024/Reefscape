@@ -19,10 +19,19 @@ public class WheelRadiusCharacterizationCommand {
     private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
+    private final SwerveDriveSubsystem swerveDriveSubsystem;
+
     /**
      * 
      */
-    private static class WheelRadiusCharacterizationState {
+    public WheelRadiusCharacterizationCommand(SwerveDriveSubsystem swerveDriveSubsystem) {
+        this.swerveDriveSubsystem = swerveDriveSubsystem;
+    }
+
+    /**
+     * 
+     */
+    private class WheelRadiusCharacterizationState {
         double[] positions = new double[4];
         Rotation2d lastAngle = new Rotation2d();
         double gyroDelta = 0.0;
@@ -31,7 +40,7 @@ public class WheelRadiusCharacterizationCommand {
     /**
      * 
      */
-    public static Command get(SwerveDriveSubsystem swerveDriveSubsystem) {
+    public Command get() {
         SlewRateLimiter limiter = new SlewRateLimiter(WHEEL_RADIUS_RAMP_RATE);
         WheelRadiusCharacterizationState state = new WheelRadiusCharacterizationState();
 
@@ -48,9 +57,9 @@ public class WheelRadiusCharacterizationCommand {
                         Commands.run(
                                 () -> {
                                     double speed = limiter.calculate(WHEEL_RADIUS_MAX_VELOCITY);
-                                    swerveDriveSubsystem.runVelocity(new ChassisSpeeds(0.0, 0.0, speed));
+                                    this.swerveDriveSubsystem.runVelocity(new ChassisSpeeds(0.0, 0.0, speed));
                                 },
-                                swerveDriveSubsystem)),
+                                this.swerveDriveSubsystem)),
 
                 // Measurement sequence
                 Commands.sequence(
@@ -60,15 +69,16 @@ public class WheelRadiusCharacterizationCommand {
                         // Record starting measurement
                         Commands.runOnce(
                                 () -> {
-                                    state.positions = swerveDriveSubsystem.getWheelRadiusCharacterizationPositions();
-                                    state.lastAngle = swerveDriveSubsystem.getRotation();
+                                    state.positions = this.swerveDriveSubsystem
+                                            .getWheelRadiusCharacterizationPositions();
+                                    state.lastAngle = this.swerveDriveSubsystem.getRotation();
                                     state.gyroDelta = 0.0;
                                 }),
 
                         // Update gyro delta
                         Commands.run(
                                 () -> {
-                                    var rotation = swerveDriveSubsystem.getRotation();
+                                    var rotation = this.swerveDriveSubsystem.getRotation();
                                     state.gyroDelta += Math.abs(rotation.minus(state.lastAngle).getRadians());
                                     state.lastAngle = rotation;
                                 })
@@ -76,7 +86,7 @@ public class WheelRadiusCharacterizationCommand {
                                 // When cancelled, calculate and print results
                                 .finallyDo(
                                         () -> {
-                                            double[] positions = swerveDriveSubsystem
+                                            double[] positions = this.swerveDriveSubsystem
                                                     .getWheelRadiusCharacterizationPositions();
                                             double wheelDelta = 0.0;
                                             for (int i = 0; i < 4; i++) {

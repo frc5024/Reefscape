@@ -18,8 +18,8 @@ import frc.robot.utils.MapleSimUtil;
 public class ElevatorVisualizer {
     private static ElevatorVisualizer mInstance = null;
     private final ElevatorMechanism elevatorMechanism = new ElevatorMechanism();
-    public static final Translation2d elevatorOrigin2d = new Translation2d(0.10686, 0.06357);
-    public static final Translation3d elevatorOrigin3d = new Translation3d(elevatorOrigin2d.getX(), 0.0,
+    public final Translation2d elevatorOrigin2d = new Translation2d(0.10686, 0.06357);
+    public final Translation3d elevatorOrigin3d = new Translation3d(elevatorOrigin2d.getX(), 0.0,
             elevatorOrigin2d.getY());
 
     private final String name;

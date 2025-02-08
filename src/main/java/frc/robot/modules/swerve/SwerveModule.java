@@ -2,16 +2,13 @@ package frc.robot.modules.swerve;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import frc.robot.Constants.Swerve;
 
 /**
  * 
@@ -20,7 +17,6 @@ public class SwerveModule {
     private final SwerveModuleIO swerveModuleIO;
     private final SwerveModuleIOInputsAutoLogged inputs = new SwerveModuleIOInputsAutoLogged();
     private final int index;
-    private final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants;
 
     private final Alert driveDisconnectedAlert;
     private final Alert turnDisconnectedAlert;
@@ -30,11 +26,10 @@ public class SwerveModule {
     /**
      * 
      */
-    public SwerveModule(SwerveModuleIO swerveModuleIO, int index,
-            SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants) {
+    public SwerveModule(SwerveModuleIO swerveModuleIO, int index) {
         this.swerveModuleIO = swerveModuleIO;
         this.index = index;
-        this.constants = constants;
+
         driveDisconnectedAlert = new Alert("Disconnected drive motor on module " + Integer.toString(index) + ".",
                 AlertType.kError);
         turnDisconnectedAlert = new Alert("Disconnected turn motor on module " + Integer.toString(index) + ".",
@@ -51,7 +46,7 @@ public class SwerveModule {
         int sampleCount = inputs.odometryTimestamps.length; // All signals are sampled together
         this.odometryPositions = new SwerveModulePosition[sampleCount];
         for (int i = 0; i < sampleCount; i++) {
-            double positionMeters = inputs.odometryDrivePositionsRad[i] * constants.WheelRadius;
+            double positionMeters = inputs.odometryDrivePositionsRad[i] * (Swerve.chosenModule.wheelDiameter / 2);
             Rotation2d angle = inputs.odometryTurnPositions[i];
             this.odometryPositions[i] = new SwerveModulePosition(positionMeters, angle);
         }
@@ -72,7 +67,12 @@ public class SwerveModule {
         state.cosineScale(inputs.turnPosition);
 
         // Apply setpoints
-        swerveModuleIO.runDriveVelocity(state.speedMetersPerSecond / constants.WheelRadius);
+        double velocityRadPerSec = state.speedMetersPerSecond / (Swerve.chosenModule.wheelDiameter / 2);
+        Logger.recordOutput("John/sMPS", state.speedMetersPerSecond);
+        Logger.recordOutput("John/wD", Swerve.chosenModule.wheelDiameter / 2);
+        Logger.recordOutput("John/vRadPS", velocityRadPerSec);
+
+        swerveModuleIO.runDriveVelocity(velocityRadPerSec);
         swerveModuleIO.runTurnPosition(state.angle);
     }
 
@@ -100,17 +100,24 @@ public class SwerveModule {
     }
 
     /**
+     * 
+     */
+    public int getIndex() {
+        return this.index;
+    }
+
+    /**
      * Returns the current drive position of the module in meters.
      */
     public double getPositionMeters() {
-        return this.inputs.drivePositionRad * this.constants.WheelRadius;
+        return this.inputs.drivePositionRad * (Swerve.chosenModule.wheelDiameter / 2);
     }
 
     /**
      * Returns the current drive velocity of the module in meters per second.
      */
     public double getVelocityMetersPerSec() {
-        return inputs.driveVelocityRadPerSec * this.constants.WheelRadius;
+        return inputs.driveVelocityRadPerSec * (Swerve.chosenModule.wheelDiameter / 2);
     }
 
     /**
@@ -182,6 +189,6 @@ public class SwerveModule {
     public void updateInputs() {
         this.swerveModuleIO.updateInputs(this.inputs);
 
-        Logger.processInputs("Subsystems/SwerveDrive/Module" + Integer.toString(index), inputs);
+        Logger.processInputs("SwerveDrive/Module" + Integer.toString(index), inputs);
     }
 }

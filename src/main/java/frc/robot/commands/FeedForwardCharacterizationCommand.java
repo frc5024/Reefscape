@@ -17,10 +17,22 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * This command should only be used in voltage control mode.
  */
 public class FeedForwardCharacterizationCommand {
-    private static final double FF_START_DELAY = 2.0; // Secs
-    private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
+    private final double FF_START_DELAY = 2.0; // Secs
+    private final double FF_RAMP_RATE = 0.1; // Volts/Sec
 
-    public static Command get(SwerveDriveSubsystem swerveDriveSubsystem) {
+    private final SwerveDriveSubsystem swerveDriveSubsystem;
+
+    /**
+     * 
+     */
+    public FeedForwardCharacterizationCommand(SwerveDriveSubsystem swerveDriveSubsystem) {
+        this.swerveDriveSubsystem = swerveDriveSubsystem;
+    }
+
+    /**
+     * 
+     */
+    public Command get() {
         List<Double> velocitySamples = new LinkedList<>();
         List<Double> voltageSamples = new LinkedList<>();
         Timer timer = new Timer();
@@ -34,9 +46,9 @@ public class FeedForwardCharacterizationCommand {
 
                 // Allow modules to orient
                 Commands.run(() -> {
-                    swerveDriveSubsystem.runCharacterization(0.0);
+                    this.swerveDriveSubsystem.runCharacterization(0.0);
                 },
-                        swerveDriveSubsystem)
+                        this.swerveDriveSubsystem)
                         .withTimeout(FF_START_DELAY),
 
                 // Start timer
@@ -46,11 +58,11 @@ public class FeedForwardCharacterizationCommand {
                 Commands.run(
                         () -> {
                             double voltage = timer.get() * FF_RAMP_RATE;
-                            swerveDriveSubsystem.runCharacterization(voltage);
-                            velocitySamples.add(swerveDriveSubsystem.getFFCharacterizationVelocity());
+                            this.swerveDriveSubsystem.runCharacterization(voltage);
+                            velocitySamples.add(this.swerveDriveSubsystem.getFFCharacterizationVelocity());
                             voltageSamples.add(voltage);
                         },
-                        swerveDriveSubsystem)
+                        this.swerveDriveSubsystem)
 
                         // When cancelled, calculate and print results
                         .finallyDo(

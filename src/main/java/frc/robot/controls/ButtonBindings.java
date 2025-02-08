@@ -72,8 +72,10 @@ public class ButtonBindings {
         // switch from robot relative to field relative
         commandXboxController.start()
                 .whileTrue(either(
-                        runOnce(this.swerveDriveSubsystem::disableFieldRelative, this.swerveDriveSubsystem),
-                        runOnce(this.swerveDriveSubsystem::enableFieldRelative, this.swerveDriveSubsystem),
+                        runOnce(this.swerveDriveSubsystem::disableFieldRelative,
+                                this.swerveDriveSubsystem),
+                        runOnce(this.swerveDriveSubsystem::enableFieldRelative,
+                                this.swerveDriveSubsystem),
                         this.swerveDriveSubsystem::isFieldRelative));
 
         // Lock to 0° when A button is held
@@ -106,13 +108,16 @@ public class ButtonBindings {
 
         // Drive to selected reef station
         commandXboxController.rightTrigger()
-                .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem, this.swerveDriveSubsystem::getPose,
-                        GameData.getInstance()::getReefStationIndex, GameData.getInstance().getCoralPole(),
+                .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem,
+                        this.swerveDriveSubsystem::getPose,
+                        GameData.getInstance()::getReefStationIndex,
+                        GameData.getInstance().getCoralPole(),
                         GameData.getInstance().getGamePieceMode()));
 
         // Drive to right pole of best apriltag
         commandXboxController.rightBumper()
-                .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem,
+                        this.visionSubsystem,
                         this.swerveDriveSubsystem::getPose,
                         GameData.getInstance().getCoralPole(),
                         GameData.getInstance().getGamePieceMode()));
@@ -125,7 +130,8 @@ public class ButtonBindings {
 
         // Drive to left pole of best apriltag
         commandXboxController.leftBumper()
-                .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem,
+                        this.visionSubsystem,
                         this.swerveDriveSubsystem::getPose,
                         GameData.getInstance().getCoralPole(),
                         GameData.getInstance().getGamePieceMode()));

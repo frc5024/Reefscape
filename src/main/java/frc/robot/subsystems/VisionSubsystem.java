@@ -13,9 +13,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
@@ -77,54 +75,6 @@ public class VisionSubsystem extends SubsystemBase {
             this.disconnectedAlerts.put(visionModuleIO.getName(),
                     new Alert("Vision camera is disconnected.", AlertType.kWarning));
         }
-    }
-
-    /**
-     * 
-     */
-    public int getBestTargetId(String cameraName) {
-        VisionIOInputsAutoLogged inputs = this.inputs.get(cameraName);
-
-        if (inputs == null)
-            return 0;
-
-        return inputs.bestTargetId;
-    }
-
-    /**
-     * 
-     */
-    public Pose3d getBestTargetPose(String cameraName) {
-        VisionIOInputsAutoLogged inputs = this.inputs.get(cameraName);
-
-        if (inputs == null)
-            return null;
-
-        return inputs.bestTargetPose;
-    }
-
-    /**
-     * 
-     */
-    public Transform3d getRobotToCamera(String cameraName) {
-        VisionModuleIO visionModule = getVisionModuleByName(cameraName);
-
-        return visionModule == null ? null : visionModule.getRobotToCamera();
-    }
-
-    /**
-     * 
-     */
-    public VisionModuleIO getVisionModuleByName(String cameraName) {
-        if (this.visionModules.isEmpty())
-            return null;
-
-        VisionModuleIO visionModule = this.visionModules.stream()
-                .filter(module -> module.getName() == cameraName)
-                .findFirst()
-                .get();
-
-        return visionModule;
     }
 
     @Override
@@ -244,29 +194,54 @@ public class VisionSubsystem extends SubsystemBase {
         Logger.recordOutput(
                 "Subsystems/Vision/Summary/RobotPosesRejected",
                 allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
-
-        setVisualizations();
     }
 
     /**
      * 
      */
-    public void setVisualizations() {
-        try {
-            for (VisionModuleIO visionModule : this.visionModules) {
-                Pose2d currentPose = this.poseSupplier.get();
+    public int getBestTargetId(String cameraName) {
+        VisionIOInputsAutoLogged inputs = this.inputs.get(cameraName);
 
-                Transform3d cameraView = new Transform3d(
-                        new Translation3d(currentPose.getX(), currentPose.getY(), visionModule.getHeight()),
-                        new Rotation3d(0, visionModule.getPitch(), currentPose.getRotation().getRadians()));
+        if (inputs == null)
+            return 0;
 
-                // Logger.recordOutput("Subsystems/Vision/Views/" + visionModule.getName(),
-                // cameraView);
-                // Logger.recordOutput("Vision/Views/" + visionModule.getCamera().getName(),
-                // visionModule.getCamera().getRobotToCamera());
-            }
-        } catch (Exception e) {
-        }
+        return inputs.bestTargetId;
+    }
+
+    /**
+     * 
+     */
+    public Pose3d getBestTargetPose(String cameraName) {
+        VisionIOInputsAutoLogged inputs = this.inputs.get(cameraName);
+
+        if (inputs == null)
+            return null;
+
+        return inputs.bestTargetPose;
+    }
+
+    /**
+     * 
+     */
+    public Transform3d getRobotToCamera(String cameraName) {
+        VisionModuleIO visionModule = getVisionModuleByName(cameraName);
+
+        return visionModule == null ? null : visionModule.getRobotToCamera();
+    }
+
+    /**
+     * 
+     */
+    public VisionModuleIO getVisionModuleByName(String cameraName) {
+        if (this.visionModules.isEmpty())
+            return null;
+
+        VisionModuleIO visionModule = this.visionModules.stream()
+                .filter(module -> module.getName() == cameraName)
+                .findFirst()
+                .get();
+
+        return visionModule;
     }
 
     @FunctionalInterface
