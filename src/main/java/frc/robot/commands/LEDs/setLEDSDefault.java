@@ -6,7 +6,7 @@ import frc.robot.subsystems.LEDs;
 public class setLEDSDefault extends Command {
     private LEDs leds;
 
-    // Constructor
+    // Constructor, intakes LED Subsystem
     public setLEDSDefault(LEDs leds) {
         this.leds = leds;
     }
@@ -19,7 +19,7 @@ public class setLEDSDefault extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // Sets LEDs to be the colour provided
+        // Sets LEDs to be the colour provided in constants
         leds.setLEDSDefault();
     }
 

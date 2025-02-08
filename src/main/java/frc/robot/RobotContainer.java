@@ -32,8 +32,8 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        driver.a().onTrue(new setLEDS(s_LEDs, LEDPreset.Solid.kBlue));
-        driver.b().onTrue(new setLEDSDefault(s_LEDs));
-        driver.x().onTrue(new flashLEDS(s_LEDs, LEDPreset.Solid.kGreen, 1));
+        driver.a().onTrue(new setLEDS(s_LEDs, LEDPreset.Solid.kBlue));// Sets to blue
+        driver.b().onTrue(new setLEDSDefault(s_LEDs));// Sets to Default colour (Find in Constants)
+        driver.x().onTrue(new flashLEDS(s_LEDs, LEDPreset.Solid.kGreen, 1));// Flashes Green for 1 second
     }
 }

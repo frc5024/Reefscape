@@ -14,6 +14,7 @@ public class LEDs extends SubsystemBase {
     private ILEDPreset flashColour;
     private int flashDuration;
 
+    // Instance
     public static LEDs getInstance() {
         if (mInstance == null) {
             mInstance = new LEDs();
@@ -21,6 +22,7 @@ public class LEDs extends SubsystemBase {
         return mInstance;
     }
 
+    // Constructor
     private LEDs() {
         ledController = new LEDController(Constants.LEDs.ledPort);// Sets which motor we are using, currently port 9
     }
@@ -30,10 +32,14 @@ public class LEDs extends SubsystemBase {
         ledController.set(colour);
     }
 
+    // Set the LEDs to be Default colour
     public void setLEDSDefault() {
         setLEDS(Constants.LEDs.defaultLED);
     }
 
+    // Flash the LEDs
+
+    // Initialize variables
     public void startFlashing(ILEDPreset colour, int flashSeconds) {
         flashColour = colour;
         flashDuration = flashSeconds;
@@ -43,6 +49,7 @@ public class LEDs extends SubsystemBase {
         timer.start();
     }
 
+    // update LED colour every 0.1 seconds
     public void updateFlash() {
         if (!flashing)
             return;
@@ -57,10 +64,11 @@ public class LEDs extends SubsystemBase {
                 return;
             }
 
+            // Set LEDs
             if (flashCount % 2 == 0) {
                 setLEDS(flashColour);
             } else {
-                setLEDS(LEDPreset.Solid.kBlack);
+                setLEDS(LEDPreset.Solid.kBlack);// OFF
             }
         }
     }

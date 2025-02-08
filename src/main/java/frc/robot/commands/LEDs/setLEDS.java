@@ -12,6 +12,7 @@ public class setLEDS extends Command {
     private LEDs leds;
     private ILEDPreset colour;
 
+    // Constructor, intakes LED subsystem and LED Preset
     public setLEDS(LEDs leds, ILEDPreset colour) {
         this.leds = leds;
         this.colour = colour;

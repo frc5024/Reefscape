@@ -15,12 +15,12 @@ import frc.robot.subsystems.LEDPreset;
 
 public final class Constants {
     public static class LEDs {
-        public final static int ledPort = 9;
-        public final static LEDPreset.Solid defaultLED = LEDPreset.Solid.kGold;
+        public final static int ledPort = 9; // Port for LED, Make sure it is PWM not DIO
+        public final static LEDPreset.Solid defaultLED = LEDPreset.Solid.kGold;// Default Colour
     }
 
     public static class Servo {
-        public final static int servoPort = 8;
+        public final static int servoPort = 8;// Port for Servo, Make sure it is PWM not DIO
     }
 
     // AdvantageKit simulation
