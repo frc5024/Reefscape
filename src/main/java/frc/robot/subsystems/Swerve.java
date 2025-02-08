@@ -44,15 +44,18 @@ public class Swerve extends SubsystemBase {
 
         speedModifier = 1;
         mSwerveMods = new SwerveModule[] {
-            new SwerveModule(0, Constants.Swerve.Mod0.constants), new SwerveModule(1, Constants.Swerve.Mod1.constants),
-            new SwerveModule(2, Constants.Swerve.Mod2.constants), new SwerveModule(3, Constants.Swerve.Mod3.constants)
+                new SwerveModule(0, Constants.Swerve.Mod0.constants),
+                new SwerveModule(1, Constants.Swerve.Mod1.constants),
+                new SwerveModule(2, Constants.Swerve.Mod2.constants),
+                new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
 
     }
 
-    // takes priority over controller input - call lockController to remove controller access to movement value
+    // takes priority over controller input - call lockController to remove
+    // controller access to movement value
     public void visionTranslationalVal(double translationSpeed, boolean lockController) {
         if (lockController) {
             translationVal = translationSpeed;
@@ -209,8 +212,8 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("Heading", getHeading().getDegrees());
 
         // Log subsystem to AK
-        double[] acceleration = new double[] {
-            this.gyro.getWorldLinearAccelX(), this.gyro.getWorldLinearAccelY()
-        };
+        // double[] acceleration = new double[] {
+        // this.gyro.getWorldLinearAccelX(), this.gyro.getWorldLinearAccelY()
+        // };
     }
 }

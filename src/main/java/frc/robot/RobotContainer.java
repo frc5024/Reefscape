@@ -4,9 +4,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.leds.LEDPreset;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.LEDs.flashLEDS;
-import frc.robot.commands.LEDs.setLEDS;
-import frc.robot.commands.LEDs.setLEDSDefault;
+import frc.robot.commands.Servo.ServoDesired;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Swerve;
 
@@ -27,13 +25,14 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, () -> -driver.getRawAxis(translationAxis),
                 () -> -driver.getRawAxis(strafeAxis), () -> -driver.getRawAxis(rotationAxis), () -> false));
 
-        s_LEDs.setLEDSDefault();
+        s_LEDs.setDefault();
         configureBindings();
     }
 
     private void configureBindings() {
-        driver.a().onTrue(new setLEDS(s_LEDs, LEDPreset.Solid.kBlue));// Sets to blue
-        driver.b().onTrue(new setLEDSDefault(s_LEDs));// Sets to Default colour (Find in Constants)
-        driver.x().onTrue(new flashLEDS(s_LEDs, LEDPreset.Solid.kGreen, 1));// Flashes Green for 1 second
+        driver.a().onTrue(new ServoDesired(0, s_LEDs, LEDPreset.Solid.kBlue, 10));
+        driver.b().onTrue(new ServoDesired(90, s_LEDs, LEDPreset.Solid.kBlue, 10));
+        driver.x().onTrue(new ServoDesired(180, s_LEDs, LEDPreset.Solid.kBlue, 10));
+        driver.y().onTrue(s_LEDs.setDefaultCommand());
     }
 }
