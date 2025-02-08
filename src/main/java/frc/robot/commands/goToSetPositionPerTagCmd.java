@@ -15,7 +15,7 @@ import frc.robot.subsystems.Swerve;
 
 public class goToSetPositionPerTagCmd extends Command {
     static ShuffleboardTab tab = Shuffleboard.getTab("Tag");
-    GenericEntry pEntry = tab.add("SET P", 0.7).getEntry();
+    GenericEntry pEntry = tab.add("SET P.", 0.7).getEntry();
     GenericEntry dEntry = tab.add("SET D", 0.05).getEntry();
     GenericEntry iEntry = tab.add("SET I", 0).getEntry();
 
@@ -32,7 +32,7 @@ public class goToSetPositionPerTagCmd extends Command {
     private PIDController translationPidController;
 
     double desiredz = 1; // in meters
-    double desiredx = 0.3; // in meters (+ right)?
+    double desiredx = 0; // in meters? (+ right)?
 
     double tagAngle = 0;
 
@@ -49,7 +49,7 @@ public class goToSetPositionPerTagCmd extends Command {
         this.translationPidController = new PIDController(0.7, 0, 0.05);
         this.rotationPidController = new PIDController(0.008, 0, 0.0005);
 
-        addRequirements(limelight);
+        addRequirements(swerveDrive); // might not work now but should fix errors
     }
 
     @Override
@@ -74,15 +74,15 @@ public class goToSetPositionPerTagCmd extends Command {
         // a new variable to lie to the robot on which will be the quickest rotation
 
         if (validTagIDs.contains(detectedTagID)) {
-            swerveDrive.isFieldRelative(false);
+            swerveDrive.setFieldRelative(false);
 
             // tag angle = angle based on the ROBOTS forward/heading
             if (detectedTagID == 18 || detectedTagID == 7) {
                 tagAngle = 0;
             } else if (detectedTagID == 10 || detectedTagID == 21) {
-                tagAngle = -180;
+                tagAngle = -179.5;
             } else if (detectedTagID == 3 || detectedTagID == 16) {
-                tagAngle = 90;
+                tagAngle = -90; // change back to 90
             } else {
                 tagAngle = 0;
             }
@@ -102,7 +102,7 @@ public class goToSetPositionPerTagCmd extends Command {
             swerveDrive.visionStrafeVal(0, false);
             swerveDrive.visionRotationVal(0, false);
 
-            swerveDrive.isFieldRelative(true);
+            swerveDrive.setFieldRelative(true);
         }
 
     }
@@ -118,14 +118,14 @@ public class goToSetPositionPerTagCmd extends Command {
 
         double rotationToTag = robotHeading + tagAngle;
 
-        double zDis = Dis * Math.cos(Math.toRadians(robotHeading)); // Distance from robot to tag in relation of the
-                                                                    // field
+        double zDis = Dis * Math.cos(Math.toRadians(rotationToTag)); // Distance from robot to tag in relation of the
+                                                                     // field
 
         double atDeg = yawDeg - x;
         double xDis = zDis * (Math.tan(Math.toRadians(atDeg)));
 
         // Left/Right
-        double zDiff = desiredz - zDis;
+        double zDiff = zDis - desiredz;
 
         // forward/back
         double xDiff = xDis + xOffset;
@@ -133,6 +133,8 @@ public class goToSetPositionPerTagCmd extends Command {
         rotateToTag(rotationToTag);
         translateToTag(zDiff);
         strafeToTag(xDiff);
+
+        setDrive();
     }
 
     public void rotateToTag(double rotationToTag) {
@@ -144,21 +146,17 @@ public class goToSetPositionPerTagCmd extends Command {
             rotationPidOutput = 0;
             rotationPos = true;
         }
-
-        swerveDrive.visionRotationVal(rotationPidOutput, true);
     }
 
     public void translateToTag(double zDiff) {
         if (Math.abs(zDiff) > 0.015) { // In meters
             translationPidOutput = translationPidController.calculate(zDiff, 0);
-            translationPidOutput = translationPidOutput * 1; // Speed multiplier
+            translationPidOutput = -translationPidOutput * 1; // Speed multiplier
             zPos = false;
         } else {
             translationPidOutput = 0;
             zPos = true;
         }
-
-        swerveDrive.visionTranslationalVal(translationPidOutput, true);
     }
 
     public void strafeToTag(double xDiff) {
@@ -170,7 +168,13 @@ public class goToSetPositionPerTagCmd extends Command {
             strafePidOutput = 0;
             xPos = true;
         }
+    }
 
+    public void setDrive() {
+        swerveDrive.setFieldRelative(false);
+
+        swerveDrive.visionRotationVal(rotationPidOutput, true);
+        swerveDrive.visionTranslationalVal(translationPidOutput, true);
         swerveDrive.visionStrafeVal(strafePidOutput, true);
     }
 
@@ -185,6 +189,7 @@ public class goToSetPositionPerTagCmd extends Command {
         swerveDrive.visionTranslationalVal(0, false);
         swerveDrive.visionStrafeVal(0, false);
         swerveDrive.visionRotationVal(0, false);
-        swerveDrive.isFieldRelative(false);
+
+        swerveDrive.setFieldRelative(true);
     }
 }

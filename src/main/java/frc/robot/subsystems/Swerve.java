@@ -147,8 +147,12 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    public void isFieldRelative(boolean isFieldRelative) {
+    public void setFieldRelative(boolean isFieldRelative) {
         fieldRelative = isFieldRelative;
+    }
+
+    public boolean getFieldRelative() {
+        return fieldRelative;
     }
 
     /**
