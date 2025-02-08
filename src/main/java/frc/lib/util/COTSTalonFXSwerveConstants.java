@@ -7,7 +7,7 @@ import edu.wpi.first.math.util.Units;
 
 /* Contains values and required settings for common COTS swerve modules. */
 public class COTSTalonFXSwerveConstants {
-    public static final double globalWheelDiameter = Units.inchesToMeters(4.0);
+    public static final double globalWheelDiameter = Units.inchesToMeters(3.87);
     public final double wheelDiameter;
     public final double wheelCircumference;
     public final double angleGearRatio;

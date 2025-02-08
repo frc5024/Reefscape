@@ -5,13 +5,13 @@ import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
-public class ZeroToTagCmd extends Command {
+public class ZeroHeadingUsingTagCmd extends Command {
     private final Limelight limelight;
     private final Swerve swerveDrive;
 
     private final double targetID = 5;
 
-    public ZeroToTagCmd(Limelight limelight, Swerve swerveDrive) {
+    public ZeroHeadingUsingTagCmd(Limelight limelight, Swerve swerveDrive) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
 

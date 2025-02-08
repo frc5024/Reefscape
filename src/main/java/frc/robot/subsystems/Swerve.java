@@ -36,6 +36,8 @@ public class Swerve extends SubsystemBase {
     boolean lockStrafe = false;
     boolean lockTranslation = false;
 
+    boolean fieldRelative = true;
+
     public final double scaleValue = 3600.0 / 3831.020004272461;
 
     private static Swerve mInstance;
@@ -145,10 +147,14 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public void isFieldRelative(boolean isFieldRelative) {
+        fieldRelative = isFieldRelative;
+    }
+
     /**
      * 
      */
-    public void drive(boolean fieldRelative, boolean isOpenLoop) {
+    public void drive(boolean isOpenLoop) {
         ChassisSpeeds chassisSpeeds = null;
 
         if (fieldRelative) {

@@ -27,6 +27,11 @@ public class TeleopSwerve extends Command {
     }
 
     @Override
+    public void initialize() {
+        s_Swerve.isFieldRelative(true);
+    }
+
+    @Override
     public void execute() {
         /* Get Values, Deadband */
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
@@ -38,6 +43,6 @@ public class TeleopSwerve extends Command {
         s_Swerve.controllerStrafeVal(strafeVal);
         s_Swerve.controllerRotationVal(rotationVal);
 
-        s_Swerve.drive(false, true);
+        s_Swerve.drive(true);
     }
 }
