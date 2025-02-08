@@ -3,39 +3,54 @@ package frc.robot.commands.LEDs;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.leds.ILEDPreset;
+import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
 import frc.robot.subsystems.LEDs;;
 
-public class flashLEDS extends Command {
+public class FlashLEDS extends Command {
     private LEDs leds;
-    private ILEDPreset colour;
+    private ILEDPreset colour1;
+    private ILEDPreset colour2;
     private int flashSeconds;
+    private int flashMiliseconds;
 
     private Timer totalTime = new Timer();
+    private Timer timer = new Timer();
+    private int flashCount = 0;
 
-    // Contructor takes in LED subsystem, LED Preset, flashSeoncds
-    public flashLEDS(LEDs leds, ILEDPreset colour, int flashSeconds) {
-        // Subsystem
+    public FlashLEDS(LEDs leds, ILEDPreset colour, int flashSeconds) {
+        this(leds, colour, LEDPreset.Solid.kBlack, flashSeconds);
+    }
+
+    public FlashLEDS(LEDs leds, ILEDPreset colour1, ILEDPreset colour2, int flashSeconds) {
         this.leds = leds;
-        // Preset (Colour)
-        this.colour = colour;
-        // How long to flash for
+        this.colour1 = colour1;
+        this.colour2 = colour2;
         this.flashSeconds = flashSeconds;
+        flashMiliseconds = flashSeconds * 100;
     }
 
     @Override
     public void initialize() {
-        // Reset and restart timer
-        totalTime.reset();
-        totalTime.restart();
-        // Tell led subsystem we want to flash
-        leds.startFlashing(colour, flashSeconds);
+        flashCount = 0;// Resets count just to be safe
+        timer.reset();// Resets timer
+        timer.restart();// Starts timer
     }
 
     @Override
     public void execute() {
-        // Update the flash
-        leds.updateFlash();
+        if (flashCount < flashMiliseconds) {
+            if (timer.hasElapsed(0.1)) {// Number in brackets is in seconds
+                flashCount++;
+                timer.restart();
+            }
+
+            if (flashCount % 2 == 0) {// If count is even set to the colour
+                leds.set(colour1);
+            } else {// Else set to colour 2
+                leds.set(colour2);
+            }
+        }
     }
 
     // Returns true when the command should end.
@@ -43,7 +58,7 @@ public class flashLEDS extends Command {
     public boolean isFinished() {
         // After certain time has elapsed stop command and reset to default
         if (totalTime.hasElapsed(flashSeconds)) {
-            leds.setLEDS(Constants.LEDs.defaultLED);
+            leds.set(Constants.LEDs.defaultLED);
             return true;
         }
         return false;
