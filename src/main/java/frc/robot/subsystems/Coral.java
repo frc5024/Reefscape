@@ -61,7 +61,7 @@ public class Coral extends SubsystemBase{
         
         tab.addDouble("reversed motor speed", () -> coralMotorReversed.get());
 
-        this.coralMotorReversed.configure(coralMotorReversedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        //this.coralMotorReversed.configure(coralMotorReversedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     }
     
@@ -70,14 +70,15 @@ public class Coral extends SubsystemBase{
 
     @Override
     public void periodic() {
-        intakeSpeed = intakeMotorSpeedEntry.getDouble(intakeSpeed);
-        outtakeSpeed = outtakeMotorSpeedEntry.getDouble(outtakeSpeed);
-        plopSpeed = plopSpeedEntry.getDouble(plopSpeed);
+    //     intakeSpeed = intakeMotorSpeedEntry.getDouble(intakeSpeed);
+    //     outtakeSpeed = outtakeMotorSpeedEntry.getDouble(outtakeSpeed);
+    //     plopSpeed = plopSpeedEntry.getDouble(plopSpeed);
     }
 
     //idle state, set motor to 0
     public void setIdle() {
         coralMotor.set(0);
+        coralMotorReversed.set(0);
     }
 
     public boolean isLineBroken() {
@@ -91,6 +92,7 @@ public class Coral extends SubsystemBase{
 
     public void set(double speed) {
         coralMotor.set(speed);
+        coralMotorReversed.set(-speed);
     }
 
     public Command plopCommand(){

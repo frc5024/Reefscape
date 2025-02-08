@@ -23,7 +23,7 @@ public class IntakeCommand extends Command {
         if(!coralSubsystem.isLineBroken()) {
             coralSubsystem.set(Constants.coralConstants.intakeSpeed);
         } else {
-            coralSubsystem.setIdle();
+            cancel();
         }
 
     }
