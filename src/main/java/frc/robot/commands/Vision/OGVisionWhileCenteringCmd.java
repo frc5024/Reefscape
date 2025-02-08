@@ -19,7 +19,7 @@ public class OGVisionWhileCenteringCmd extends Command {
     private final Limelight limelight;
     private final Swerve swerveDrive;
 
-    private final double targetID = 5;
+    private final double targetID = 3;
 
     double strafePidOutput = 0;
     double rotationPidOutput = 0;
@@ -30,7 +30,7 @@ public class OGVisionWhileCenteringCmd extends Command {
     private PIDController translationPidController;
 
     double desiredz = 1; // in meters
-    double tagAngle = 0;
+    double tagAngle = -90;
 
     boolean xPos = false;
     boolean rotationPos = false;
@@ -76,16 +76,17 @@ public class OGVisionWhileCenteringCmd extends Command {
             double yawDeg = botPose[4];
             double Dis = -botPose3D.getZ(); // Distance from LL to tag
 
-            double rotationToTag = robotHeading - tagAngle;
+            double rotationToTag = robotHeading + tagAngle;
 
-            double zDis = Dis * Math.cos(Math.toRadians(robotHeading)); // Distance from robot to tag in relation of the
-                                                                        // field
+            double zDis = Dis * Math.cos(Math.toRadians(rotationToTag)); // Distance from robot to tag in relation of
+                                                                         // the
+                                                                         // field
 
             double atDeg = yawDeg - x;
             double atXDis = zDis * (Math.tan(Math.toRadians(atDeg)));
 
             // Left/Right
-            double zDiff = desiredz - zDis;
+            double zDiff = zDis - desiredz;
 
             if (Math.abs(rotationToTag) > 1) { // Adjust tolerance as needed
                 rotationPidOutput = rotationPidController.calculate(rotationToTag, 0);
@@ -107,7 +108,7 @@ public class OGVisionWhileCenteringCmd extends Command {
 
             if (Math.abs(zDiff) > 0.015) { // In meters
                 translationPidOutput = translationPidController.calculate(zDiff, 0);
-                translationPidOutput = translationPidOutput * 1; // Speed multiplier
+                translationPidOutput = -translationPidOutput * 1; // Speed multiplier
                 zPos = false;
             } else {
                 translationPidOutput = 0;
