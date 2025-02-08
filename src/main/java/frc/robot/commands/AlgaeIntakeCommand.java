@@ -22,10 +22,8 @@ public class AlgaeIntakeCommand extends Command {
 
         // If the linebreak sensor has not been triggered, set the motors to intake mode
         if (!m_AlgaeCommandBased.getLinebreak()) {
-            System.out.println("Intake!");
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.intakeSpeed);
         } else {
-            System.out.println("Stop!");
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
         }
 
