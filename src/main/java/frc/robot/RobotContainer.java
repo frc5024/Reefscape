@@ -8,11 +8,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.PathFinderAndFollowCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Vision.FaceHeadingCmd;
-import frc.robot.commands.Vision.OGVisionWhileCenteringCmd;
-import frc.robot.commands.Vision.UpdatedWhileCenteringCmd;
+import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
@@ -49,13 +47,12 @@ public class RobotContainer {
 
         driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-        driver.x().whileTrue(new OGVisionWhileCenteringCmd(limelightSubsystem, s_Swerve));
-        driver.b().whileTrue(new UpdatedWhileCenteringCmd(limelightSubsystem, s_Swerve));
-
-        driver.a().whileTrue(new FaceHeadingCmd(s_Swerve));
-
-        driver.rightBumper().onTrue(new PathFinderAndFollowCommand(s_Swerve, "Forward 1 meter"));
-
+        // driver.x().whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem,
+        // s_Swerve, Constants.Vision.leftOffset));
+        // driver.b().whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem,
+        // s_Swerve, Constants.Vision.rightOffset));
+        driver.a().whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.noOffset));
+        driver.rightBumper().whileTrue(new FaceHeadingCmd(s_Swerve));
     }
 
     public Command getAutonomousCommand() {

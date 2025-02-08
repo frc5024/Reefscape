@@ -29,6 +29,14 @@ public final class Constants {
 
     public static final double stickDeadband = 0.1;
 
+    public static final class Vision {
+
+        public static final double leftOffset = -0.3; // in meters
+        public static final double rightOffset = 0.3; // in meters
+        public static final double noOffset = 0; // in meters
+
+    }
+
     public static final class Swerve {
         public static final int AHRS = 1;
 

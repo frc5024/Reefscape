@@ -38,6 +38,6 @@ public class TeleopSwerve extends Command {
         s_Swerve.controllerStrafeVal(strafeVal);
         s_Swerve.controllerRotationVal(rotationVal);
 
-        s_Swerve.drive(false, true);
+        s_Swerve.drive(true);
     }
 }
