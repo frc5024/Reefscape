@@ -7,37 +7,36 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDPreset;
 import frc.robot.subsystems.LEDs;
-import edu.wpi.first.wpilibj.Timer;;
 
 public class TestLEDs extends Command {
-  private LEDs leds;
+    private LEDs leds;
 
-  public TestLEDs() {
-    leds = LEDs.getInstance();
-  }
+    public TestLEDs() {
+        leds = LEDs.getInstance();
+    }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    //leds.setLEDS(LEDPreset.Solid.kOrange);//Is automaticly overrun by execute
-  }
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        // leds.setLEDS(LEDPreset.Solid.kOrange);//Is automaticly overrun by execute
+    }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    leds.setLEDS(LEDPreset.Solid.kYellow);
-    //leds.setLEDS(LEDPreset.Color1And2.kNoBlend);//Current Funtion
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        leds.setLEDS(LEDPreset.Solid.kYellow);
+        // leds.setLEDS(LEDPreset.Color1And2.kNoBlend);//Current Funtion
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    leds.setLEDS(LEDPreset.Solid.kBlack);
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        leds.setLEDS(LEDPreset.Solid.kBlack);
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

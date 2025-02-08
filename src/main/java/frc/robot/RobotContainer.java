@@ -2,15 +2,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AlgaeStateCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TestFlashLEDs;
 import frc.robot.commands.TestLEDs;
-import frc.robot.subsystems.Algae;
+import frc.robot.subsystems.AlgaeCommandBased;
 import frc.robot.subsystems.ExampleSubsystem;
 //import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Swerve;
@@ -23,7 +21,7 @@ public class RobotContainer {
 
     private final Swerve s_Swerve = Swerve.getInstance();
     // private final LEDs s_LEDs = LEDs.getInstance();
-    private final Algae s_Algae = Algae.getInstance();
+    private final AlgaeCommandBased s_Algae = AlgaeCommandBased.getInstance();
 
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -45,8 +43,8 @@ public class RobotContainer {
         // s_Algae.setDefaultCommand(new AlgaeManualCommand(s_Algae, () ->
         // driver.getLeftTriggerAxis(), () -> driver.getRightTriggerAxis()));
 
-        s_Algae.setDefaultCommand(
-                new AlgaeStateCommand(s_Algae, () -> driver.getRightTriggerAxis()));
+        // s_Algae.setDefaultCommand(new AlgaeStateCommand(s_Algae, () ->
+        // driver.getRightTriggerAxis()));
 
         configureBindings();
         // Sets the controllers triggers to be used by algae command
@@ -56,7 +54,10 @@ public class RobotContainer {
     private void configureBindings() {
         changeRainbow.whileTrue(new TestLEDs());
         testFlash.whileTrue(new TestFlashLEDs());
-        driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        driver.y().whileTrue(s_Algae.intake());
+        driver.x().whileTrue(s_Algae.launch());
+        driver.a().whileTrue(s_Algae.drop());
+        driver.b().whileTrue(s_Algae.cancel());
 
     }
 

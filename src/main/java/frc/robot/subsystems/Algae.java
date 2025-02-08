@@ -144,7 +144,7 @@ public class Algae extends SubsystemBase {
 
             // When holding an algae, sets state to outtaking and enables motors in reverse
             else if (currentstate == states.holding) {
-                setSpeed(Constants.Algaes.outtakespeed);
+                setSpeed(Constants.Algaes.launchSpeed);
                 currentstate = states.outaking;
                 algaeOuttakeTimer.restart();
             }

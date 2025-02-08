@@ -24,10 +24,12 @@ public final class Constants {
         public final static int motor2Port = 62;
         public final static int pinMotorPort = 2;
         public final static double intakeSpeed = -0.5;
-        public final static double outtakespeed = 0.5;
         public final static double outtaketimer = 1.5;
         public final static int pinRelease = 1;
         public final static int pinStop = 0;
+        public final static double idleSpeed = 0.0;
+        public final static double launchSpeed = 0.5;
+        public final static double dropSpeed = 0.1;
 
     }
 

@@ -1,27 +1,21 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Algae;
 
-public class AlgaeManualCommand extends Command {
-    private final Algae m_algae;
+public class TestCommand extends Command {
+    public TestCommand() {
 
-    public AlgaeManualCommand(Algae algae, DoubleSupplier outPower, DoubleSupplier inPower) {
-        this.m_algae = algae;
-
-        addRequirements(m_algae);
     }
 
-    // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-
+        System.out.println("dye!");
     }
 
+    // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 
     // Called once the command ends or is interrupted.
