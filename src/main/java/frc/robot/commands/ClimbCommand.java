@@ -29,7 +29,7 @@ public class ClimbCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    climbSubsystem.cancel();
+    climbSubsystem.stopMotor();
   }
 
   // Returns true when the command should end.

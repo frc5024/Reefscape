@@ -41,12 +41,22 @@ public class Climb extends SubsystemBase {
 
     public void climbing() {
         // speed = encoder.getDouble(0);
-        climbMotor.set(Constants.ClimbConstants.climbSpeed);
+        if (climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.liftoffPos && !overThreshold()) {
+            System.out.println("CLIMB FAILED");
+            climbMotor.set(0);
+        } else {
+            climbMotor.set(Constants.ClimbConstants.climbSpeed);
+        }
     }
 
     public void extending() {
         // speed = encoder.getDouble(0);
         climbMotor.set(Constants.ClimbConstants.extendoSpeed);
+    }
+
+    public void retracting() {
+        // speed = encoder.getDouble(0);
+        climbMotor.set(-Constants.ClimbConstants.extendoSpeed);
     }
 
     public void cancel() {
@@ -59,6 +69,9 @@ public class Climb extends SubsystemBase {
 
     @Override
     public void periodic() {
+        Ultrasonic.setAutomaticMode(true);
+        m_ultrasonic.setEnabled(true);
+
         distanceMillimetres = m_ultrasonic.getRangeMM();
         // Calculates the average of the given values from the Ultrasonic sensor
         measurement = filter.calculate(distanceMillimetres);
@@ -88,7 +101,7 @@ public class Climb extends SubsystemBase {
 
     public boolean isExtendoPosition() {
         // Returns true if the Encoder detects the motor is at end position
-        if (climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.extendoPosition) {
+        if (climbMotor.getPosition().getValueAsDouble() <= Constants.ClimbConstants.extendoPosition) {
             return true;
         } else {
             return false;

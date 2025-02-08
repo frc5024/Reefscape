@@ -158,15 +158,16 @@ public final class Constants {
                 // Motor
                 public static final int climbMotorID = 7;
                 // Placeholder value
-                public static final double endPosition = 0;
+                public static final double endPosition = 200.0;
                 // ALSO Placeholder value
-                public static final double extendoPosition = 0.123;
+                public static final double extendoPosition = 50.0;
+                public static final double liftoffPos = 180.0;
                 // EVEN MORE Placeholder values
-                public static final double climbSpeed = 0.321;
+                public static final double climbSpeed = 0.3;
                 // PLACEHOLDER PLACEHOLDER PLACEHOLDER
-                public static final double cancelSpeed = 0.314;
+                public static final double cancelSpeed = -0.3;
                 // P L A C E H O L D E R
-                public static final double extendoSpeed = 0.628;
+                public static final double extendoSpeed = -0.3;
 
         }
 }
