@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.elevatorConstants;
@@ -34,10 +35,12 @@ public class Elevator extends SubsystemBase{
             .follow(elevatorConstants.motorID1);
 
 
-    private boolean enabled;
-
     //created and named the PID controller
     private PIDController PID;
+    private double gConstant;
+
+    private double speed;
+
 
     //created and named the limit switches
     //private static DigitalInput zeroingLimitSwitch;
@@ -48,7 +51,9 @@ public class Elevator extends SubsystemBase{
     GenericEntry pEntry = tab.add("SET P", elevatorConstants.kP).getEntry();
     GenericEntry dEntry = tab.add("SET D", elevatorConstants.kD).getEntry();
     GenericEntry iEntry = tab.add("SET I", elevatorConstants.kI).getEntry();
-    GenericEntry maxSpeedEntry = tab.add("SET Max Speed", (elevatorConstants.elevatorMaxSpeed)).getEntry();
+    GenericEntry gEntry = tab.add("SET G", elevatorConstants.G).getEntry();
+    GenericEntry maxUpSpeedEntry = tab.add("SET Max Speed", (elevatorConstants.elevatorMaxUpSpeed)).getEntry();
+    GenericEntry maxDownSpeedEntry = tab.add("SET Max Down Speed", (elevatorConstants.elevatorMaxDownSpeed)).getEntry();
     GenericEntry SETsetPoint = tab.add("SET Dest (DEG)", 0.0).getEntry();
 
 
@@ -65,7 +70,6 @@ public class Elevator extends SubsystemBase{
         elevatorMotor.getEncoder().setPosition(elevatorConstants.zeroPosition);
 
         //elevatorMotor.setPosition(0);
-        enabled = false;
         
        tab.addDouble("encoder value", () ->elevatorMotor.getEncoder().getPosition()); //callback loop. calls the function everytime it wants a value. Constantly checks the value.
        tab.addDouble("encoder valueDEG", () ->Units.radiansToDegrees(elevatorMotor.getEncoder().getPosition()));
@@ -80,42 +84,39 @@ public class Elevator extends SubsystemBase{
         //getting the PID values and showing them on the shuffle board ("getDouble" constantly checks the value)
         PID.setP(pEntry.getDouble(elevatorConstants.kP));
         PID.setD(dEntry.getDouble(elevatorConstants.kD));
-        PID.setI(dEntry.getDouble(elevatorConstants.kI));
-
-        double speed = 0;
+        PID.setI(iEntry.getDouble(elevatorConstants.kI));
+        gConstant = gEntry.getDouble(elevatorConstants.G);
 
         //if the boolean enabled is true then run this command
-        if(enabled) {
-            speed = PID.calculate(elevatorMotor.getEncoder().getPosition());
 
-            if (speed >= maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed)) {
-                elevatorMotor.set(maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed));
-            } else if (speed <= -maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed)) {
-                elevatorMotor.set(-maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed));
-            } else {
-                elevatorMotor.set(speed);
-            }
+        if (speed >= maxUpSpeedEntry.getDouble(elevatorConstants.elevatorMaxUpSpeed)) {
+            elevatorMotor.set(maxUpSpeedEntry.getDouble(elevatorConstants.elevatorMaxUpSpeed));
+        } else if (speed <= -maxDownSpeedEntry.getDouble(elevatorConstants.elevatorMaxDownSpeed)) {
+            elevatorMotor.set(-maxDownSpeedEntry.getDouble(elevatorConstants.elevatorMaxDownSpeed));
+        } else {
+            elevatorMotor.set(speed);
         }
+        //safety precaution to prevent the motor from trying to go past the bottom stop
+        if (speed < 0 && encoderValue() <= elevatorConstants.minimumBottomValue) {
+            elevatorMotor.set(0);
+        }
+        
 
         //checkTopLimitSwitch();
         //zeroingEncoder();
-
-        // SmartDashboard.putNumber("encoderValue", elevatorMotor.getEncoder().getPosition());
     }
 
+    public void pidMotor() {
+        speed = PID.calculate(elevatorMotor.getEncoder().getPosition()) + gConstant;
+    }
 
     //gets the position from the SetElevatorSetpointCmd
     public void setSetPoint(double position) {
         PID.setSetpoint(position);
     }
 
-    //get the condition of enabled from the elevator command
-    public void motorOn(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public void controlMotor(double targetSpeed) {
-        elevatorMotor.set(targetSpeed);
+        speed = targetSpeed;
     }
 
     //creating a boolean method which returns the condition of both limit switches
@@ -144,9 +145,14 @@ public class Elevator extends SubsystemBase{
     // }
 
 
-    
+    private double encoderValue() {
+        return elevatorMotor.getEncoder().getPosition();
+    }
 
-
+    @Override
+    public Command getDefaultCommand() {
+        return run(() -> elevatorMotor.set(0)); //set it to g constant so that it stays put in the future
+    }
 
 
 }

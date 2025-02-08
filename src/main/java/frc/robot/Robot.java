@@ -4,7 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -47,10 +51,16 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    // ShuffleboardTab tab = Shuffleboard.getTab("Elevator");
+    // tab.addDouble("encoder value", () ->m_robotContainer.elevatorSubsystem.elevatorMotor.getEncoder().getPosition());
+    // tab.addDouble("encoder valueDEG", () ->Units.radiansToDegrees(m_robotContainer.elevatorSubsystem.elevatorMotor.getEncoder().getPosition()));
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

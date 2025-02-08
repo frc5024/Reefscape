@@ -50,13 +50,13 @@ public class RobotContainer {
     //buttons for elevator positions
     driver.b().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
     driver.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
-    driver.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.Algae1));
+    driver.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
     driver.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
     //driver.rightTrigger().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.rootPosition));
     driver.leftBumper().whileTrue(new RunCommand(() ->
     { 
       System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-      elevatorSubsystem.controlMotor(0);
+      elevatorSubsystem.controlMotor(0.2);
     }).finallyDo( ()-> 
     {
       System.out.println("DONEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");

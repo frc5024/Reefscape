@@ -20,15 +20,19 @@ public final class Constants {
         //elevator values
         public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
-        public static final double elevatorMaxSpeed = 1;
+        public static final double elevatorMaxUpSpeed = 0.4;
+        public static final double elevatorMaxDownSpeed = 0.1;
         public static final double zeroPosition = 0;
         public static final int motorID1 = 60;
         public static final int motorID2 = 61;
 
         //values for PID
-        public static final double kP =0.073;
+        public static final double kP =0;
         public static final double kI = 0;
-        public static final double kD = 0.00001;
+        public static final double kD = 0;
+
+        public static final double G = 0.145;
+        public static final double minimumBottomValue = 0.1;  //encoder value will not always be zero so we create a tolerance value
 
         //public static final double radianstoCM(double CM) {
                 //double radians;
@@ -40,12 +44,12 @@ public final class Constants {
 
         
         public static final double rootPosition = Units.degreesToRadians(0);
-        public static final double L1Position = Units.degreesToRadians(100);
-        public static final double L2Position =Units.degreesToRadians(200);
+        public static final double L1Position = Units.degreesToRadians(355);
+        public static final double L2Position =Units.degreesToRadians(682);
         public static final double Algae1 = Units.degreesToRadians(250);
-        public static final double L3position = Units.degreesToRadians(300);
+        public static final double L3position = Units.degreesToRadians(1270);
         public static final double Algae2 = Units.degreesToRadians(350);
-        public static final double L4position = Units.degreesToRadians(400);
+        public static final double L4position = Units.degreesToRadians(1988);
 
   }
   public static final double stickDeadband = 0.1;

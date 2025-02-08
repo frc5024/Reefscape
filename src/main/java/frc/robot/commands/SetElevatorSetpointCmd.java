@@ -22,17 +22,18 @@ public class SetElevatorSetpointCmd extends Command {
     public void initialize() {
         //sets the setpoint to the position that is assigned to the button
         elevatorSubsystem.setSetPoint(setpoint);
-        //sets enabled to true
-        elevatorSubsystem.motorOn(true);
-        System.out.println("aaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
+    }
+
+    @Override
+    public void execute() {
+        elevatorSubsystem.pidMotor();
     }
 
     //"end" is called when the button is no longer being pressed
     @Override
     public void end(boolean interrupted) {
         elevatorSubsystem.controlMotor(0);
-        elevatorSubsystem.motorOn(false);
     }
 
    
