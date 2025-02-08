@@ -15,12 +15,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Coral;
+
 
 public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final CommandXboxController driver = new CommandXboxController(0);
-  //private final CommandXboxController operator = new CommandXboxController(1);
+  private final CommandXboxController operator = new CommandXboxController(1);
 
   //private final Swerve s_Swerve = Swerve.getInstance();
   private final Elevator elevatorSubsystem = new Elevator();
@@ -28,6 +30,8 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
+
+  private final Coral coralSubsystem = new Coral();
 
   public RobotContainer() {
 
@@ -48,20 +52,23 @@ public class RobotContainer {
 
   private void configureBindings() {
     //buttons for elevator positions
-    driver.b().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
-    driver.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
-    driver.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
-    driver.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
+    operator.b().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
+    operator.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
+    operator.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
+    operator.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
+    driver.a().onTrue(coralSubsystem.intakeCommand());
+    driver.b().onTrue(coralSubsystem.outtakeCommand());
+    driver.y().onTrue(coralSubsystem.cancelIntakeCommand());
+    driver.x().onTrue(coralSubsystem.plopCommand());
+    driver.rightBumper().onTrue(coralSubsystem.lowerRampCommand());
     //driver.rightTrigger().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.rootPosition));
-    driver.leftBumper().whileTrue(new RunCommand(() ->
-    { 
-      System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-      elevatorSubsystem.controlMotor(0.2);
-    }).finallyDo( ()-> 
-    {
-      System.out.println("DONEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-      elevatorSubsystem.controlMotor(0.0);
-    }));
+    // driver.leftBumper().whileTrue(new RunCommand(() ->
+    // { 
+    //   elevatorSubsystem.controlMotor(0.2);
+    // }).finallyDo( ()-> 
+    // {
+    //   elevatorSubsystem.controlMotor(0.0);
+    // }));
     driver.rightBumper().whileTrue(new RunCommand(() -> elevatorSubsystem.controlMotor(-0.1)).finallyDo( ()-> elevatorSubsystem.controlMotor(0.0)));
     //operator.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.Algae2));
     //operator.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
