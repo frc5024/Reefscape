@@ -1,12 +1,17 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.Constants.coralConstants;
 import frc.robot.commands.Coral.CancelIntakeCommand;
 import frc.robot.commands.Coral.IntakeCommand;
 import frc.robot.commands.Coral.OuttakeCommand;
 import frc.robot.commands.Coral.PlopCommand;
 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -20,6 +25,10 @@ public class Coral extends SubsystemBase{
     // motor controller for coral
     private SparkFlex coralMotor;
     private SparkFlex coralMotorReversed;
+    
+    private final SparkBaseConfig coralMotorReversedConfig = new SparkFlexConfig()
+        .inverted(true)
+        .follow(coralConstants.coralMotorChannel);
 
     private static DigitalInput linebreak;
 
@@ -49,10 +58,13 @@ public class Coral extends SubsystemBase{
         tab.addDouble("motor speed", () -> coralMotor.get());
         
         coralMotorReversed = new SparkFlex(coralMotorReversedChannel, SparkFlex.MotorType.kBrushless);
+        
         tab.addDouble("reversed motor speed", () -> coralMotorReversed.get());
 
-        //rampServo = new Servo(Constants.coralConstants.servoChannel);
+        this.coralMotorReversed.configure(coralMotorReversedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
     }
+    
 
     // method for intaking coral, takes in a boolean to determine if the coral should intake
 
@@ -66,7 +78,6 @@ public class Coral extends SubsystemBase{
     //idle state, set motor to 0
     public void setIdle() {
         coralMotor.set(0);
-        coralMotorReversed.set(0);
     }
 
     public boolean isLineBroken() {
@@ -80,7 +91,6 @@ public class Coral extends SubsystemBase{
 
     public void set(double speed) {
         coralMotor.set(speed);
-        coralMotorReversed.set(-speed);
     }
 
     public Command plopCommand(){
