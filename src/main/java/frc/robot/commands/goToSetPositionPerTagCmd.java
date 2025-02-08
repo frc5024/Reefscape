@@ -1,4 +1,4 @@
-package frc.robot.commands.Vision;
+package frc.robot.commands;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +21,7 @@ public class goToSetPositionPerTagCmd extends Command {
 
     private final Limelight limelight;
     private final Swerve swerveDrive;
+    private final double xOffset;
 
     double strafePidOutput = 0;
     double rotationPidOutput = 0;
@@ -39,9 +40,10 @@ public class goToSetPositionPerTagCmd extends Command {
     boolean rotationPos = false;
     boolean zPos = false;
 
-    public goToSetPositionPerTagCmd(Limelight limelight, Swerve swerveDrive) {
+    public goToSetPositionPerTagCmd(Limelight limelight, Swerve swerveDrive, double xOffset) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
+        this.xOffset = xOffset;
 
         this.strafePidController = new PIDController(0.7, 0, 0.05);
         this.translationPidController = new PIDController(0.7, 0, 0.05);
@@ -81,6 +83,8 @@ public class goToSetPositionPerTagCmd extends Command {
                 tagAngle = -180;
             } else if (detectedTagID == 3 || detectedTagID == 16) {
                 tagAngle = 90;
+            } else {
+                tagAngle = 0;
             }
 
             // at___ = AprilTag____
@@ -124,7 +128,7 @@ public class goToSetPositionPerTagCmd extends Command {
         double zDiff = desiredz - zDis;
 
         // forward/back
-        double xDiff = desiredx - xDis;
+        double xDiff = xDis + xOffset;
 
         rotateToTag(rotationToTag);
         translateToTag(zDiff);
