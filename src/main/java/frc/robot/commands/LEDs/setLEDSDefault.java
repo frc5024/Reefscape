@@ -19,7 +19,7 @@ public class setLEDSDefault extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // Sets LEDs to be the colour provided in constants
+        // Sets LEDs to default colour
         leds.setLEDSDefault();
     }
 

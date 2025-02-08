@@ -2,8 +2,8 @@ package frc.robot.commands.LEDs;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.leds.ILEDPreset;
 import frc.robot.Constants;
-import frc.robot.subsystems.ILEDPreset;
 import frc.robot.subsystems.LEDs;;
 
 public class flashLEDS extends Command {

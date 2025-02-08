@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.leds.ILEDPreset;
+import frc.lib.leds.LEDController;
+import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
 
 public class LEDs extends SubsystemBase {
@@ -39,8 +42,8 @@ public class LEDs extends SubsystemBase {
 
     // Flash the LEDs
 
-    // Initialize variables
     public void startFlashing(ILEDPreset colour, int flashSeconds) {
+        // Initialize variables
         flashColour = colour;
         flashDuration = flashSeconds;
         flashCount = 0;
