@@ -21,15 +21,18 @@ public final class Constants {
 
         //constants for intake and channels 
         public static final class coralConstants {
-                public static final int coralMotorChannel = 61;
-                public static final int coralMotorReversedChannel = 62;
+                public static final int coralMotorChannel = 51;
+                public static final int coralMotorReversedChannel = 52;
                 public static final int linebreakChannel = 0;
-                //public static final int linebreakBottomChannel = 9;
                 public static final int servoChannel = 0;
-                public static double intakeSpeed = 0.1;
+
+                public static double intakeSpeed = -0.1;
                 public static double outtakeSpeed = -0.1;
-                public static double outtakeTime = 0.5;
-                
+                public static double plopSpeed = -0.05;
+                public static double rampSpeed = 0.05;
+
+                // public static double servoRotate = 0.5; 
+                // public static double servoReset = -0.5;    
         }
 
       public static final class Swerve {

@@ -1,17 +1,13 @@
-package frc.robot.commands;
+package frc.robot.commands.Coral;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Coral;
-import frc.robot.subsystems.Coral.coralState;
 import frc.robot.Constants;
-
+import frc.robot.subsystems.Coral;
 
 public class OuttakeCommand extends Command { 
 
     private final Coral coralSubsystem;
     //private static DigitalInput linebreak;
     
-    //constants for outtakeTime
-    double outtakeTime = Constants.coralConstants.outtakeTime;
 
     //constructor for OuttakeCommand
     public OuttakeCommand(Coral coralSubsystem) {
@@ -24,13 +20,16 @@ public class OuttakeCommand extends Command {
     @Override
     public void initialize() {
         if(coralSubsystem.isLineBroken()) {
-            coralSubsystem.state = coralState.HOLDING;
+            coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
+        }else {
+            cancel();
         }
     }
-    //execute, if line is not broken, and t2nd linebreak not broken, set activeOuttake to false and state to IDLE
+
+    //execute, startOuttake() once button is pressed
     @Override
     public void execute() {
-       coralSubsystem.startOuttake();
+
     } 
         
     //end, when command ends, set activeOuttake to false and set state to IDLE
@@ -39,6 +38,7 @@ public class OuttakeCommand extends Command {
         coralSubsystem.setIdle();
     }
 
+     //if line is not broken, return true, else return false
     @Override
     public boolean isFinished() {
         if(!coralSubsystem.isLineBroken()){

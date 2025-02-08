@@ -1,8 +1,8 @@
 
-package frc.robot.commands;
+package frc.robot.commands.Coral;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Coral;
-import frc.robot.subsystems.Coral.coralState;
 
 
 public class IntakeCommand extends Command { 
@@ -17,35 +17,36 @@ public class IntakeCommand extends Command {
         addRequirements(coralSubsystem);
     }
     
-    //initizlize, when command starts, set activeIntake to true, start timer, but state should be IDLE
+    //initialize, when command starts, if line is not broken, set state to IDLE
     @Override
     public void initialize() {
         if(!coralSubsystem.isLineBroken()) {
-            coralSubsystem.state = coralState.IDLE;
+            coralSubsystem.set(Constants.coralConstants.intakeSpeed);
+        }else{
+            cancel();
         }
 
     }
-    //execute, if line is broken, and timer is greater than 0.05, set activeIntake to false, and state to HOLDING (you want motors to stop)
+    //execute, if button is pressed, startIntake()
     @Override
     public void execute() {
-        coralSubsystem.startIntake();
+        
     } 
     
-    //end, when command ends, set activeIntake to false
+    //end, when command ends, set Idle
     @Override
     public void end(boolean interrupted) {
         coralSubsystem.setIdle();
     }
 
 
-    //always return false for isFinished()
+    //if line is broken, return true, else return false
     @Override
     public boolean isFinished() {
         if(coralSubsystem.isLineBroken()){
             return true;
         }
         return false;
-    
     }
     
 }

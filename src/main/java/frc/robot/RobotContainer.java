@@ -7,9 +7,6 @@ import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Coral;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.OuttakeCommand;
-import frc.robot.commands.ServoCommand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -49,9 +46,12 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    driver.a().whileTrue(new IntakeCommand(coralSubsystem));
-    driver.b().onTrue(new OuttakeCommand(coralSubsystem));
-    driver.rightBumper().onTrue(new ServoCommand(coralSubsystem));
+    driver.a().onTrue(coralSubsystem.intakeCommand());
+    driver.b().onTrue(coralSubsystem.outtakeCommand());
+    driver.y().onTrue(coralSubsystem.cancelIntakeCommand());
+    driver.x().onTrue(coralSubsystem.plopCommand());
+    driver.rightBumper().onTrue(coralSubsystem.lowerRampCommand());
+
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
 
