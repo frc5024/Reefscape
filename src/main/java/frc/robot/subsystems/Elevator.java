@@ -28,17 +28,18 @@ public class Elevator extends SubsystemBase{
     private SparkMax elevatorMotor; //LEAD
     private SparkMax elevatorMotor2; //FOLLOWER
     private final SparkBaseConfig elevatorMotorConfig = new SparkMaxConfig()
-            .idleMode(IdleMode.kBrake)
+            .idleMode(IdleMode.kBrake) //sets the motors to break mode
             .inverted(true);
     private final SparkBaseConfig elevatorMotor2Config = new SparkMaxConfig()
             .idleMode(IdleMode.kBrake)
-            .follow(elevatorConstants.motorID1);
+            .follow(elevatorConstants.motorID1); //makes this motor the follower to the lead
 
 
     //created and named the PID controller
     private PIDController PID;
     private double gConstant;
 
+    //made it so "speed" is able to be accessed by the whole class
     private double speed;
 
 
@@ -87,8 +88,7 @@ public class Elevator extends SubsystemBase{
         PID.setI(iEntry.getDouble(elevatorConstants.kI));
         gConstant = gEntry.getDouble(elevatorConstants.G);
 
-        //if the boolean enabled is true then run this command
-
+        //Max speed cap incase the PID sets a high speed which could possibly break the elevator
         if (speed >= maxUpSpeedEntry.getDouble(elevatorConstants.elevatorMaxUpSpeed)) {
             elevatorMotor.set(maxUpSpeedEntry.getDouble(elevatorConstants.elevatorMaxUpSpeed));
         } else if (speed <= -maxDownSpeedEntry.getDouble(elevatorConstants.elevatorMaxDownSpeed)) {
@@ -106,6 +106,7 @@ public class Elevator extends SubsystemBase{
         //zeroingEncoder();
     }
 
+    //creates a command for calculating speed through PID which will be used in the command instead of the periodic
     public void pidMotor() {
         speed = PID.calculate(elevatorMotor.getEncoder().getPosition()) + gConstant;
     }
@@ -115,6 +116,7 @@ public class Elevator extends SubsystemBase{
         PID.setSetpoint(position);
     }
 
+    //setting the manual target speed that can be controlled by the driver to the speed used in calculations and safety checks
     public void controlMotor(double targetSpeed) {
         speed = targetSpeed;
     }
@@ -144,14 +146,15 @@ public class Elevator extends SubsystemBase{
     //     }
     // }
 
-
+    //gets the encoder value for safety precautions in the periodic
     private double encoderValue() {
         return elevatorMotor.getEncoder().getPosition();
     }
 
+    //runs this command when no other command is being called which will set the speed to 0
     @Override
     public Command getDefaultCommand() {
-        return run(() -> elevatorMotor.set(0)); //set it to g constant so that it stays put in the future
+        return run(() -> elevatorMotor.set(0)); //***set it to g constant so that it stays put in the future
     }
 
 

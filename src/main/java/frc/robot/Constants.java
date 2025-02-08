@@ -31,7 +31,7 @@ public final class Constants {
         public static final double kI = 0;
         public static final double kD = 0;
 
-        public static final double G = 0.145;
+        public static final double G = 0.145; //creates a constant g values which will represent gravity since the elevator will fight against gravity going up and move with gravitiy when going down
         public static final double minimumBottomValue = 0.1;  //encoder value will not always be zero so we create a tolerance value
 
         //public static final double radianstoCM(double CM) {
@@ -42,7 +42,7 @@ public final class Constants {
         
         //one rotation equals 1.4765 cm
 
-        
+        //position constants for the different levels to score
         public static final double rootPosition = Units.degreesToRadians(0);
         public static final double L1Position = Units.degreesToRadians(355);
         public static final double L2Position =Units.degreesToRadians(682);
@@ -52,6 +52,19 @@ public final class Constants {
         public static final double L4position = Units.degreesToRadians(1988);
 
   }
+
+        public static final class coralConstants {
+                public static final int coralMotorChannel = 51;
+                public static final int coralMotorReversedChannel = 52;
+                public static final int linebreakChannel = 0;
+                public static final int servoChannel = 0;
+                public static double intakeSpeed = -0.1;
+                public static double outtakeSpeed = -0.1;
+                public static double plopSpeed = -0.05;
+                public static double rampSpeed = 0.05;
+                // public static double servoRotate = 0.5;
+                // public static double servoReset = -0.5;
+        }
   public static final double stickDeadband = 0.1;
 
       public static final class Swerve {
