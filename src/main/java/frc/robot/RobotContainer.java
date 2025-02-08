@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.leds.LEDPreset;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.LEDs.FlashLEDS;
+import frc.robot.commands.LEDs.SetLEDS;
 import frc.robot.commands.Servo.ServoDesired;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Swerve;
@@ -30,9 +32,9 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        driver.a().onTrue(new ServoDesired(0, s_LEDs, LEDPreset.Solid.kBlue, 10));
-        driver.b().onTrue(new ServoDesired(90, s_LEDs, LEDPreset.Solid.kBlue, 10));
-        driver.x().onTrue(new ServoDesired(180, s_LEDs, LEDPreset.Solid.kBlue, 10));
-        driver.y().onTrue(s_LEDs.setDefaultCommand());
+        driver.a().whileTrue(new ServoDesired(180, s_LEDs, LEDPreset.Solid.kBlue, LEDPreset.Solid.kGold, 10));
+        driver.b().whileTrue(new SetLEDS(s_LEDs, LEDPreset.Sinelon.kOcean));
+        driver.x().whileTrue(new FlashLEDS(s_LEDs, LEDPreset.Solid.kGold, LEDPreset.Solid.kBlue, 10));
+        driver.y().whileTrue(s_LEDs.setDefaultCommand());
     }
 }
