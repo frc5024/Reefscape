@@ -526,7 +526,12 @@ public final class Constants {
                 Units.inchesToMeters(0.0), 0.0, Units.inchesToMeters(0.0),
                 0.0, Units.degreesToRadians(0), 0.0);
 
-        public static final Camera LIMELIGHT_CAMERA = new Camera("Limelight",
+        public static final Camera LIMELIGHT3G_CAMERA = new Camera("limelight-threegee",
+                Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
+                Units.inchesToMeters(10.0), 0.0, Units.inchesToMeters(7.0),
+                0.0, Units.degreesToRadians(0), 0.0);
+
+        public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight-two",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
                 Units.inchesToMeters(10.0), 0.0, Units.inchesToMeters(7.0),
                 0.0, Units.degreesToRadians(0), 0.0);
@@ -534,7 +539,7 @@ public final class Constants {
         /**
          * TODO: set list of enabled camera
          */
-        public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT_CAMERA);
+        public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA);
         // public static final List<Camera> CAMERAS = Arrays.asList(FRONT_CAMERA,
         // REAR_CAMERA);
 

@@ -91,7 +91,7 @@ public class Robot extends LoggedRobot {
         }
 
         // Start AdvantageKit logger
-        // Logger.start();
+        Logger.start();
 
         checkDriverStationUpdate();
     }

@@ -52,11 +52,13 @@ public class VisionSubsystem extends SubsystemBase {
             if (Robot.isReal()) {
                 if (camera.getProcessor() == Camera.Processor.LIMELIGHT) {
                     this.visionModules.add(new VisionModuleIOLimelight(camera, rotationSupplier));
-                } else {
+                } else if (camera.getProcessor() == Camera.Processor.PHOTONVISION) {
                     this.visionModules.add(new VisionModuleIOPhotonVision(camera));
                 }
             } else {
-                if (camera.getProcessor() == Camera.Processor.PHOTONVISION) {
+                if (camera.getProcessor() == Camera.Processor.LIMELIGHT) {
+                    this.visionModules.add(new VisionModuleIOLimelight(camera, rotationSupplier));
+                } else if (camera.getProcessor() == Camera.Processor.PHOTONVISION) {
                     // this.visionModules.add(new VisionModuleIOPhotonVision(camera));
                     this.visionModules.add(new VisionModuleIOPhotonVisionSim(camera, this.poseSupplier));
                 }
