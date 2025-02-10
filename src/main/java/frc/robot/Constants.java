@@ -539,7 +539,7 @@ public final class Constants {
         /**
          * TODO: set list of enabled camera
          */
-        public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA);
+        public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, LIMELIGHT2_CAMERA);
         // public static final List<Camera> CAMERAS = Arrays.asList(FRONT_CAMERA,
         // REAR_CAMERA);
 

@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class AlgaeintakeModuleIOSparkMax implements AlgaeIntakeModuleIO {
     private final int TOP_MOTOR_ID = 3;
     private final int BOTTOM_MOTOR_ID = 62;
-    private final int LINEBREAK_CHANNEL = 8;
+    private final int LINEBREAK_CHANNEL = 9;
 
     private final SparkBaseConfig TOP_MOTOR_CONFIG = new SparkMaxConfig()
             .idleMode(IdleMode.kBrake)
@@ -31,12 +31,12 @@ public class AlgaeintakeModuleIOSparkMax implements AlgaeIntakeModuleIO {
             .secondaryCurrentLimit(40)
             .inverted(true);
 
-    private final double MOTOR_INTAKE_SPEED = 0.8;
-    private final double MOTOR_EJECT_SPEED = -0.6;
+    private final double MOTOR_INTAKE_SPEED = -0.5;
+    private final double MOTOR_EJECT_SPEED = 0.5;
 
     private final SparkMax topMotor;
     private final SparkMax bottomMotor;
-    private final DigitalInput limitSwitch;
+    private final DigitalInput lineBreak;
 
     private double appliedVoltage = 0.0;
 
@@ -50,7 +50,7 @@ public class AlgaeintakeModuleIOSparkMax implements AlgaeIntakeModuleIO {
         this.topMotor.configure(TOP_MOTOR_CONFIG, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         this.bottomMotor.configure(BOTTOM_MOTOR_CONFIG, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        this.limitSwitch = new DigitalInput(LINEBREAK_CHANNEL);
+        this.lineBreak = new DigitalInput(LINEBREAK_CHANNEL);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class AlgaeintakeModuleIOSparkMax implements AlgaeIntakeModuleIO {
 
     @Override
     public boolean hasAlgae() {
-        return this.limitSwitch.get();
+        return this.lineBreak.get();
     }
 
     @Override

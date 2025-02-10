@@ -41,7 +41,7 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
     /* Variables */
     private final PIDController pidController;
     private boolean closedLoop = false;
-    private double feedforward = 0.0;
+    private double feedforward = 0.145;
 
     private double appliedVoltage = 0.0;
 

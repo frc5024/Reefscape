@@ -16,11 +16,10 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public class CoralIntakeModuleIOSparkFlex implements CoralIntakeModuleIO {
     /* Constants */
-    private final int TOP_MOTOR_CHANNEL = 62;
-    private final int BOTTOM_MOTOR_CHANNEL = 61;
+    private final int TOP_MOTOR_CHANNEL = 51;
+    private final int BOTTOM_MOTOR_CHANNEL = 52;
 
-    private final int TOP_LINEBREAK_CHANNEL = 8;
-    private final int BOTTOM_LINEBREAK_CHANNEL = 9;
+    private final int LINEBREAK_CHANNEL = 0;
 
     private final int SERVO_CHANNEL = 0;
 
@@ -35,13 +34,13 @@ public class CoralIntakeModuleIOSparkFlex implements CoralIntakeModuleIO {
             .secondaryCurrentLimit(40)
             .inverted(true);
 
-    private final double MOTOR_INTAKE_SPEED = 0.8;
-    private final double MOTOR_EJECT_SPEED = -0.6;
+    private final double MOTOR_INTAKE_SPEED = -0.1;
+    private final double MOTOR_EJECT_SPEED = 0.1;
 
     /* Hardware */
     private final SparkFlex topMotor;
     private final SparkFlex bottomMotor;
-    private final DigitalInput topLimitSwitch;
+    private final DigitalInput lineBreak;
 
     /* Variables */
     private double appliedVoltage = 0.0;
@@ -56,7 +55,7 @@ public class CoralIntakeModuleIOSparkFlex implements CoralIntakeModuleIO {
         this.topMotor.configure(TOP_MOTOR_CONFIG, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         this.bottomMotor.configure(BOTTOM_MOTOR_CONFIG, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        this.topLimitSwitch = new DigitalInput(TOP_LINEBREAK_CHANNEL);
+        this.lineBreak = new DigitalInput(LINEBREAK_CHANNEL);
     }
 
     @Override
@@ -80,7 +79,7 @@ public class CoralIntakeModuleIOSparkFlex implements CoralIntakeModuleIO {
 
     @Override
     public boolean hasCoral() {
-        return this.topLimitSwitch.get();
+        return this.lineBreak.get();
     }
 
     @Override
