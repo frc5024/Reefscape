@@ -21,8 +21,8 @@ public final class Constants {
 
         //constants for intake and channels 
         public static final class coralConstants {
-                public static final int coralMotorChannel = 51;
-                public static final int coralMotorReversedChannel = 52;
+                public static final int coralMotorChannel = 52;
+                public static final int coralMotorReversedChannel = 51;
                 public static final int linebreakChannel = 0;
                 public static final int servoChannel = 0;
 

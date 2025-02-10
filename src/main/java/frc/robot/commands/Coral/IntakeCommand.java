@@ -20,17 +20,27 @@ public class IntakeCommand extends Command {
     //initialize, when command starts, if line is not broken, set state to IDLE
     @Override
     public void initialize() {
-        if(!coralSubsystem.isLineBroken()) {
-            coralSubsystem.set(Constants.coralConstants.intakeSpeed);
-        }else{
-            cancel();
-        }
+        
+        // if(!coralSubsystem.isLineBroken()) {
+        //     System.out.println("THELINE IS BROKEN THE LINE IS BROKENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
+        //     coralSubsystem.set(Constants.coralConstants.intakeSpeed);
+        // }else{
+        //     cancel();
+        // }
 
     }
     //execute, if button is pressed, startIntake()
     @Override
     public void execute() {
         
+        if(coralSubsystem.isLineBroken()) {
+            coralSubsystem.setIdle();
+            cancel();
+        } else {
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            coralSubsystem.set(Constants.coralConstants.intakeSpeed);
+        }
+        //System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
     } 
     
     //end, when command ends, set Idle
@@ -44,6 +54,7 @@ public class IntakeCommand extends Command {
     @Override
     public boolean isFinished() {
         if(coralSubsystem.isLineBroken()){
+            System.out.println("THELINE IS BROKEN THE LINE IS BROKENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
             return true;
         }
         return false;

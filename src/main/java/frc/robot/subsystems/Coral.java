@@ -26,9 +26,9 @@ public class Coral extends SubsystemBase{
     private SparkFlex coralMotor;
     private SparkFlex coralMotorReversed;
     
-    private final SparkBaseConfig coralMotorReversedConfig = new SparkFlexConfig()
-        .inverted(true)
-        .follow(coralConstants.coralMotorChannel);
+    // private final SparkBaseConfig coralMotorReversedConfig = new SparkFlexConfig()
+    //     .inverted(true)
+    //     .follow(coralConstants.coralMotorChannel);
 
     private static DigitalInput linebreak;
 
@@ -58,14 +58,10 @@ public class Coral extends SubsystemBase{
         tab.addDouble("motor speed", () -> coralMotor.get());
         
         coralMotorReversed = new SparkFlex(coralMotorReversedChannel, SparkFlex.MotorType.kBrushless);
-        
         tab.addDouble("reversed motor speed", () -> coralMotorReversed.get());
 
-        this.coralMotorReversed.configure(coralMotorReversedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
+        //this.coralMotorReversed.configure(coralMotorReversedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
-    
-
     // method for intaking coral, takes in a boolean to determine if the coral should intake
 
     @Override
@@ -91,6 +87,7 @@ public class Coral extends SubsystemBase{
 
     public void set(double speed) {
         coralMotor.set(speed);
+        //coralMotorReversed.set(-speed);
     }
 
     public Command plopCommand(){

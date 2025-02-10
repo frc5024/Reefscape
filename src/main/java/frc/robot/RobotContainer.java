@@ -9,6 +9,8 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Coral;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.testCommand;
+import frc.robot.commands.Coral.IntakeCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -19,7 +21,7 @@ public class RobotContainer {
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
 
-  private final Swerve s_Swerve = Swerve.getInstance();
+  //private final Swerve s_Swerve = Swerve.getInstance();
 
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -29,15 +31,15 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    s_Swerve.setDefaultCommand(
-                new TeleopSwerve(
-                        s_Swerve,
-                        () -> -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
-                        () -> false // true = robotcentric
+    // s_Swerve.setDefaultCommand(
+    //             new TeleopSwerve(
+    //                     s_Swerve,
+    //                     () -> -driver.getRawAxis(translationAxis),
+    //                     () -> -driver.getRawAxis(strafeAxis),
+    //                     () -> -driver.getRawAxis(rotationAxis),
+    //                     () -> false // true = robotcentric
 
-                ));
+    //             ));
 
 
     configureBindings();
@@ -47,12 +49,13 @@ public class RobotContainer {
   private void configureBindings() {
 
     driver.a().onTrue(coralSubsystem.intakeCommand());
+    driver.x().whileTrue(new testCommand(coralSubsystem));
     driver.b().onTrue(coralSubsystem.outtakeCommand());
     driver.y().onTrue(coralSubsystem.cancelIntakeCommand());
-    driver.x().onTrue(coralSubsystem.plopCommand());
+    //driver.x().onTrue(coralSubsystem.plopCommand());
     driver.rightBumper().onTrue(coralSubsystem.lowerRampCommand());
 
-    driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+    //driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
   }
 
   public Command getAutonomousCommand() {

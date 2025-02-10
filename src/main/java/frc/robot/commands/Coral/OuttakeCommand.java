@@ -19,17 +19,18 @@ public class OuttakeCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        if(coralSubsystem.isLineBroken()) {
-            coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
-        }else {
-            cancel();
-        }
+        // if(coralSubsystem.isLineBroken()) {
+        //     System.out.println("THELINE IS BROKEN THE LINE IS BROKENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
+        //     coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
+        // }else {
+        //     cancel();
+        // }
     }
 
     //execute, startOuttake() once button is pressed
     @Override
     public void execute() {
-
+        coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
     } 
         
     //end, when command ends, set activeOuttake to false and set state to IDLE
