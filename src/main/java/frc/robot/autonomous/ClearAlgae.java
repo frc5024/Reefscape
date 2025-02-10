@@ -142,7 +142,7 @@ public class ClearAlgae {
                 new ParallelCommandGroup(
                         AutoBuilder.followPath(pathGroup.get(6)),
                         new InstantCommand(() -> {
-                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_2);
+                            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_1);
                         }),
                         new SequentialCommandGroup(
                                 new WaitCommand(1),

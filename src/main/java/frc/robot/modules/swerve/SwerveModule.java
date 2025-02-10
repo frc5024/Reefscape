@@ -67,12 +67,7 @@ public class SwerveModule {
         state.cosineScale(inputs.turnPosition);
 
         // Apply setpoints
-        double velocityRadPerSec = state.speedMetersPerSecond / (Swerve.chosenModule.wheelDiameter / 2);
-        Logger.recordOutput("John/sMPS", state.speedMetersPerSecond);
-        Logger.recordOutput("John/wD", Swerve.chosenModule.wheelDiameter / 2);
-        Logger.recordOutput("John/vRadPS", velocityRadPerSec);
-
-        swerveModuleIO.runDriveVelocity(velocityRadPerSec);
+        swerveModuleIO.runDriveVelocity(state.speedMetersPerSecond / (Swerve.chosenModule.wheelDiameter / 2));
         swerveModuleIO.runTurnPosition(state.angle);
     }
 

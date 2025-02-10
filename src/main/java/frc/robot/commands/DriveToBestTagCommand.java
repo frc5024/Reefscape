@@ -14,12 +14,10 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.TeleopConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.controls.GameData.CoralPole;
 import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -29,7 +27,6 @@ public class DriveToBestTagCommand extends Command {
     private final SwerveDriveSubsystem swerveDriveSubsystem;
     private final VisionSubsystem visionSubsystem;
     private final Supplier<Pose2d> poseProvider;
-    private final Supplier<CoralPole> poleSupplier;
     private final Supplier<GamePieceMode> gamePieceModeSupplier;
 
     private final ProfiledPIDController xController;
@@ -40,12 +37,10 @@ public class DriveToBestTagCommand extends Command {
      * Drive to best tag plus any pole offset
      */
     public DriveToBestTagCommand(SwerveDriveSubsystem swerveDriveSubsystem, VisionSubsystem visionSubsystem,
-            Supplier<Pose2d> poseProvider, Supplier<CoralPole> poleSupplier,
-            Supplier<GamePieceMode> gamePieceModeSupplier) {
+            Supplier<Pose2d> poseProvider, Supplier<GamePieceMode> gamePieceModeSupplier) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.visionSubsystem = visionSubsystem;
         this.poseProvider = poseProvider;
-        this.poleSupplier = poleSupplier;
         this.gamePieceModeSupplier = gamePieceModeSupplier;
 
         double[] driveXPIDs = PIDConstants.getDriveXPIDs();
@@ -142,16 +137,7 @@ public class DriveToBestTagCommand extends Command {
             return null;
         }
 
-        CoralPole poleId = this.poleSupplier.get();
-        GamePieceMode gamePieceMode = this.gamePieceModeSupplier.get();
-
-        // Set pole offset if Coral
-        double offset = 0.0;
-        if (gamePieceMode == GamePieceMode.CORAL) {
-            offset = poleId == CoralPole.LEFT ? FieldConstants.REEF_POLE_OFFSET : -FieldConstants.REEF_POLE_OFFSET;
-        }
-
-        Transform3d ROBOT_TO_TAG = new Transform3d(new Translation3d(RobotConstants.LENGTH_METERS / 2, offset, 0.0),
+        Transform3d ROBOT_TO_TAG = new Transform3d(new Translation3d(RobotConstants.LENGTH_METERS / 2, 0.0, 0.0),
                 new Rotation3d(0.0, 0.0, 0.0));
 
         return targetPose.transformBy(ROBOT_TO_TAG).toPose2d();

@@ -13,7 +13,9 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PIDConstants;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.TeleopConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.controls.GameData.GamePieceMode;
@@ -27,7 +29,7 @@ public class DriveFromBestTagCommand extends Command {
     private final SwerveDriveSubsystem swerveDrive;
     private final VisionSubsystem visionSubsystem;
     private final Supplier<Pose2d> poseProvider;
-    private final Transform3d transformation;
+    private final boolean isLeftPole;
     private final Supplier<GamePieceMode> gamePieceModeSupplier;
 
     private final ProfiledPIDController xController;
@@ -38,12 +40,11 @@ public class DriveFromBestTagCommand extends Command {
      * Drive to a provided translation/rotation away from vision system best tag
      */
     public DriveFromBestTagCommand(SwerveDriveSubsystem swerveDrive, VisionSubsystem visionSubsystem,
-            Supplier<Pose2d> poseProvider, Translation3d translation, Rotation3d rotation,
-            Supplier<GamePieceMode> gamePieceModeSupplier) {
+            Supplier<Pose2d> poseProvider, boolean isLeftPole, Supplier<GamePieceMode> gamePieceModeSupplier) {
         this.swerveDrive = swerveDrive;
         this.visionSubsystem = visionSubsystem;
         this.poseProvider = poseProvider;
-        this.transformation = new Transform3d(translation, rotation);
+        this.isLeftPole = isLeftPole;
         this.gamePieceModeSupplier = gamePieceModeSupplier;
 
         double[] driveXPIDs = PIDConstants.getDriveXPIDs();
@@ -96,20 +97,22 @@ public class DriveFromBestTagCommand extends Command {
      * 
      */
     private Pose2d getBestTagPose(Pose3d currentPose) {
-        String cameraName = this.gamePieceModeSupplier.get() == GamePieceMode.ALGAE
+        boolean isAlgaeMode = this.gamePieceModeSupplier.get() == GamePieceMode.ALGAE;
+
+        String cameraName = isAlgaeMode
                 ? VisionConstants.REAR_CAMERA.getName()
                 : VisionConstants.FRONT_CAMERA.getName();
         Pose3d targetPose = this.visionSubsystem.getBestTargetPose(cameraName);
 
-        // if (targetPose == null) {
-        // return null;
-        // }
-
-        // Pose3d cameraPose =
-        // currentPose.transformBy(this.visionSubsystem.getRobotToCamera(cameraName));
-
-        // Transform3d camToTarget = new Transform3d(cameraPose, targetPose);
-        // Pose3d targetPose = cameraPose.transformBy(camToTarget);
+        double yOffset = 0.0;
+        double yawOffset = 0.0;
+        if (!isAlgaeMode) {
+            yOffset = isLeftPole ? FieldConstants.REEF_POLE_OFFSET : -FieldConstants.REEF_POLE_OFFSET;
+            yawOffset = Units.degreesToRadians(180.0);
+        }
+        Transform3d transformation = new Transform3d(
+                new Translation3d(RobotConstants.LENGTH_METERS / 2, yOffset, 0.0),
+                new Rotation3d(0.0, 0.0, yawOffset));
 
         return targetPose.transformBy(transformation).toPose2d();
     }

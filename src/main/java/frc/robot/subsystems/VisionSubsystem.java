@@ -86,7 +86,7 @@ public class VisionSubsystem extends SubsystemBase {
             VisionIOInputsAutoLogged inputs = this.inputs.get(name);
 
             visionModuleIO.updateInputs(inputs);
-            Logger.processInputs("Subsystems/Vision/Camera " + name, inputs);
+            Logger.processInputs("Vision/Camera " + name, inputs);
         }
 
         // Initialize logging values

@@ -122,7 +122,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         }
 
         this.gyroIO.updateInputs(this.gyroInputs);
-        Logger.processInputs("Subsystems/SwerveDrive/Gyro", this.gyroInputs);
+        Logger.processInputs("SwerveDrive/Gyro", this.gyroInputs);
         odometryLock.unlock();
 
         for (SwerveModule swerveModule : this.swerveModules) {
@@ -205,7 +205,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         }
 
         // Log optimized setpoints (runSetpoint mutates each state)
-        Logger.recordOutput("Subsystems/SwerveDriveSwerveStates/SetpointsOptimized", setpointStates);
+        Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/SetpointsOptimized", setpointStates);
     }
 
     /**

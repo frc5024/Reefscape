@@ -50,12 +50,12 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     public SwerveModuleIOSim(
             SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants) {
         // Create drive and turn sim models
-        driveMotorSim = new DCMotorSim(
+        this.driveMotorSim = new DCMotorSim(
                 LinearSystemId.createDCMotorSystem(DRIVE_GEARBOX, constants.DriveInertia,
                         constants.DriveMotorGearRatio),
                 DRIVE_GEARBOX);
 
-        turnMotorSim = new DCMotorSim(
+        this.turnMotorSim = new DCMotorSim(
                 LinearSystemId.createDCMotorSystem(TURN_GEARBOX, constants.SteerInertia, constants.SteerMotorGearRatio),
                 TURN_GEARBOX);
 
@@ -66,22 +66,23 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     @Override
     public void updateInputs(SwerveModuleIOInputs inputs) {
         // Run closed-loop control
-        if (driveClosedLoop) {
-            driveAppliedVolts = driveFFVolts + driveController.calculate(driveMotorSim.getAngularVelocityRadPerSec());
+        if (this.driveClosedLoop) {
+            this.driveAppliedVolts = driveFFVolts
+                    + driveController.calculate(this.driveMotorSim.getAngularVelocityRadPerSec());
         } else {
-            driveController.reset();
+            this.driveController.reset();
         }
-        if (turnClosedLoop) {
-            turnAppliedVolts = turnController.calculate(turnMotorSim.getAngularPositionRad());
+        if (this.turnClosedLoop) {
+            this.turnAppliedVolts = turnController.calculate(turnMotorSim.getAngularPositionRad());
         } else {
-            turnController.reset();
+            this.turnController.reset();
         }
 
         // Update simulation state
-        driveMotorSim.setInputVoltage(MathUtil.clamp(driveAppliedVolts, -12.0, 12.0));
-        turnMotorSim.setInputVoltage(MathUtil.clamp(turnAppliedVolts, -12.0, 12.0));
-        driveMotorSim.update(0.02);
-        turnMotorSim.update(0.02);
+        this.driveMotorSim.setInputVoltage(MathUtil.clamp(driveAppliedVolts, -12.0, 12.0));
+        this.turnMotorSim.setInputVoltage(MathUtil.clamp(turnAppliedVolts, -12.0, 12.0));
+        this.driveMotorSim.update(0.02);
+        this.turnMotorSim.update(0.02);
 
         // Update drive inputs
         inputs.driveConnected = true;
@@ -108,21 +109,21 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
 
     @Override
     public void runDriveOpenLoop(double output) {
-        driveClosedLoop = false;
-        driveAppliedVolts = output;
+        this.driveClosedLoop = false;
+        this.driveAppliedVolts = output;
     }
 
     @Override
     public void runTurnOpenLoop(double output) {
-        turnClosedLoop = false;
-        turnAppliedVolts = output;
+        this.turnClosedLoop = false;
+        this.turnAppliedVolts = output;
     }
 
     @Override
     public void runDriveVelocity(double velocityRadPerSec) {
-        driveClosedLoop = true;
-        driveFFVolts = DRIVE_KS * Math.signum(velocityRadPerSec) + DRIVE_KV * velocityRadPerSec;
-        driveController.setSetpoint(velocityRadPerSec);
+        this.driveClosedLoop = true;
+        this.driveFFVolts = DRIVE_KS * Math.signum(velocityRadPerSec) + DRIVE_KV * velocityRadPerSec;
+        this.driveController.setSetpoint(velocityRadPerSec);
     }
 
     @Override

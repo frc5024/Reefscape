@@ -255,11 +255,11 @@ public final class Constants {
         public static final double SWERVE_DRIVE_OMEGA_KD = 0.0;
 
         // PID constants for simulated autonomous/pathplanner mode
-        public static final double SIM_SWERVE_DRIVE_X_KP = 1.0;
+        public static final double SIM_SWERVE_DRIVE_X_KP = 2.0;
         public static final double SIM_SWERVE_DRIVE_X_KI = 0.0;
         public static final double SIM_SWERVE_DRIVE_X_KD = 0.0;
 
-        public static final double SIM_SWERVE_DRIVE_Y_KP = 1.0;
+        public static final double SIM_SWERVE_DRIVE_Y_KP = 2.0;
         public static final double SIM_SWERVE_DRIVE_Y_KI = 0.0;
         public static final double SIM_SWERVE_DRIVE_Y_KD = 0.0;
 
@@ -539,9 +539,9 @@ public final class Constants {
         /**
          * TODO: set list of enabled camera
          */
-        public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, LIMELIGHT2_CAMERA);
-        // public static final List<Camera> CAMERAS = Arrays.asList(FRONT_CAMERA,
-        // REAR_CAMERA);
+        // public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA,
+        // LIMELIGHT2_CAMERA);
+        public static final List<Camera> CAMERAS = Arrays.asList(FRONT_CAMERA, REAR_CAMERA);
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;

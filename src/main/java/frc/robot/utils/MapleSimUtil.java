@@ -81,9 +81,10 @@ public class MapleSimUtil {
                         MetersPerSecond.of(2), // initial velocity, in m/s
                         Angle.ofRelativeUnits(0, Units.Degrees)) // shooter angle
                         .withProjectileTrajectoryDisplayCallBack(
-                                (poses) -> Logger.recordOutput("successfulShotsTrajectory",
+                                (poses) -> Logger.recordOutput("GameData/Algae/SuccessfulShotsTrajectory",
                                         poses.toArray(Pose3d[]::new)),
-                                (poses) -> Logger.recordOutput("missedShotsTrajectory", poses.toArray(Pose3d[]::new))));
+                                (poses) -> Logger.recordOutput("GameData/Algae/MissedShotsTrajectory",
+                                        poses.toArray(Pose3d[]::new))));
     }
 
     /**
@@ -103,8 +104,9 @@ public class MapleSimUtil {
                         MetersPerSecond.of(2), // initial velocity, in m/s
                         Angle.ofRelativeUnits(0, Units.Degrees)) // shooter angle
                         .withProjectileTrajectoryDisplayCallBack(
-                                (poses) -> Logger.recordOutput("successfulShotsTrajectory",
+                                (poses) -> Logger.recordOutput("GameData/Coral/SuccessfulShotsTrajectory",
                                         poses.toArray(Pose3d[]::new)),
-                                (poses) -> Logger.recordOutput("missedShotsTrajectory", poses.toArray(Pose3d[]::new))));
+                                (poses) -> Logger.recordOutput("GameData/Coral/MissedShotsTrajectory",
+                                        poses.toArray(Pose3d[]::new))));
     }
 }

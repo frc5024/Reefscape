@@ -7,9 +7,9 @@ import static edu.wpi.first.wpilibj2.command.Commands.startEnd;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.DriveFromBestTagCommand;
 import frc.robot.commands.DriveNearestCoralStationCommand;
 import frc.robot.commands.DriveProcessorCommand;
-import frc.robot.commands.DriveToBestTagCommand;
 import frc.robot.commands.DriveToReefStationCommand;
 import frc.robot.controls.GameData.CoralPole;
 import frc.robot.controls.GameData.GamePieceMode;
@@ -114,26 +114,26 @@ public class ButtonBindings {
                         GameData.getInstance().getCoralPole(),
                         GameData.getInstance().getGamePieceMode()));
 
-        // Drive to right pole of best apriltag
-        commandXboxController.rightBumper()
-                .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem,
-                        this.visionSubsystem,
+        // Drive to selected reef station
+        commandXboxController.leftTrigger()
+                .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem,
                         this.swerveDriveSubsystem::getPose,
+                        GameData.getInstance()::getReefStationIndex,
                         GameData.getInstance().getCoralPole(),
                         GameData.getInstance().getGamePieceMode()));
 
-        // commandXboxController.rightBumper()
-        // .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem,
-        // this.visionSubsystem,
-        // this.swerveDriveSubsystem::getPose,
-        // new Translation3d(0.76, -FieldConstants.POLE_STRAFE_DISTANCE, 0.0), false));
+        // Drive to right pole of best apriltag
+        commandXboxController.rightBumper()
+                .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                        this.swerveDriveSubsystem::getPose,
+                        false,
+                        GameData.getInstance().getGamePieceMode()));
 
         // Drive to left pole of best apriltag
         commandXboxController.leftBumper()
-                .whileTrue(new DriveToBestTagCommand(this.swerveDriveSubsystem,
-                        this.visionSubsystem,
+                .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
                         this.swerveDriveSubsystem::getPose,
-                        GameData.getInstance().getCoralPole(),
+                        true,
                         GameData.getInstance().getGamePieceMode()));
 
         // Set reef position
