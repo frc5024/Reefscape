@@ -2,8 +2,10 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.CoralTestCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.CoralTest;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.XboxController;
@@ -14,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final CoralTest m_coralTest = new CoralTest();
 
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -27,24 +30,22 @@ public class RobotContainer {
   public RobotContainer() {
 
     s_Swerve.setDefaultCommand(
-                new TeleopSwerve(
-                        s_Swerve,
-                        () -> -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
-                        () -> false // true = robotcentric
+        new TeleopSwerve(
+            s_Swerve,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            () -> -driver.getRawAxis(rotationAxis),
+            () -> false // true = robotcentric
 
-                ));
-
+        ));
 
     configureBindings();
 
   }
 
   private void configureBindings() {
-
-
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+    driver.x().whileTrue(new CoralTestCommand(m_coralTest));
   }
 
   public Command getAutonomousCommand() {
