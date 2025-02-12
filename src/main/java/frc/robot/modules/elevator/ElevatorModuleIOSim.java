@@ -24,7 +24,7 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
     private double inputTorqueCurrent = 0.0;
     private double appliedVolts = 0.0;
 
-    private final PIDController controller;
+    private final PIDController pidController;
     private boolean closedLoop = false;
     private double feedforward = 0.0;
 
@@ -35,19 +35,19 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
         this.simState = VecBuilder.fill(0.0, 0.0);
 
         double[] elevatorPIDs = PIDConstants.getElevatorPIDs();
-        this.controller = new PIDController(elevatorPIDs[0], elevatorPIDs[1], elevatorPIDs[2]);
+        this.pidController = new PIDController(elevatorPIDs[0], elevatorPIDs[1], elevatorPIDs[2]);
     }
 
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
         if (!closedLoop) {
-            this.controller.reset();
+            this.pidController.reset();
             update(RobotConstants.LOOP_PERIOD_SECS);
         } else {
             // Run control at 1khz
             for (int i = 0; i < RobotConstants.LOOP_PERIOD_SECS / (1.0 / 1000.0); i++) {
                 setInputTorqueCurrent(
-                        this.controller.calculate(simState.get(0) / ElevatorConstants.drumRadiusMeters)
+                        this.pidController.calculate(simState.get(0) / ElevatorConstants.drumRadiusMeters)
                                 + this.feedforward);
                 update(1.0 / 1000.0);
             }
@@ -69,7 +69,7 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
     @Override
     public void runPosition(double positionRad, double feedforward) {
         closedLoop = true;
-        this.controller.setSetpoint(positionRad);
+        this.pidController.setSetpoint(positionRad);
         this.feedforward = feedforward;
     }
 
@@ -131,5 +131,10 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
             this.simState.set(1, 0, 0.0);
             this.simState.set(0, 0, ElevatorConstants.HEIGHT_IN_METERS);
         }
+    }
+
+    @Override
+    public void updatePID(double kP, double kI, double kD) {
+        this.pidController.setPID(kP, kI, kD);
     }
 }

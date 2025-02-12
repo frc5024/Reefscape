@@ -40,4 +40,7 @@ public interface ElevatorModuleIO {
 
     default void setBrakeMode(boolean enabled) {
     }
+
+    default void updatePID(double kP, double kI, double kD) {
+    }
 }

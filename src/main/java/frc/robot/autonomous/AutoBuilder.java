@@ -6,10 +6,12 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +34,10 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
     private final AlgaeIntakeSubsystem algaeIntakeSubsystem;
     private final CoralIntakeSubsystem coralIntakeSubsystem;
     private final ElevatorSubsystem elevatorSubsystem;
+
+    /* Constraints */
+    public static final PathConstraints CONSTRAINTS = new PathConstraints(
+            4.5, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
     /* Autonomous Chooser */
     private LoggedDashboardChooser<Command> autonomousChooser;
@@ -97,5 +103,17 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
      */
     public LoggedDashboardChooser<Command> getAutonomousChooser() {
         return this.autonomousChooser;
+    }
+
+    /**
+     * 
+     */
+    public static Command getPathFindingCommand(Pose2d targetPose) {
+        Command pathFindingCommand = AutoBuilder.pathfindToPose(
+                targetPose,
+                CONSTRAINTS,
+                0.0);
+
+        return pathFindingCommand;
     }
 }

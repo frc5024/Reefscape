@@ -24,7 +24,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.utils.AllianceFlipUtil;
 
 /**
- *
+ * Drives to reef station based on game piece mode settings
  */
 public class DriveToReefStationCommand extends Command {
     private final SwerveDriveSubsystem swerveDriveSubsystem;

@@ -256,4 +256,11 @@ public class ElevatorSubsystem extends SubsystemBase {
                 ElevatorConstants.A.get(1, 1),
                 ElevatorConstants.B.get(1));
     }
+
+    /**
+     * Used in tuning mode
+     */
+    public void updatePID(double kP, double kI, double kD) {
+        this.elevatorModule.updatePID(kP, kI, kD);
+    }
 }

@@ -36,7 +36,7 @@ public class SwerveDriveCommands {
     /**
      * 
      */
-    private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
+    public static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
         // Apply deadband
         double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DEADBAND);
         Rotation2d linearDirection = new Rotation2d(Math.atan2(y, x));

@@ -13,6 +13,7 @@ import frc.robot.Constants.RobotConstants;
 import frc.robot.Robot;
 import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.SwerveDriveCommands;
+import frc.robot.commands.TuningCommand;
 import frc.robot.controls.ButtonBindings;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
@@ -31,9 +32,6 @@ abstract public class RobotContainer {
     protected ElevatorSubsystem elevatorSubsystem;
     protected SwerveDriveSubsystem swerveDriveSubsystem;
     protected VisionSubsystem visionSubsystem;
-
-    /* Controllers */
-    private CommandXboxController driverController;
 
     /* Autonomous */
     AutoBuilder autoBuilder;
@@ -66,15 +64,24 @@ abstract public class RobotContainer {
     protected void configureButtonBindings() {
         ButtonBindings buttonBindings = new ButtonBindings(this.swerveDriveSubsystem, this.algaeIntakeSubsystem,
                 this.coralIntakeSubsystem, this.elevatorSubsystem, this.visionSubsystem);
-        this.driverController = buttonBindings.getDriverController();
+        CommandXboxController commandXboxController = RobotConstants.TUNING_MODE
+                ? buttonBindings.getButtonTestController()
+                : buttonBindings.getDriverController();
+
+        Command joystickDrive = SwerveDriveCommands.joystickDrive(swerveDriveSubsystem,
+                () -> -commandXboxController.getLeftY(),
+                () -> -commandXboxController.getLeftX(),
+                () -> -commandXboxController.getRightX());
+
+        Command tuningCommand = new TuningCommand(swerveDriveSubsystem, algaeIntakeSubsystem, coralIntakeSubsystem,
+                elevatorSubsystem,
+                () -> -commandXboxController.getLeftY(),
+                () -> -commandXboxController.getLeftX(),
+                () -> -commandXboxController.getRightX(),
+                commandXboxController);
 
         // Default command, normal field-relative drive
-        swerveDriveSubsystem.setDefaultCommand(
-                SwerveDriveCommands.joystickDrive(
-                        swerveDriveSubsystem,
-                        () -> -driverController.getLeftY(),
-                        () -> -driverController.getLeftX(),
-                        () -> -driverController.getRightX()));
+        swerveDriveSubsystem.setDefaultCommand(RobotConstants.TUNING_MODE ? tuningCommand : joystickDrive);
     }
 
     /**

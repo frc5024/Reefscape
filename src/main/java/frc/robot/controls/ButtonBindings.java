@@ -56,7 +56,8 @@ public class ButtonBindings {
         this.operatorController = setOperatorBindingsController();
 
         // Set this to whichever button bindings you want to test
-        this.buttonTestController = setLEDTestBindingsController();
+        // this.buttonTestController = setLEDTestBindingsController();
+        this.buttonTestController = setTuningBindings();
     }
 
     /**
@@ -66,11 +67,11 @@ public class ButtonBindings {
         CommandXboxController commandXboxController = new CommandXboxController(DRIVER_PORT);
 
         // Toggle game piece modes
-        commandXboxController.back()
+        commandXboxController.start()
                 .whileTrue(runOnce(() -> GameData.getInstance().toggleGamePieceMode()));
 
         // switch from robot relative to field relative
-        commandXboxController.start()
+        commandXboxController.back()
                 .whileTrue(either(
                         runOnce(this.swerveDriveSubsystem::disableFieldRelative,
                                 this.swerveDriveSubsystem),
@@ -209,6 +210,15 @@ public class ButtonBindings {
         commandXboxController.y()
                 .whileTrue(startEnd(() -> LEDSubsystem.getInstance().solidYellow(),
                         () -> LEDSubsystem.getInstance().solidBlack()));
+
+        return commandXboxController;
+    }
+
+    /**
+     * 
+     */
+    private CommandXboxController setTuningBindings() {
+        CommandXboxController commandXboxController = new CommandXboxController(TEST_PORT);
 
         return commandXboxController;
     }

@@ -101,4 +101,9 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
         this.appliedVoltage = 0.0;
         this.leftMotor.setVoltage(this.appliedVoltage);
     }
+
+    @Override
+    public void updatePID(double kP, double kI, double kD) {
+        this.pidController.setPID(kP, kI, kD);
+    }
 }
