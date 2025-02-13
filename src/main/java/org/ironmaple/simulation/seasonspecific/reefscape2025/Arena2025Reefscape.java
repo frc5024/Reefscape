@@ -96,10 +96,13 @@ public class Arena2025Reefscape extends SimulatedArena {
         for (Translation2d position : redPositions)
             super.addGamePiece(new ReefscapeCoralAlgaeStack(position));
 
-        for (Pose3d pose : AlgaeReefPoses.getPoses()) {
+        for (Pose3d pose : GamePiecePoses.getAlgaeReefPoses()) {
             super.addGamePiece(new ReefscapeAlgaeOnField(pose));
-            // super.addGamePiece(new ReefscapeAlgaeOnField(pose.toPose2d()));
         }
+
+        // for (Pose3d pose : GamePiecePoses.getCoralStationPoses()) {
+        // super.addGamePiece(new ReefscapeCoralOnField(pose));
+        // }
     }
 
     @Override

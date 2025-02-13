@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants.MapleSimConstants;
 import frc.robot.modules.elevator.ElevatorVisualizer;
 
@@ -53,9 +54,8 @@ public class MapleSimUtil {
      */
     public static IntakeSimulation getCoralIntakeSimulation() {
         if (coralIntakeSimulation == null) {
-            coralIntakeSimulation = IntakeSimulation.OverTheBumperIntake("Coral", getSwerveDriveSimulation(),
-                    Meters.of(0.5),
-                    Meters.of(0.4), IntakeSimulation.IntakeSide.FRONT, 1);
+            coralIntakeSimulation = IntakeSimulation.InTheFrameIntake("Coral", getSwerveDriveSimulation(),
+                    Meters.of(1.0), IntakeSimulation.IntakeSide.FRONT, 1);
         }
 
         return coralIntakeSimulation;
@@ -84,7 +84,7 @@ public class MapleSimUtil {
     /**
      * 
      */
-    public static void ejectCoral(Pose3d coralPose) {
+    public static void ejectCoralFromRobot(Pose3d coralPose) {
         Transform3d coralTransform = new Transform3d(
                 new Pose3d(getSwerveDriveSimulation().getSimulatedDriveTrainPose()), coralPose);
 
@@ -99,5 +99,20 @@ public class MapleSimUtil {
                         Meters.of(coralTransform.getZ()),
                         MetersPerSecond.of(2),
                         Degrees.of(angle)));
+    }
+
+    /**
+     * 
+     */
+    public static void ejectCoralFromStation(Pose3d coralStationPose) {
+        SimulatedArena.getInstance()
+                .addGamePieceProjectile(new ReefscapeCoralOnFly(
+                        coralStationPose.toPose2d().getTranslation(),
+                        new Translation2d(),
+                        new ChassisSpeeds(),
+                        coralStationPose.toPose2d().getRotation(),
+                        Meters.of(coralStationPose.getZ()),
+                        MetersPerSecond.of(2),
+                        Degrees.of(-35.0)));
     }
 }
