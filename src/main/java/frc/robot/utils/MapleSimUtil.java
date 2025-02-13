@@ -1,5 +1,6 @@
 package frc.robot.utils;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
@@ -8,16 +9,14 @@ import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeAlgaeOnFly;
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly;
-import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Angle;
 import frc.robot.Constants.MapleSimConstants;
+import frc.robot.modules.elevator.ElevatorVisualizer;
 
 public class MapleSimUtil {
     private static SwerveDriveSimulation swerveDriveSimulation;
@@ -77,14 +76,9 @@ public class MapleSimUtil {
                         new Translation2d(algaeTransform.getX(), algaeTransform.getY()),
                         getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),
                         getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation(),
-                        Meters.of(algaeTransform.getZ()), // initial height of the ball, in meters
-                        MetersPerSecond.of(2), // initial velocity, in m/s
-                        Angle.ofRelativeUnits(0, Units.Degrees)) // shooter angle
-                        .withProjectileTrajectoryDisplayCallBack(
-                                (poses) -> Logger.recordOutput("GameData/Algae/SuccessfulShotsTrajectory",
-                                        poses.toArray(Pose3d[]::new)),
-                                (poses) -> Logger.recordOutput("GameData/Algae/MissedShotsTrajectory",
-                                        poses.toArray(Pose3d[]::new))));
+                        Meters.of(algaeTransform.getZ()),
+                        MetersPerSecond.of(2),
+                        Degrees.of(0.0)));
     }
 
     /**
@@ -94,19 +88,16 @@ public class MapleSimUtil {
         Transform3d coralTransform = new Transform3d(
                 new Pose3d(getSwerveDriveSimulation().getSimulatedDriveTrainPose()), coralPose);
 
+        double angle = ElevatorVisualizer.getOuttakeAngle("Measured");
+
         SimulatedArena.getInstance()
                 .addGamePieceProjectile(new ReefscapeCoralOnFly(
                         getSwerveDriveSimulation().getSimulatedDriveTrainPose().getTranslation(),
                         new Translation2d(coralTransform.getX(), coralTransform.getY()),
                         getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),
                         getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation(),
-                        Meters.of(coralTransform.getZ()), // initial height of the ball, in meters
-                        MetersPerSecond.of(2), // initial velocity, in m/s
-                        Angle.ofRelativeUnits(0, Units.Degrees)) // shooter angle
-                        .withProjectileTrajectoryDisplayCallBack(
-                                (poses) -> Logger.recordOutput("GameData/Coral/SuccessfulShotsTrajectory",
-                                        poses.toArray(Pose3d[]::new)),
-                                (poses) -> Logger.recordOutput("GameData/Coral/MissedShotsTrajectory",
-                                        poses.toArray(Pose3d[]::new))));
+                        Meters.of(coralTransform.getZ()),
+                        MetersPerSecond.of(2),
+                        Degrees.of(angle)));
     }
 }

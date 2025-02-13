@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.ElevatorConstants.ElevatorLevel;
 import frc.robot.utils.MapleSimUtil;
 
 /**
@@ -23,6 +24,7 @@ public class ElevatorVisualizer {
             elevatorOrigin2d.getY());
 
     private final String name;
+    ElevatorLevel elevatorLevel;
 
     private Pose3d algaeIntakePose;
     private Pose3d coralIntakePose;
@@ -51,8 +53,10 @@ public class ElevatorVisualizer {
     /**
      * 
      */
-    public void update(double positionInMeters, boolean hasAlgae, boolean hasCoral) {
+    public void update(double positionInMeters, ElevatorLevel elevatorLevel, boolean hasAlgae, boolean hasCoral) {
         this.elevatorMechanism.setLength(positionInMeters);
+        this.elevatorLevel = elevatorLevel;
+
         double[] heights = this.elevatorMechanism.getShaftLengths();
         double elevatorAngleInRadians = ElevatorConstants.ANGLE.getRadians();
 
@@ -114,5 +118,13 @@ public class ElevatorVisualizer {
     public static Pose3d getCoralPose(String name) {
         ElevatorVisualizer elevatorVisualizer = ElevatorVisualizer.getInstance(name);
         return elevatorVisualizer.coralIntakePose;
+    }
+
+    /**
+     * 
+     */
+    public static double getOuttakeAngle(String name) {
+        ElevatorVisualizer elevatorVisualizer = ElevatorVisualizer.getInstance(name);
+        return elevatorVisualizer.elevatorLevel.angleInDegrees;
     }
 }

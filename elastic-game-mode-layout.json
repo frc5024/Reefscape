@@ -1,1 +1,83 @@
-{"version":1.0,"grid_size":128,"tabs":[{"name":"Drivers Station","grid_layout":{"layouts":[],"containers":[{"title":"Auto Routine","x":0.0,"y":0.0,"width":256.0,"height":128.0,"type":"ComboBox Chooser","properties":{"topic":"/SmartDashboard/Auto Routine","period":0.06,"sort_options":false}},{"title":"StationMode","x":256.0,"y":0.0,"width":256.0,"height":128.0,"type":"Text Display","properties":{"topic":"/AdvantageKit/RealOutputs/LoggedRobot/StationMode","period":0.06,"data_type":"string","show_submit_button":false}}]}}]}
+{
+  "version": 1.0,
+  "grid_size": 128,
+  "tabs": [
+    {
+      "name": "Drivers Station",
+      "grid_layout": {
+        "layouts": [
+          {
+            "title": "GameData",
+            "x": 256.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "Game Piece Mode",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/AdvantageKit/RealOutputs/GameData/Game Piece Mode",
+                  "period": 0.06,
+                  "data_type": "string",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Pole Position",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/AdvantageKit/RealOutputs/GameData/Pole Position",
+                  "period": 0.06,
+                  "data_type": "string",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Reef Position",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/AdvantageKit/RealOutputs/GameData/Reef Position",
+                  "period": 0.06,
+                  "data_type": "string",
+                  "show_submit_button": false
+                }
+              }
+            ]
+          }
+        ],
+        "containers": [
+          {
+            "title": "Auto Routine",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto Routine",
+              "period": 0.06,
+              "sort_options": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

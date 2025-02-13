@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMetadata;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.ElevatorConstants.ElevatorLevel;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.modules.elevator.ElevatorIOInputsAutoLogged;
 import frc.robot.modules.elevator.ElevatorModuleIO;
@@ -47,6 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private Supplier<State> goal;
     private boolean atGoal;
     private State setpoint;
+    private ElevatorLevel elevatorLevel;
 
     private final Supplier<Boolean> hasAlgaSupplier;
     private final Supplier<Boolean> hasCoralSupplier;
@@ -109,7 +111,8 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToAlgae1(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.ElevatorLevels.AlgaeL1.heightInMeters);
+            this.elevatorLevel = ElevatorLevel.AlgaeL1;
+            setGoal(this.elevatorLevel.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -119,7 +122,8 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToAlgae2(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.ElevatorLevels.AlgaeL2.heightInMeters);
+            this.elevatorLevel = ElevatorLevel.AlgaeL2;
+            setGoal(this.elevatorLevel.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -129,7 +133,8 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToProcessor(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.ElevatorLevels.Processor.heightInMeters);
+            this.elevatorLevel = ElevatorLevel.Processor;
+            setGoal(this.elevatorLevel.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -139,7 +144,8 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToCoral1(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.ElevatorLevels.CoralL1.heightInMeters);
+            this.elevatorLevel = ElevatorLevel.CoralL1;
+            setGoal(this.elevatorLevel.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -149,7 +155,8 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToCoral2(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.ElevatorLevels.CoralL2.heightInMeters);
+            this.elevatorLevel = ElevatorLevel.CoralL2;
+            setGoal(this.elevatorLevel.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -159,7 +166,8 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToCoral3(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.ElevatorLevels.CoralL3.heightInMeters);
+            this.elevatorLevel = ElevatorLevel.CoralL3;
+            setGoal(this.elevatorLevel.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -169,7 +177,8 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     protected void handleMoveToCoral4(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            setGoal(ElevatorConstants.ElevatorLevels.CoralL4.heightInMeters);
+            this.elevatorLevel = ElevatorLevel.CoralL4;
+            setGoal(this.elevatorLevel.heightInMeters);
             this.stateTimer.start();
         }
     }
@@ -226,7 +235,8 @@ public class ElevatorSubsystem extends SubsystemBase {
             }
         }
 
-        this.elevatorVisualizer.update(getPositionMeters(), this.hasAlgaSupplier.get(), this.hasCoralSupplier.get());
+        this.elevatorVisualizer.update(getPositionMeters(), this.elevatorLevel, this.hasAlgaSupplier.get(),
+                this.hasCoralSupplier.get());
 
         Logger.recordOutput("Subsystems/" + this.NAME + "/AtGoal", this.atGoal);
         Logger.recordOutput("Subsystems/" + this.NAME + "/Current State", this.stateMachine.getCurrentState());
