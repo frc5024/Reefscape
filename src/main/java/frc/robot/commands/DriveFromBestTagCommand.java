@@ -58,9 +58,9 @@ public class DriveFromBestTagCommand extends Command {
         this.omegaController = new ProfiledPIDController(driveOmegaPIDs[0], driveOmegaPIDs[1], driveOmegaPIDs[2],
                 TeleopConstants.OMEGA_CONSTRAINTS);
 
-        this.xController.setTolerance(0.2);
-        this.yController.setTolerance(0.2);
-        this.omegaController.setTolerance(Units.degreesToRadians(3));
+        this.xController.setTolerance(0.01);
+        this.yController.setTolerance(0.01);
+        this.omegaController.setTolerance(Units.degreesToRadians(1));
         this.omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
         addRequirements(this.swerveDrive);
@@ -107,7 +107,7 @@ public class DriveFromBestTagCommand extends Command {
         double yOffset = 0.0;
         double yawOffset = 0.0;
         if (!isAlgaeMode) {
-            yOffset = isLeftPole ? FieldConstants.REEF_POLE_OFFSET : -FieldConstants.REEF_POLE_OFFSET;
+            yOffset = isLeftPole ? -FieldConstants.REEF_POLE_OFFSET : FieldConstants.REEF_POLE_OFFSET;
             yawOffset = Units.degreesToRadians(180.0);
         }
         Transform3d transformation = new Transform3d(

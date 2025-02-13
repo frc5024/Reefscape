@@ -67,11 +67,11 @@ public class ButtonBindings {
         CommandXboxController commandXboxController = new CommandXboxController(DRIVER_PORT);
 
         // Toggle game piece modes
-        commandXboxController.start()
+        commandXboxController.back()
                 .whileTrue(runOnce(() -> GameData.getInstance().toggleGamePieceMode()));
 
         // switch from robot relative to field relative
-        commandXboxController.back()
+        commandXboxController.start()
                 .whileTrue(either(
                         runOnce(this.swerveDriveSubsystem::disableFieldRelative,
                                 this.swerveDriveSubsystem),

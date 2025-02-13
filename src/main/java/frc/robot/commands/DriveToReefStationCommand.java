@@ -119,6 +119,7 @@ public class DriveToReefStationCommand extends Command {
         this.yController.setGoal(driveToPose.getY());
         this.omegaController.setGoal(driveToPose.getRotation().rotateBy(Rotation2d.fromDegrees(robotYaw)).getRadians());
 
+        Logger.recordOutput("Commands/Goal Pose", goalPose);
         Logger.recordOutput("Commands/Active Command", this.getName());
     }
 
