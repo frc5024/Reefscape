@@ -11,6 +11,7 @@ import frc.robot.commands.DriveFromBestTagCommand;
 import frc.robot.commands.DriveNearestCoralStationCommand;
 import frc.robot.commands.DriveProcessorCommand;
 import frc.robot.commands.DriveToReefStationCommand;
+import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.controls.GameData.CoralPole;
 import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
@@ -80,13 +81,13 @@ public class ButtonBindings {
                         this.swerveDriveSubsystem::isFieldRelative));
 
         // Lock to 0° when A button is held
-        // commandXboxController.a()
-        // .whileTrue(
-        // SwerveDriveCommands.joystickDriveAtAngle(
-        // swerveDriveSubsystem,
-        // () -> -controller.getLeftY(),
-        // () -> -controller.getLeftX(),
-        // () -> new Rotation2d()));
+        commandXboxController.a()
+                .whileTrue(
+                        SwerveDriveCommands.joystickDriveAtAngle(
+                                swerveDriveSubsystem,
+                                () -> -commandXboxController.getLeftY(),
+                                () -> -commandXboxController.getLeftX(),
+                                () -> new Rotation2d()));
 
         // Switch to X pattern when X button is pressed
         // controller.x().onTrue(Commands.runOnce(swerveDriveSubsystem::stopWithX,

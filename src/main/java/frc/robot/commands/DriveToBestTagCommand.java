@@ -54,9 +54,9 @@ public class DriveToBestTagCommand extends Command {
         this.omegaController = new ProfiledPIDController(driveOmegaPIDs[0], driveOmegaPIDs[1], driveOmegaPIDs[2],
                 TeleopConstants.OMEGA_CONSTRAINTS);
 
-        this.xController.setTolerance(0.2);
-        this.yController.setTolerance(0.2);
-        this.omegaController.setTolerance(Units.degreesToRadians(3));
+        this.xController.setTolerance(0.01);
+        this.yController.setTolerance(0.01);
+        this.omegaController.setTolerance(Units.degreesToRadians(1));
         this.omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
         addRequirements(this.swerveDriveSubsystem);
