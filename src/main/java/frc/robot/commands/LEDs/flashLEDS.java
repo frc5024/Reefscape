@@ -1,23 +1,27 @@
 package frc.robot.commands.LEDs;
 
+//Imports
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
-import frc.robot.subsystems.LEDs;;
+import frc.robot.subsystems.LEDs;
 
 public class FlashLEDS extends Command {
     // Variables
-    private LEDs leds;
-    private ILEDPreset colour1;
-    private ILEDPreset colour2;
-    private int flashSeconds;
-    private int flashMiliseconds;
+    private LEDs leds; // LED Subsystem for calling
+    private ILEDPreset colour1; // Colour #1 we wish to set colour to (See constructor)
+    private ILEDPreset colour2; // Colour #2 we wish to set colour to (See constructor (Will automaticly be set
+                                // to black if only one colour is imputed))
+    private int flashSeconds; // Amount of time we wish to flash for (IN SECONDS), used to keep track of total
+                              // time elapsed
+    private int flashMiliseconds; // Amount of time we wish to flash for (IN MILLISECONDS), used to keep track of
+                                  // how many times we have flashed
 
-    private Timer totalTime = new Timer();
-    private Timer timer = new Timer();
-    private int flashCount = 0;
+    private Timer totalTime = new Timer(); // Timer to check total amount of time elapsed since the start of the command
+    private Timer timer = new Timer(); // Timer to check time elapsed
+    private int flashCount = 0; // A counter to ensure amount of flashes
 
     // Constructor for one colour
     public FlashLEDS(LEDs leds, ILEDPreset colour, int flashSeconds) {
@@ -27,11 +31,11 @@ public class FlashLEDS extends Command {
 
     // Constructor for two colours
     public FlashLEDS(LEDs leds, ILEDPreset colour1, ILEDPreset colour2, int flashSeconds) {
-        this.leds = leds;
-        this.colour1 = colour1;
-        this.colour2 = colour2;
-        this.flashSeconds = flashSeconds;
-        flashMiliseconds = flashSeconds * 100;
+        this.leds = leds; // Subsystem set
+        this.colour1 = colour1; // Colour 1 set
+        this.colour2 = colour2; // Colour 2 set
+        this.flashSeconds = flashSeconds; // Total time set
+        flashMiliseconds = flashSeconds * 100; // Conversion from seconds to milliseconds
     }
 
     @Override
@@ -44,8 +48,11 @@ public class FlashLEDS extends Command {
     @Override
     public void execute() {
         if (flashCount < flashMiliseconds) {
+            // the .hasElapsed function checks how much time has elapsed since the start of
+            // the command, if not restarted will keep increasing and the function will not
+            // operate correctly
             if (timer.hasElapsed(0.1)) {// Number in brackets is in seconds
-                flashCount++;
+                flashCount++;// Update flash
                 timer.restart();
             }
 
