@@ -108,34 +108,34 @@ public class ButtonBindings {
         commandXboxController.y()
                 .whileTrue(new DriveProcessorCommand(this.swerveDriveSubsystem));
 
-        // Drive to selected reef station
-        commandXboxController.rightTrigger()
-                .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem,
-                        this.swerveDriveSubsystem::getPose,
-                        GameData.getInstance()::getReefStationIndex,
-                        GameData.getInstance().getCoralPole(),
-                        GameData.getInstance().getGamePieceMode()));
-
-        // Drive to selected reef station
-        commandXboxController.leftTrigger()
-                .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem,
-                        this.swerveDriveSubsystem::getPose,
-                        GameData.getInstance()::getReefStationIndex,
-                        GameData.getInstance().getCoralPole(),
-                        GameData.getInstance().getGamePieceMode()));
-
         // Drive to right pole of best apriltag
-        commandXboxController.rightBumper()
+        commandXboxController.rightTrigger()
                 .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
                         this.swerveDriveSubsystem::getPose,
                         false,
                         GameData.getInstance().getGamePieceMode()));
 
         // Drive to left pole of best apriltag
-        commandXboxController.leftBumper()
+        commandXboxController.leftTrigger()
                 .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
                         this.swerveDriveSubsystem::getPose,
                         true,
+                        GameData.getInstance().getGamePieceMode()));
+
+        // Drive to selected reef station
+        commandXboxController.rightBumper()
+                .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem,
+                        this.swerveDriveSubsystem::getPose,
+                        GameData.getInstance()::getReefStationIndex,
+                        GameData.getInstance().getCoralPole(),
+                        GameData.getInstance().getGamePieceMode()));
+
+        // Drive to selected reef station
+        commandXboxController.leftBumper()
+                .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem,
+                        this.swerveDriveSubsystem::getPose,
+                        GameData.getInstance()::getReefStationIndex,
+                        GameData.getInstance().getCoralPole(),
                         GameData.getInstance().getGamePieceMode()));
 
         // Set reef position
@@ -175,20 +175,30 @@ public class ButtonBindings {
                         .addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_3)));
 
         commandXboxController.leftTrigger()
-                .whileTrue(runOnce(() -> this.algaeIntakeSubsystem
-                        .addAction(AlgaeIntakeSubsystem.Action.EJECT)));
+                .whileTrue(runOnce(() -> {
+                    if (GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE) {
+                        this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.EJECT);
+                    } else {
+                        this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.EJECT);
+                    }
+                }));
 
         commandXboxController.rightTrigger()
-                .whileTrue(runOnce(() -> this.algaeIntakeSubsystem
-                        .addAction(AlgaeIntakeSubsystem.Action.INTAKE)));
+                .whileTrue(runOnce(() -> {
+                    if (GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE) {
+                        this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.INTAKE);
+                    } else {
+                        this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.INTAKE);
+                    }
+                }));
 
-        commandXboxController.leftBumper()
-                .whileTrue(runOnce(() -> this.coralIntakeSubsystem
-                        .addAction(CoralIntakeSubsystem.Action.EJECT)));
+        // commandXboxController.leftBumper()
+        // .whileTrue(runOnce(() -> this.coralIntakeSubsystem
+        // .addAction(CoralIntakeSubsystem.Action.EJECT)));
 
-        commandXboxController.rightBumper()
-                .whileTrue(runOnce(() -> this.coralIntakeSubsystem
-                        .addAction(CoralIntakeSubsystem.Action.INTAKE)));
+        // commandXboxController.rightBumper()
+        // .whileTrue(runOnce(() -> this.coralIntakeSubsystem
+        // .addAction(CoralIntakeSubsystem.Action.INTAKE)));
 
         return commandXboxController;
     }
