@@ -513,7 +513,7 @@ public final class Constants {
      */
     public static class VisionConstants {
         public static AprilTagFieldLayout TAG_FIELD_LAYOUT = AprilTagFieldLayout
-                .loadField(AprilTagFields.kDefaultField);
+                .loadField(AprilTagFields.k2025ReefscapeWelded);
 
         /**
          * TODO: set camera names and positions - pitch is based on degress from
