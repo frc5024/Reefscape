@@ -48,20 +48,11 @@ public class RobotContainer {
 
   private void configureBindings() {
     //buttons for elevator positions
-    driver.b().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
-    driver.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
-    driver.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
-    driver.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
+    driver.b().whileTrue(elevatorSubsystem.goToL1Position());
+    driver.a().whileTrue(elevatorSubsystem.goToL2Position());
+    driver.x().whileTrue(elevatorSubsystem.goToL3Position());
+    driver.y().whileTrue(elevatorSubsystem.goToL4Position());
     //driver.rightTrigger().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.rootPosition));
-    driver.leftBumper().whileTrue(new RunCommand(() ->
-    { 
-      System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-      elevatorSubsystem.controlMotor(0.2);
-    }).finallyDo( ()-> 
-    {
-      System.out.println("DONEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-      elevatorSubsystem.controlMotor(0.0);
-    }));
     driver.rightBumper().whileTrue(new RunCommand(() -> elevatorSubsystem.controlMotor(-0.1)).finallyDo( ()-> elevatorSubsystem.controlMotor(0.0)));
     //operator.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.Algae2));
     //operator.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));

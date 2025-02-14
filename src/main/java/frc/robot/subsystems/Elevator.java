@@ -20,8 +20,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.Constants;
 import frc.robot.Constants.elevatorConstants;
+import frc.robot.commands.SetElevatorSetpointCmd;
 
 public class Elevator extends SubsystemBase{
      //created and named the motor controller
@@ -119,6 +120,14 @@ public class Elevator extends SubsystemBase{
         speed = targetSpeed;
     }
 
+    public boolean targetReached() {
+        if (PID.atSetpoint()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     //creating a boolean method which returns the condition of both limit switches
     // public boolean isBottomLimitSwitchBroken() {
     //     return zeroingLimitSwitch.get();
@@ -149,9 +158,35 @@ public class Elevator extends SubsystemBase{
         return elevatorMotor.getEncoder().getPosition();
     }
 
+
+    public Command goToL1Position(){
+        return new SetElevatorSetpointCmd(this,Constants.elevatorConstants.L1Position);
+    } 
+
+    public Command goToL2Position(){
+        return new SetElevatorSetpointCmd(this,Constants.elevatorConstants.L2Position);
+    } 
+
+    public Command goToL3Position(){
+        return new SetElevatorSetpointCmd(this,Constants.elevatorConstants.L3Position);
+    } 
+
+    public Command goToL4Position(){
+        return new SetElevatorSetpointCmd(this,Constants.elevatorConstants.L4Position);
+    } 
+
+    public Command goToAlgae1Position(){
+        return new SetElevatorSetpointCmd(this,Constants.elevatorConstants.Algae1);
+    } 
+
+    public Command goToAlgae2Position(){
+        return new SetElevatorSetpointCmd(this,Constants.elevatorConstants.Algae2);
+    } 
+
+    
     @Override
     public Command getDefaultCommand() {
-        return run(() -> elevatorMotor.set(0)); //set it to g constant so that it stays put in the future
+        return run(() -> pidMotor()); //continues to use PID so that we are able to stay at our current pos
     }
 
 

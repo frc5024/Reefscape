@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
+
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
@@ -21,13 +22,13 @@ public final class Constants {
         public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
         public static final double elevatorMaxUpSpeed = 0.4;
-        public static final double elevatorMaxDownSpeed = 0.1;
+        public static final double elevatorMaxDownSpeed = 0.1;  
         public static final double zeroPosition = 0;
         public static final int motorID1 = 60;
         public static final int motorID2 = 61;
 
         //values for PID
-        public static final double kP =0;
+        public static final double kP =0.01;
         public static final double kI = 0;
         public static final double kD = 0;
 
@@ -47,11 +48,13 @@ public final class Constants {
         public static final double L1Position = Units.degreesToRadians(355);
         public static final double L2Position =Units.degreesToRadians(682);
         public static final double Algae1 = Units.degreesToRadians(250);
-        public static final double L3position = Units.degreesToRadians(1270);
+        public static final double L3Position = Units.degreesToRadians(1270);
         public static final double Algae2 = Units.degreesToRadians(350);
-        public static final double L4position = Units.degreesToRadians(1988);
+        public static final double L4Position = Units.degreesToRadians(1988);
+
 
   }
+  
   public static final double stickDeadband = 0.1;
 
       public static final class Swerve {

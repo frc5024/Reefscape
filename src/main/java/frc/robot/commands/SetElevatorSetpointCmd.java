@@ -36,5 +36,8 @@ public class SetElevatorSetpointCmd extends Command {
         elevatorSubsystem.controlMotor(0);
     }
 
-   
+    @Override
+    public boolean isFinished() {
+        return elevatorSubsystem.targetReached();
+    }
 }
