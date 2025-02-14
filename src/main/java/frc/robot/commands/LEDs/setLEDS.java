@@ -8,25 +8,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.leds.ILEDPreset;
 import frc.robot.subsystems.LEDs;
 
-public class setLEDS extends Command {
+public class SetLEDS extends Command {
     private LEDs leds;
     private ILEDPreset colour;
 
-    // Constructor, intakes LED subsystem and LED Preset
-    public setLEDS(LEDs leds, ILEDPreset colour) {
+    // Constructor, intakes LED subsystem and LED Preset colour
+    public SetLEDS(LEDs leds, ILEDPreset colour) {
         this.leds = leds;
         this.colour = colour;
-    }
-
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        leds.setLEDS(colour);// Sets to colour imputed
+        leds.set(colour); // sets to colour based on constructor intake
     }
 
     // Returns true when the command should end.

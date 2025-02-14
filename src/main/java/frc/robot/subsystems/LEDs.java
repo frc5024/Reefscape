@@ -1,21 +1,19 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Timer;
+//Imports
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDController;
-import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
+import frc.robot.commands.LEDs.FlashLEDS;
+import frc.robot.commands.LEDs.SetLEDS;
+import frc.robot.commands.LEDs.SetLEDSDefault;
 
 public class LEDs extends SubsystemBase {
+    // Variables
     private static LEDs mInstance = null;
     private LEDController ledController;
-
-    private Timer timer = new Timer();
-    private int flashCount = 0;
-    private boolean flashing = false;
-    private ILEDPreset flashColour;
-    private int flashDuration;
 
     // Instance
     public static LEDs getInstance() {
@@ -30,49 +28,42 @@ public class LEDs extends SubsystemBase {
         ledController = new LEDController(Constants.LEDs.ledPort);// Sets which motor we are using, currently port 9
     }
 
+    // Direct Commands in order to set LEDs to a colour
+
     // Set the LEDs to be a colour
-    public void setLEDS(ILEDPreset colour) {
+    public void set(ILEDPreset colour) {
         ledController.set(colour);
     }
 
     // Set the LEDs to be Default colour
+    public void setDefault() {
+        set(Constants.LEDs.defaultLED);
+    }
+
+    // Command Callers
+
+    // Flash LEDs Command with one colour
+    public Command flashCommand(ILEDPreset colour, int flashSeconds) {
+        return new FlashLEDS(this, colour, flashSeconds);
+    }
+
+    // Flash LEDs Command with two colours
+    public Command flashCommand(ILEDPreset colour1, ILEDPreset colour2, int flashSeconds) {
+        return new FlashLEDS(this, colour1, colour2, flashSeconds);
+    }
+
+    // Set to colour Command
+    public Command setCommand(ILEDPreset colour) {
+        return new SetLEDS(this, colour);
+    }
+
+    // Set LEDs to Default Command
+    public Command setDefaultCommand() {
+        return new SetLEDSDefault(this);
+    }
+
     public void setLEDSDefault() {
-        setLEDS(Constants.LEDs.defaultLED);
-    }
-
-    // Flash the LEDs
-
-    public void startFlashing(ILEDPreset colour, int flashSeconds) {
-        // Initialize variables
-        flashColour = colour;
-        flashDuration = flashSeconds;
-        flashCount = 0;
-        flashing = true;
-        timer.reset();
-        timer.start();
-    }
-
-    // update LED colour every 0.1 seconds
-    public void updateFlash() {
-        if (!flashing)
-            return;
-
-        if (timer.hasElapsed(0.1)) { // Check every 0.1 seconds
-            flashCount++;
-            timer.reset(); // Restart the timer for the next interval
-
-            if (flashCount / 10 >= flashDuration) { // Stop after flashSeconds
-                flashing = false;
-                setLEDS(LEDPreset.Solid.kBlack);
-                return;
-            }
-
-            // Set LEDs
-            if (flashCount % 2 == 0) {
-                setLEDS(flashColour);
-            } else {
-                setLEDS(LEDPreset.Solid.kBlack);// OFF
-            }
-        }
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setLEDSDefault'");
     }
 }

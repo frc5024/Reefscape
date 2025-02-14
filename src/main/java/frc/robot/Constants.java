@@ -10,13 +10,14 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.lib.leds.LEDPreset;
+import frc.lib.leds.ILEDPreset;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static class LEDs {
         public final static int ledPort = 9; // Port for LED, Make sure it is PWM not DIO
-        public final static LEDPreset.Solid defaultLED = LEDPreset.Solid.kGold;// Default Colour
+        public final static ILEDPreset defaultLED = LEDPreset.Solid.kGold;// Default Colour
     }
 
     public static class Servo {
