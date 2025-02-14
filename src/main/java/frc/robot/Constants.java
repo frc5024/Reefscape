@@ -521,35 +521,35 @@ public final class Constants {
          */
         public static final Camera FRONT_CAMERA = new Camera("Arducam_OV9281-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(19.0), Units.inchesToMeters(0.0), Units.inchesToMeters(6.0),
-                0.0, Units.degreesToRadians(0), 0.0);
+                Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(6.0),
+                0.0, Units.degreesToRadians(-25.0), Units.degreesToRadians(45.0));
 
         public static final Camera REAR_CAMERA = new Camera("Arducam_OV9281-1",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(0.0), Units.inchesToMeters(0), Units.inchesToMeters(6.0),
-                0.0, Units.degreesToRadians(0), Math.PI);
+                Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(6.0),
+                0.0, Units.degreesToRadians(45), Math.PI);
 
         public static final Camera GAME_PIECE_CAMERA = new Camera("WebCam",
                 Camera.Type.COLOURED_SHAPE, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(0.0), 0.0, Units.inchesToMeters(0.0),
                 0.0, Units.degreesToRadians(0), 0.0);
 
-        public static final Camera LIMELIGHT3G_CAMERA = new Camera("limelight-threegee",
+        public static final Camera LIMELIGHT3G_CAMERA = new Camera("limelight",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
-                Units.inchesToMeters(10.0), 0.0, Units.inchesToMeters(7.0),
-                0.0, Units.degreesToRadians(0), 0.0);
+                Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(6.0),
+                0.0, Units.degreesToRadians(-25.0), Units.degreesToRadians(45.0));
 
         public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight-two",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
-                Units.inchesToMeters(10.0), 0.0, Units.inchesToMeters(7.0),
-                0.0, Units.degreesToRadians(0), 0.0);
+                Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(6.0),
+                0.0, Units.degreesToRadians(-25.0), Units.degreesToRadians(45.0));
 
         /**
          * TODO: set list of enabled camera
          */
         // public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA,
         // LIMELIGHT2_CAMERA);
-        public static final List<Camera> CAMERAS = Arrays.asList(FRONT_CAMERA, REAR_CAMERA);
+        public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA);
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;
