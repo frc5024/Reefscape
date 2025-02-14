@@ -1,11 +1,9 @@
 package frc.robot.commands.LEDs;
 
-import edu.wpi.first.networktables.TimestampedBoolean;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDPreset;
-import frc.robot.Constants;
 import frc.robot.subsystems.LEDs;;
 
 public class FlashLEDS extends Command {
@@ -20,10 +18,14 @@ public class FlashLEDS extends Command {
     private Timer timer = new Timer();
     private int flashCount = 0;
 
+    // Constructor for one LED colour
+    // If there is one colour imputed, it will set colour 2 to black
     public FlashLEDS(LEDs leds, ILEDPreset colour1, int flashSeconds) {
         this(leds, colour1, LEDPreset.Solid.kBlack, flashSeconds);
     }
 
+    // Constructor for two colours, also takes subsystem leds and amount of time you
+    // wish to flash for
     public FlashLEDS(LEDs leds, ILEDPreset colour1, ILEDPreset colour2, int flashSeconds) {
         this.leds = leds;
         this.colour1 = colour1;
@@ -42,21 +44,20 @@ public class FlashLEDS extends Command {
 
     @Override
     public void execute() {
-        if(shouldFlash){
+        if (shouldFlash) {
             if (flashCount < flashMiliseconds) {
                 if (timer.hasElapsed(0.1)) {// Number in brackets is in seconds
                     flashCount++;
                     timer.restart();
                 }
-    
+
                 if (flashCount % 2 == 0) {// If count is even set to the colour
                     leds.set(colour1);
                     System.out.println("Flash");
                 } else {// Else set to colour 2
                     leds.set(colour2);
                 }
-            }
-            else(){
+            } else {
                 shouldFlash = false;
             }
         }
