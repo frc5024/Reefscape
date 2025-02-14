@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Timer;
+//Imports
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.leds.ILEDPreset;
@@ -11,14 +11,9 @@ import frc.robot.commands.LEDs.SetLEDS;
 import frc.robot.commands.LEDs.SetLEDSDefault;
 
 public class LEDs extends SubsystemBase {
+    // Variables
     private static LEDs mInstance = null;
     private LEDController ledController;
-
-    private Timer timer = new Timer();
-    private int flashCount = 0;
-    private boolean flashing = false;
-    private ILEDPreset flashColour;
-    private int flashDuration;
 
     // Instance
     public static LEDs getInstance() {
@@ -33,6 +28,8 @@ public class LEDs extends SubsystemBase {
         ledController = new LEDController(Constants.LEDs.ledPort);// Sets which motor we are using, currently port 9
     }
 
+    // Direct Commands in order to set LEDs to a colour
+
     // Set the LEDs to be a colour
     public void set(ILEDPreset colour) {
         ledController.set(colour);
@@ -43,18 +40,24 @@ public class LEDs extends SubsystemBase {
         set(Constants.LEDs.defaultLED);
     }
 
+    // Command Callers
+
+    // Flash LEDs Command with one colour
     public Command flashCommand(ILEDPreset colour, int flashSeconds) {
         return new FlashLEDS(this, colour, flashSeconds);
     }
 
+    // Flash LEDs Command with two colours
     public Command flashCommand(ILEDPreset colour1, ILEDPreset colour2, int flashSeconds) {
         return new FlashLEDS(this, colour1, colour2, flashSeconds);
     }
 
+    // Set to colour Command
     public Command setCommand(ILEDPreset colour) {
         return new SetLEDS(this, colour);
     }
 
+    // Set LEDs to Default Command
     public Command setDefaultCommand() {
         return new SetLEDSDefault(this);
     }

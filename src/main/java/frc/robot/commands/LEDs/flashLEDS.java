@@ -8,6 +8,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.LEDs;;
 
 public class FlashLEDS extends Command {
+    // Variables
     private LEDs leds;
     private ILEDPreset colour1;
     private ILEDPreset colour2;
@@ -18,10 +19,13 @@ public class FlashLEDS extends Command {
     private Timer timer = new Timer();
     private int flashCount = 0;
 
+    // Constructor for one colour
     public FlashLEDS(LEDs leds, ILEDPreset colour, int flashSeconds) {
-        this(leds, colour, LEDPreset.Solid.kBlack, flashSeconds);
+        this(leds, colour, LEDPreset.Solid.kBlack, flashSeconds);// does the command again with the second colour set to
+                                                                 // black
     }
 
+    // Constructor for two colours
     public FlashLEDS(LEDs leds, ILEDPreset colour1, ILEDPreset colour2, int flashSeconds) {
         this.leds = leds;
         this.colour1 = colour1;
@@ -45,7 +49,7 @@ public class FlashLEDS extends Command {
                 timer.restart();
             }
 
-            if (flashCount % 2 == 0) {// If count is even set to the colour
+            if (flashCount % 2 == 0) {// If count is even set to colour 1
                 leds.set(colour1);
             } else {// Else set to colour 2
                 leds.set(colour2);

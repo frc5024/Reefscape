@@ -12,21 +12,16 @@ public class SetLEDS extends Command {
     private LEDs leds;
     private ILEDPreset colour;
 
-    // Constructor, intakes LED subsystem and LED Preset
+    // Constructor, intakes LED subsystem and LED Preset colour
     public SetLEDS(LEDs leds, ILEDPreset colour) {
         this.leds = leds;
         this.colour = colour;
     }
 
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {
-    }
-
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        leds.set(colour); //
+        leds.set(colour); // sets to colour based on constructor intake
     }
 
     // Returns true when the command should end.
