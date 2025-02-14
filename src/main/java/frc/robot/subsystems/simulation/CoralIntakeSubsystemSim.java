@@ -1,8 +1,5 @@
 package frc.robot.subsystems.simulation;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.util.Units;
 import frc.lib.statemachine.StateMetadata;
 import frc.robot.modules.coral.CoralIntakeModuleIO;
 import frc.robot.modules.elevator.ElevatorVisualizer;
@@ -34,9 +31,7 @@ public class CoralIntakeSubsystemSim extends CoralIntakeSubsystem {
 
         if (stateMetadata.isFirstRun()) {
             MapleSimUtil.getCoralIntakeSimulation().startIntake();
-            MapleSimUtil.ejectCoralFromStation(
-                    new Pose3d(Units.inchesToMeters(48.0), Units.inchesToMeters(6.0), Units.inchesToMeters(46.0),
-                            new Rotation3d(0.0, Units.degreesToRadians(-35.0), Units.degreesToRadians(55.0))));
+            MapleSimUtil.ejectCoralFromStation();
         }
     }
 

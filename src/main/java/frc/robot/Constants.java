@@ -165,6 +165,15 @@ public final class Constants {
                 new Pose2d(Units.inchesToMeters(33.51), Units.inchesToMeters(25.80), Rotation2d.fromDegrees(54.0))
         };
 
+        // left and right coral station poses as seen from driver's station for dropping
+        // coral in simulation
+        public static final Pose2d[] CORAL_DROP_STATIONS = new Pose2d[] {
+                new Pose2d(Units.inchesToMeters(48.0), Units.inchesToMeters(6.0),
+                        new Rotation2d(Units.degreesToRadians(55.0))),
+                new Pose2d(Units.inchesToMeters(48.0), Units.inchesToMeters(312.0),
+                        new Rotation2d(Units.degreesToRadians(-55.0)))
+        };
+
         // starts with one closest to driver station and rotates clockwise
         public static final Pose2d[] REEF_POSES = new Pose2d[] {
                 new Pose2d(Units.inchesToMeters(144.00), Units.inchesToMeters(158.50), Rotation2d.fromDegrees(0.0)), // Tag-18

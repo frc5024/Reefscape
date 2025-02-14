@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import java.util.Arrays;
+
 import org.ironmaple.simulation.IntakeSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -16,6 +18,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.MapleSimConstants;
 import frc.robot.modules.elevator.ElevatorVisualizer;
 
@@ -104,14 +108,18 @@ public class MapleSimUtil {
     /**
      * 
      */
-    public static void ejectCoralFromStation(Pose3d coralStationPose) {
+    public static void ejectCoralFromStation() {
+        Pose2d robotPose = getSwerveDriveSimulation().getSimulatedDriveTrainPose();
+        Pose2d nearestStation = robotPose.nearest(Arrays.asList(FieldConstants.CORAL_STATION_POSES));
+        Pose2d nearestDropStation = nearestStation.nearest(Arrays.asList(FieldConstants.CORAL_DROP_STATIONS));
+
         SimulatedArena.getInstance()
                 .addGamePieceProjectile(new ReefscapeCoralOnFly(
-                        coralStationPose.toPose2d().getTranslation(),
+                        nearestDropStation.getTranslation(),
                         new Translation2d(),
                         new ChassisSpeeds(),
-                        coralStationPose.toPose2d().getRotation(),
-                        Meters.of(coralStationPose.getZ()),
+                        nearestDropStation.getRotation(),
+                        Meters.of(Units.inchesToMeters(46.0)),
                         MetersPerSecond.of(2),
                         Degrees.of(-35.0)));
     }
