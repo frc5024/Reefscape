@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.goToSetPositionPerTagCmd;
+import frc.robot.commands.goToSetPositionPerTagOnTrueCmd;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
@@ -37,6 +39,9 @@ public class RobotContainer {
 
         configureBindings();
 
+        NamedCommands.registerCommand("Test Drive to AT",
+                new goToSetPositionPerTagOnTrueCmd(limelightSubsystem, s_Swerve, Constants.Vision.noOffset));
+
         autoChooser = AutoBuilder.buildAutoChooser();
 
         SmartDashboard.putData("Auto/Chooser", autoChooser);
@@ -47,6 +52,8 @@ public class RobotContainer {
         driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
         driver.a().whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.noOffset));
+        driver.x()
+                .whileTrue(new goToSetPositionPerTagOnTrueCmd(limelightSubsystem, s_Swerve, Constants.Vision.noOffset));
 
         // driver.a().whileTrue(new FaceHeadingCmd(s_Swerve));
     }

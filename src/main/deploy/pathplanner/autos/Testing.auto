@@ -1,0 +1,97 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "drive to april tag command"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 Outtake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2L reef to S-top"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1L reef to S-top"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 Outtake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of 1R reef to S-top"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Station to R1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 Outtake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1R reef to S-top"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of 1L reef to S-top"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 Outtake"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

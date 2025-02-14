@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Test Drive to AT"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Forward 1 meter"
+            "pathName": "New Path"
           }
         }
       ]
