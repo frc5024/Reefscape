@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Climb;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climb;
@@ -19,7 +19,7 @@ public class ClimbCancelCommand extends Command {
 
     public void execute() {
         // stops when encoder reaches extended position
-        if (climbSubsystem.isExtendoPosition()) {
+        if (climbSubsystem.isClimbPosition()) {
             climbSubsystem.stopMotor();
         } else {
             climbSubsystem.cancel();

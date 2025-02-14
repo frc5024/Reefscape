@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -7,14 +9,14 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
-
-import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Climb extends SubsystemBase {
     public static Climb mInstance = null;
 
     private TalonFX climbMotor;
+    private LEDs ledSubsystem;
 
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
     GenericEntry encoder = tab.add("climbSpeed", .35).getEntry();
@@ -44,23 +46,29 @@ public class Climb extends SubsystemBase {
         if (climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.liftoffPos && !overThreshold()) {
             System.out.println("CLIMB FAILED");
             climbMotor.set(0);
+            ledSubsystem.setLEDS(LEDPreset.Strobe.kRed);
         } else {
             climbMotor.set(Constants.ClimbConstants.climbSpeed);
+            ledSubsystem.setLEDS(LEDPreset.LightChase.kBlue);
         }
     }
 
     public void extending() {
         // speed = encoder.getDouble(0);
         climbMotor.set(Constants.ClimbConstants.extendoSpeed);
+        ledSubsystem.setLEDS(LEDPreset.Solid.kDarkBlue);
     }
 
     public void retracting() {
         // speed = encoder.getDouble(0);
         climbMotor.set(-Constants.ClimbConstants.extendoSpeed);
+        ledSubsystem.setLEDS(LEDPreset.Solid.kDarkBlue);
     }
 
     public void cancel() {
         climbMotor.set(Constants.ClimbConstants.cancelSpeed);
+        ledSubsystem.setLEDS(LEDPreset.Strobe.kGold);
+
     }
 
     public void stopMotor() {

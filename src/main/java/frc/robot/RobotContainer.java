@@ -2,9 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.leds.LEDPreset;
-import frc.robot.commands.ClimbCancelCommand;
-import frc.robot.commands.ClimbCommand;
-import frc.robot.commands.ClimbExtendoCommand;
+import frc.robot.commands.Climb.ClimbCancelCommand;
+import frc.robot.commands.Climb.ClimbCommand;
+import frc.robot.commands.Climb.ClimbExtendoCommand;
 import frc.robot.commands.LEDs.flashLEDS;
 import frc.robot.commands.LEDs.setLEDS;
 import frc.robot.commands.LEDs.setLEDSDefault;
@@ -43,7 +43,7 @@ public class RobotContainer {
         driver.b().onTrue(new setLEDSDefault(s_LEDs));// Sets to Default colour (Find in Constants)
         driver.x().onTrue(new flashLEDS(s_LEDs, LEDPreset.Solid.kGreen, 1));// Flashes Green for 1 second
 
-        driver.a().onTrue(new ClimbCommand(m_climbSubsystem));
+        driver.a().onTrue(new ClimbCommand(m_climbSubsystem, s_LEDs));
         driver.x().onTrue(new ClimbExtendoCommand(m_climbSubsystem, true));
         driver.y().onTrue(new ClimbExtendoCommand(m_climbSubsystem, false));
         driver.b().onTrue(new ClimbCancelCommand(m_climbSubsystem));
