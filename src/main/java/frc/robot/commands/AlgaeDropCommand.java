@@ -22,7 +22,6 @@ public class AlgaeDropCommand extends Command {
         dropTimer.start();
 
         if (!m_AlgaeCommandBased.getLinebreak()) {
-            System.out.println("Stop!");
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
         }
 

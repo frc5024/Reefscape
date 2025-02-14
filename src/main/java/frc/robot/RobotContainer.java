@@ -65,16 +65,4 @@ public class RobotContainer {
         return Autos.exampleAuto(m_exampleSubsystem);
     }
 
-    public void algaeReleasePin() {
-
-        s_Algae.setPin(Constants.Algaes.pinRelease);
-
-    };
-
-    public void algaeStopRelease() {
-
-        s_Algae.setPin(Constants.Algaes.pinStop);
-
-    }
-
 }

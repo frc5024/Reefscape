@@ -19,7 +19,7 @@ public final class Constants {
 
     public static class Algaes {
         public final static int algaeArmPort = 8;
-        public final static int linebreakPort = 9;
+        public final static int linebreakPort = 0;
         public final static int motor1Port = 3;
         public final static int motor2Port = 62;
         public final static int pinMotorPort = 2;
