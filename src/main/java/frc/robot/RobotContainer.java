@@ -1,10 +1,7 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.leds.LEDPreset;
-import frc.robot.commands.Autos;
 import frc.robot.commands.ClimbCancelCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.ClimbExtendoCommand;
@@ -12,12 +9,9 @@ import frc.robot.commands.LEDs.flashLEDS;
 import frc.robot.commands.LEDs.setLEDS;
 import frc.robot.commands.LEDs.setLEDSDefault;
 import frc.robot.subsystems.Climb;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LEDs;
-import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
-    private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
     private final Climb m_climbSubsystem = Climb.getInstance();
 
     private final CommandXboxController driver = new CommandXboxController(0);
@@ -55,30 +49,4 @@ public class RobotContainer {
         driver.b().onTrue(new ClimbCancelCommand(m_climbSubsystem));
         // driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
     }
-
-    public Command getAutonomousCommand() {
-        return Autos.exampleAuto(m_exampleSubsystem);
-    }
-
-    }
-    
-    
-
-    
-
-    
-
-        
-        
-        
-        
-        
-    
-
-    
-
-    
-
-    
-
-    
+}
