@@ -18,9 +18,8 @@ public class PlopCommand extends Command {
     // Called when the command is initially scheduled, if line is broken, set state to HOLDING
     @Override
     public void initialize() {
-        if(coralSubsystem.isLineBroken()) {
-            coralSubsystem.set(Constants.coralConstants.plopSpeed);
-        }
+        coralSubsystem.set(Constants.coralConstants.plopSpeed);
+        
     }
     //execute, once button is pressed, startPlop()
     @Override
@@ -36,9 +35,6 @@ public class PlopCommand extends Command {
     //if line is not broken, return true, else return false
     @Override
     public boolean isFinished() {
-        if(!coralSubsystem.isLineBroken()){
-            return true;
-        }
-        return false;
+        return !coralSubsystem.isLineBroken();
     }
 }

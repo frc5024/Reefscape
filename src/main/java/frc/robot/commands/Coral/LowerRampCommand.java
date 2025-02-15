@@ -2,12 +2,14 @@ package frc.robot.commands.Coral;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Coral;
+import edu.wpi.first.wpilibj.Timer;
 
 public class LowerRampCommand extends Command {
 
     private final Coral coralSubsystem;
-    private double startingValue;
-
+    //private double startingValue;
+    private Timer timer = new Timer();
+    
     public LowerRampCommand(Coral coralSubsystem) {
         
         this.coralSubsystem = coralSubsystem; 
@@ -17,12 +19,11 @@ public class LowerRampCommand extends Command {
 
     //when start, rotate -plopspeed, lowers the ramp
     public void initialize() {
-        startingValue = coralSubsystem.getEncoder();
-        System.out.println(startingValue);
-        if(!coralSubsystem.isLineBroken()) {
-            coralSubsystem.setBottom(-Constants.coralConstants.intakeSpeed);
-        }
+        coralSubsystem.setBottom(Constants.coralConstants.rampSpeed);
+        timer.reset();
+        timer.start();
     }
+    
 
     //when button pressed, rotate servo 90 degrees (lowers the ramp)
     public void execute() {
@@ -37,11 +38,6 @@ public class LowerRampCommand extends Command {
     // Returns true when the command should end. 
     @Override
     public boolean isFinished() {
-        return false;
-        // if(coralSubsystem.getEncoder() > startingValue + 1792){ //1 rotation = 7168 ticks
-        //     return true;
-        // } else {
-        //     return false;
-        // }
+        return coralSubsystem.isLineBroken() || timer.get() > 0.5;
     }
 }

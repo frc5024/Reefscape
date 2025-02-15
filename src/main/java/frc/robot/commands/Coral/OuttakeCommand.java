@@ -19,11 +19,7 @@ public class OuttakeCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        if(coralSubsystem.isLineBroken()) {
-            coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
-        }else {
-            cancel();
-        }
+        coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
     }
 
     //execute, startOuttake() once button is pressed
@@ -41,9 +37,6 @@ public class OuttakeCommand extends Command {
      //if line is not broken, return true, else return false
     @Override
     public boolean isFinished() {
-        if(!coralSubsystem.isLineBroken()){
-            return true;
-        }
-        return false;
+        return !coralSubsystem.isLineBroken();
     }
 }
