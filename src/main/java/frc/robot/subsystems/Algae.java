@@ -50,8 +50,8 @@ public class Algae extends SubsystemBase {
         pinMotor = new Servo(Constants.Algaes.pinMotorPort);
         linebreak = new DigitalInput(Constants.Algaes.linebreakPort);
         // limSwInput = new DigitalInput(5);
-        motor1 = new SparkMax(Constants.Algaes.motor1Port, MotorType.kBrushless);
-        motor2 = new SparkMax(Constants.Algaes.motor2Port, MotorType.kBrushless);
+        motor1 = new SparkMax(Constants.Algaes.motorID1, MotorType.kBrushless);
+        motor2 = new SparkMax(Constants.Algaes.motorID2, MotorType.kBrushless);
         // motorarm = new Servo(Constants.Algae.AlgaeArmPort);
         algaeOuttakeTimer = new Timer();
 

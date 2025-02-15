@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.AlgaeCommandBased;
 
+// Releases the pin holding the intake mechanism, should be called at the start of the round
 public class AlgaePinReleaseCommand extends Command {
     private final AlgaeCommandBased m_AlgaeCommandBased;
 
@@ -21,6 +22,7 @@ public class AlgaePinReleaseCommand extends Command {
     @Override
     public void execute() {
 
+        // Calls command from robotContainer to set pin to release value
         m_AlgaeCommandBased.setPin(Constants.Algaes.pinRelease);
 
     }

@@ -51,6 +51,7 @@ public class RobotContainer {
 
     }
 
+    // Binding a key to each algae command
     private void configureBindings() {
         changeRainbow.whileTrue(new TestLEDs());
         testFlash.whileTrue(new TestFlashLEDs());

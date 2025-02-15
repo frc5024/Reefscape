@@ -18,9 +18,11 @@ public class AlgaeDropCommand extends Command {
     @Override
     public void initialize() {
 
+        // Reset dropTimer (set to 0) and then start timer
         dropTimer.reset();
         dropTimer.start();
 
+        // If there is nothing in the intake system, set motors to idle
         if (!m_AlgaeCommandBased.getLinebreak()) {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
         }
@@ -31,10 +33,12 @@ public class AlgaeDropCommand extends Command {
     @Override
     public void execute() {
 
-        // Sets the motors to drop mode
-        if (dropTimer.hasElapsed(1.5)) {
+        // Set the motors to drop mode (outtake) if there is something in the intake
+        // system and timer is not elasped
+        if (dropTimer.hasElapsed(Constants.Algaes.outtaketimer)) {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
         } else if (m_AlgaeCommandBased.getLinebreak()) {
+            // Set motors to idle if timer has passed timer time
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.dropSpeed);
         }
 
@@ -44,6 +48,7 @@ public class AlgaeDropCommand extends Command {
     @Override
     public void end(boolean interrupted) {
 
+        // Sets speed to idle (off) if command is interrupted
         m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
 
     }

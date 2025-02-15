@@ -18,123 +18,71 @@ import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.AlgaeLaunchCommand;
 
 public class AlgaeCommandBased extends SubsystemBase {
-
-    final double motorspeedintake = -0.5;
-    final double motorspeedouttake = 0.1;
-    final double motorspeedidle = 0;
-    private DigitalInput linebreak;
+    // Singleton Instance
     private static AlgaeCommandBased mInstance = null;
-    public boolean sensorOutput;
-    private LEDs LEDS = LEDs.getInstance();
+
+    // Intake Variables
     private SparkMax motor1;
     private SparkMax motor2;
+    private DigitalInput linebreak;
+
+    // Pin Variables
     private Servo pinMotor;
 
-    // private Servo motorarm;
-
-    private enum states {
-        idle,
-        intaking,
-        holding,
-        outaking
-    }
-
+    // Singleton Pattern
     public static final AlgaeCommandBased getInstance() {
         if (mInstance == null) {
             mInstance = new AlgaeCommandBased();
         }
-
         return mInstance;
     }
 
     private AlgaeCommandBased() {
-        pinMotor = new Servo(Constants.Algaes.pinMotorPort);
-        linebreak = new DigitalInput(Constants.Algaes.linebreakPort);
-        // limSwInput = new DigitalInput(5);
-        motor1 = new SparkMax(Constants.Algaes.motor1Port, MotorType.kBrushless);
-        motor2 = new SparkMax(Constants.Algaes.motor2Port, MotorType.kBrushless);
-        // motorarm = new Servo(Constants.Algae.AlgaeArmPort);
+        // Motors used to control the Algae intake mechanism
+        motor1 = new SparkMax(Constants.Algaes.motorID1, MotorType.kBrushless);
+        motor2 = new SparkMax(Constants.Algaes.motorID2, MotorType.kBrushless);
 
+        // Sensor used to detect if an Algae is in our intake mechanism
+        linebreak = new DigitalInput(Constants.Algaes.linebreakPort);
+
+        // pinMotor servo motor used to lock and extend intake mechanism
+        pinMotor = new Servo(Constants.Algaes.pinMotorPort);
     }
 
-    // Assigns sparkmax motors to variables
+    // Set both sparkmax motors to one of the motor speed constants
+    // (ex. idle, launch, drop, intake)
     public void setSpeed(Double speed) {
         motor1.set(speed);
         motor2.set(speed);
-
     }
 
-    public void dropSpeed() {
-        motor1.set(Constants.Algaes.dropSpeed);
-        motor2.set(Constants.Algaes.dropSpeed);
-    }
-
-    public void intakeSpeed() {
-        motor1.set(Constants.Algaes.intakeSpeed);
-        motor2.set(Constants.Algaes.intakeSpeed);
-    }
-
-    public void launchSpeed() {
-        motor1.set(Constants.Algaes.launchSpeed);
-        motor2.set(Constants.Algaes.launchSpeed);
-    }
-
-    public void idleSpeed() {
-        motor1.set(Constants.Algaes.idleSpeed);
-        motor2.set(Constants.Algaes.idleSpeed);
-    }
-
+    // Gets the current value of the linebreak sensor and returns to systems outside
+    // of this one
     public boolean getLinebreak() {
         return (linebreak.get());
     }
 
     // Sets the speed of the servo controlling the pin
-
-    // Sets the speed of the servo controlling the pin
     public void setPin(int pinDirection) {
-
         pinMotor.set(pinDirection);
-
     }
 
-    public void setLEDColor(states state) {
-
-        if (state == states.idle) {
-            LEDS.setLEDS(LEDPreset.Solid.kWhite);
-        }
-        if (state == states.intaking) {
-            LEDS.setLEDS(LEDPreset.Solid.kGreen);
-        }
-        if (state == states.outaking) {
-            LEDS.setLEDS(LEDPreset.Solid.kRed);
-        }
-        if (state == states.holding) {
-            LEDS.setLEDS(LEDPreset.Solid.kBlue);
-        }
-    }
-    // public void setArmMotorAngle(Double angle){
-    // motorarm.setangle(angle);
-    // }
-    // Sets the motors speed to the setSpeed value
-
-    /**
-     * Example command factory method.
-     *
-     * @return a command
-     */
-
+    // Creating new instance of AlgaeIntakeCommand class
     public Command intake() {
         return new AlgaeIntakeCommand(mInstance);
     }
 
+    // Creating new instance of AlgaeLaunchCommand class
     public Command launch() {
         return new AlgaeLaunchCommand(mInstance);
     }
 
+    // Creating new instance of AlgaeDropCommand class
     public Command drop() {
         return new AlgaeDropCommand(mInstance);
     }
 
+    // Creating new instance of AlgaeCancelCommand class
     public Command cancel() {
         return new AlgaeCancelCommand(mInstance);
     }
