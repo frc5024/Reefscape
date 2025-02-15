@@ -24,7 +24,7 @@ public class RobotContainer {
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
 
-  //private final Swerve s_Swerve = Swerve.getInstance();
+  // private final Swerve s_Swerve = Swerve.getInstance();
   private final Elevator elevatorSubsystem = new Elevator();
 
   private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -56,6 +56,8 @@ public class RobotContainer {
     driver.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
     driver.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
     driver.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
+    driver.leftTrigger().onTrue(coralSubsystem.outtakeCommand());
+    driver.leftBumper().onTrue(coralSubsystem.intakeCommand());
 
     driver.rightBumper().onTrue(new InstantCommand (() -> elevatorSubsystem.zeroEncoderValue()));
   
