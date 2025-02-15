@@ -17,14 +17,11 @@ public class AlgaeIntakeCommand extends Command {
     @Override
     public void initialize() {
 
-        System.out.println("Initializing Intake");
-
-        // If linebreak is false, set hasAlgae to false and set motors to intake speed
-        // otherwise, set hasAlgae to true and set motors to idle speed
+        // If linebreak is false, set hasAlgae to false and set motors to intakeSpeed
+        // otherwise, set hasAlgae to true and set motors to idleSpeed
         if (!m_AlgaeCommandBased.getLinebreak()) {
             hasAlgae = false;
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.intakeSpeed);
-            System.out.println("setted the motors");
         } else {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
             hasAlgae = true;
@@ -36,10 +33,8 @@ public class AlgaeIntakeCommand extends Command {
     @Override
     public void execute() {
 
-        System.out.println("Executing Intake");
-
         // If linebreak is triggered, set motors to
-        // idlespeed and set hasAlgae to true
+        // idleSpeed and set hasAlgae to true
         if (m_AlgaeCommandBased.getLinebreak()) {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
             hasAlgae = true;
@@ -50,7 +45,6 @@ public class AlgaeIntakeCommand extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        System.out.println("End");
     }
 
     // Returns true when the command should end.

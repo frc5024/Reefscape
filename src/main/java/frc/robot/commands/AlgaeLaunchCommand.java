@@ -23,11 +23,12 @@ public class AlgaeLaunchCommand extends Command {
         launchTimer.reset();
         launchTimer.start();
 
-        // If there is nothing in the intake system, set motors to idle
+        // If there is something in the intake system, set motors to launchSpeed
         if (m_AlgaeCommandBased.getLinebreak()) {
             hasAlgae = true;
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.launchSpeed);
         } else {
+            // If there is nothing in the intake system, set motors to idle and end command
             hasAlgae = false;
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
         }
@@ -38,8 +39,8 @@ public class AlgaeLaunchCommand extends Command {
     @Override
     public void execute() {
 
-        // Set the motors to drop mode (outtake) if there is something in the intake
-        // system and timer is not elasped
+        // Set the motors to idleSpeed and set hasAlgae to false (ending the command) if
+        // timer has elapsed outtaketimer time (1.5 seconds)
         if (launchTimer.hasElapsed(Constants.Algaes.outtaketimer)) {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
             hasAlgae = false;
