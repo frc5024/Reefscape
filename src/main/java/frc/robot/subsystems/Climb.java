@@ -16,7 +16,6 @@ public class Climb extends SubsystemBase {
     public static Climb mInstance = null;
 
     private TalonFX climbMotor;
-    private LEDs ledSubsystem;
 
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
     GenericEntry encoder = tab.add("climbSpeed", .35).getEntry();
@@ -46,28 +45,29 @@ public class Climb extends SubsystemBase {
         if (climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.liftoffPos && !overThreshold()) {
             System.out.println("CLIMB FAILED");
             climbMotor.set(0);
-            ledSubsystem.setLEDS(LEDPreset.Strobe.kRed);
+            LEDs.getInstance().setCommand(LEDPreset.Strobe.kRed).schedule();
+
         } else {
             climbMotor.set(Constants.ClimbConstants.climbSpeed);
-            ledSubsystem.setLEDS(LEDPreset.LightChase.kBlue);
+            LEDs.getInstance().setCommand(LEDPreset.LightChase.kBlue).schedule();
         }
     }
 
     public void extending() {
         // speed = encoder.getDouble(0);
         climbMotor.set(Constants.ClimbConstants.extendoSpeed);
-        ledSubsystem.setLEDS(LEDPreset.Solid.kDarkBlue);
+        LEDs.getInstance().setCommand(LEDPreset.Solid.kDarkBlue).schedule();
     }
 
     public void retracting() {
         // speed = encoder.getDouble(0);
         climbMotor.set(-Constants.ClimbConstants.extendoSpeed);
-        ledSubsystem.setLEDS(LEDPreset.Solid.kDarkBlue);
+        LEDs.getInstance().setCommand(LEDPreset.Solid.kDarkBlue).schedule();
     }
 
     public void cancel() {
         climbMotor.set(Constants.ClimbConstants.cancelSpeed);
-        ledSubsystem.setLEDS(LEDPreset.Strobe.kGold);
+        LEDs.getInstance().setCommand(LEDPreset.Strobe.kGold).schedule();
 
     }
 

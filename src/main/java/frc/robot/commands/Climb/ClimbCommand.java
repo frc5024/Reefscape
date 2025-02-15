@@ -25,7 +25,7 @@ public class ClimbCommand extends Command {
     public void execute() {
         // Stops motor when Ultrasonic sensor and Encoder detect end position
         if (climbSubsystem.overThreshold() && climbSubsystem.isClimbPosition()) {
-            ledSubsystem.setLEDS(LEDPreset.Rainbow.kConfetti);
+            ledSubsystem.setCommand(LEDPreset.Rainbow.kConfetti).schedule();
         } else {
             climbSubsystem.climbing();
         }
