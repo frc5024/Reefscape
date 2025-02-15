@@ -13,8 +13,6 @@ import frc.robot.Constants.RobotConstants;
 import frc.robot.Robot;
 import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.SwerveDriveCommands;
-import frc.robot.commands.TuningCommand;
-import frc.robot.controls.ButtonBindings;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -62,26 +60,31 @@ abstract public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     protected void configureButtonBindings() {
-        ButtonBindings buttonBindings = new ButtonBindings(this.swerveDriveSubsystem, this.algaeIntakeSubsystem,
-                this.coralIntakeSubsystem, this.elevatorSubsystem, this.visionSubsystem);
-        CommandXboxController commandXboxController = RobotConstants.TUNING_MODE
-                ? buttonBindings.getButtonTestController()
-                : buttonBindings.getDriverController();
+        // ButtonBindings buttonBindings = new ButtonBindings(this.swerveDriveSubsystem,
+        // this.algaeIntakeSubsystem,
+        // this.coralIntakeSubsystem, this.elevatorSubsystem, this.visionSubsystem);
+        // CommandXboxController commandXboxController = RobotConstants.TUNING_MODE
+        // ? buttonBindings.getButtonTestController()
+        // : buttonBindings.getDriverController();
 
+        CommandXboxController commandXboxController = new CommandXboxController(0);
         Command joystickDrive = SwerveDriveCommands.joystickDrive(swerveDriveSubsystem,
                 () -> -commandXboxController.getLeftY(),
                 () -> -commandXboxController.getLeftX(),
                 () -> -commandXboxController.getRightX());
 
-        Command tuningCommand = new TuningCommand(swerveDriveSubsystem, algaeIntakeSubsystem, coralIntakeSubsystem,
-                elevatorSubsystem,
-                () -> -commandXboxController.getLeftY(),
-                () -> -commandXboxController.getLeftX(),
-                () -> -commandXboxController.getRightX(),
-                commandXboxController);
+        // Command tuningCommand = new TuningCommand(swerveDriveSubsystem,
+        // algaeIntakeSubsystem, coralIntakeSubsystem,
+        // elevatorSubsystem,
+        // () -> -commandXboxController.getLeftY(),
+        // () -> -commandXboxController.getLeftX(),
+        // () -> -commandXboxController.getRightX(),
+        // commandXboxController);
 
         // Default command, normal field-relative drive
-        swerveDriveSubsystem.setDefaultCommand(RobotConstants.TUNING_MODE ? tuningCommand : joystickDrive);
+        // swerveDriveSubsystem.setDefaultCommand(RobotConstants.TUNING_MODE ?
+        // tuningCommand : joystickDrive);
+        swerveDriveSubsystem.setDefaultCommand(joystickDrive);
     }
 
     /**
