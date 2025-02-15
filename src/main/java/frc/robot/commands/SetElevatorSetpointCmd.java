@@ -24,7 +24,7 @@ public class SetElevatorSetpointCmd extends Command {
         elevatorSubsystem.setSetPoint(setpoint);
 
     }
-
+    //will use PID calculatioins to set the speed. Execute is used because it is called only when the command is running 
     @Override
     public void execute() {
         elevatorSubsystem.pidMotor();

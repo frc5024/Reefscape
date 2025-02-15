@@ -28,7 +28,7 @@ public class Elevator extends SubsystemBase{
     public SparkMax elevatorMotor; //LEAD R  CHANGE THIS
     public SparkMax elevatorMotor2; //FOLLOWER L
     private final SparkBaseConfig elevatorMotorConfig = new SparkMaxConfig()
-            .idleMode(IdleMode.kBrake)
+            .idleMode(IdleMode.kBrake) //sets the motors to break mode
             .inverted(true);
     private final SparkBaseConfig elevatorMotor2Config = new SparkMaxConfig()
             .idleMode(IdleMode.kBrake)
@@ -40,6 +40,7 @@ public class Elevator extends SubsystemBase{
     private PIDController PID;
     private double gConstant;
 
+    //made it so "speed" is able to be accessed by the whole class
     private double speed;
 
 
@@ -113,6 +114,7 @@ public class Elevator extends SubsystemBase{
         // zeroingEncoder();
     }
 
+    //creates a command for calculating speed through PID which will be used in the command instead of the periodic
     public void pidMotor() {
         speed = PID.calculate(elevatorMotor.getEncoder().getPosition()) + gConstant;
     }
@@ -122,6 +124,7 @@ public class Elevator extends SubsystemBase{
         PID.setSetpoint(position);
     }
 
+    //setting the manual target speed that can be controlled by the driver to the speed used in calculations and safety checks
     public void controlMotor(double targetSpeed) {
         speed = targetSpeed;
     }
@@ -151,7 +154,7 @@ public class Elevator extends SubsystemBase{
     //     }
     // }
 
-
+    //gets the encoder value for safety precautions in the periodic
     private double encoderValue() {
         return elevatorMotor.getEncoder().getPosition();
     }
@@ -162,7 +165,7 @@ public class Elevator extends SubsystemBase{
 
     @Override
     public Command getDefaultCommand() {
-        return run(() -> elevatorMotor.set(0)); //set it to g constant so that it stays put in the future
+        return run(() -> elevatorMotor.set(0)); //***set it to g constant so that it stays put in the future
     }
 
     public void motor1Manual() {

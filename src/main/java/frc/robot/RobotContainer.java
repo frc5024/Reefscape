@@ -15,12 +15,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Coral;
+
 
 public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final CommandXboxController driver = new CommandXboxController(0);
-  //private final CommandXboxController operator = new CommandXboxController(1);
+  private final CommandXboxController operator = new CommandXboxController(1);
 
   //private final Swerve s_Swerve = Swerve.getInstance();
   private final Elevator elevatorSubsystem = new Elevator();
@@ -28,6 +30,8 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
+
+  private final Coral coralSubsystem = new Coral();
 
   public RobotContainer() {
 
