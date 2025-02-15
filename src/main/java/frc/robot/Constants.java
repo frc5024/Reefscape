@@ -3,18 +3,26 @@ package frc.robot;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.lib.leds.LEDPreset;
+import frc.lib.leds.ILEDPreset;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
+        public static class LEDsConstants  { //changed name to LEDsConstants
+            public final static int ledPort = 9; // Port for LED, Make sure it is PWM not DIO
+            public final static ILEDPreset defaultLED = LEDPreset.Solid.kGold;// Default Colour
+        
+        }
+
+
+        public static class OperatorConstants{
+                public static final int kDriverControllerPort = 0;
+        }
 
   public static class elevatorConstants {
         //elevator values
@@ -52,7 +60,7 @@ public final class Constants {
         public static final double L4position = Units.degreesToRadians(1988);
 
   }
-
+  
         public static final class coralConstants {
                 public static final int coralMotorChannel = 51;
                 public static final int coralMotorReversedChannel = 52;
@@ -187,4 +195,4 @@ public final class Constants {
                     canCoderID, angleOffset);
         }
     }
-}
+        }
