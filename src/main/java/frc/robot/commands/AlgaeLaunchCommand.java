@@ -40,8 +40,7 @@ public class AlgaeLaunchCommand extends Command {
 
         // Set the motors to drop mode (outtake) if there is something in the intake
         // system and timer is not elasped
-        if (launchTimer.hasElapsed(Constants.Algaes.outtaketimer)
-                || (m_AlgaeCommandBased.getMotorSpeed() == Constants.Algaes.idleSpeed)) {
+        if (launchTimer.hasElapsed(Constants.Algaes.outtaketimer)) {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
             hasAlgae = false;
         }

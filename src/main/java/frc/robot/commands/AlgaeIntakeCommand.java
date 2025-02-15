@@ -19,6 +19,8 @@ public class AlgaeIntakeCommand extends Command {
 
         System.out.println("Initializing Intake");
 
+        // If linebreak is false, set hasAlgae to false and set motors to intake speed
+        // otherwise, set hasAlgae to true and set motors to idle speed
         if (!m_AlgaeCommandBased.getLinebreak()) {
             hasAlgae = false;
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.intakeSpeed);
@@ -36,8 +38,9 @@ public class AlgaeIntakeCommand extends Command {
 
         System.out.println("Executing Intake");
 
-        if (m_AlgaeCommandBased.getLinebreak()
-                || m_AlgaeCommandBased.getMotorSpeed() == Constants.Algaes.idleSpeed) {
+        // If linebreak is triggered, set motors to
+        // idlespeed and set hasAlgae to true
+        if (m_AlgaeCommandBased.getLinebreak()) {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
             hasAlgae = true;
         }

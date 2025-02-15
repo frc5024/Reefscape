@@ -21,7 +21,8 @@ public class AlgaePinResetCommand extends Command {
     @Override
     public void execute() {
 
-        m_AlgaeCommandBased.setPin(Constants.Algaes.pinStop);
+        // Resets the position of the pin back to 0
+        m_AlgaeCommandBased.setPin(Constants.Algaes.pinReset);
 
     }
 
