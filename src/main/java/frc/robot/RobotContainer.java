@@ -3,6 +3,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.elevatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.CoralScored;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.SetElevatorSetpointCmd;
@@ -52,15 +53,18 @@ public class RobotContainer {
 
   private void configureBindings() {
     //buttons for elevator positions
-    operator.b().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
+    //operator.b().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
+    operator.b().onTrue(new CoralScored(coralSubsystem, elevatorSubsystem));
     operator.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
     operator.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
     operator.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
+    
     driver.a().onTrue(coralSubsystem.intakeCommand());
     driver.b().onTrue(coralSubsystem.outtakeCommand());
     driver.y().onTrue(coralSubsystem.cancelIntakeCommand());
     driver.x().onTrue(coralSubsystem.plopCommand());
     driver.rightBumper().onTrue(coralSubsystem.lowerRampCommand());
+
     //driver.rightTrigger().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.rootPosition));
     // driver.leftBumper().whileTrue(new RunCommand(() ->
     // { 

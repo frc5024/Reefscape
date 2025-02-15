@@ -26,9 +26,9 @@ public class Coral extends SubsystemBase{
     private SparkFlex coralMotor;
     private SparkFlex coralMotorReversed;
     
-    private final SparkBaseConfig coralMotorReversedConfig = new SparkFlexConfig()
-        .inverted(true)
-        .follow(coralConstants.coralMotorChannel);
+    // private final SparkBaseConfig coralMotorReversedConfig = new SparkFlexConfig()
+    //     .inverted(true)
+    //     .follow(coralConstants.coralMotorChannel);
 
     private static DigitalInput linebreak;
 
@@ -61,7 +61,7 @@ public class Coral extends SubsystemBase{
         
         tab.addDouble("reversed motor speed", () -> coralMotorReversed.get());
 
-        this.coralMotorReversed.configure(coralMotorReversedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        //this.coralMotorReversed.configure(coralMotorReversedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     }
     
@@ -78,6 +78,7 @@ public class Coral extends SubsystemBase{
     //idle state, set motor to 0
     public void setIdle() {
         coralMotor.set(0);
+        coralMotorReversed.set(0);
     }
 
     public boolean isLineBroken() {
@@ -85,12 +86,12 @@ public class Coral extends SubsystemBase{
     }
 
     public double getEncoder() {
-        return coralMotor.getAbsoluteEncoder().getPosition();
-        //return coralMotorReversed.getAbsoluteEncoder().getPosition();
+        return coralMotorReversed.getAbsoluteEncoder().getPosition();
     }
 
     public void set(double speed) {
         coralMotor.set(speed);
+        coralMotorReversed.set(-speed);
     }
 
     public Command plopCommand(){
