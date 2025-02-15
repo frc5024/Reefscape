@@ -8,7 +8,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import frc.robot.Constants.Swerve;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.ConstantsMiniBot.Swerve;
 
 /**
  * 
@@ -55,6 +56,11 @@ public class SwerveModule {
         this.driveDisconnectedAlert.set(!inputs.driveConnected);
         this.turnDisconnectedAlert.set(!inputs.turnConnected);
         this.turnEncoderDisconnectedAlert.set(!inputs.turnEncoderConnected);
+
+        // SmartDashboard.putNumber("Mod " + index + " CANcoder",
+        // this.cancoder.getDegrees());
+        SmartDashboard.putNumber("Mod " + index + " Angle", getPosition().angle.getDegrees());
+        SmartDashboard.putNumber("Mod " + index + " Velocity", getState().speedMetersPerSecond);
     }
 
     /**

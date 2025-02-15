@@ -75,6 +75,8 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     private final Debouncer turnConnectedDebounce = new Debouncer(0.5);
     private final Debouncer turnEncoderConnectedDebounce = new Debouncer(0.5);
 
+    private final Rotation2d angleOffset;
+
     /**
      * 
      */
@@ -84,6 +86,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         this.driveTalon = new TalonFX(swerveModuleConstants.driveMotorID, "rio");
         this.turnTalon = new TalonFX(swerveModuleConstants.angleMotorID, "rio");
         this.cancoder = new CANcoder(swerveModuleConstants.cancoderID, "rio");
+        this.angleOffset = swerveModuleConstants.angleOffset;
 
         // Configure drive motor
         this.driveConfig = this.ctreConfigs.getDriveConfig();
@@ -93,6 +96,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         // Configure turn motor
         this.turnConfig = this.ctreConfigs.getAngleConfig();
         tryUntilOk(5, () -> this.turnTalon.getConfigurator().apply(this.turnConfig, 0.25));
+        resetToAbsolute();
 
         // Configure CANCoder
         CANcoderConfiguration cancoderConfig = this.ctreConfigs.getCancoderConfig();
@@ -167,6 +171,21 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         this.timestampQueue.clear();
         this.drivePositionQueue.clear();
         this.turnPositionQueue.clear();
+    }
+
+    /**
+     * 
+     */
+    private Rotation2d getCANcoder() {
+        return Rotation2d.fromRotations(this.cancoder.getAbsolutePosition().getValueAsDouble());
+    }
+
+    /**
+     * 
+     */
+    public void resetToAbsolute() {
+        double absolutePosition = getCANcoder().getRotations() - this.angleOffset.getRotations();
+        this.turnTalon.setPosition(absolutePosition);
     }
 
     @Override

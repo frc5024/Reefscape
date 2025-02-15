@@ -49,7 +49,7 @@ import frc.robot.utils.SwerveModuleConstants;
 /**
  * 
  */
-public final class Constants {
+public final class ConstantsMiniBot {
     /**
      * 
      */
@@ -241,24 +241,24 @@ public final class Constants {
      */
     public static final class PIDConstants {
         // PID constants for simulated swerve modules
-        public static final double SIM_SWERVE_MODULE_DRIVE_KP = 0.1;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KP = 0.2;
         public static final double SIM_SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SIM_SWERVE_MODULE_DRIVE_KD = 0.0;
 
-        public static final double SIM_SWERVE_MODULE_TURN_KP = 0.5;
+        public static final double SIM_SWERVE_MODULE_TURN_KP = 1.0;
         public static final double SIM_SWERVE_MODULE_TURN_KI = 0.0;
         public static final double SIM_SWERVE_MODULE_TURN_KD = 0.0;
 
         // PID constants for autonomous/pathplanner mode
-        public static final double SWERVE_DRIVE_X_KP = 0.2;
+        public static final double SWERVE_DRIVE_X_KP = 0.05;
         public static final double SWERVE_DRIVE_X_KI = 0.0;
         public static final double SWERVE_DRIVE_X_KD = 0.0;
 
-        public static final double SWERVE_DRIVE_Y_KP = 0.2;
+        public static final double SWERVE_DRIVE_Y_KP = 0.05;
         public static final double SWERVE_DRIVE_Y_KI = 0.0;
         public static final double SWERVE_DRIVE_Y_KD = 0.0;
 
-        public static final double SWERVE_DRIVE_OMEGA_KP = 1.0;
+        public static final double SWERVE_DRIVE_OMEGA_KP = 0.5;
         public static final double SWERVE_DRIVE_OMEGA_KI = 0.0;
         public static final double SWERVE_DRIVE_OMEGA_KD = 0.0;
 
@@ -358,15 +358,16 @@ public final class Constants {
         public static final int AHRS = 1;
 
         public static final COTSTalonFXSwerveConstants chosenModule = // TODO: This must be tuned to specific robot
-                COTSTalonFXSwerveConstants.SDS.MK4i.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L1);
+                COTSTalonFXSwerveConstants.SDS.MK4i.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L3);
 
         public static final COTSTalonFXSwerveConstants chosenDriveModule = // TODO: This must be tuned to specific robot
-                COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L1);
+                COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L3);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(22.0); // TODO: This must be tuned to specific
+        public static final double trackWidth = Units.inchesToMeters(18.75); // TODO: This must be tuned to specific
+                                                                             // robot
+        public static final double wheelBase = Units.inchesToMeters(18.75); // TODO: This must be tuned to specific
                                                                             // robot
-        public static final double wheelBase = Units.inchesToMeters(22.0); // TODO: This must be tuned to specific robot
         public static final double wheelCircumference = chosenDriveModule.wheelCircumference;
 
         /*
@@ -425,7 +426,8 @@ public final class Constants {
 
         /* Drive Motor Characterization Values From SYSID */
         public static final double driveKS = (0.32); // TODO: This must be tuned to specific robot
-        public static final double driveKV = (1.51);
+        public static final double driveKV = (0);
+        // public static final double driveKV = (1.51);
         public static final double driveKA = (0.27);
 
         /* Swerve Profiling Values */
@@ -444,7 +446,7 @@ public final class Constants {
             public static final int driveMotorID = 41;
             public static final int angleMotorID = 42;
             public static final int canCoderID = 4;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(152.8); //
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(155.566406);
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -454,7 +456,7 @@ public final class Constants {
             public static final int driveMotorID = 11;
             public static final int angleMotorID = 12;
             public static final int canCoderID = 1;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(92.9 + 180); //
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-317.021484);
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -464,7 +466,7 @@ public final class Constants {
             public static final int driveMotorID = 31;
             public static final int angleMotorID = 32;
             public static final int canCoderID = 3;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-60); //
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-72.861328); //
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -474,7 +476,7 @@ public final class Constants {
             public static final int driveMotorID = 21;
             public static final int angleMotorID = 22;
             public static final int canCoderID = 2;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-35.7); //
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-35.7);
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -519,12 +521,12 @@ public final class Constants {
          * TODO: set camera names and positions - pitch is based on degress from
          * vertical
          */
-        public static final Camera ARDUCAM2_CAMERA = new Camera("Arducam_OV9281-2",
+        public static final Camera FRONT_CAMERA = new Camera("Arducam_OV9281-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(6.0),
                 0.0, Units.degreesToRadians(-25.0), Units.degreesToRadians(45.0));
 
-        public static final Camera ARDUCAM1_CAMERA = new Camera("Arducam_OV9281-1",
+        public static final Camera REAR_CAMERA = new Camera("Arducam_OV9281-1",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(6.0),
                 0.0, Units.degreesToRadians(45), Math.PI);
@@ -536,22 +538,20 @@ public final class Constants {
 
         public static final Camera LIMELIGHT3G_CAMERA = new Camera("limelight",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
-                Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(6.0),
+                Units.inchesToMeters(11.0), Units.inchesToMeters(11.0), Units.inchesToMeters(9.25),
                 0.0, Units.degreesToRadians(-25.0), Units.degreesToRadians(45.0));
 
         public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight-two",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
                 Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(6.0),
-                0.0, Units.degreesToRadians(-25.0), Units.degreesToRadians(45.0));
+                0.0, Units.degreesToRadians(-15.0), Units.degreesToRadians(45.0));
 
         /**
          * TODO: set list of enabled camera
          */
         // public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA,
         // LIMELIGHT2_CAMERA);
-        public static final Camera FRONT_CAMERA = LIMELIGHT3G_CAMERA;
-        public static final Camera REAR_CAMERA = LIMELIGHT3G_CAMERA;
-        public static final List<Camera> CAMERAS = Arrays.asList(FRONT_CAMERA, REAR_CAMERA);
+        public static final List<Camera> CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA);
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;

@@ -13,11 +13,11 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.PIDConstants;
-import frc.robot.Constants.RobotConstants;
-import frc.robot.Constants.TeleopConstants;
-import frc.robot.Constants.VisionConstants;
+import frc.robot.ConstantsMiniBot.FieldConstants;
+import frc.robot.ConstantsMiniBot.PIDConstants;
+import frc.robot.ConstantsMiniBot.RobotConstants;
+import frc.robot.ConstantsMiniBot.TeleopConstants;
+import frc.robot.ConstantsMiniBot.VisionConstants;
 import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -82,6 +82,7 @@ public class DriveFromBestTagCommand extends Command {
         double ySpeed = this.yController.calculate(robotPose.getY());
         double omegaSpeed = this.omegaController.calculate(robotPose.getRotation().getRadians());
 
+        System.out.printf("*** SPEEDS - X: %.2f - Y: %.2f - O: %.2f", xSpeed, ySpeed, omegaSpeed);
         if (this.xController.atGoal())
             xSpeed = 0;
         if (this.yController.atGoal())
@@ -103,6 +104,10 @@ public class DriveFromBestTagCommand extends Command {
                 ? VisionConstants.REAR_CAMERA.getName()
                 : VisionConstants.FRONT_CAMERA.getName();
         Pose3d targetPose = this.visionSubsystem.getBestTargetPose(cameraName);
+
+        if (targetPose == null) {
+            return null;
+        }
 
         double yOffset = 0.0;
         double yawOffset = 0.0;
