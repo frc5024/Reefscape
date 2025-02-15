@@ -7,7 +7,7 @@ import frc.robot.subsystems.AlgaeCommandBased;
 // Intakes 
 public class AlgaeIntakeCommand extends Command {
     private final AlgaeCommandBased m_AlgaeCommandBased;
-    boolean brokenLine = false;
+    boolean hasAlgae = false;
 
     public AlgaeIntakeCommand(AlgaeCommandBased algaeCommandBased) {
         this.m_AlgaeCommandBased = algaeCommandBased;
@@ -17,7 +17,16 @@ public class AlgaeIntakeCommand extends Command {
     @Override
     public void initialize() {
 
-        brokenLine = false;
+        System.out.println("Initializing Intake");
+
+        if (!m_AlgaeCommandBased.getLinebreak()) {
+            hasAlgae = false;
+            m_AlgaeCommandBased.setSpeed(Constants.Algaes.intakeSpeed);
+            System.out.println("setted the motors");
+        } else {
+            m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
+            hasAlgae = true;
+        }
 
     }
 
@@ -25,12 +34,12 @@ public class AlgaeIntakeCommand extends Command {
     @Override
     public void execute() {
 
-        // If the linebreak sensor has not been triggered, set the motors to intake mode
-        if (!m_AlgaeCommandBased.getLinebreak() && !brokenLine) {
-            m_AlgaeCommandBased.setSpeed(Constants.Algaes.intakeSpeed);
-        } else {
+        System.out.println("Executing Intake");
+
+        if (m_AlgaeCommandBased.getLinebreak()
+                || m_AlgaeCommandBased.getMotorSpeed() == Constants.Algaes.idleSpeed) {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
-            brokenLine = true;
+            hasAlgae = true;
         }
 
     }
@@ -38,12 +47,12 @@ public class AlgaeIntakeCommand extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
+        System.out.println("End");
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return hasAlgae;
     }
 }

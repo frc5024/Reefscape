@@ -22,9 +22,7 @@ public class AlgaeCancelCommand extends Command {
     public void execute() {
 
         // If the linebreak sensor has not been triggered, set the motors to idle
-        if (!m_AlgaeCommandBased.getLinebreak()) {
-            m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
-        }
+        m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
 
     }
 

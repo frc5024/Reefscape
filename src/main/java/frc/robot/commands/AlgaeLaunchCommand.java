@@ -7,6 +7,7 @@ import frc.robot.subsystems.AlgaeCommandBased;
 
 public class AlgaeLaunchCommand extends Command {
     private final AlgaeCommandBased m_AlgaeCommandBased;
+    boolean hasAlgae = false;
 
     Timer launchTimer = new Timer();
 
@@ -18,10 +19,16 @@ public class AlgaeLaunchCommand extends Command {
     @Override
     public void initialize() {
 
+        // Reset dropTimer (set to 0) and then start timer
         launchTimer.reset();
         launchTimer.start();
 
-        if (!m_AlgaeCommandBased.getLinebreak()) {
+        // If there is nothing in the intake system, set motors to idle
+        if (m_AlgaeCommandBased.getLinebreak()) {
+            hasAlgae = true;
+            m_AlgaeCommandBased.setSpeed(Constants.Algaes.launchSpeed);
+        } else {
+            hasAlgae = false;
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
         }
 
@@ -31,13 +38,12 @@ public class AlgaeLaunchCommand extends Command {
     @Override
     public void execute() {
 
-        // Set the motors to launch mode (outtake) if there is something in the intake
+        // Set the motors to drop mode (outtake) if there is something in the intake
         // system and timer is not elasped
-        if (launchTimer.hasElapsed(Constants.Algaes.outtaketimer)) {
+        if (launchTimer.hasElapsed(Constants.Algaes.outtaketimer)
+                || (m_AlgaeCommandBased.getMotorSpeed() == Constants.Algaes.idleSpeed)) {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
-        } else if (m_AlgaeCommandBased.getLinebreak()) {
-            // Set motors to idle if timer has passed timer time
-            m_AlgaeCommandBased.setSpeed(Constants.Algaes.launchSpeed);
+            hasAlgae = false;
         }
 
     }
@@ -46,14 +52,11 @@ public class AlgaeLaunchCommand extends Command {
     @Override
     public void end(boolean interrupted) {
 
-        // Sets speed to idle (off) if command is interrupted
-        m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
-
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return !hasAlgae;
     }
 }

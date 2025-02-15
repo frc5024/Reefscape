@@ -62,6 +62,18 @@ public class AlgaeCommandBased extends SubsystemBase {
         return (linebreak.get());
     }
 
+    public double getMotorSpeed() {
+
+        return (motor1.get());
+
+    }
+
+    public double getMotor2Voltage() {
+
+        return (motor2.getBusVoltage());
+
+    }
+
     // Sets the speed of the servo controlling the pin
     public void setPin(int pinDirection) {
         pinMotor.set(pinDirection);
