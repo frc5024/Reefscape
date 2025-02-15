@@ -9,6 +9,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
+import frc.lib.leds.ILEDPreset;
+import frc.lib.leds.LEDPreset;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -35,6 +37,66 @@ public final class Constants {
         public static final double rightOffset = 0.3; // in meters
         public static final double noOffset = 0; // in meters
 
+    }
+
+    public static class LEDsConstants { // changed name to LEDsConstants
+        public final static int ledPort = 0; // Port for LED, Make sure it is PWM not DIO
+        public final static ILEDPreset defaultLED = LEDPreset.Solid.kGold;// Default Colour
+
+    }
+
+    public static class elevatorConstants {
+        // elevator values
+        public static final double elevatorSpeed = 0.5;
+        public static final double elevatorOff = 0;
+        public static final double elevatorMaxUpSpeed = 0.20;
+        public static final double elevatorMaxDownSpeed = 0.1;
+        public static final double zeroPosition = 0;
+        public static final int motorID1 = 60;
+        public static final int motorID2 = 61;
+
+        // values for PID
+        public static final double kP = 0.033;
+        public static final double kI = 0;
+        public static final double kD = 0;
+
+        public static final double G = 0.038;
+        public static final double minimumBottomValue = 0.1; // encoder value will not always be zero so we create a
+                                                             // tolerance value
+
+        // public static final double radianstoCM(double CM) {
+        // double radians;
+        // radians = Units.degreesToRadians(CM/1.4765*360);
+        // return(radians);
+        // }
+
+        // one rotation equals 1.4765 cm
+
+        // position constants for the different levels to score
+        public static final double rootPosition = Units.degreesToRadians(0);
+        public static final double L1Position = Units.degreesToRadians(355);
+        public static final double L2Position = Units.degreesToRadians(1012);
+        public static final double Algae1 = Units.degreesToRadians(250);
+        public static final double L3position = Units.degreesToRadians(1656);
+        public static final double Algae2 = Units.degreesToRadians(350);
+        public static final double L4position = Units.degreesToRadians(2683);
+
+    }
+
+    // constants for intake and channels
+    public static final class coralConstants {
+        public static final int coralMotorChannel = 51;
+        public static final int coralMotorReversedChannel = 52;
+        public static final int linebreakChannel = 0;
+        public static final int servoChannel = 0;
+
+        public static double intakeSpeed = -0.1;
+        public static double outtakeSpeed = -0.2;
+        public static double plopSpeed = -0.05;
+        public static double rampSpeed = -0.05;
+
+        // public static double servoRotate = 0.5;
+        // public static double servoReset = -0.5;
     }
 
     public static final class Swerve {
