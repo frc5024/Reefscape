@@ -2,12 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
@@ -21,11 +18,12 @@ public class Climb extends SubsystemBase {
     GenericEntry encoder = tab.add("climbSpeed", .35).getEntry();
 
     // Ultrasonic
-    private final Ultrasonic m_ultrasonic = new Ultrasonic(Constants.ClimbConstants.pingID,
-            Constants.ClimbConstants.echoID);
-    double distanceMillimetres;
-    double measurement;
-    MedianFilter filter = new MedianFilter(Constants.ClimbConstants.filterValue);
+    // private final Ultrasonic m_ultrasonic = new
+    // Ultrasonic(Constants.ClimbConstants.pingID,
+    // Constants.ClimbConstants.echoID);
+    // double distanceMillimetres;
+    // double measurement;
+    // MedianFilter filter = new MedianFilter(Constants.ClimbConstants.filterValue);
 
     public static Climb getInstance() {
         if (mInstance == null) {
@@ -42,15 +40,16 @@ public class Climb extends SubsystemBase {
 
     public void climbing() {
         // speed = encoder.getDouble(0);
-        if (climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.liftoffPos && !overThreshold()) {
-            System.out.println("CLIMB FAILED");
-            climbMotor.set(0);
-            LEDs.getInstance().setCommand(LEDPreset.Strobe.kRed).schedule();
+        // if (climbMotor.getPosition().getValueAsDouble() >=
+        // Constants.ClimbConstants.liftoffPos && !overThreshold()) {
+        // System.out.println("CLIMB FAILED");
+        // climbMotor.set(0);
+        // LEDs.getInstance().setCommand(LEDPreset.Strobe.kRed).schedule();
 
-        } else {
-            climbMotor.set(Constants.ClimbConstants.climbSpeed);
-            LEDs.getInstance().setCommand(LEDPreset.LightChase.kBlue).schedule();
-        }
+        // } else {
+        climbMotor.set(Constants.ClimbConstants.climbSpeed);
+        LEDs.getInstance().setCommand(LEDPreset.LightChase.kBlue).schedule();
+        // }
     }
 
     public void extending() {
@@ -77,26 +76,27 @@ public class Climb extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Ultrasonic.setAutomaticMode(true);
-        m_ultrasonic.setEnabled(true);
+        // Ultrasonic.setAutomaticMode(true);
+        // m_ultrasonic.setEnabled(true);
 
-        distanceMillimetres = m_ultrasonic.getRangeMM();
-        // Calculates the average of the given values from the Ultrasonic sensor
-        measurement = filter.calculate(distanceMillimetres);
+        // distanceMillimetres = m_ultrasonic.getRangeMM();
+        // // Calculates the average of the given values from the Ultrasonic sensor
+        // measurement = filter.calculate(distanceMillimetres);
 
-        SmartDashboard.putBoolean("Over Threshold", overThreshold());
-        SmartDashboard.putNumber("Ultrasonic", measurement);
+        // SmartDashboard.putBoolean("Over Threshold", overThreshold());
+        // SmartDashboard.putNumber("Ultrasonic", measurement);
     }
 
-    public boolean overThreshold() {
-        // Returns true if the Ultrasonic sensor detects that it is a certain distance
-        // above the ground
-        if (measurement >= Constants.ClimbConstants.ultrasonicThreshold) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // public boolean overThreshold() {
+    // // Returns true if the Ultrasonic sensor detects that it is a certain
+    // distance
+    // // above the ground
+    // if (measurement >= Constants.ClimbConstants.ultrasonicThreshold) {
+    // return true;
+    // } else {
+    // return false;
+    // }
+    // }
 
     public boolean isClimbPosition() {
         // Returns true if the Encoder detects the motor is at end position
