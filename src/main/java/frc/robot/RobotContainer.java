@@ -52,10 +52,20 @@ public class RobotContainer {
     driver.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
     driver.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
     driver.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
-    driver.rightBumper().onTrue(new InstantCommand(() -> elevatorSubsystem.zeroEncoderValue()));
+
+    driver.rightBumper().onTrue(new InstantCommand (() -> elevatorSubsystem.zeroEncoderValue()));
+  
     //driver.rightTrigger().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.rootPosition));
- 
-    driver.rightBumper().whileTrue(new RunCommand(() -> elevatorSubsystem.controlMotor(-0.1)).finallyDo( ()-> elevatorSubsystem.controlMotor(0.0)));
+    // driver.leftBumper().whileTrue(new RunCommand(() ->
+    // { 
+    //   System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    //   elevatorSubsystem.motor1Manual();
+    // }).finallyDo( ()-> 
+    // {
+    //   System.out.println("DONEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+    //   elevatorSubsystem.elevatorMotor.set(0);
+    // }));
+    // driver.rightBumper().whileTrue(new RunCommand(() -> elevatorSubsystem.motor2Manual()).finallyDo( ()-> elevatorSubsystem.elevatorMotor2.set(0.0)));
     //operator.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.Algae2));
     //operator.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
     //driver.x().whileTrue(new elevatorCmd(elevatorSubsystem, true) );

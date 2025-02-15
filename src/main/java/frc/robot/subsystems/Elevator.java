@@ -25,14 +25,15 @@ import frc.robot.Constants.elevatorConstants;
 
 public class Elevator extends SubsystemBase{
      //created and named the motor controller
-    private SparkMax elevatorMotor; //LEAD
-    private SparkMax elevatorMotor2; //FOLLOWER
+    public SparkMax elevatorMotor; //LEAD R  CHANGE THIS
+    public SparkMax elevatorMotor2; //FOLLOWER L
     private final SparkBaseConfig elevatorMotorConfig = new SparkMaxConfig()
             .idleMode(IdleMode.kBrake)
             .inverted(true);
     private final SparkBaseConfig elevatorMotor2Config = new SparkMaxConfig()
             .idleMode(IdleMode.kBrake)
-            .follow(elevatorConstants.motorID1);
+            //.inverted(true)
+            .follow(elevatorConstants.motorID1, false);
 
 
     //created and named the PID controller
@@ -43,7 +44,7 @@ public class Elevator extends SubsystemBase{
 
 
     //created and named the limit switches
-    //private static DigitalInput zeroingLimitSwitch;
+    // private static DigitalInput zeroingLimitSwitch;
     //private static DigitalInput stoppingLimitSwitch;
 
     //added shuffleboard tabs to change the different values in the shuffle board app
@@ -55,6 +56,7 @@ public class Elevator extends SubsystemBase{
     GenericEntry maxUpSpeedEntry = tab.add("SET Max Speed", (elevatorConstants.elevatorMaxUpSpeed)).getEntry();
     GenericEntry maxDownSpeedEntry = tab.add("SET Max Down Speed", (elevatorConstants.elevatorMaxDownSpeed)).getEntry();
     GenericEntry SETsetPoint = tab.add("SET Dest (DEG)", 0.0).getEntry();
+    GenericEntry motor1ManualEntry = tab.add("SET MANUAL SPEED", 0.0).getEntry();
 
 
     //constructor
@@ -64,6 +66,8 @@ public class Elevator extends SubsystemBase{
         elevatorMotor2 = new SparkMax(elevatorConstants.motorID2, SparkLowLevel.MotorType.kBrushless);
         this.elevatorMotor.configure(elevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         this.elevatorMotor2.configure(elevatorMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        
+        // zeroingLimitSwitch = new DigitalInput(9);
 
         //assigning values to the P, I and D
         PID = new PIDController(elevatorConstants.kP, elevatorConstants.kI, elevatorConstants.kD);
@@ -73,6 +77,8 @@ public class Elevator extends SubsystemBase{
         
        tab.addDouble("encoder value", () ->elevatorMotor.getEncoder().getPosition()); //callback loop. calls the function everytime it wants a value. Constantly checks the value.
        tab.addDouble("encoder valueDEG", () ->Units.radiansToDegrees(elevatorMotor.getEncoder().getPosition()));
+       tab.addDouble("encoder2 valueDEG", () ->Units.radiansToDegrees(elevatorMotor2.getEncoder().getPosition()));
+       tab.addDouble("PID Speed Value", () -> speed);
 
        
     }
@@ -87,7 +93,7 @@ public class Elevator extends SubsystemBase{
         PID.setI(iEntry.getDouble(elevatorConstants.kI));
         gConstant = gEntry.getDouble(elevatorConstants.G);
 
-        //if the boolean enabled is true then run this command
+        // //if the boolean enabled is true then run this command
 
         if (speed >= maxUpSpeedEntry.getDouble(elevatorConstants.elevatorMaxUpSpeed)) {
             elevatorMotor.set(maxUpSpeedEntry.getDouble(elevatorConstants.elevatorMaxUpSpeed));
@@ -96,14 +102,15 @@ public class Elevator extends SubsystemBase{
         } else {
             elevatorMotor.set(speed);
         }
-        //safety precaution to prevent the motor from trying to go past the bottom stop
+
+        // //safety precaution to prevent the motor from trying to go past the bottom stop
         if (speed < 0 && encoderValue() <= elevatorConstants.minimumBottomValue) {
             elevatorMotor.set(0);
         }
         
 
         //checkTopLimitSwitch();
-        //zeroingEncoder();
+        // zeroingEncoder();
     }
 
     public void pidMotor() {
@@ -121,7 +128,7 @@ public class Elevator extends SubsystemBase{
 
     //creating a boolean method which returns the condition of both limit switches
     // public boolean isBottomLimitSwitchBroken() {
-    //     return zeroingLimitSwitch.get();
+    //      return zeroingLimitSwitch.get();
     // }
 
     //public boolean isTopLimitSwitchBroken() {
@@ -131,9 +138,9 @@ public class Elevator extends SubsystemBase{
 
     //encoder value will reset to 0 once the bottom limit switch is triggered
     // public void zeroingEncoder () {
-    //     if (isBottomLimitSwitchBroken()) {
-    //         elevatorMotor.getEncoder().setPosition(elevatorConstants.zeroPosition);
-    //     }
+    //      if (isBottomLimitSwitchBroken()) {
+    //          elevatorMotor.getEncoder().setPosition(elevatorConstants.zeroPosition);
+    //      }
     // }
 
     //stop the motor if the the top limit switch is triggered
@@ -149,11 +156,22 @@ public class Elevator extends SubsystemBase{
         return elevatorMotor.getEncoder().getPosition();
     }
 
+    public void zeroEncoderValue() {
+        elevatorMotor.getEncoder().setPosition(0.0);
+    }
+
     @Override
     public Command getDefaultCommand() {
         return run(() -> elevatorMotor.set(0)); //set it to g constant so that it stays put in the future
     }
 
+    public void motor1Manual() {
+        elevatorMotor.set(motor1ManualEntry.getDouble(0));
+    }
+
+    public void motor2Manual() {
+        elevatorMotor2.set(motor1ManualEntry.getDouble(0));
+    }
 
 }
 
