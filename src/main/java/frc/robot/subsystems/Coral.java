@@ -26,9 +26,9 @@ public class Coral extends SubsystemBase{
     private SparkFlex coralMotor;
     private SparkFlex coralMotorReversed;
     
-    private final SparkBaseConfig coralMotorReversedConfig = new SparkFlexConfig()
-        .inverted(true)
-        .follow(coralConstants.coralMotorChannel);
+    // private final SparkBaseConfig coralMotorReversedConfig = new SparkFlexConfig()
+    //     .inverted(true)
+    //     .follow(coralConstants.coralMotorChannel);
 
     private static DigitalInput linebreak;
 
@@ -53,15 +53,17 @@ public class Coral extends SubsystemBase{
     //constructor for coralMotor
     public Coral() {
         linebreak = new DigitalInput(Constants.coralConstants.linebreakChannel);
+        tab.addBoolean("linebreak", () -> linebreak.get());
         
         coralMotor = new SparkFlex(coralMotorChannel, SparkFlex.MotorType.kBrushless);
         tab.addDouble("motor speed", () -> coralMotor.get());
         
         coralMotorReversed = new SparkFlex(coralMotorReversedChannel, SparkFlex.MotorType.kBrushless);
-        
-        tab.addDouble("reversed motor speed", () -> coralMotorReversed.get());
+        tab.addDouble("bottom motor speed", () -> coralMotorReversed.get());
 
-        this.coralMotorReversed.configure(coralMotorReversedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        tab.addDouble("encoder value", () -> getEncoder());
+
+        //this.coralMotorReversed.configure(coralMotorReversedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     }
     
@@ -78,6 +80,7 @@ public class Coral extends SubsystemBase{
     //idle state, set motor to 0
     public void setIdle() {
         coralMotor.set(0);
+        coralMotorReversed.set(0);  
     }
 
     public boolean isLineBroken() {
@@ -85,12 +88,22 @@ public class Coral extends SubsystemBase{
     }
 
     public double getEncoder() {
-        return coralMotor.getAbsoluteEncoder().getPosition();
-        //return coralMotorReversed.getAbsoluteEncoder().getPosition();
+        // Combine or choose one encoder value to return
+        //return (coralMotor.getAbsoluteEncoder().getPosition() + coralMotorReversed.getAbsoluteEncoder().getPosition()) / 2;
+        return coralMotorReversed.getAbsoluteEncoder().getPosition(); //getExternalEncoder() or getAbsoluteEncoder(), not sure yet
     }
 
-    public void set(double speed) {
+    public void set(double speed) { 
+        setTop(speed);
+        setBottom(-speed);
+    }
+
+    public void setTop(double speed) {
         coralMotor.set(speed);
+    }
+
+    public void setBottom(double speed) {
+        coralMotorReversed.set(speed);
     }
 
     public Command plopCommand(){

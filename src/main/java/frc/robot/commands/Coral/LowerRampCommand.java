@@ -18,8 +18,9 @@ public class LowerRampCommand extends Command {
     //when start, rotate -plopspeed, lowers the ramp
     public void initialize() {
         startingValue = coralSubsystem.getEncoder();
+        System.out.println(startingValue);
         if(!coralSubsystem.isLineBroken()) {
-            coralSubsystem.set(-Constants.coralConstants.rampSpeed);
+            coralSubsystem.setBottom(-Constants.coralConstants.intakeSpeed);
         }
     }
 
@@ -36,10 +37,11 @@ public class LowerRampCommand extends Command {
     // Returns true when the command should end. 
     @Override
     public boolean isFinished() {
-        if(coralSubsystem.getEncoder() > startingValue + 90){
-            return true;
-        } else {
-            return false;
-        }
+        return false;
+        // if(coralSubsystem.getEncoder() > startingValue + 1792){ //1 rotation = 7168 ticks
+        //     return true;
+        // } else {
+        //     return false;
+        // }
     }
 }
