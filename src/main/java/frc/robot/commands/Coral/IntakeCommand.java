@@ -50,8 +50,8 @@ public class IntakeCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         coralSubsystem.setIdle();
+        //when command ends, set the leds to red
         s_LEDs.setCommand(LEDPreset.Solid.kRed);
-        //LEDs.SetCommand(LEDPreset.Solid.kRed);
         
     }
 

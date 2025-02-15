@@ -13,7 +13,7 @@ import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-        public static class LEDsConstants {
+        public static class LEDsConstants  { //changed name to LEDsConstants
             public final static int ledPort = 9; // Port for LED, Make sure it is PWM not DIO
             public final static ILEDPreset defaultLED = LEDPreset.Solid.kGold;// Default Colour
         
