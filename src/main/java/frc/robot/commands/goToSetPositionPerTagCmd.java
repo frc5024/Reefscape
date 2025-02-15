@@ -15,9 +15,9 @@ import frc.robot.subsystems.Swerve;
 
 public class goToSetPositionPerTagCmd extends Command {
     static ShuffleboardTab tab = Shuffleboard.getTab("Tag");
-    GenericEntry pEntry = tab.add("SET P.", 0.7).getEntry();
-    GenericEntry dEntry = tab.add("SET D", 0.05).getEntry();
-    GenericEntry iEntry = tab.add("SET I", 0).getEntry();
+    GenericEntry pEntry = tab.add("SET P...", 0.7).getEntry();
+    GenericEntry dEntry = tab.add("SET D...", 0.05).getEntry();
+    GenericEntry iEntry = tab.add("SET I...", 0).getEntry();
 
     private final Limelight limelight;
     private final Swerve swerveDrive;
@@ -122,7 +122,7 @@ public class goToSetPositionPerTagCmd extends Command {
                                                                      // field
 
         double atDeg = yawDeg - x;
-        double xDis = zDis * (Math.tan(Math.toRadians(atDeg)));
+        double xDis = zDis * (Math.tan(Math.toRadians(rotationToTag))); // WAS atDeg BEFORE IF DOESNT WORK
 
         // Left/Right
         double zDiff = zDis - desiredz;

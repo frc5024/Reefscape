@@ -5,19 +5,12 @@ import java.util.Set;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
 public class goToSetPositionPerTagOnTrueCmd extends Command {
-    static ShuffleboardTab tab = Shuffleboard.getTab("Tag");
-    GenericEntry pEntry = tab.add("SET P.", 0.7).getEntry();
-    GenericEntry dEntry = tab.add("SET D", 0.05).getEntry();
-    GenericEntry iEntry = tab.add("SET I", 0).getEntry();
 
     private final Limelight limelight;
     private final Swerve swerveDrive;
@@ -89,15 +82,6 @@ public class goToSetPositionPerTagOnTrueCmd extends Command {
                 tagAngle = 0;
             }
 
-            // at___ = AprilTag____
-            translationPidController.setP(pEntry.getDouble(0));
-            translationPidController.setI(iEntry.getDouble(0));
-            translationPidController.setD(dEntry.getDouble(0));
-
-            strafePidController.setP(pEntry.getDouble(0));
-            strafePidController.setI(iEntry.getDouble(0));
-            strafePidController.setD(dEntry.getDouble(0));
-
             mathToTag();
         } else {
             swerveDrive.visionTranslationalVal(0, false);
@@ -126,7 +110,8 @@ public class goToSetPositionPerTagOnTrueCmd extends Command {
                                                                      // field
 
         double atDeg = yawDeg - x; // might want to switch to 3D X value
-        double xDis = zDis * (Math.tan(Math.toRadians(atDeg)));
+        double xDis = zDis * (Math.tan(Math.toRadians(atDeg))); // might want to switch to rotation to tag instead of
+                                                                // atdeg
 
         // Left/Right
         double zDiff = zDis - desiredz;

@@ -7,6 +7,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -302,5 +303,20 @@ public class Swerve extends SubsystemBase {
         double[] acceleration = new double[] {
                 this.gyro.getWorldLinearAccelX(), this.gyro.getWorldLinearAccelY()
         };
+
+        double tagAngle = 0;
+
+        Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
+        double robotHeading = getGyroYaw().getDegrees();
+
+        double Dis = -botPose3D.getZ(); // Distance from LL to tag
+
+        double rotationToTag = robotHeading + tagAngle;
+
+        double zDis = Dis * Math.cos(Math.toRadians(rotationToTag));
+        double xDis = zDis * (Math.tan(Math.toRadians(rotationToTag)));
+
+        SmartDashboard.putNumber("PotentialForwardOffest", zDis);
+        SmartDashboard.putNumber("PotentialSideOffest", xDis);
     }
 }

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.goToSetPositionPerTagCmd;
 import frc.robot.commands.goToSetPositionPerTagOnTrueCmd;
+import frc.robot.commands.Vision.FaceHeadingCmd;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
@@ -52,10 +53,11 @@ public class RobotContainer {
         driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
         driver.a().whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.noOffset));
+
         driver.x()
                 .whileTrue(new goToSetPositionPerTagOnTrueCmd(limelightSubsystem, s_Swerve, Constants.Vision.noOffset));
 
-        // driver.a().whileTrue(new FaceHeadingCmd(s_Swerve));
+        driver.b().whileTrue(new FaceHeadingCmd(s_Swerve));
     }
 
     public Command getAutonomousCommand() {
