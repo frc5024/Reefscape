@@ -49,25 +49,25 @@ public class Climb extends SubsystemBase {
 
         } else {
             climbMotor.set(Constants.ClimbConstants.climbSpeed);
-            LEDs.getInstance().setCommand(LEDPreset.LightChase.kBlue).schedule();
+            LEDs.getInstance().setCommand(LEDPreset.Solid.kGreen).schedule();
         }
     }
 
     public void extending() {
         // speed = encoder.getDouble(0);
         climbMotor.set(Constants.ClimbConstants.extendoSpeed);
-        LEDs.getInstance().setCommand(LEDPreset.Solid.kDarkBlue).schedule();
+        LEDs.getInstance().setCommand(LEDPreset.Solid.kOrange).schedule();
     }
 
     public void retracting() {
         // speed = encoder.getDouble(0);
         climbMotor.set(-Constants.ClimbConstants.extendoSpeed);
-        LEDs.getInstance().setCommand(LEDPreset.Solid.kDarkBlue).schedule();
+        LEDs.getInstance().setCommand(LEDPreset.Solid.kBlue).schedule();
     }
 
     public void cancel() {
         climbMotor.set(Constants.ClimbConstants.cancelSpeed);
-        LEDs.getInstance().setCommand(LEDPreset.Strobe.kGold).schedule();
+        LEDs.getInstance().setCommand(LEDPreset.Solid.kDarkRed).schedule();
 
     }
 
