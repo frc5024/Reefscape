@@ -9,7 +9,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.ConstantsMiniBot.Swerve;
 
 /**
  * 
@@ -47,7 +46,8 @@ public class SwerveModule {
         int sampleCount = inputs.odometryTimestamps.length; // All signals are sampled together
         this.odometryPositions = new SwerveModulePosition[sampleCount];
         for (int i = 0; i < sampleCount; i++) {
-            double positionMeters = inputs.odometryDrivePositionsRad[i] * (Swerve.chosenModule.wheelDiameter / 2);
+            double positionMeters = inputs.odometryDrivePositionsRad[i]
+                    * (SwerveModuleConstants.cotsTurnConstants.wheelDiameter / 2);
             Rotation2d angle = inputs.odometryTurnPositions[i];
             this.odometryPositions[i] = new SwerveModulePosition(positionMeters, angle);
         }
@@ -73,7 +73,8 @@ public class SwerveModule {
         state.cosineScale(inputs.turnPosition);
 
         // Apply setpoints
-        swerveModuleIO.runDriveVelocity(state.speedMetersPerSecond / (Swerve.chosenModule.wheelDiameter / 2));
+        swerveModuleIO.runDriveVelocity(
+                state.speedMetersPerSecond / (SwerveModuleConstants.cotsTurnConstants.wheelDiameter / 2));
         swerveModuleIO.runTurnPosition(state.angle);
     }
 
@@ -111,14 +112,14 @@ public class SwerveModule {
      * Returns the current drive position of the module in meters.
      */
     public double getPositionMeters() {
-        return this.inputs.drivePositionRad * (Swerve.chosenModule.wheelDiameter / 2);
+        return this.inputs.drivePositionRad * (SwerveModuleConstants.cotsTurnConstants.wheelDiameter / 2);
     }
 
     /**
      * Returns the current drive velocity of the module in meters per second.
      */
     public double getVelocityMetersPerSec() {
-        return inputs.driveVelocityRadPerSec * (Swerve.chosenModule.wheelDiameter / 2);
+        return inputs.driveVelocityRadPerSec * (SwerveModuleConstants.cotsTurnConstants.wheelDiameter / 2);
     }
 
     /**

@@ -24,9 +24,8 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.generated.TunerConstants;
-import frc.robot.utils.CTREConfigs;
 import frc.robot.utils.PhoenixOdometryThread;
-import frc.robot.utils.SwerveModuleConstants;
+import frc.robot.utils.SwerveModuleBuilder;
 
 /**
  * Module IO implementation for Talon FX drive motor controller, Talon FX turn
@@ -45,7 +44,6 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
 
     private final TalonFXConfiguration driveConfig;
     private final TalonFXConfiguration turnConfig;
-    private final CTREConfigs ctreConfigs;
 
     // Voltage control requests
     private final VoltageOut voltageRequest = new VoltageOut(0);
@@ -75,31 +73,29 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     private final Debouncer turnConnectedDebounce = new Debouncer(0.5);
     private final Debouncer turnEncoderConnectedDebounce = new Debouncer(0.5);
 
-    private final Rotation2d angleOffset;
+    private final Rotation2d encoderOffset;
 
     /**
      * 
      */
-    public SwerveModuleIOTalonFX(SwerveModuleConstants swerveModuleConstants) {
-        this.ctreConfigs = new CTREConfigs();
-
-        this.driveTalon = new TalonFX(swerveModuleConstants.driveMotorID, "rio");
-        this.turnTalon = new TalonFX(swerveModuleConstants.angleMotorID, "rio");
-        this.cancoder = new CANcoder(swerveModuleConstants.cancoderID, "rio");
-        this.angleOffset = swerveModuleConstants.angleOffset;
+    public SwerveModuleIOTalonFX(SwerveModuleBuilder swerveModuleBuilder) {
+        this.driveTalon = new TalonFX(swerveModuleBuilder.driveMotorId, "rio");
+        this.turnTalon = new TalonFX(swerveModuleBuilder.turnMotorId, "rio");
+        this.cancoder = new CANcoder(swerveModuleBuilder.encoderChannel, "rio");
+        this.encoderOffset = swerveModuleBuilder.encoderOffset;
 
         // Configure drive motor
-        this.driveConfig = this.ctreConfigs.getDriveConfig();
+        this.driveConfig = swerveModuleBuilder.getDriveConfig();
         tryUntilOk(5, () -> this.driveTalon.getConfigurator().apply(this.driveConfig, 0.25));
         tryUntilOk(5, () -> this.driveTalon.setPosition(0.0, 0.25));
 
         // Configure turn motor
-        this.turnConfig = this.ctreConfigs.getAngleConfig();
+        this.turnConfig = swerveModuleBuilder.getTurnConfig();
         tryUntilOk(5, () -> this.turnTalon.getConfigurator().apply(this.turnConfig, 0.25));
         resetToAbsolute();
 
         // Configure CANCoder
-        CANcoderConfiguration cancoderConfig = this.ctreConfigs.getCancoderConfig();
+        CANcoderConfiguration cancoderConfig = swerveModuleBuilder.getCancoderConfig();
         this.cancoder.getConfigurator().apply(cancoderConfig);
 
         // Create timestamp queue
@@ -184,7 +180,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
      * 
      */
     public void resetToAbsolute() {
-        double absolutePosition = getCANcoder().getRotations() - this.angleOffset.getRotations();
+        double absolutePosition = getCANcoder().getRotations() - this.encoderOffset.getRotations();
         this.turnTalon.setPosition(absolutePosition);
     }
 

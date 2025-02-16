@@ -1,8 +1,8 @@
 package frc.robot.containers;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import frc.robot.ConstantsMiniBot.Swerve;
 import frc.robot.modules.gyro.GyroModuleIONavX;
+import frc.robot.modules.swerve.SwerveModuleConstants;
 import frc.robot.modules.swerve.SwerveModuleIOTalonFX;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -19,10 +19,10 @@ public class ReefscapeRobotContainer extends RobotContainer {
 
         this.swerveDriveSubsystem = new SwerveDriveSubsystem(
                 new GyroModuleIONavX(),
-                new SwerveModuleIOTalonFX(Swerve.Mod0.constants),
-                new SwerveModuleIOTalonFX(Swerve.Mod1.constants),
-                new SwerveModuleIOTalonFX(Swerve.Mod2.constants),
-                new SwerveModuleIOTalonFX(Swerve.Mod3.constants));
+                new SwerveModuleIOTalonFX(SwerveModuleConstants.swerveModuleConfigs[0]),
+                new SwerveModuleIOTalonFX(SwerveModuleConstants.swerveModuleConfigs[1]),
+                new SwerveModuleIOTalonFX(SwerveModuleConstants.swerveModuleConfigs[2]),
+                new SwerveModuleIOTalonFX(SwerveModuleConstants.swerveModuleConfigs[3]));
 
         this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
                 this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);

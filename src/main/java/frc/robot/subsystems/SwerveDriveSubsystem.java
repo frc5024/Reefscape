@@ -30,12 +30,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.Constants.SwerveConstants;
-import frc.robot.ConstantsMiniBot.Swerve;
 import frc.robot.generated.TunerConstants;
 import frc.robot.modules.gyro.GyroIOInputsAutoLogged;
 import frc.robot.modules.gyro.GyroModuleIO;
 import frc.robot.modules.swerve.SwerveModule;
+import frc.robot.modules.swerve.SwerveModuleConstants;
 import frc.robot.modules.swerve.SwerveModuleIO;
 import frc.robot.utils.PhoenixOdometryThread;
 
@@ -62,7 +61,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
                     new SwerveModulePosition(),
                     new SwerveModulePosition()
             };
-    private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(Swerve.swerveDriveKinematics,
+    private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
+            SwerveModuleConstants.swerveDriveKinematics,
             rawGyroRotation,
             lastModulePositions, new Pose2d());
     private boolean isFieldRelative;
@@ -163,7 +163,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
                 rawGyroRotation = gyroInputs.odometryYawPositions[i];
             } else {
                 // Use the angle delta from the kinematics and module deltas
-                Twist2d twist = Swerve.swerveDriveKinematics.toTwist2d(moduleDeltas);
+                Twist2d twist = SwerveModuleConstants.swerveDriveKinematics.toTwist2d(moduleDeltas);
                 rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
             }
 
@@ -192,7 +192,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public void runVelocity(ChassisSpeeds speeds) {
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
-        SwerveModuleState[] setpointStates = Swerve.swerveDriveKinematics.toSwerveModuleStates(discreteSpeeds);
+        SwerveModuleState[] setpointStates = SwerveModuleConstants.swerveDriveKinematics
+                .toSwerveModuleStates(discreteSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
 
         // Log unoptimized setpoints and setpoint speeds
@@ -240,9 +241,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public void stopWithX() {
         Rotation2d[] headings = new Rotation2d[4];
         for (int i = 0; i < 4; i++) {
-            headings[i] = Swerve.moduleTranslations[i].getAngle();
+            headings[i] = SwerveModuleConstants.moduleTranslations[i].getAngle();
         }
-        Swerve.swerveDriveKinematics.resetHeadings(headings);
+        SwerveModuleConstants.swerveDriveKinematics.resetHeadings(headings);
         stop();
     }
 
@@ -288,7 +289,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      */
     @AutoLogOutput(key = "Subsystems/SwerveDrive/SwerveChassisSpeeds/Measured")
     public ChassisSpeeds getChassisSpeeds() {
-        return Swerve.swerveDriveKinematics.toChassisSpeeds(getModuleStates());
+        return SwerveModuleConstants.swerveDriveKinematics.toChassisSpeeds(getModuleStates());
     }
 
     /** Returns the position of each module in radians. */
@@ -356,7 +357,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      * Returns the maximum angular speed in radians per sec.
      */
     public double getMaxAngularSpeedRadPerSec() {
-        return getMaxLinearSpeedMetersPerSec() / SwerveConstants.DRIVE_BASE_RADIUS;
+        return getMaxLinearSpeedMetersPerSec() / SwerveModuleConstants.driveBaseRadius;
     }
 
     /**
