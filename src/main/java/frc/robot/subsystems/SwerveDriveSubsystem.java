@@ -211,10 +211,29 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     /**
      * 
      */
-    public void runRobotRelativeVelocity(double xVelocity, double yVelocity, double rVelocity, Rotation2d angle) {
-        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
+    public void runVelocity(double xVelocity, double yVelocity, double rVelocity, Rotation2d angle) {
+        ChassisSpeeds chassisSpeeds = null;
+        if (isFieldRelative) {
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, rVelocity, angle);
+        } else {
+            chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
+        }
+        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
+        SwerveModuleState[] setpointStates = SwerveModuleConstants.swerveDriveKinematics
+                .toSwerveModuleStates(discreteSpeeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, SwerveModuleConstants.kSpeedAt12Volts);
 
-        runVelocity(chassisSpeeds);
+        // Log unoptimized setpoints and setpoint speeds
+        Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", setpointStates);
+        Logger.recordOutput("Subsystems/SwerveDrive/SwerveChassisSpeeds/Setpoints", discreteSpeeds);
+
+        // Send setpoints to modules
+        for (SwerveModule swerveModule : this.swerveModules) {
+            swerveModule.runSetpoint(setpointStates[swerveModule.getIndex()]);
+        }
+
+        // Log optimized setpoints (runSetpoint mutates each state)
+        Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/SetpointsOptimized", setpointStates);
     }
 
     /** Runs the drive in a straight line with the specified drive output. */

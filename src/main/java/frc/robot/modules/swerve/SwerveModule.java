@@ -87,6 +87,18 @@ public class SwerveModule {
     }
 
     /**
+     * Runs the module
+     */
+    public void runVelocity(SwerveModuleState state) {
+        state.optimize(getAngle());
+        state.cosineScale(inputs.turnPosition);
+
+        // Apply setpoints
+        swerveModuleIO.runDriveOpenLoop(state.speedMetersPerSecond / SwerveModuleConstants.maxLinearSpeed);
+        swerveModuleIO.runTurnPosition(state.angle);
+    }
+
+    /**
      * Disables all outputs to motors.
      */
     public void stop() {

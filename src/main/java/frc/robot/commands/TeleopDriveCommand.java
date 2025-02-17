@@ -102,7 +102,7 @@ public class TeleopDriveCommand extends Command {
             }
         }
 
-        this.swerveDrive.runRobotRelativeVelocity(xVelocity, yVelocity, rVelocity, angle);
+        this.swerveDrive.runVelocity(xVelocity, yVelocity, rVelocity, angle);
 
         Logger.recordOutput("Commands/TeleopDriveCommand/xVelocity", xVelocity);
         Logger.recordOutput("Commands/TeleopDriveCommand/yVelocity", yVelocity);
