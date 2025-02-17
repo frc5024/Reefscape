@@ -21,7 +21,6 @@ import com.ctre.phoenix6.StatusSignal;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.RobotController;
-import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -38,7 +37,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * time synchronization.
  */
 public class PhoenixOdometryThread extends Thread {
-    public static final double ODOMETRY_FREQUENCY = new CANBus(TunerConstants.DrivetrainConstants.CANBusName)
+    public static final double ODOMETRY_FREQUENCY = new CANBus("rio")
             .isNetworkFD() ? 250.0 : 100.0;
     private final Lock signalsLock = new ReentrantLock(); // Prevents conflicts when registering signals
     private BaseStatusSignal[] phoenixSignals = new BaseStatusSignal[0];

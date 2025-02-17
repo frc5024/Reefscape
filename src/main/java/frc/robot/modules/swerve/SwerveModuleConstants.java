@@ -1,9 +1,12 @@
 package frc.robot.modules.swerve;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.LinearVelocity;
 import frc.robot.utils.COTSTalonFXSwerveConstants;
 import frc.robot.utils.COTSTalonFXSwerveConstants.SDS.MK4i;
 import frc.robot.utils.SwerveModuleBuilder;
@@ -14,6 +17,8 @@ public class SwerveModuleConstants {
     public static final double driveBaseRadius = Math.hypot(trackWidth / 2, wheelBase / 2);
     public static final double maxLinearSpeed = 4.69;
     public static final double maxAngularSpeed = 4.69 / driveBaseRadius;
+
+    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(2.0);
 
     public static final Translation2d[] moduleTranslations = new Translation2d[] {
             new Translation2d(wheelBase / 2.0, trackWidth / 2.0),

@@ -23,7 +23,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
-import frc.robot.generated.TunerConstants;
+import frc.robot.Constants.PIDConstants;
 import frc.robot.utils.PhoenixOdometryThread;
 import frc.robot.utils.SwerveModuleBuilder;
 
@@ -208,7 +208,9 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
 
     @Override
     public void resetDrivePID() {
-        this.driveTalon.getConfigurator().refresh(TunerConstants.driveGains);
+        double[] drivePIDs = PIDConstants.getDrivePIDs();
+        this.driveTalon.getConfigurator()
+                .refresh(new Slot0Configs().withKP(drivePIDs[0]).withKI(drivePIDs[1]).withKD(drivePIDs[2]));
     }
 
     @Override

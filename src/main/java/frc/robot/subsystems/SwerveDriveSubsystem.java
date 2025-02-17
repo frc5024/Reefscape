@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.generated.TunerConstants;
 import frc.robot.modules.gyro.GyroIOInputsAutoLogged;
 import frc.robot.modules.gyro.GyroModuleIO;
 import frc.robot.modules.swerve.SwerveModule;
@@ -194,7 +193,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
         SwerveModuleState[] setpointStates = SwerveModuleConstants.swerveDriveKinematics
                 .toSwerveModuleStates(discreteSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
+        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, SwerveModuleConstants.kSpeedAt12Volts);
 
         // Log unoptimized setpoints and setpoint speeds
         Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", setpointStates);
@@ -350,7 +349,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      * Returns the maximum linear speed in meters per sec.
      */
     public double getMaxLinearSpeedMetersPerSec() {
-        return TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+        return SwerveModuleConstants.kSpeedAt12Volts.in(MetersPerSecond);
     }
 
     /**

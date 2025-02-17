@@ -34,7 +34,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.lib.camera.Camera;
-import frc.robot.generated.TunerConstants;
 import frc.robot.modules.swerve.SwerveModuleConstants;
 
 /**
@@ -74,12 +73,12 @@ public final class Constants {
             ROBOT_MASS_KG,
             ROBOT_MOI,
             new ModuleConfig(
-                    TunerConstants.FrontLeft.WheelRadius,
-                    TunerConstants.kSpeedAt12Volts.in(MetersPerSecond),
+                    SwerveModuleConstants.cotsDriveConstants.wheelDiameter / 2,
+                    SwerveModuleConstants.kSpeedAt12Volts.in(MetersPerSecond),
                     WHEEL_COF,
                     DCMotor.getKrakenX60Foc(1)
-                            .withReduction(TunerConstants.FrontLeft.DriveMotorGearRatio),
-                    TunerConstants.FrontLeft.SlipCurrent,
+                            .withReduction(SwerveModuleConstants.cotsDriveConstants.driveGearRatio),
+                    120,
                     1),
             SwerveModuleConstants.moduleTranslations);
 
@@ -216,7 +215,7 @@ public final class Constants {
                         9424.0 / 203.0,
                         Volts.of(0.1),
                         Volts.of(0.1),
-                        Meters.of(TunerConstants.FrontLeft.WheelRadius),
+                        Meters.of(SwerveModuleConstants.cotsDriveConstants.wheelDiameter / 2),
                         KilogramSquareMeters.of(0.02),
                         WHEEL_COF));
     }
@@ -234,6 +233,11 @@ public final class Constants {
      *
      */
     public static final class PIDConstants {
+        // PID constants for swerve modules
+        public static final double SWERVE_MODULE_DRIVE_KP = 0.112;
+        public static final double SWERVE_MODULE_DRIVE_KI = 0.0;
+        public static final double SWERVE_MODULE_DRIVE_KD = 0.0;
+
         // PID constants for simulated swerve modules
         public static final double SIM_SWERVE_MODULE_DRIVE_KP = 0.1;
         public static final double SIM_SWERVE_MODULE_DRIVE_KI = 0.0;
@@ -282,8 +286,10 @@ public final class Constants {
          * Should only be call by simulation as TunerContants has real values
          */
         public static final double[] getDrivePIDs() {
-            return new double[] { SIM_SWERVE_MODULE_DRIVE_KP, SIM_SWERVE_MODULE_DRIVE_KI,
-                    SIM_SWERVE_MODULE_DRIVE_KD };
+            return Robot.isReal()
+                    ? new double[] { SWERVE_MODULE_DRIVE_KP, SWERVE_MODULE_DRIVE_KI, SWERVE_MODULE_DRIVE_KD }
+                    : new double[] { SIM_SWERVE_MODULE_DRIVE_KP, SIM_SWERVE_MODULE_DRIVE_KI,
+                            SIM_SWERVE_MODULE_DRIVE_KD };
         }
 
         /**

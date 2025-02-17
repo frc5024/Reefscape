@@ -7,6 +7,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Constants.PIDConstants;
 
 /**
  * 
@@ -94,9 +95,10 @@ public class SwerveModuleBuilder {
         // this.driveTalonFXConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
 
         /* PID Config */
-        this.driveTalonFXConfig.Slot0.kP = 0.112;
-        this.driveTalonFXConfig.Slot0.kI = 0.0;
-        this.driveTalonFXConfig.Slot0.kD = 0.0;
+        double[] drivePIDs = PIDConstants.getDrivePIDs();
+        this.driveTalonFXConfig.Slot0.kP = drivePIDs[0];
+        this.driveTalonFXConfig.Slot0.kI = drivePIDs[1];
+        this.driveTalonFXConfig.Slot0.kD = drivePIDs[2];
         this.driveTalonFXConfig.Slot0.kV = 0.0;
 
         /* Open and Closed Loop Ramping */
