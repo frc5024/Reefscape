@@ -67,6 +67,7 @@ public class SwerveModuleBuilder {
      * 
      */
     private void setCancoderConfig() {
+        this.canCoderConfig.MagnetSensor.MagnetOffset = this.encoderOffset.getRotations();
         this.canCoderConfig.MagnetSensor.SensorDirection = this.cotsTurnConstants.cancoderInvert;
     }
 

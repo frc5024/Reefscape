@@ -84,6 +84,10 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         this.cancoder = new CANcoder(swerveModuleBuilder.encoderChannel, "rio");
         this.encoderOffset = swerveModuleBuilder.encoderOffset;
 
+        // Configure CANCoder
+        CANcoderConfiguration cancoderConfig = swerveModuleBuilder.getCancoderConfig();
+        this.cancoder.getConfigurator().apply(cancoderConfig);
+
         // Configure drive motor
         this.driveConfig = swerveModuleBuilder.getDriveConfig();
         tryUntilOk(5, () -> this.driveTalon.getConfigurator().apply(this.driveConfig, 0.25));
@@ -92,11 +96,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         // Configure turn motor
         this.turnConfig = swerveModuleBuilder.getTurnConfig();
         tryUntilOk(5, () -> this.turnTalon.getConfigurator().apply(this.turnConfig, 0.25));
-        resetToAbsolute();
-
-        // Configure CANCoder
-        CANcoderConfiguration cancoderConfig = swerveModuleBuilder.getCancoderConfig();
-        this.cancoder.getConfigurator().apply(cancoderConfig);
+        // resetToAbsolute();
 
         // Create timestamp queue
         this.timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
@@ -150,7 +150,8 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         // Update turn inputs
         inputs.turnConnected = this.turnConnectedDebounce.calculate(turnStatus.isOK());
         inputs.turnEncoderConnected = this.turnEncoderConnectedDebounce.calculate(turnEncoderStatus.isOK());
-        inputs.turnAbsolutePosition = Rotation2d.fromRotations(this.turnAbsolutePosition.getValueAsDouble());
+        inputs.turnAbsolutePosition = Rotation2d.fromRotations(this.turnAbsolutePosition.getValueAsDouble())
+                .minus(encoderOffset);
         inputs.turnPosition = Rotation2d.fromRotations(this.turnPosition.getValueAsDouble());
         inputs.turnVelocityRadPerSec = Units.rotationsToRadians(this.turnVelocity.getValueAsDouble());
         inputs.turnAppliedVolts = this.turnAppliedVolts.getValueAsDouble();

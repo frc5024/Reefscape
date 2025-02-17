@@ -13,6 +13,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.MechanismConstants;
@@ -37,12 +38,15 @@ public class Robot extends LoggedRobot {
     private Alliance alliance = Alliance.Blue;
     private int location = 0;
 
+    private Timer gcTimer = new Timer();
+
     /**
      * This function is run when the robot is first started up and should be used
      * for any
      * initialization code.
      */
     public Robot() {
+        gcTimer.start();
     }
 
     @Override
@@ -93,7 +97,7 @@ public class Robot extends LoggedRobot {
         }
 
         // Start AdvantageKit logger
-        // Logger.start();
+        Logger.start();
 
         // Setup Limelight port forwarding - be sure to match against camera constants
         // https://docs.limelightvision.io/docs/docs-limelight/getting-started/FRC/best-practices
@@ -120,6 +124,9 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotPeriodic() {
+        if (gcTimer.advanceIfElapsed(5)) {
+            System.gc();
+        }
         // Runs the Scheduler. This is responsible for polling buttons, adding
         // newly-scheduled
         // commands, running already-scheduled commands, removing finished or
