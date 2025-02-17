@@ -69,9 +69,10 @@ public class SwerveModuleBuilder {
         this.canCoderConfig = new CANcoderConfiguration();
 
         this.canCoderConfig.MagnetSensor.MagnetOffset = 0.0; // this.encoderOffset.getRotations();
-        this.canCoderConfig.MagnetSensor.SensorDirection = this.encoderInverted
-                ? SensorDirectionValue.Clockwise_Positive
-                : SensorDirectionValue.CounterClockwise_Positive;
+        this.canCoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        // this.encoderInverted
+        // ? SensorDirectionValue.Clockwise_Positive
+        // : SensorDirectionValue.CounterClockwise_Positive;
     }
 
     /**
@@ -117,9 +118,10 @@ public class SwerveModuleBuilder {
 
         /** Swerve Turn Motor Configurations */
         /* Motor Inverts and Neutral Mode */
-        this.turnTalonFXConfig.MotorOutput.Inverted = this.turnInverted
-                ? InvertedValue.Clockwise_Positive
-                : InvertedValue.CounterClockwise_Positive;
+        this.turnTalonFXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        // this.turnTalonFXConfig.MotorOutput.Inverted = this.turnInverted
+        // ? InvertedValue.Clockwise_Positive
+        // : InvertedValue.CounterClockwise_Positive;
         this.turnTalonFXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         /* Gear Ratio and Wrapping Config */

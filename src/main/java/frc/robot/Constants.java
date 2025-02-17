@@ -3,7 +3,6 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Kilogram;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import java.util.Arrays;
@@ -53,7 +52,7 @@ public final class Constants {
 
         // Set to true to use FeedForwardCharacterization and
         // WheelRadiusCharacterization auto commands
-        public static final boolean TUNING_MODE = false;
+        public static final boolean TUNING_MODE = true;
 
         // AdvantageKit simulation
         public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
@@ -74,7 +73,7 @@ public final class Constants {
             ROBOT_MOI,
             new ModuleConfig(
                     SwerveModuleConstants.cotsDriveConstants.wheelDiameter / 2,
-                    SwerveModuleConstants.kSpeedAt12Volts.in(MetersPerSecond),
+                    SwerveModuleConstants.maxLinearSpeed,
                     WHEEL_COF,
                     DCMotor.getKrakenX60Foc(1)
                             .withReduction(SwerveModuleConstants.cotsDriveConstants.driveGearRatio),
@@ -359,8 +358,10 @@ public final class Constants {
         public static final double SPEED_MODIFIER_ONE_HUNDRED = 1.00;
         public static final double SPEED_MODIFIER_THIRTY = 0.30;
 
-        public static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(4.5, 4);
-        public static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(4.5, 4);
+        public static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                SwerveModuleConstants.maxLinearSpeed, SwerveModuleConstants.maxAcceleration);
+        public static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                SwerveModuleConstants.maxLinearSpeed, SwerveModuleConstants.maxAcceleration);
         public static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(10,
                 10);
     }

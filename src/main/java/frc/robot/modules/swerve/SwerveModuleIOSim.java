@@ -13,6 +13,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants.PIDConstants;
+import frc.robot.Constants.RobotConstants;
 
 /**
  * Physics sim implementation of module IO. The sim models are configured using
@@ -81,8 +82,8 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
         // Update simulation state
         this.driveMotorSim.setInputVoltage(MathUtil.clamp(driveAppliedVolts, -12.0, 12.0));
         this.turnMotorSim.setInputVoltage(MathUtil.clamp(turnAppliedVolts, -12.0, 12.0));
-        this.driveMotorSim.update(0.02);
-        this.turnMotorSim.update(0.02);
+        this.driveMotorSim.update(RobotConstants.LOOP_PERIOD_SECS);
+        this.turnMotorSim.update(RobotConstants.LOOP_PERIOD_SECS);
 
         // Update drive inputs
         inputs.driveConnected = true;

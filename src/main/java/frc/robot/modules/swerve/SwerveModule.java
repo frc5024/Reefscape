@@ -91,7 +91,7 @@ public class SwerveModule {
      */
     public void runVelocity(SwerveModuleState state) {
         state.optimize(getAngle());
-        state.cosineScale(inputs.turnPosition);
+        state.cosineScale(this.inputs.turnPosition);
 
         // Apply setpoints
         swerveModuleIO.runDriveOpenLoop(state.speedMetersPerSecond / SwerveModuleConstants.maxLinearSpeed);
@@ -110,7 +110,11 @@ public class SwerveModule {
      * Returns the current turn angle of the module.
      */
     public Rotation2d getAngle() {
-        return this.inputs.turnPosition;
+        SwerveModuleState swerveModuleState = new SwerveModuleState(
+                this.inputs.driveVelocityRotPerSec * SwerveModuleConstants.cotsDriveConstants.wheelCircumference,
+                this.inputs.turnPosition);
+        return swerveModuleState.angle;
+        // return this.inputs.turnPosition;
     }
 
     /**

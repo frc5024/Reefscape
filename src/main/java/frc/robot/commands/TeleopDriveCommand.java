@@ -13,6 +13,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.TeleopConstants;
+import frc.robot.modules.swerve.SwerveModuleConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -80,15 +81,14 @@ public class TeleopDriveCommand extends Command {
     public void execute() {
         Rotation2d angle = this.robotAngleSupplier.get();
 
-        double xVelocity = -modifyAxis(this.translationXSupplier.getAsDouble() * 4.5);
-        double yVelocity = -modifyAxis(this.translationYSupplier.getAsDouble() * 4.5);
+        double xVelocity = -modifyAxis(this.translationXSupplier.getAsDouble() * SwerveModuleConstants.maxLinearSpeed);
+        double yVelocity = -modifyAxis(this.translationYSupplier.getAsDouble() * SwerveModuleConstants.maxLinearSpeed);
         double rVelocity = -modifyAxis(this.rotationSupplier.getAsDouble() * 10.0 / 2);
 
         xVelocity = this.translateXRateLimiter.calculate(xVelocity);
         yVelocity = this.translateYRateLimiter.calculate(yVelocity);
         rVelocity = this.rotationRateLimiter.calculate(rVelocity);
 
-        //
         if (rVelocity == 0.0) {
             if (this.rotationalAngle != 360.0) {
                 double goalRotation = Units.degreesToRadians(this.rotationalAngle);

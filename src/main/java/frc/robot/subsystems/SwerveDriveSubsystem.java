@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import java.util.concurrent.locks.Lock;
@@ -190,10 +189,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      */
     public void runVelocity(ChassisSpeeds speeds) {
         // Calculate module setpoints
-        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, RobotConstants.LOOP_PERIOD_SECS);
         SwerveModuleState[] setpointStates = SwerveModuleConstants.swerveDriveKinematics
                 .toSwerveModuleStates(discreteSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, SwerveModuleConstants.kSpeedAt12Volts);
+        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, SwerveModuleConstants.maxLinearSpeed);
 
         // Log unoptimized setpoints and setpoint speeds
         Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", setpointStates);
@@ -218,10 +217,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         } else {
             chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
         }
-        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
+        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, RobotConstants.LOOP_PERIOD_SECS);
         SwerveModuleState[] setpointStates = SwerveModuleConstants.swerveDriveKinematics
                 .toSwerveModuleStates(discreteSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, SwerveModuleConstants.kSpeedAt12Volts);
+        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, SwerveModuleConstants.maxLinearSpeed);
 
         // Log unoptimized setpoints and setpoint speeds
         Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", setpointStates);
@@ -229,7 +228,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
         // Send setpoints to modules
         for (SwerveModule swerveModule : this.swerveModules) {
-            swerveModule.runSetpoint(setpointStates[swerveModule.getIndex()]);
+            swerveModule.runVelocity(setpointStates[swerveModule.getIndex()]);
         }
 
         // Log optimized setpoints (runSetpoint mutates each state)
@@ -284,8 +283,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     @AutoLogOutput(key = "Subsystems/SwerveDrive/SwerveStates/Measured")
     private SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
-        for (int i = 0; i < 4; i++) {
-            states[i] = this.swerveModules[i].getState();
+        for (SwerveModule swerveModule : this.swerveModules) {
+            states[swerveModule.getIndex()] = swerveModule.getState();
         }
         return states;
     }
@@ -362,20 +361,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
             Matrix<N3, N1> visionMeasurementStdDevs) {
         poseEstimator.addVisionMeasurement(
                 visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
-    }
-
-    /**
-     * Returns the maximum linear speed in meters per sec.
-     */
-    public double getMaxLinearSpeedMetersPerSec() {
-        return SwerveModuleConstants.kSpeedAt12Volts.in(MetersPerSecond);
-    }
-
-    /**
-     * Returns the maximum angular speed in radians per sec.
-     */
-    public double getMaxAngularSpeedRadPerSec() {
-        return getMaxLinearSpeedMetersPerSec() / SwerveModuleConstants.driveBaseRadius;
     }
 
     /**

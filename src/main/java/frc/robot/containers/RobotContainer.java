@@ -96,7 +96,7 @@ abstract public class RobotContainer {
                 commandXboxController);
 
         // Default command, normal field-relative drive
-        swerveDriveSubsystem.setDefaultCommand(teleopDriveCommand);
+        swerveDriveSubsystem.setDefaultCommand(tuningCommand);
     }
 
     /**

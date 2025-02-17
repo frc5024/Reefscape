@@ -96,7 +96,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
 
         // Configure CANCoder
         CANcoderConfiguration cancoderConfig = swerveModuleBuilder.getCancoderConfig();
-        this.cancoder.getConfigurator().apply(cancoderConfig);
+        tryUntilOk(5, () -> this.cancoder.getConfigurator().apply(cancoderConfig));
 
         // Create timestamp queue
         this.timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
@@ -143,6 +143,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         // Update drive inputs
         inputs.driveConnected = this.driveConnectedDebounce.calculate(driveStatus.isOK());
         inputs.drivePositionRad = Units.rotationsToRadians(this.drivePosition.getValueAsDouble());
+        inputs.driveVelocityRotPerSec = this.driveVelocity.getValueAsDouble();
         inputs.driveVelocityRadPerSec = Units.rotationsToRadians(this.driveVelocity.getValueAsDouble());
         inputs.driveAppliedVolts = this.driveAppliedVolts.getValueAsDouble();
         inputs.driveCurrentAmps = this.driveCurrent.getValueAsDouble();

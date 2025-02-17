@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.TeleopConstants;
 import frc.robot.autonomous.AutoBuilder;
+import frc.robot.modules.swerve.SwerveModuleConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.utils.LoggedTunableNumber;
 
@@ -349,9 +350,9 @@ public class TuningSwerveCommand extends Command {
 
         // Convert to field relative speeds & send command
         ChassisSpeeds speeds = new ChassisSpeeds(
-                linearVelocity.getX() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
-                linearVelocity.getY() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
-                omega * swerveDriveSubsystem.getMaxAngularSpeedRadPerSec());
+                linearVelocity.getX() * SwerveModuleConstants.maxLinearSpeed,
+                linearVelocity.getY() * SwerveModuleConstants.maxLinearSpeed,
+                omega * SwerveModuleConstants.maxAngularSpeed);
 
         boolean isFlipped = DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == Alliance.Red;

@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.TeleopConstants;
 import frc.robot.autonomous.AutoBuilder;
+import frc.robot.modules.swerve.SwerveModuleConstants;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -358,20 +359,20 @@ public class TuningCommand extends Command {
 
         // Convert to field relative speeds & send command
         ChassisSpeeds speeds = new ChassisSpeeds(
-                linearVelocity.getX() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
-                linearVelocity.getY() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
-                omega * swerveDriveSubsystem.getMaxAngularSpeedRadPerSec());
+                linearVelocity.getX() * SwerveModuleConstants.maxLinearSpeed,
+                linearVelocity.getY() * SwerveModuleConstants.maxLinearSpeed,
+                omega * SwerveModuleConstants.maxAngularSpeed);
 
         boolean isFlipped = DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == Alliance.Red;
 
-        swerveDriveSubsystem.runVelocity(
-                swerveDriveSubsystem.isFieldRelative()
+        this.swerveDriveSubsystem.runVelocity(
+                this.swerveDriveSubsystem.isFieldRelative()
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                 speeds,
                                 isFlipped
-                                        ? swerveDriveSubsystem.getRotation().plus(new Rotation2d(Math.PI))
-                                        : swerveDriveSubsystem.getRotation())
+                                        ? this.swerveDriveSubsystem.getRotation().plus(new Rotation2d(Math.PI))
+                                        : this.swerveDriveSubsystem.getRotation())
                         : new ChassisSpeeds(linearVelocity.getX(), linearVelocity.getY(), omega));
     }
 

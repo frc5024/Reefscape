@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.modules.swerve.SwerveModuleConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -70,9 +71,9 @@ public class SwerveDriveCommands {
 
                     // Convert to field relative speeds & send command
                     ChassisSpeeds speeds = new ChassisSpeeds(
-                            linearVelocity.getX() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
-                            linearVelocity.getY() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
-                            omega * swerveDriveSubsystem.getMaxAngularSpeedRadPerSec());
+                            linearVelocity.getX() * SwerveModuleConstants.maxLinearSpeed,
+                            linearVelocity.getY() * SwerveModuleConstants.maxLinearSpeed,
+                            omega * SwerveModuleConstants.maxAngularSpeed);
 
                     boolean isFlipped = DriverStation.getAlliance().isPresent()
                             && DriverStation.getAlliance().get() == Alliance.Red;
@@ -116,9 +117,9 @@ public class SwerveDriveCommands {
 
                     // Convert to field relative speeds & send command
                     ChassisSpeeds speeds = new ChassisSpeeds(
-                            linearVelocity.getX() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
-                            linearVelocity.getY() * swerveDriveSubsystem.getMaxLinearSpeedMetersPerSec(),
-                            omega);
+                            linearVelocity.getX() * SwerveModuleConstants.maxLinearSpeed,
+                            linearVelocity.getY() * SwerveModuleConstants.maxLinearSpeed,
+                            omega * SwerveModuleConstants.maxAngularSpeed);
 
                     boolean isFlipped = DriverStation.getAlliance().isPresent()
                             && DriverStation.getAlliance().get() == Alliance.Red;
