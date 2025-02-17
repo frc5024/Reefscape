@@ -156,7 +156,7 @@ public class TunerConstants {
     private static final int kFrontLeftDriveMotorId = 41;
     private static final int kFrontLeftSteerMotorId = 42;
     private static final int kFrontLeftEncoderId = 4;
-    private static final Angle kFrontLeftEncoderOffset = Angle.ofRelativeUnits(155.566406, Units.Degrees);
+    private static final Angle kFrontLeftEncoderOffset = Angle.ofRelativeUnits(-0.437500, Units.Rotations);
     private static final boolean kFrontLeftSteerMotorInverted = true;
     private static final boolean kFrontLeftEncoderInverted = false;
 
@@ -167,7 +167,7 @@ public class TunerConstants {
     private static final int kFrontRightDriveMotorId = 11;
     private static final int kFrontRightSteerMotorId = 12;
     private static final int kFrontRightEncoderId = 1;
-    private static final Angle kFrontRightEncoderOffset = Angle.ofRelativeUnits(-317.021484, Units.Degrees);
+    private static final Angle kFrontRightEncoderOffset = Angle.ofRelativeUnits(-317.021484, Units.Rotations);
     private static final boolean kFrontRightSteerMotorInverted = true;
     private static final boolean kFrontRightEncoderInverted = false;
 
@@ -178,7 +178,7 @@ public class TunerConstants {
     private static final int kBackLeftDriveMotorId = 31;
     private static final int kBackLeftSteerMotorId = 32;
     private static final int kBackLeftEncoderId = 3;
-    private static final Angle kBackLeftEncoderOffset = Angle.ofRelativeUnits(-72.861328, Units.Degrees);
+    private static final Angle kBackLeftEncoderOffset = Angle.ofRelativeUnits(-72.861328, Units.Rotations);
     private static final boolean kBackLeftSteerMotorInverted = false;
     private static final boolean kBackLeftEncoderInverted = false;
 
@@ -189,7 +189,7 @@ public class TunerConstants {
     private static final int kBackRightDriveMotorId = 21;
     private static final int kBackRightSteerMotorId = 22;
     private static final int kBackRightEncoderId = 2;
-    private static final Angle kBackRightEncoderOffset = Angle.ofRelativeUnits(-202.763672 + 180, Units.Degrees);
+    private static final Angle kBackRightEncoderOffset = Angle.ofRelativeUnits(-202.763672 + 180, Units.Rotations);
     private static final boolean kBackRightSteerMotorInverted = false;
     private static final boolean kBackRightEncoderInverted = false;
 

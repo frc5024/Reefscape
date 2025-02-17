@@ -2,7 +2,9 @@ package frc.robot.utils;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -20,9 +22,9 @@ public class SwerveModuleBuilder {
     private final COTSTalonFXSwerveConstants cotsDriveConstants;
     private final COTSTalonFXSwerveConstants cotsTurnConstants;
 
-    private final CANcoderConfiguration canCoderConfig;
-    private final TalonFXConfiguration driveTalonFXConfig;
-    private final TalonFXConfiguration turnTalonFXConfig;
+    private CANcoderConfiguration canCoderConfig;
+    private TalonFXConfiguration driveTalonFXConfig;
+    private TalonFXConfiguration turnTalonFXConfig;
 
     /**
      * 
@@ -39,13 +41,9 @@ public class SwerveModuleBuilder {
         this.cotsDriveConstants = cotsDriveConstants;
         this.cotsTurnConstants = cotsTurnConstants;
 
-        this.canCoderConfig = new CANcoderConfiguration();
-        this.driveTalonFXConfig = new TalonFXConfiguration();
-        this.turnTalonFXConfig = new TalonFXConfiguration();
-
-        setCancoderConfig();
         setDriveConfig();
         setTurnConfig();
+        setCancoderConfig();
     }
 
     /**
@@ -67,14 +65,20 @@ public class SwerveModuleBuilder {
      * 
      */
     private void setCancoderConfig() {
-        this.canCoderConfig.MagnetSensor.MagnetOffset = this.encoderOffset.getRotations();
-        this.canCoderConfig.MagnetSensor.SensorDirection = this.cotsTurnConstants.cancoderInvert;
+        this.canCoderConfig = new CANcoderConfiguration();
+
+        this.canCoderConfig.MagnetSensor.MagnetOffset = 0.0; // this.encoderOffset.getRotations();
+        this.canCoderConfig.MagnetSensor.SensorDirection = this.encoderInverted
+                ? SensorDirectionValue.Clockwise_Positive
+                : SensorDirectionValue.CounterClockwise_Positive;
     }
 
     /**
      * 
      */
     private void setDriveConfig() {
+        this.driveTalonFXConfig = new TalonFXConfiguration();
+
         /** Swerve Drive Motor Configuration */
         /* Motor Inverts and Neutral Mode */
         this.driveTalonFXConfig.MotorOutput.Inverted = this.cotsDriveConstants.driveMotorInvert;
@@ -107,9 +111,13 @@ public class SwerveModuleBuilder {
      * 
      */
     private void setTurnConfig() {
+        this.turnTalonFXConfig = new TalonFXConfiguration();
+
         /** Swerve Turn Motor Configurations */
         /* Motor Inverts and Neutral Mode */
-        this.turnTalonFXConfig.MotorOutput.Inverted = this.cotsTurnConstants.angleMotorInvert;
+        this.turnTalonFXConfig.MotorOutput.Inverted = this.turnInverted
+                ? InvertedValue.Clockwise_Positive
+                : InvertedValue.CounterClockwise_Positive;
         this.turnTalonFXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         /* Gear Ratio and Wrapping Config */

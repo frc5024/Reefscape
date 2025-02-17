@@ -27,16 +27,16 @@ public class SwerveModuleConstants {
     public static final COTSTalonFXSwerveConstants cotsTurnConstants = MK4i.Falcon500(MK4i.driveRatios.L3);
 
     private static SwerveModuleBuilder frontLeft = new SwerveModuleBuilder(41, 42, 4,
-            Rotation2d.fromRotations(-0.443604), false, false, cotsDriveConstants,
+            Rotation2d.fromRotations(-0.437500), true, false, cotsDriveConstants,
             cotsTurnConstants);
     private static SwerveModuleBuilder frontRight = new SwerveModuleBuilder(11, 12, 1,
-            Rotation2d.fromRotations(-0.118896), false, false, cotsDriveConstants,
+            Rotation2d.fromRotations(0.375000), true, false, cotsDriveConstants,
             cotsTurnConstants);
     private static SwerveModuleBuilder backLeft = new SwerveModuleBuilder(31, 32, 3,
-            Rotation2d.fromRotations(0.196533), false, false, cotsDriveConstants,
+            Rotation2d.fromRotations(0.184570), true, false, cotsDriveConstants,
             cotsTurnConstants);
     private static SwerveModuleBuilder backRight = new SwerveModuleBuilder(21, 22, 2,
-            Rotation2d.fromRotations(0.054443), false, false, cotsDriveConstants,
+            Rotation2d.fromRotations(0.436035), true, true, cotsDriveConstants,
             cotsTurnConstants);
 
     public static final SwerveModuleBuilder[] swerveModuleConfigs = { frontLeft, frontRight, backLeft, backRight };
