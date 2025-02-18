@@ -100,7 +100,7 @@ public class SwerveModuleBuilder {
         this.driveTalonFXConfig.Slot0.kP = drivePIDs[0];
         this.driveTalonFXConfig.Slot0.kI = drivePIDs[1];
         this.driveTalonFXConfig.Slot0.kD = drivePIDs[2];
-        this.driveTalonFXConfig.Slot0.kV = 0.0;
+        this.driveTalonFXConfig.Slot0.kV = 0.1205;
 
         /* Open and Closed Loop Ramping */
         this.driveTalonFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.25;

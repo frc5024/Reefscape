@@ -81,8 +81,8 @@ public class TeleopDriveCommand extends Command {
     public void execute() {
         Rotation2d angle = this.robotAngleSupplier.get();
 
-        double xVelocity = -modifyAxis(this.translationXSupplier.getAsDouble() * SwerveModuleConstants.maxLinearSpeed);
-        double yVelocity = -modifyAxis(this.translationYSupplier.getAsDouble() * SwerveModuleConstants.maxLinearSpeed);
+        double xVelocity = -modifyAxis(this.translationXSupplier.getAsDouble()) * SwerveModuleConstants.maxLinearSpeed;
+        double yVelocity = -modifyAxis(this.translationYSupplier.getAsDouble()) * SwerveModuleConstants.maxLinearSpeed;
         double rVelocity = -modifyAxis(this.rotationSupplier.getAsDouble() * 10.0 / 2);
 
         xVelocity = this.translateXRateLimiter.calculate(xVelocity);

@@ -196,8 +196,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
         Logger.recordOutput("Subsystems/SwerveDrive/IsFieldOriented", this.isFieldRelative);
         Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", this.desiredModuleStates);
-        // Logger.recordOutput("Subsystems/SwerveDrive/SwerveChassisSpeeds/Setpoints",
-        // discreteSpeeds);
+        Logger.recordOutput("Subsystems/SwerveDrive/SwerveChassisSpeeds/Setpoints", this.desiredChassisSpeeds);
         Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/SetpointsOptimized", this.desiredModuleStates);
 
         // Always reset desiredChassisSpeeds to null to prevent latching to the last
@@ -242,6 +241,11 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
         this.desiredChassisSpeeds = ChassisSpeeds.discretize(chassisSpeeds, RobotConstants.LOOP_PERIOD_SECS);
         this.isOpenLoop = isOpenLoop;
+
+        Logger.recordOutput("Subsystems/SwerveDrive/Velocites/xVelocity", xVelocity);
+        Logger.recordOutput("Subsystems/SwerveDrive/Velocites/yVelocity", yVelocity);
+        Logger.recordOutput("Subsystems/SwerveDrive/Velocites/rVelocity", rVelocity);
+        Logger.recordOutput("Subsystems/SwerveDrive/Velocites/angle", angle.getDegrees());
     }
 
     /**

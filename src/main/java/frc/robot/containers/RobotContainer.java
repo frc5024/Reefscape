@@ -14,7 +14,6 @@ import frc.robot.Robot;
 import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.commands.TeleopDriveCommand;
-import frc.robot.commands.TuningCommand;
 import frc.robot.commands.TuningSwerveCommand;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
@@ -83,13 +82,13 @@ abstract public class RobotContainer {
                 () -> commandXboxController.getLeftX(),
                 () -> commandXboxController.getRightX());
 
-        Command tuningCommand = new TuningCommand(swerveDriveSubsystem,
-                algaeIntakeSubsystem, coralIntakeSubsystem,
-                elevatorSubsystem,
-                () -> -commandXboxController.getLeftY(),
-                () -> -commandXboxController.getLeftX(),
-                () -> -commandXboxController.getRightX(),
-                commandXboxController);
+        // Command tuningCommand = new TuningCommand(swerveDriveSubsystem,
+        // algaeIntakeSubsystem, coralIntakeSubsystem,
+        // elevatorSubsystem,
+        // () -> -commandXboxController.getLeftY(),
+        // () -> -commandXboxController.getLeftX(),
+        // () -> -commandXboxController.getRightX(),
+        // commandXboxController);
 
         Command tuningSwerveCommand = new TuningSwerveCommand(swerveDriveSubsystem,
                 () -> -commandXboxController.getLeftY(),
@@ -98,7 +97,7 @@ abstract public class RobotContainer {
                 commandXboxController);
 
         // Default command, normal field-relative drive
-        swerveDriveSubsystem.setDefaultCommand(RobotConstants.TUNING_MODE ? tuningCommand : closedLoopDrive);
+        swerveDriveSubsystem.setDefaultCommand(RobotConstants.TUNING_MODE ? tuningSwerveCommand : closedLoopDrive);
     }
 
     /**
