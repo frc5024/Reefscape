@@ -9,6 +9,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -47,6 +48,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
 
     // Voltage control requests
     private final VoltageOut voltageRequest = new VoltageOut(0);
+    private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
     private final PositionVoltage positionVoltageRequest = new PositionVoltage(0.0);
     private final VelocityVoltage velocityVoltageRequest = new VelocityVoltage(0.0);
 
@@ -188,7 +190,8 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
 
     @Override
     public void runDriveOpenLoop(double output) {
-        this.driveTalon.setControl(voltageRequest.withOutput(output));
+        this.driveTalon.setControl(dutyCycleRequest.withOutput(output));
+        // this.driveTalon.setControl(voltageRequest.withOutput(output));
     }
 
     @Override

@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
@@ -85,8 +84,7 @@ public class DriveToBestTagCommand extends Command {
         if (this.omegaController.atGoal())
             omegaSpeed = 0;
 
-        this.swerveDriveSubsystem.runVelocity(
-                ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
+        this.swerveDriveSubsystem.drive(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation(), false);
     }
 
     @Override

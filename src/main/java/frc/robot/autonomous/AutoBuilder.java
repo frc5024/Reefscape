@@ -62,9 +62,8 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
                 this.swerveDriveSubsystem::getPose,
                 this.swerveDriveSubsystem::setPose,
                 this.swerveDriveSubsystem::getChassisSpeeds,
-                this.swerveDriveSubsystem::runVelocity,
-                new PPHolonomicDriveController(
-                        new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+                this.swerveDriveSubsystem::drive,
+                new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
                 Constants.PP_CONFIG,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this.swerveDriveSubsystem);

@@ -9,13 +9,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.modules.swerve.SwerveModuleConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -55,37 +51,17 @@ public class SwerveDriveCommands {
      * Field relative drive command using two joysticks (controlling linear and
      * angular velocities).
      */
-    public static Command joystickDrive(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier xSupplier,
+    public static Command closedLoopDrive(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier xSupplier,
             DoubleSupplier ySupplier, DoubleSupplier omegaSupplier) {
         return Commands.run(
                 () -> {
-                    // Get linear velocity
                     Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(),
                             ySupplier.getAsDouble());
 
-                    // Apply rotation deadband
                     double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
-
-                    // Square rotation value for more precise control
                     omega = Math.copySign(omega * omega, omega);
 
-                    // Convert to field relative speeds & send command
-                    ChassisSpeeds speeds = new ChassisSpeeds(
-                            linearVelocity.getX() * SwerveModuleConstants.maxLinearSpeed,
-                            linearVelocity.getY() * SwerveModuleConstants.maxLinearSpeed,
-                            omega * SwerveModuleConstants.maxAngularSpeed);
-
-                    boolean isFlipped = DriverStation.getAlliance().isPresent()
-                            && DriverStation.getAlliance().get() == Alliance.Red;
-
-                    swerveDriveSubsystem.runVelocity(
-                            swerveDriveSubsystem.isFieldRelative()
-                                    ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                            speeds,
-                                            isFlipped
-                                                    ? swerveDriveSubsystem.getRotation().plus(new Rotation2d(Math.PI))
-                                                    : swerveDriveSubsystem.getRotation())
-                                    : new ChassisSpeeds(linearVelocity.getX(), linearVelocity.getY(), omega));
+                    swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega);
                 },
                 swerveDriveSubsystem);
     }
@@ -115,19 +91,7 @@ public class SwerveDriveCommands {
                     double omega = angleController.calculate(swerveDriveSubsystem.getRotation().getRadians(),
                             rotationSupplier.get().getRadians());
 
-                    // Convert to field relative speeds & send command
-                    ChassisSpeeds speeds = new ChassisSpeeds(
-                            linearVelocity.getX() * SwerveModuleConstants.maxLinearSpeed,
-                            linearVelocity.getY() * SwerveModuleConstants.maxLinearSpeed,
-                            omega * SwerveModuleConstants.maxAngularSpeed);
-
-                    boolean isFlipped = DriverStation.getAlliance().isPresent()
-                            && DriverStation.getAlliance().get() == Alliance.Red;
-
-                    swerveDriveSubsystem.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
-                            isFlipped
-                                    ? swerveDriveSubsystem.getRotation().plus(new Rotation2d(Math.PI))
-                                    : swerveDriveSubsystem.getRotation()));
+                    swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega);
                 },
                 swerveDriveSubsystem)
 

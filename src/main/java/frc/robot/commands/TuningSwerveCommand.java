@@ -231,9 +231,8 @@ public class TuningSwerveCommand extends Command {
 
             handleAutonomousDriving();
         } else if (this.driveByVelocities.get()) {
-            ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(this.vxMPS.get(), this.vyMPS.get(),
-                    this.omRPS.get(), new Rotation2d(this.angle.get()));
-            this.swerveDriveSubsystem.runVelocity(chassisSpeeds);
+            this.swerveDriveSubsystem.drive(this.vxMPS.get(), this.vyMPS.get(), this.omRPS.get(),
+                    new Rotation2d(this.angle.get()), false);
         } else if (this.driveBackAndForth.get() || this.driveSideToSide.get() || this.alternateRotation.get()) {
             handleAutonomousDriving();
         } else {
@@ -294,8 +293,7 @@ public class TuningSwerveCommand extends Command {
             if (this.omegaController.atGoal())
                 omegaSpeed = 0;
 
-            this.swerveDriveSubsystem.runVelocity(
-                    ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
+            this.swerveDriveSubsystem.drive(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation(), false);
         }
     }
 
@@ -357,14 +355,7 @@ public class TuningSwerveCommand extends Command {
         boolean isFlipped = DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == Alliance.Red;
 
-        swerveDriveSubsystem.runVelocity(
-                swerveDriveSubsystem.isFieldRelative()
-                        ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                speeds,
-                                isFlipped
-                                        ? swerveDriveSubsystem.getRotation().plus(new Rotation2d(Math.PI))
-                                        : swerveDriveSubsystem.getRotation())
-                        : new ChassisSpeeds(linearVelocity.getX(), linearVelocity.getY(), omega));
+        swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega);
     }
 
     /**

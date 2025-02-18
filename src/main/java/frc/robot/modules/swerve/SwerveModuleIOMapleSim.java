@@ -10,6 +10,7 @@ import java.util.Arrays;
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
 import org.ironmaple.simulation.motorsims.SimulatedMotorController;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants.MapleSimConstants;
@@ -93,13 +94,15 @@ public class SwerveModuleIOMapleSim implements SwerveModuleIO {
     @Override
     public void runDriveOpenLoop(double output) {
         driveClosedLoop = false;
-        driveAppliedVolts = output;
+        driveAppliedVolts = MathUtil.clamp(output * 12, -12.0, 12.0);
+        ;
     }
 
     @Override
     public void runTurnOpenLoop(double output) {
         turnClosedLoop = false;
-        turnAppliedVolts = output;
+        turnAppliedVolts = MathUtil.clamp(output * 12, -12.0, 12.0);
+        ;
     }
 
     @Override

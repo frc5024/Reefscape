@@ -12,10 +12,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -24,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.TeleopConstants;
 import frc.robot.autonomous.AutoBuilder;
-import frc.robot.modules.swerve.SwerveModuleConstants;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -240,9 +236,8 @@ public class TuningCommand extends Command {
 
             handleAutonomousDriving();
         } else if (this.driveByVelocities.get()) {
-            ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(this.vxMPS.get(), this.vyMPS.get(),
-                    this.omRPS.get(), new Rotation2d(this.angle.get()));
-            this.swerveDriveSubsystem.runVelocity(chassisSpeeds);
+            this.swerveDriveSubsystem.drive(this.vxMPS.get(), this.vyMPS.get(), this.omRPS.get(),
+                    new Rotation2d(this.angle.get()), false);
         } else if (this.driveBackAndForth.get() || this.driveSideToSide.get() || this.alternateRotation.get()) {
             handleAutonomousDriving();
         } else {
@@ -303,8 +298,7 @@ public class TuningCommand extends Command {
             if (this.omegaController.atGoal())
                 omegaSpeed = 0;
 
-            this.swerveDriveSubsystem.runVelocity(
-                    ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
+            this.swerveDriveSubsystem.drive(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation(), false);
         }
     }
 
@@ -357,23 +351,7 @@ public class TuningCommand extends Command {
             this.alternateRotation.set(false);
         }
 
-        // Convert to field relative speeds & send command
-        ChassisSpeeds speeds = new ChassisSpeeds(
-                linearVelocity.getX() * SwerveModuleConstants.maxLinearSpeed,
-                linearVelocity.getY() * SwerveModuleConstants.maxLinearSpeed,
-                omega * SwerveModuleConstants.maxAngularSpeed);
-
-        boolean isFlipped = DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get() == Alliance.Red;
-
-        this.swerveDriveSubsystem.runVelocity(
-                this.swerveDriveSubsystem.isFieldRelative()
-                        ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                speeds,
-                                isFlipped
-                                        ? this.swerveDriveSubsystem.getRotation().plus(new Rotation2d(Math.PI))
-                                        : this.swerveDriveSubsystem.getRotation())
-                        : new ChassisSpeeds(linearVelocity.getX(), linearVelocity.getY(), omega));
+        this.swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega);
     }
 
     /**

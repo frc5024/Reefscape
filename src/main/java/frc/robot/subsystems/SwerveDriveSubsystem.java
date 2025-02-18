@@ -8,6 +8,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+import com.pathplanner.lib.util.DriveFeedforwards;
+
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
@@ -25,6 +27,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -63,7 +66,11 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
             SwerveModuleConstants.swerveDriveKinematics,
             rawGyroRotation,
             lastModulePositions, new Pose2d());
+
+    private ChassisSpeeds desiredChassisSpeeds;
+    private SwerveModuleState[] desiredModuleStates = new SwerveModuleState[] {};
     private boolean isFieldRelative;
+    private boolean isOpenLoop;
 
     /**
      * 
@@ -93,6 +100,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
                         (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
 
         this.isFieldRelative = true;
+        this.isOpenLoop = false;
     }
 
     /** Adds a new timestamped vision measurement. */
@@ -114,6 +122,20 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
     @Override
     public void periodic() {
+        // Set the swerve module states
+        if (this.desiredChassisSpeeds != null) {
+            this.desiredModuleStates = SwerveModuleConstants.swerveDriveKinematics
+                    .toSwerveModuleStates(this.desiredChassisSpeeds);
+            SwerveDriveKinematics.desaturateWheelSpeeds(this.desiredModuleStates, SwerveModuleConstants.maxLinearSpeed);
+            for (SwerveModule swerveModule : this.swerveModules) {
+                if (this.isOpenLoop) {
+                    swerveModule.runVelocity(this.desiredModuleStates[swerveModule.getIndex()]);
+                } else {
+                    swerveModule.runSetpoint(this.desiredModuleStates[swerveModule.getIndex()]);
+                }
+            }
+        }
+
         odometryLock.lock(); // Prevents odometry updates while reading data
         for (SwerveModule swerveModule : this.swerveModules) {
             swerveModule.updateInputs();
@@ -173,6 +195,53 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         gyroDisconnectedAlert.set(!gyroInputs.connected && RobotConstants.currentMode != RobotConstants.Mode.SIM);
 
         Logger.recordOutput("Subsystems/SwerveDrive/IsFieldOriented", this.isFieldRelative);
+        Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", this.desiredModuleStates);
+        // Logger.recordOutput("Subsystems/SwerveDrive/SwerveChassisSpeeds/Setpoints",
+        // discreteSpeeds);
+        Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/SetpointsOptimized", this.desiredModuleStates);
+
+        // Always reset desiredChassisSpeeds to null to prevent latching to the last
+        // state (aka motor safety)!!
+        this.desiredChassisSpeeds = null;
+    }
+
+    /**
+     * Used for autonomous driving in AutoBuilder - chassis speeds are robot
+     * relative
+     */
+    public void drive(ChassisSpeeds chassisSpeeds, DriveFeedforwards driveFeedforwards) {
+        this.desiredChassisSpeeds = chassisSpeeds;
+        this.isOpenLoop = false;
+    }
+
+    /**
+     * 
+     */
+    public void drive(double xVelocity, double yVelocity, double rVelocity) {
+        drive(xVelocity, yVelocity, rVelocity,
+                DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
+                        ? getRotation().plus(new Rotation2d(Math.PI))
+                        : getRotation(),
+                false);
+    }
+
+    /**
+     * 
+     */
+    public void drive(double xVelocity, double yVelocity, double rVelocity, Rotation2d angle, boolean isOpenLoop) {
+        ChassisSpeeds chassisSpeeds = null;
+        xVelocity = xVelocity * SwerveModuleConstants.maxLinearSpeed;
+        yVelocity = yVelocity * SwerveModuleConstants.maxLinearSpeed;
+        rVelocity = rVelocity * SwerveModuleConstants.maxAngularSpeed;
+
+        if (isFieldRelative) {
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, rVelocity, angle);
+        } else {
+            chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
+        }
+
+        this.desiredChassisSpeeds = ChassisSpeeds.discretize(chassisSpeeds, RobotConstants.LOOP_PERIOD_SECS);
+        this.isOpenLoop = isOpenLoop;
     }
 
     /**
@@ -183,59 +252,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     }
 
     /**
-     * Runs the drive at the desired velocity.
-     *
-     * @param speeds Speeds in meters/sec
+     * Runs the drive in a straight line with the specified drive output.
      */
-    public void runVelocity(ChassisSpeeds speeds) {
-        // Calculate module setpoints
-        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, RobotConstants.LOOP_PERIOD_SECS);
-        SwerveModuleState[] setpointStates = SwerveModuleConstants.swerveDriveKinematics
-                .toSwerveModuleStates(discreteSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, SwerveModuleConstants.maxLinearSpeed);
-
-        // Log unoptimized setpoints and setpoint speeds
-        Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", setpointStates);
-        Logger.recordOutput("Subsystems/SwerveDrive/SwerveChassisSpeeds/Setpoints", discreteSpeeds);
-
-        // Send setpoints to modules
-        for (SwerveModule swerveModule : this.swerveModules) {
-            swerveModule.runSetpoint(setpointStates[swerveModule.getIndex()]);
-        }
-
-        // Log optimized setpoints (runSetpoint mutates each state)
-        Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/SetpointsOptimized", setpointStates);
-    }
-
-    /**
-     * 
-     */
-    public void runVelocity(double xVelocity, double yVelocity, double rVelocity, Rotation2d angle) {
-        ChassisSpeeds chassisSpeeds = null;
-        if (isFieldRelative) {
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, rVelocity, angle);
-        } else {
-            chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
-        }
-        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, RobotConstants.LOOP_PERIOD_SECS);
-        SwerveModuleState[] setpointStates = SwerveModuleConstants.swerveDriveKinematics
-                .toSwerveModuleStates(discreteSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, SwerveModuleConstants.maxLinearSpeed);
-
-        // Log unoptimized setpoints and setpoint speeds
-        Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", setpointStates);
-        Logger.recordOutput("Subsystems/SwerveDrive/SwerveChassisSpeeds/Setpoints", discreteSpeeds);
-
-        // Send setpoints to modules
-        for (SwerveModule swerveModule : this.swerveModules) {
-            swerveModule.runVelocity(setpointStates[swerveModule.getIndex()]);
-        }
-
-        // Log optimized setpoints (runSetpoint mutates each state)
-        Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/SetpointsOptimized", setpointStates);
-    }
-
-    /** Runs the drive in a straight line with the specified drive output. */
     public void runCharacterization(double output) {
         for (int i = 0; i < 4; i++) {
             this.swerveModules[i].runCharacterization(output);
@@ -246,7 +264,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      * Stops the drive.
      */
     public void stop() {
-        runVelocity(new ChassisSpeeds());
+        drive(0.0, 0.0, 0.0);
     }
 
     /**

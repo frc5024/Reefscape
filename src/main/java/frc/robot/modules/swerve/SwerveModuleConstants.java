@@ -12,9 +12,9 @@ public class SwerveModuleConstants {
     public static final double trackWidth = Units.inchesToMeters(18.75);
     public static final double wheelBase = Units.inchesToMeters(18.75);
     public static final double driveBaseRadius = Math.hypot(trackWidth / 2, wheelBase / 2);
-    public static final double maxLinearSpeed = 2.0; // 4.69;
-    public static final double maxAcceleration = 2.0; // 4.0;
-    public static final double maxAngularSpeed = 2.0 / driveBaseRadius; // 4.69 / driveBaseRadius;
+    public static final double maxLinearSpeed = 4.69;
+    public static final double maxAcceleration = 4.0;
+    public static final double maxAngularSpeed = 4.69 / driveBaseRadius;
 
     public static final Translation2d[] moduleTranslations = new Translation2d[] {
             new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
