@@ -49,7 +49,7 @@ public class VisionSubsystem extends SubsystemBase {
 
         // Setup the vision modules
         for (Camera camera : VisionConstants.CAMERAS) {
-            if (Robot.isReal()) {
+            if (!Robot.isReal()) {
                 if (camera.getProcessor() == Camera.Processor.LIMELIGHT) {
                     this.visionModules.add(new VisionModuleIOLimelight(camera, rotationSupplier));
                 } else if (camera.getProcessor() == Camera.Processor.PHOTONVISION) {

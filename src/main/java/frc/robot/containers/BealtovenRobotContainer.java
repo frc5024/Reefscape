@@ -2,16 +2,17 @@ package frc.robot.containers;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.SwerveDriveCommands;
-import frc.robot.commands.TeleopDriveCommand;
-import frc.robot.commands.TuningSwerveCommand;
+import frc.robot.modules.algae.AlgaeIntakeModuleIOSim;
+import frc.robot.modules.coral.CoralIntakeModuleIOSim;
+import frc.robot.modules.elevator.ElevatorModuleIOSim;
 import frc.robot.modules.gyro.GyroModuleIONavX;
 import frc.robot.modules.swerve.SwerveModuleIOTalonFX;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utils.SwerveModuleBuilder;
 
 /**
@@ -33,37 +34,17 @@ public class BealtovenRobotContainer extends RobotContainer {
                 new SwerveModuleIOTalonFX(swerveModuleConfigs[2]),
                 new SwerveModuleIOTalonFX(swerveModuleConfigs[3]));
 
-        // this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
-        // this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
+        this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
+                this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
+
+        this.algaeIntakeSubsystem = new AlgaeIntakeSubsystem(new AlgaeIntakeModuleIOSim());
+        this.coralIntakeSubsystem = new CoralIntakeSubsystem(new CoralIntakeModuleIOSim());
+        this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim(), this.algaeIntakeSubsystem::hasAlgae,
+                this.coralIntakeSubsystem::hasCoral);
 
         // registerNamedCommands();
-        // configureAutoBuilder();
+        configureAutoBuilder();
         configureButtonBindings();
-    }
-
-    @Override
-    protected void configureButtonBindings() {
-        CommandXboxController commandXboxController = new CommandXboxController(0);
-
-        Command closedLoopDrive = SwerveDriveCommands.closedLoopDrive(swerveDriveSubsystem,
-                () -> -commandXboxController.getLeftY(),
-                () -> -commandXboxController.getLeftX(),
-                () -> -commandXboxController.getRightX());
-
-        Command openLoopDrive = new TeleopDriveCommand(this.swerveDriveSubsystem,
-                () -> this.swerveDriveSubsystem.getPose().getRotation(),
-                () -> commandXboxController.getLeftY(),
-                () -> commandXboxController.getLeftX(),
-                () -> commandXboxController.getRightX());
-
-        Command tuningSwerveCommand = new TuningSwerveCommand(swerveDriveSubsystem,
-                () -> -commandXboxController.getLeftY(),
-                () -> -commandXboxController.getLeftX(),
-                () -> -commandXboxController.getRightX(),
-                commandXboxController);
-
-        // Default command, normal field-relative drive
-        swerveDriveSubsystem.setDefaultCommand(RobotConstants.TUNING_MODE ? tuningSwerveCommand : closedLoopDrive);
     }
 
     @Override
