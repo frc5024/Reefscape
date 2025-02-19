@@ -25,6 +25,8 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -33,7 +35,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.lib.camera.Camera;
-import frc.robot.modules.swerve.SwerveModuleConstants;
+import frc.robot.utils.COTSTalonFXSwerveConstants;
+import frc.robot.utils.COTSTalonFXSwerveConstants.SDS.MK4i;
 
 /**
  * 
@@ -72,14 +75,14 @@ public final class Constants {
             ROBOT_MASS_KG,
             ROBOT_MOI,
             new ModuleConfig(
-                    SwerveModuleConstants.cotsDriveConstants.wheelDiameter / 2,
-                    SwerveModuleConstants.maxLinearSpeed,
+                    SwerveConstants.cotsDriveConstants.wheelDiameter / 2,
+                    SwerveConstants.maxLinearSpeed,
                     WHEEL_COF,
                     DCMotor.getKrakenX60Foc(1)
-                            .withReduction(SwerveModuleConstants.cotsDriveConstants.driveGearRatio),
+                            .withReduction(SwerveConstants.cotsDriveConstants.driveGearRatio),
                     120,
                     1),
-            SwerveModuleConstants.moduleTranslations);
+            SwerveConstants.moduleTranslations);
 
     /**
      * 
@@ -204,7 +207,7 @@ public final class Constants {
         public static final double turnSimD = 0.0;
 
         public static final DriveTrainSimulationConfig mapleSimConfig = DriveTrainSimulationConfig.Default()
-                .withCustomModuleTranslations(SwerveModuleConstants.moduleTranslations)
+                .withCustomModuleTranslations(SwerveConstants.moduleTranslations)
                 .withRobotMass(Kilogram.of(ROBOT_MASS_KG))
                 .withGyro(COTS.ofPigeon2())
                 .withSwerveModule(new SwerveModuleSimulationConfig(
@@ -214,7 +217,7 @@ public final class Constants {
                         9424.0 / 203.0,
                         Volts.of(0.1),
                         Volts.of(0.1),
-                        Meters.of(SwerveModuleConstants.cotsDriveConstants.wheelDiameter / 2),
+                        Meters.of(SwerveConstants.cotsDriveConstants.wheelDiameter / 2),
                         KilogramSquareMeters.of(0.02),
                         WHEEL_COF));
     }
@@ -337,6 +340,30 @@ public final class Constants {
     }
 
     /**
+     * Be sure to update SwerveConstants to match robot
+     */
+    public static final class SwerveConstants {
+        public static final double trackWidth = Units.inchesToMeters(18.75);
+        public static final double wheelBase = Units.inchesToMeters(18.75);
+        public static final double driveBaseRadius = Math.hypot(trackWidth / 2, wheelBase / 2);
+        public static final double maxLinearSpeed = 4.69;
+        public static final double maxLinearAcceleration = 4.0;
+        public static final double maxAngularAcceleration = 20.0;
+        public static final double maxAngularSpeed = 8.0; // 4.69 / driveBaseRadius;
+
+        public static final Translation2d[] moduleTranslations = new Translation2d[] {
+                new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
+                new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
+                new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
+                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0) };
+
+        public static final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(moduleTranslations);
+
+        public static final COTSTalonFXSwerveConstants cotsDriveConstants = MK4i.KrakenX60(MK4i.driveRatios.L3);
+        public static final COTSTalonFXSwerveConstants cotsTurnConstants = MK4i.Falcon500(MK4i.driveRatios.L3);
+    }
+
+    /**
      * 
      */
     public static final class TeleopConstants {
@@ -346,24 +373,15 @@ public final class Constants {
         public static final double Y_RATE_LIMIT = 6.0;
         public static final double ROTATION_RATE_LIMIT = 5.0 * Math.PI;
 
-        public static final double HEADING_MAX_VELOCITY = Math.PI * 4;
-        public static final double HEADING_MAX_ACCELERATION = Math.PI * 16;
-
-        public static final double HEADING_kP = 2.0;
-        public static final double HEADING_kI = 0.0;
-        public static final double HEADING_kD = 0.0;
-
-        public static final double HEADING_TOLERANCE = Units.degreesToRadians(1.5);
-
         public static final double SPEED_MODIFIER_ONE_HUNDRED = 1.00;
         public static final double SPEED_MODIFIER_THIRTY = 0.30;
 
         public static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(
-                SwerveModuleConstants.maxLinearSpeed, SwerveModuleConstants.maxAcceleration);
+                SwerveConstants.maxLinearSpeed, SwerveConstants.maxLinearAcceleration);
         public static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(
-                SwerveModuleConstants.maxLinearSpeed, SwerveModuleConstants.maxAcceleration);
-        public static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(10,
-                10);
+                SwerveConstants.maxLinearSpeed, SwerveConstants.maxLinearAcceleration);
+        public static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                SwerveConstants.maxAngularSpeed, SwerveConstants.maxLinearAcceleration);
     }
 
     /**

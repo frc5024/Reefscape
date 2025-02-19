@@ -12,8 +12,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.TeleopConstants;
-import frc.robot.modules.swerve.SwerveModuleConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -81,8 +81,8 @@ public class TeleopDriveCommand extends Command {
     public void execute() {
         Rotation2d angle = this.robotAngleSupplier.get();
 
-        double xVelocity = -modifyAxis(this.translationXSupplier.getAsDouble()) * SwerveModuleConstants.maxLinearSpeed;
-        double yVelocity = -modifyAxis(this.translationYSupplier.getAsDouble()) * SwerveModuleConstants.maxLinearSpeed;
+        double xVelocity = -modifyAxis(this.translationXSupplier.getAsDouble()) * SwerveConstants.maxLinearSpeed;
+        double yVelocity = -modifyAxis(this.translationYSupplier.getAsDouble()) * SwerveConstants.maxLinearSpeed;
         double rVelocity = -modifyAxis(this.rotationSupplier.getAsDouble() * 10.0 / 2);
 
         xVelocity = this.translateXRateLimiter.calculate(xVelocity);
@@ -119,7 +119,7 @@ public class TeleopDriveCommand extends Command {
      * 
      */
     private double modifyAxis(double value) {
-        value = MathUtil.applyDeadband(value, 0.2);
+        value = MathUtil.applyDeadband(value, TeleopConstants.DEADBAND);
         value = Math.copySign(value, value);
 
         return value;

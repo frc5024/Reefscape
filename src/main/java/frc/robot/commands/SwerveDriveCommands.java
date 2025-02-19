@@ -12,17 +12,16 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.TeleopConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
  * 
  */
 public class SwerveDriveCommands {
-    private static final double DEADBAND = 0.1;
     private static final double ANGLE_KP = 5.0;
     private static final double ANGLE_KD = 0.4;
-    private static final double ANGLE_MAX_VELOCITY = 8.0;
-    private static final double ANGLE_MAX_ACCELERATION = 20.0;
 
     /**
      * 
@@ -35,7 +34,7 @@ public class SwerveDriveCommands {
      */
     public static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
         // Apply deadband
-        double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DEADBAND);
+        double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), TeleopConstants.DEADBAND);
         Rotation2d linearDirection = new Rotation2d(Math.atan2(y, x));
 
         // Square magnitude for more precise control
@@ -58,10 +57,11 @@ public class SwerveDriveCommands {
                     Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(),
                             ySupplier.getAsDouble());
 
-                    double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
+                    double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), TeleopConstants.DEADBAND);
                     omega = Math.copySign(omega * omega, omega);
 
-                    swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega);
+                    swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega,
+                            swerveDriveSubsystem.getRotation(), false);
                 },
                 swerveDriveSubsystem);
     }
@@ -77,7 +77,8 @@ public class SwerveDriveCommands {
             DoubleSupplier ySupplier, Supplier<Rotation2d> rotationSupplier) {
         // Create PID controller
         ProfiledPIDController angleController = new ProfiledPIDController(ANGLE_KP, 0.0, ANGLE_KD,
-                new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
+                new TrapezoidProfile.Constraints(SwerveConstants.maxAngularSpeed,
+                        SwerveConstants.maxAngularAcceleration));
         angleController.enableContinuousInput(-Math.PI, Math.PI);
 
         // Construct command

@@ -32,10 +32,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.modules.gyro.GyroIOInputsAutoLogged;
 import frc.robot.modules.gyro.GyroModuleIO;
 import frc.robot.modules.swerve.SwerveModule;
-import frc.robot.modules.swerve.SwerveModuleConstants;
 import frc.robot.modules.swerve.SwerveModuleIO;
 import frc.robot.utils.PhoenixOdometryThread;
 
@@ -63,7 +63,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
                     new SwerveModulePosition()
             };
     private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
-            SwerveModuleConstants.swerveDriveKinematics,
+            SwerveConstants.swerveDriveKinematics,
             rawGyroRotation,
             lastModulePositions, new Pose2d());
 
@@ -124,9 +124,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public void periodic() {
         // Set the swerve module states
         if (this.desiredChassisSpeeds != null) {
-            this.desiredModuleStates = SwerveModuleConstants.swerveDriveKinematics
+            this.desiredModuleStates = SwerveConstants.swerveDriveKinematics
                     .toSwerveModuleStates(this.desiredChassisSpeeds);
-            SwerveDriveKinematics.desaturateWheelSpeeds(this.desiredModuleStates, SwerveModuleConstants.maxLinearSpeed);
+            SwerveDriveKinematics.desaturateWheelSpeeds(this.desiredModuleStates, SwerveConstants.maxLinearSpeed);
             for (SwerveModule swerveModule : this.swerveModules) {
                 if (this.isOpenLoop) {
                     swerveModule.runVelocity(this.desiredModuleStates[swerveModule.getIndex()]);
@@ -183,7 +183,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
                 rawGyroRotation = gyroInputs.odometryYawPositions[i];
             } else {
                 // Use the angle delta from the kinematics and module deltas
-                Twist2d twist = SwerveModuleConstants.swerveDriveKinematics.toTwist2d(moduleDeltas);
+                Twist2d twist = SwerveConstants.swerveDriveKinematics.toTwist2d(moduleDeltas);
                 rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
             }
 
@@ -229,9 +229,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      */
     public void drive(double xVelocity, double yVelocity, double rVelocity, Rotation2d angle, boolean isOpenLoop) {
         ChassisSpeeds chassisSpeeds = null;
-        xVelocity = xVelocity * SwerveModuleConstants.maxLinearSpeed;
-        yVelocity = yVelocity * SwerveModuleConstants.maxLinearSpeed;
-        rVelocity = rVelocity * SwerveModuleConstants.maxAngularSpeed;
+        xVelocity = xVelocity * SwerveConstants.maxLinearSpeed;
+        yVelocity = yVelocity * SwerveConstants.maxLinearSpeed;
+        rVelocity = rVelocity * SwerveConstants.maxAngularSpeed;
 
         if (isFieldRelative) {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, rVelocity, angle);
@@ -280,9 +280,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public void stopWithX() {
         Rotation2d[] headings = new Rotation2d[4];
         for (int i = 0; i < 4; i++) {
-            headings[i] = SwerveModuleConstants.moduleTranslations[i].getAngle();
+            headings[i] = SwerveConstants.moduleTranslations[i].getAngle();
         }
-        SwerveModuleConstants.swerveDriveKinematics.resetHeadings(headings);
+        SwerveConstants.swerveDriveKinematics.resetHeadings(headings);
         stop();
     }
 
@@ -328,7 +328,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      */
     @AutoLogOutput(key = "Subsystems/SwerveDrive/SwerveChassisSpeeds/Measured")
     public ChassisSpeeds getChassisSpeeds() {
-        return SwerveModuleConstants.swerveDriveKinematics.toChassisSpeeds(getModuleStates());
+        return SwerveConstants.swerveDriveKinematics.toChassisSpeeds(getModuleStates());
     }
 
     /** Returns the position of each module in radians. */

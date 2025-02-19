@@ -9,6 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.SwerveConstants;
 
 /**
  * 
@@ -47,7 +48,7 @@ public class SwerveModule {
         this.odometryPositions = new SwerveModulePosition[sampleCount];
         for (int i = 0; i < sampleCount; i++) {
             double positionMeters = inputs.odometryDrivePositionsRad[i]
-                    * (SwerveModuleConstants.cotsTurnConstants.wheelDiameter / 2);
+                    * (SwerveConstants.cotsTurnConstants.wheelDiameter / 2);
             Rotation2d angle = inputs.odometryTurnPositions[i];
             this.odometryPositions[i] = new SwerveModulePosition(positionMeters, angle);
         }
@@ -74,7 +75,7 @@ public class SwerveModule {
 
         // Apply setpoints
         swerveModuleIO.runDriveVelocity(
-                state.speedMetersPerSecond / (SwerveModuleConstants.cotsTurnConstants.wheelDiameter / 2));
+                state.speedMetersPerSecond / (SwerveConstants.cotsTurnConstants.wheelDiameter / 2));
         swerveModuleIO.runTurnPosition(state.angle);
     }
 
@@ -94,7 +95,7 @@ public class SwerveModule {
         state.cosineScale(this.inputs.turnPosition);
 
         // Apply setpoints
-        swerveModuleIO.runDriveOpenLoop(state.speedMetersPerSecond / SwerveModuleConstants.maxLinearSpeed);
+        swerveModuleIO.runDriveOpenLoop(state.speedMetersPerSecond / SwerveConstants.maxLinearSpeed);
         swerveModuleIO.runTurnPosition(state.angle);
     }
 
@@ -111,7 +112,7 @@ public class SwerveModule {
      */
     public Rotation2d getAngle() {
         SwerveModuleState swerveModuleState = new SwerveModuleState(
-                this.inputs.driveVelocityRotPerSec * SwerveModuleConstants.cotsDriveConstants.wheelCircumference,
+                this.inputs.driveVelocityRotPerSec * SwerveConstants.cotsDriveConstants.wheelCircumference,
                 this.inputs.turnPosition);
         return swerveModuleState.angle;
         // return this.inputs.turnPosition;
@@ -128,14 +129,14 @@ public class SwerveModule {
      * Returns the current drive position of the module in meters.
      */
     public double getPositionMeters() {
-        return this.inputs.drivePositionRad * (SwerveModuleConstants.cotsTurnConstants.wheelDiameter / 2);
+        return this.inputs.drivePositionRad * (SwerveConstants.cotsTurnConstants.wheelDiameter / 2);
     }
 
     /**
      * Returns the current drive velocity of the module in meters per second.
      */
     public double getVelocityMetersPerSec() {
-        return inputs.driveVelocityRadPerSec * (SwerveModuleConstants.cotsTurnConstants.wheelDiameter / 2);
+        return inputs.driveVelocityRadPerSec * (SwerveConstants.cotsTurnConstants.wheelDiameter / 2);
     }
 
     /**
