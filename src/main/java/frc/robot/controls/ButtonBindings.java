@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveFromBestTagCommand;
 import frc.robot.commands.DriveNearestCoralStationCommand;
 import frc.robot.commands.DriveProcessorCommand;
-import frc.robot.commands.DriveToReefStationCommand;
+import frc.robot.commands.DriveReefStationCommand;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.controls.GameData.CoralPole;
 import frc.robot.controls.GameData.GamePieceMode;
@@ -124,7 +124,7 @@ public class ButtonBindings {
 
         // Drive to selected reef station
         commandXboxController.rightBumper()
-                .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem,
+                .whileTrue(new DriveReefStationCommand(this.swerveDriveSubsystem,
                         this.swerveDriveSubsystem::getPose,
                         GameData.getInstance()::getReefStationIndex,
                         GameData.getInstance().getCoralPole(),
@@ -132,7 +132,7 @@ public class ButtonBindings {
 
         // Drive to selected reef station
         commandXboxController.leftBumper()
-                .whileTrue(new DriveToReefStationCommand(this.swerveDriveSubsystem,
+                .whileTrue(new DriveReefStationCommand(this.swerveDriveSubsystem,
                         this.swerveDriveSubsystem::getPose,
                         GameData.getInstance()::getReefStationIndex,
                         GameData.getInstance().getCoralPole(),

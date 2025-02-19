@@ -25,7 +25,7 @@ import frc.robot.utils.AllianceFlipUtil;
 /**
  * Drives to reef station based on game piece mode settings
  */
-public class DriveToReefStationCommand extends Command {
+public class DriveReefStationCommand extends Command {
     private final SwerveDriveSubsystem swerveDriveSubsystem;
     private final Supplier<Pose2d> poseProvider;
     private final Supplier<Integer> stationSupplier;
@@ -40,7 +40,7 @@ public class DriveToReefStationCommand extends Command {
     /**
      * Drives to reef station based on pose and pole selection from elastic input
      */
-    public DriveToReefStationCommand(SwerveDriveSubsystem swerveDriveSubsystem, Supplier<Pose2d> poseProvider,
+    public DriveReefStationCommand(SwerveDriveSubsystem swerveDriveSubsystem, Supplier<Pose2d> poseProvider,
             Supplier<Integer> stationSupplier, Supplier<CoralPole> poleSupplier,
             Supplier<GamePieceMode> driveModeSupplier) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
