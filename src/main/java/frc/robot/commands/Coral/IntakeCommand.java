@@ -23,8 +23,10 @@ public class IntakeCommand extends Command {
     // initialize, when command starts, if line is not broken, set state to IDLE
     @Override
     public void initialize() {
-        coralSubsystem.set(Constants.coralConstants.intakeSpeed);
-
+        if (!coralSubsystem.isLineBroken()) {
+            coralSubsystem.set(Constants.coralConstants.intakeSpeed);
+            s_LEDs.setCommand(LEDPreset.Strobe.kGold).schedule();
+        }
     }
 
     // execute, if button is pressed, startIntake()
@@ -43,7 +45,6 @@ public class IntakeCommand extends Command {
     // if line is broken, return true, else return false
     @Override
     public boolean isFinished() {
-
         return coralSubsystem.isLineBroken();
     }
 

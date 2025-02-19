@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Elevator.SetElevatorSetpointCmd;
-import frc.robot.commands.Vision.FaceHeadingCmd;
 import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
 import frc.robot.commands.Vision.goToSetPositionPerTagOnTrueCmd;
 import frc.robot.subsystems.Coral;
@@ -30,6 +29,8 @@ public class RobotContainer {
     private final Coral coralSubsystem = new Coral();
     private final Elevator elevatorSubsystem = new Elevator();
     private final LEDs s_LEDs = LEDs.getInstance();
+
+    boolean visionMode = false;
 
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -58,32 +59,43 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+        // (driver)
+        driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        driver.a().onTrue(new InstantCommand(() -> visionMode = !visionMode));
 
-        // Vision and swerve
-        driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        driver.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.toggleSlowmode()));
 
-        driver.b().whileTrue(new goToSetPositionPerTagCmd(
-                limelightSubsystem, s_Swerve, Constants.Vision.noOffset));
+        driver.rightBumper().whileTrue(coralSubsystem.intakeCommand());
+        // driver.rightBumper().onTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
+        // Constants.elevatorConstants.zeroPosition));
 
-        // driver.b().whileTrue(new goToSetPositionPerTagOnTrueCmd(
-        // limelightSubsystem, s_Swerve, Constants.Vision.noOffset));
+        // (operator)
+        operator.b().onTrue(coralSubsystem.lowerRampCommand());
 
-        driver.x().whileTrue(new FaceHeadingCmd(s_Swerve));
+        // vision
+        if (visionMode) {
+            // (driver)
+            driver.b().whileTrue(new goToSetPositionPerTagCmd(
+                    limelightSubsystem, s_Swerve, Constants.Vision.noOffset));
 
-        // Coral
-        driver.rightBumper().onTrue(coralSubsystem.intakeCommand());
-        driver.rightTrigger().onTrue(coralSubsystem.outtakeCommand());
-        driver.leftBumper().onTrue(coralSubsystem.cancelIntakeCommand());
-        driver.leftBumper().onTrue(coralSubsystem.lowerRampCommand());
-        // driver.x().onTrue(coralSubsystem.plopCommand());
+            // (operator)
+        }
 
-        // Elevator (operator)
-        operator.b().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
-        operator.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
-        operator.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
-        operator.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
+        // manual
+        if (!visionMode) {
+            // (driver)
+            driver.rightTrigger().onTrue(coralSubsystem.outtakeCommand());
 
-        operator.rightBumper().onTrue(new InstantCommand(() -> elevatorSubsystem.zeroEncoderValue()));
+            // (operator)
+            operator.b()
+                    .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
+            operator.a()
+                    .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
+            operator.x()
+                    .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
+            operator.y()
+                    .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
+        }
     }
 
     public Command getAutonomousCommand() {
