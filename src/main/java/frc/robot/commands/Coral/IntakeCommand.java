@@ -6,12 +6,14 @@ import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.Rumble;
 
 public class IntakeCommand extends Command {
 
     private final Coral coralSubsystem;
 
     private final LEDs s_LEDs = LEDs.getInstance();
+    Rumble rumble = new Rumble();
 
     // constructor for IntakeCommand
     public IntakeCommand(Coral coralSubsystem) {
@@ -40,6 +42,7 @@ public class IntakeCommand extends Command {
     public void end(boolean interrupted) {
         coralSubsystem.setIdle();
         s_LEDs.setCommand(LEDPreset.Solid.kRed).schedule();
+        rumble.staticRumble(true);
     }
 
     // if line is broken, return true, else return false

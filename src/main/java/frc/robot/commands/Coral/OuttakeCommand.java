@@ -3,11 +3,12 @@ package frc.robot.commands.Coral;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Coral;
+import frc.robot.subsystems.Rumble;
 
 public class OuttakeCommand extends Command {
 
     private final Coral coralSubsystem;
-    // private static DigitalInput linebreak;
+    Rumble rumble = new Rumble();
 
     // constructor for OuttakeCommand
     public OuttakeCommand(Coral coralSubsystem) {
@@ -20,11 +21,17 @@ public class OuttakeCommand extends Command {
     @Override
     public void initialize() {
         coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
+        if (coralSubsystem.isLineBroken()) {
+            cancel();
+        }
     }
 
     // execute, startOuttake() once button is pressed
     @Override
     public void execute() {
+        if (!coralSubsystem.isLineBroken()) {
+            rumble.doubleRumble(true);
+        }
 
     }
 

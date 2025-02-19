@@ -36,6 +36,8 @@ public class Elevator extends SubsystemBase {
     // made it so "speed" is able to be accessed by the whole class
     private double speed;
 
+    public double elevatorMode;
+
     // created and named the limit switches
     // private static DigitalInput zeroingLimitSwitch;
     // private static DigitalInput stoppingLimitSwitch;
@@ -116,7 +118,7 @@ public class Elevator extends SubsystemBase {
         speed = PID.calculate(elevatorMotor.getEncoder().getPosition()) + gConstant;
     }
 
-    // gets the position from the SetElevatorSetpointCmd
+    // gets a position and goes there
     public void setSetPoint(double position) {
         PID.setSetpoint(position);
     }
@@ -171,6 +173,14 @@ public class Elevator extends SubsystemBase {
 
     public void motor2Manual() {
         elevatorMotor2.set(motor1ManualEntry.getDouble(0));
+    }
+
+    public void setElevatorMode(double reefLevel) {
+        elevatorMode = reefLevel;
+    }
+
+    public double getElevatorMode() {
+        return elevatorMode;
     }
 
 }

@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.Elevator.SetElevatorModeCmd;
 import frc.robot.commands.Elevator.SetElevatorSetpointCmd;
-import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
 import frc.robot.commands.Vision.goToSetPositionPerTagOnTrueCmd;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
@@ -31,6 +31,7 @@ public class RobotContainer {
     private final LEDs s_LEDs = LEDs.getInstance();
 
     boolean visionMode = false;
+    String mode;
 
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -58,13 +59,27 @@ public class RobotContainer {
         SmartDashboard.putData("Auto/Chooser", autoChooser);
     }
 
+    private void toggleVisionMode() {
+        visionMode = !visionMode;
+
+        if (visionMode) {
+            mode = "Vision";
+        } else {
+            mode = "Manual";
+        }
+
+        SmartDashboard.putString("Robot Mode", mode);
+    }
+
     private void configureBindings() {
         // (driver)
         driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        driver.a().onTrue(new InstantCommand(() -> visionMode = !visionMode));
+        driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
 
-        driver.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.toggleSlowmode()));
+        driver.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.toggleSlowmode(true)));
+        driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.toggleSlowmode(false)));
 
+        // two intake commands
         driver.rightBumper().whileTrue(coralSubsystem.intakeCommand());
         // driver.rightBumper().onTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
         // Constants.elevatorConstants.zeroPosition));
@@ -72,13 +87,29 @@ public class RobotContainer {
         // (operator)
         operator.b().onTrue(coralSubsystem.lowerRampCommand());
 
+        operator.rightTrigger().onTrue(coralSubsystem.lowerRampCommand());
+        // operator.rightTrigger().onTrue(extendClimb());
+
+        // operator.a().onTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
+        // Constants.elevatorConstants.zeroPosition));
+
         // vision
         if (visionMode) {
             // (driver)
-            driver.b().whileTrue(new goToSetPositionPerTagCmd(
-                    limelightSubsystem, s_Swerve, Constants.Vision.noOffset));
+            driver.rightTrigger().whileTrue(new goToSetPositionPerTagOnTrueCmd(
+                    limelightSubsystem, s_Swerve, Constants.Vision.noOffset)); // make right reef offset
+            driver.rightTrigger().whileTrue(new goToSetPositionPerTagOnTrueCmd(
+                    limelightSubsystem, s_Swerve, Constants.Vision.noOffset)); // make left reef offset
 
             // (operator)
+            operator.povLeft()
+                    .whileTrue(new SetElevatorModeCmd(elevatorSubsystem, Constants.elevatorConstants.L1position));
+            operator.povDown()
+                    .whileTrue(new SetElevatorModeCmd(elevatorSubsystem, Constants.elevatorConstants.L2position));
+            operator.povRight()
+                    .whileTrue(new SetElevatorModeCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
+            operator.povUp()
+                    .whileTrue(new SetElevatorModeCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
         }
 
         // manual
@@ -87,13 +118,13 @@ public class RobotContainer {
             driver.rightTrigger().onTrue(coralSubsystem.outtakeCommand());
 
             // (operator)
-            operator.b()
-                    .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
-            operator.a()
-                    .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
-            operator.x()
+            operator.povLeft()
+                    .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1position));
+            operator.povDown()
+                    .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2position));
+            operator.povRight()
                     .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
-            operator.y()
+            operator.povUp()
                     .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
         }
     }

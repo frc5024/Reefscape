@@ -39,8 +39,6 @@ public class Swerve extends SubsystemBase {
 
     boolean fieldRelative = true;
 
-    boolean slowMode = false;
-
     public final double scaleValue = 3600.0 / 3831.020004272461;
 
     private static Swerve mInstance;
@@ -158,11 +156,11 @@ public class Swerve extends SubsystemBase {
         return fieldRelative;
     }
 
-    public void toggleSlowmode() {
-        if (slowMode) {
-            speedModifier = 1;
-        } else {
+    public void toggleSlowmode(boolean isSlowMode) {
+        if (isSlowMode) {
             speedModifier = 0.3;
+        } else {
+            speedModifier = 1;
         }
     }
 
