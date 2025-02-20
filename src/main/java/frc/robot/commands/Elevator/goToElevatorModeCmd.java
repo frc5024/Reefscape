@@ -18,6 +18,7 @@ public class goToElevatorModeCmd extends Command {
     public void initialize() {
         // sets the setpoint to the position that is assigned to the elevator mode
         elevatorSubsystem.setSetPoint(elevatorSubsystem.getElevatorMode());
+        // elevatorSubsystem.setElevatorPosition(elevatorSubsystem.getElevatorMode());
 
     }
 

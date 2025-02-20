@@ -49,7 +49,7 @@ public class goToSetPositionPerTagCmd extends Command {
         this.translationPidController = new PIDController(0.7, 0, 0.05);
         this.rotationPidController = new PIDController(0.008, 0, 0.0005);
 
-        addRequirements(swerveDrive); // might not work now but should fix errors
+        // addRequirements(swerveDrive); // might not work now but should fix errors
     }
 
     @Override
@@ -88,13 +88,13 @@ public class goToSetPositionPerTagCmd extends Command {
             }
 
             // at___ = AprilTag____
-            translationPidController.setP(pEntry.getDouble(0));
-            translationPidController.setI(iEntry.getDouble(0));
-            translationPidController.setD(dEntry.getDouble(0));
+            // translationPidController.setP(pEntry.getDouble(0));
+            // translationPidController.setI(iEntry.getDouble(0));
+            // translationPidController.setD(dEntry.getDouble(0));
 
-            strafePidController.setP(pEntry.getDouble(0));
-            strafePidController.setI(iEntry.getDouble(0));
-            strafePidController.setD(dEntry.getDouble(0));
+            // strafePidController.setP(pEntry.getDouble(0));
+            // strafePidController.setI(iEntry.getDouble(0));
+            // strafePidController.setD(dEntry.getDouble(0));
 
             mathToTag();
         } else {

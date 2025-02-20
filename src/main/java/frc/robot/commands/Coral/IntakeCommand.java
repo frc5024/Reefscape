@@ -42,7 +42,9 @@ public class IntakeCommand extends Command {
     public void end(boolean interrupted) {
         coralSubsystem.setIdle();
         s_LEDs.setCommand(LEDPreset.Solid.kRed).schedule();
-        rumble.staticRumble(true);
+        if (coralSubsystem.isLineBroken()) {
+            rumble.staticRumble(true);
+        }
     }
 
     // if line is broken, return true, else return false

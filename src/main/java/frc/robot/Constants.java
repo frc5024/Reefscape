@@ -74,13 +74,12 @@ public final class Constants {
 
         // position constants for the different levels to score
         public static final double rootPosition = Units.degreesToRadians(0);
-        public static final double L1position = Units.degreesToRadians(355);
-        public static final double L2position = Units.degreesToRadians(1012);
-        public static final double L3position = Units.degreesToRadians(1656);
-        public static final double L4position = Units.degreesToRadians(2683);
-
+        public static final double L1Position = Units.degreesToRadians(636);
+        public static final double L2Position = Units.degreesToRadians(1012);
         public static final double Algae1 = Units.degreesToRadians(250);
+        public static final double L3position = Units.degreesToRadians(1656);
         public static final double Algae2 = Units.degreesToRadians(350);
+        public static final double L4position = Units.degreesToRadians(2683);
 
     }
 
@@ -93,6 +92,7 @@ public final class Constants {
 
         public static double intakeSpeed = -0.1;
         public static double outtakeSpeed = -0.2;
+        public static double L1Speed = -0.35;
         public static double plopSpeed = -0.05;
         public static double rampSpeed = -0.05;
 

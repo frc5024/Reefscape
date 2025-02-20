@@ -21,10 +21,10 @@ public class SetElevatorModeCmd extends Command {
     // stores the elevator desired mode as its degree form
     @Override
     public void initialize() {
-        if (mode == Constants.elevatorConstants.L1position) {
+        if (mode == Constants.elevatorConstants.L1Position) {
             elevatorSubsystem.setElevatorMode(mode);
             SmartDashboard.putString("ElevatorMode", "L1");
-        } else if (mode == Constants.elevatorConstants.L2position) {
+        } else if (mode == Constants.elevatorConstants.L2Position) {
             elevatorSubsystem.setElevatorMode(mode);
             SmartDashboard.putString("ElevatorMode", "L2");
         } else if (mode == Constants.elevatorConstants.L3position) {

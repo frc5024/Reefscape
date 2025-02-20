@@ -176,6 +176,7 @@ public class Swerve extends SubsystemBase {
                     strafeVal * Constants.Swerve.maxSpeed * speedModifier,
                     rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier, getGyroYaw());
         } else {
+            System.out.println("translationVal");
             chassisSpeeds = new ChassisSpeeds(translationVal * Constants.Swerve.maxSpeed * speedModifier,
                     strafeVal * Constants.Swerve.maxSpeed * speedModifier,
                     rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier);

@@ -11,6 +11,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,8 +40,8 @@ public class Elevator extends SubsystemBase {
     public double elevatorMode;
 
     // created and named the limit switches
-    // private static DigitalInput zeroingLimitSwitch;
-    // private static DigitalInput stoppingLimitSwitch;
+    private static DigitalInput zeroingLimitSwitch;
+    private static DigitalInput stoppingLimitSwitch;
 
     // added shuffleboard tabs to change the different values in the shuffle board
     // app
@@ -64,7 +65,8 @@ public class Elevator extends SubsystemBase {
         this.elevatorMotor2.configure(elevatorMotor2Config, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
 
-        // zeroingLimitSwitch = new DigitalInput(9);
+        zeroingLimitSwitch = new DigitalInput(8);
+        stoppingLimitSwitch = new DigitalInput(1);
 
         // assigning values to the P, I and D
         PID = new PIDController(elevatorConstants.kP, elevatorConstants.kI, elevatorConstants.kD);
@@ -79,6 +81,8 @@ public class Elevator extends SubsystemBase {
         tab.addDouble("encoder valueDEG", () -> Units.radiansToDegrees(elevatorMotor.getEncoder().getPosition()));
         tab.addDouble("encoder2 valueDEG", () -> Units.radiansToDegrees(elevatorMotor2.getEncoder().getPosition()));
         tab.addDouble("PID Speed Value", () -> speed);
+        tab.addBoolean("bottom limitswitch", () -> isBottomLimitSwitchBroken());
+        tab.addBoolean("toplimitswitch", () -> isTopLimitSwitchBroken());
 
     }
 
@@ -89,7 +93,14 @@ public class Elevator extends SubsystemBase {
         // constantly checks the value)
         PID.setP(pEntry.getDouble(elevatorConstants.kP));
         PID.setD(dEntry.getDouble(elevatorConstants.kD));
-        PID.setI(iEntry.getDouble(elevatorConstants.kI));
+        // using "I" value when going down because I is needed to get to a position
+        // going down, but isn't needed going up
+        if (speed < 0) {
+            PID.setI(iEntry.getDouble(elevatorConstants.kI));
+        } else {
+            PID.setI(0);
+        }
+
         gConstant = gEntry.getDouble(elevatorConstants.G);
 
         // //if the boolean enabled is true then run this command
@@ -108,8 +119,8 @@ public class Elevator extends SubsystemBase {
             elevatorMotor.set(0);
         }
 
-        // checkTopLimitSwitch();
-        // zeroingEncoder();
+        checkTopLimitSwitch();
+        zeroingEncoder();
     }
 
     // creates a command for calculating speed through PID which will be used in the
@@ -118,9 +129,15 @@ public class Elevator extends SubsystemBase {
         speed = PID.calculate(elevatorMotor.getEncoder().getPosition()) + gConstant;
     }
 
-    // gets a position and goes there
+    // gets the position from the SetElevatorSetpointCmd
     public void setSetPoint(double position) {
         PID.setSetpoint(position);
+        resetPID();
+    }
+
+    // makes it accesible to the SetElevatorSetpointCmd
+    public void resetPID() {
+        PID.reset();
     }
 
     // setting the manual target speed that can be controlled by the driver to the
@@ -130,28 +147,28 @@ public class Elevator extends SubsystemBase {
     }
 
     // creating a boolean method which returns the condition of both limit switches
-    // public boolean isBottomLimitSwitchBroken() {
-    // return zeroingLimitSwitch.get();
-    // }
+    public boolean isBottomLimitSwitchBroken() {
+        return !zeroingLimitSwitch.get();
+    }
 
-    // public boolean isTopLimitSwitchBroken() {
-    // return stoppingLimitSwitch.get();
-    // }
+    public boolean isTopLimitSwitchBroken() {
+        return !stoppingLimitSwitch.get();
+    }
 
     // encoder value will reset to 0 once the bottom limit switch is triggered
-    // public void zeroingEncoder () {
-    // if (isBottomLimitSwitchBroken()) {
-    // elevatorMotor.getEncoder().setPosition(elevatorConstants.zeroPosition);
-    // }
-    // }
+    public void zeroingEncoder() {
+        if (isBottomLimitSwitchBroken()) {
+            elevatorMotor.getEncoder().setPosition(elevatorConstants.zeroPosition);
+        }
+    }
 
     // stop the motor if the the top limit switch is triggered
-    // public void checkTopLimitSwitch () {
-    // if (isTopLimitSwitchBroken()) {
-    // elevatorMotor.set(0);
-    // //elevatorMotor.get()
-    // }
-    // }
+    public void checkTopLimitSwitch() {
+        if (isTopLimitSwitchBroken()) {
+            elevatorMotor.set(0);
+            // elevatorMotor.get()
+        }
+    }
 
     // gets the encoder value for safety precautions in the periodic
     private double encoderValue() {
