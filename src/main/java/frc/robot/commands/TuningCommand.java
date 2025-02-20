@@ -90,7 +90,7 @@ public class TuningCommand extends Command {
     private LoggedTunableNumber vyMPS;
     private LoggedTunableNumber omRPS;
     private LoggedTunableNumber angle;
-    private LoggedNetworkBoolean driveByController;
+    private LoggedNetworkBoolean driveOpenLoop;
     private LoggedNetworkBoolean driveByPathFinding;
     private LoggedNetworkBoolean driveByPosition;
     private LoggedNetworkBoolean driveByVelocities;
@@ -211,8 +211,10 @@ public class TuningCommand extends Command {
         // this.coralIntakeSubsystem.setDesiredRPM(this.desiredRPM.get());
         // }
 
-        if (this.driveByController.get()) {
-            handleDriveByController();
+        if (this.driveOpenLoop.get()) {
+            handleDriveOpenClosedLoop(false);
+        } else if (this.driveClosedLoop.get()) {
+            handleDriveOpenClosedLoop(true);
         } else if (this.driveByPathFinding.get()) {
             if (this.firstCall) {
                 this.xController.reset(this.swerveDriveSubsystem.getPose().getX());
@@ -318,7 +320,7 @@ public class TuningCommand extends Command {
     /**
      * 
      */
-    private void handleDriveByController() {
+    private void handleDriveOpenClosedLoop(boolean isOpenLoop) {
         // Set controller variables
         Rotation2d angle = this.swerveDriveSubsystem.getPose().getRotation();
 
@@ -351,7 +353,7 @@ public class TuningCommand extends Command {
             this.alternateRotation.set(false);
         }
 
-        this.swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega);
+        this.swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega, angle, isOpenLoop);
     }
 
     /**
@@ -436,14 +438,14 @@ public class TuningCommand extends Command {
         this.driveBackAndForth = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive Back and Forth", false);
         this.driveSideToSide = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive Side to Side", false);
         this.alternateRotation = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Alternate Rotation", false);
-        this.driveClosedLoop = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive Closed Loop", false);
 
         this.vxMPS = new LoggedTunableNumber("Robot/Chassis/vxMPS", 0.0);
         this.vyMPS = new LoggedTunableNumber("Robot/Chassis/vyMPS", 0.0);
         this.omRPS = new LoggedTunableNumber("Robot/Chassis/omRPS", 0.0);
         this.angle = new LoggedTunableNumber("Robot/Chassis/Angle", 0.0);
 
-        this.driveByController = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive By Controller", false);
+        this.driveOpenLoop = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive Open Loop", false);
+        this.driveClosedLoop = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive Closed Loop", false);
         this.driveByPathFinding = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive By Path Finding", false);
         this.driveByPosition = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive By Position", false);
         this.driveByVelocities = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive By Velocities", false);

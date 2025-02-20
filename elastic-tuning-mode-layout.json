@@ -484,19 +484,6 @@
         ],
         "containers": [
           {
-            "title": "Drive By Controller",
-            "x": 256.0,
-            "y": 512.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Toggle Switch",
-            "properties": {
-              "topic": "Tuning/Robot/Toggles/Drive By Controller",
-              "period": 0.06,
-              "data_type": "boolean"
-            }
-          },
-          {
             "title": "Drive By Position",
             "x": 512.0,
             "y": 512.0,
@@ -583,6 +570,19 @@
             "type": "Toggle Switch",
             "properties": {
               "topic": "Tuning/Robot/Toggles/Drive Back and Forth",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Drive Open Loop",
+            "x": 256.0,
+            "y": 512.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "Tuning/Robot/Toggles/Drive Open Loop",
               "period": 0.06,
               "data_type": "boolean"
             }
