@@ -4,9 +4,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.leds.LEDPreset;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.LEDs.FlashLEDS;
 import frc.robot.commands.LEDs.SetLEDS;
-import frc.robot.commands.LEDs.SetLEDSDefault;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Swerve;
 
@@ -32,8 +30,15 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        driver.a().onTrue(new SetLEDS(s_LEDs, LEDPreset.Solid.kBlue));// Sets to blue
-        driver.b().onTrue(new SetLEDSDefault(s_LEDs));// Sets to Default colour (Find in Constants)
-        driver.x().onTrue(new FlashLEDS(s_LEDs, LEDPreset.Solid.kGreen, 1));// Flashes Green for 1 second
+        // driver.a().whileTrue(new SetLEDS(s_LEDs, LEDPreset.Heartbeat.kBlue));// Sets
+        // to blue
+        // driver.b().whileTrue(new SetLEDSDefault(s_LEDs));// Sets to Default colour
+        // (Find in Constants)
+        // driver.x().whileTrue(new FlashLEDS(s_LEDs, LEDPreset.Solid.kGreen, 1));//
+        // Flashes Green for 1 second
+        driver.b().whileTrue(new SetLEDS(s_LEDs, LEDPreset.BeatsPerMinute.kRainbow));
+        driver.x().whileTrue(new SetLEDS(s_LEDs, LEDPreset.Twinkles.kLava));
+        driver.y().whileTrue(new SetLEDS(s_LEDs, LEDPreset.BeatsPerMinute.kOcean));
+        driver.a().whileTrue(new SetLEDS(s_LEDs, LEDPreset.BeatsPerMinute.kParty));
     }
 }

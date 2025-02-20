@@ -15,7 +15,6 @@ public class LEDs extends SubsystemBase {
     private static LEDs mInstance = null;
     private LEDController ledController;
 
-    // Instance
     public static LEDs getInstance() {
         if (mInstance == null) {
             mInstance = new LEDs();
