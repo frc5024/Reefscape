@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inch;
+
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
@@ -9,7 +12,11 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.ExponentialProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 
 import edu.wpi.first.networktables.GenericEntry;
@@ -37,7 +44,8 @@ public class Elevator extends SubsystemBase{
 
 
     //created and named the PID controller
-    private PIDController PID;
+    private ProfiledPIDController PID;
+    private ElevatorFeedforward feedForward;
     private double gConstant;
 
     //made it so "speed" is able to be accessed by the whole class
@@ -54,8 +62,10 @@ public class Elevator extends SubsystemBase{
     GenericEntry dEntry = tab.add("SET D", elevatorConstants.kD).getEntry();
     GenericEntry iEntry = tab.add("SET I", elevatorConstants.kI).getEntry();
     GenericEntry gEntry = tab.add("SET G", elevatorConstants.G).getEntry();
-    GenericEntry maxUpSpeedEntry = tab.add("SET Max Speed", (elevatorConstants.elevatorMaxUpSpeed)).getEntry();
-    GenericEntry maxDownSpeedEntry = tab.add("SET Max Down Speed", (elevatorConstants.elevatorMaxDownSpeed)).getEntry();
+    GenericEntry vEntry = tab.add("SET V", elevatorConstants.kV).getEntry();
+    GenericEntry aEntry = tab.add("SET A", elevatorConstants.kA).getEntry();
+    GenericEntry maxSpeedEntry = tab.add("SET Max Speed", (elevatorConstants.elevatorMaxSpeed)).getEntry();
+    GenericEntry maxAccelerationEntry = tab.add("SET Max accel", (elevatorConstants.elevatorMaxAccel)).getEntry();
     GenericEntry SETsetPoint = tab.add("SET Dest (DEG)", 0.0).getEntry();
     GenericEntry motor1ManualEntry = tab.add("SET MANUAL SPEED", 0.0).getEntry();
 
@@ -72,7 +82,9 @@ public class Elevator extends SubsystemBase{
         stoppingLimitSwitch = new DigitalInput(1);
 
         //assigning values to the P, I and D
-        PID = new PIDController(elevatorConstants.kP, elevatorConstants.kI, elevatorConstants.kD);
+        var feedForwardConstraints = new TrapezoidProfile.Constraints(elevatorConstants.elevatorMaxSpeed, elevatorConstants.elevatorMaxAccel);
+        PID = new ProfiledPIDController(elevatorConstants.kP, elevatorConstants.kI, elevatorConstants.kD, feedForwardConstraints);
+        feedForward = new ElevatorFeedforward(0, elevatorConstants.G, elevatorConstants.kV, elevatorConstants.kA); //ks, kg, kv, ka
         elevatorMotor.getEncoder().setPosition(elevatorConstants.zeroPosition);
 
         //elevatorMotor.setPosition(0);
@@ -101,17 +113,19 @@ public class Elevator extends SubsystemBase{
             PID.setI(0);
         }
 
+        
+
         gConstant = gEntry.getDouble(elevatorConstants.G);
 
         // //if the boolean enabled is true then run this command
 
-        if (speed >= maxUpSpeedEntry.getDouble(elevatorConstants.elevatorMaxUpSpeed)) {
-            elevatorMotor.set(maxUpSpeedEntry.getDouble(elevatorConstants.elevatorMaxUpSpeed));
-        } else if (speed <= -maxDownSpeedEntry.getDouble(elevatorConstants.elevatorMaxDownSpeed)) {
-            elevatorMotor.set(-maxDownSpeedEntry.getDouble(elevatorConstants.elevatorMaxDownSpeed));
-        } else {
-            elevatorMotor.set(speed);
-        }
+        // if (speed >= maxUpSpeedEntry.getDouble(elevatorConstants.elevatorMaxUpSpeed)) {
+        //     elevatorMotor.set(maxUpSpeedEntry.getDouble(elevatorConstants.elevatorMaxUpSpeed));
+        // } else if (speed <= -maxDownSpeedEntry.getDouble(elevatorConstants.elevatorMaxDownSpeed)) {
+        //     elevatorMotor.set(-maxDownSpeedEntry.getDouble(elevatorConstants.elevatorMaxDownSpeed));
+        // } else {
+        //     elevatorMotor.set(speed);
+        // }
 
         // //safety precaution to prevent the motor from trying to go past the bottom stop
         if (speed < 0 && encoderValue() <= elevatorConstants.minimumBottomValue) {
@@ -126,12 +140,19 @@ public class Elevator extends SubsystemBase{
     //creates a command for calculating speed through PID which will be used in the command instead of the periodic
     public void pidMotor() {
         speed = PID.calculate(elevatorMotor.getEncoder().getPosition()) + gConstant;
+
     }
 
     //gets the position from the SetElevatorSetpointCmd
     public void setSetPoint(double position) {
         PID.setSetpoint(position);
         resetPID();
+        feedForward = new ElevatorFeedforward(
+            0,
+            gEntry.getDouble(elevatorConstants.G),
+            vEntry.getDouble(elevatorConstants.kV),
+            aEntry.getDouble(elevatorConstants.kA)
+        );
     }
     //makes it accesible to the SetElevatorSetpointCmd
     public void resetPID() {
@@ -190,7 +211,15 @@ public class Elevator extends SubsystemBase{
         elevatorMotor2.set(motor1ManualEntry.getDouble(0));
     }
 
-}
+    //conversion method
+    public double inchesToRadians(double distanceValue) {
+        return distanceValue * Units.degreesToRadians(115);
+    }
+
+    public double radiansToInches(double angleValue) {
+        return angleValue/Units.degreesToRadians(115);
+    }
+}   
 
 
 

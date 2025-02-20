@@ -20,8 +20,8 @@ public final class Constants {
         //elevator values
         public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
-        public static final double elevatorMaxUpSpeed = 0.20;
-        public static final double elevatorMaxDownSpeed = 0.1;
+        public static final double elevatorMaxSpeed = 12;
+        public static final double elevatorMaxAccel = 12;
         public static final double zeroPosition = 0;
         public static final int motorID1 = 60;
         public static final int motorID2 = 61;
@@ -30,6 +30,10 @@ public final class Constants {
         public static final double kP =0.033;
         public static final double kI = 0;
         public static final double kD = 0;
+
+        //values for feed forward
+        public static final double kV = 0;
+        public static final double kA = 0;
 
         public static final double G = 0.038;
         public static final double minimumBottomValue = 0.1;  //encoder value will not always be zero so we create a tolerance value
