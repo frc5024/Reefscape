@@ -86,15 +86,6 @@ public class RobotContainer {
         // driver.rightBumper().onTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
         // Constants.elevatorConstants.zeroPosition));
 
-        driver.povLeft()
-                .whileTrue(new SetElevatorModeCmd(elevatorSubsystem, Constants.elevatorConstants.L1position));
-        driver.y()
-                .whileTrue(new SetElevatorModeCmd(elevatorSubsystem, Constants.elevatorConstants.L2position));
-        driver.povRight()
-                .whileTrue(new SetElevatorModeCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
-        driver.povUp()
-                .whileTrue(new SetElevatorModeCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
-
         // (operator)
         operator.b().onTrue(coralSubsystem.lowerRampCommand());
 
