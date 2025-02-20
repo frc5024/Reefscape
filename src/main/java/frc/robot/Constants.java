@@ -73,6 +73,30 @@ public final class Constants {
                 // public static double servoRotate = 0.5;
                 // public static double servoReset = -0.5;
         }
+
+        public final class ClimbConstants {
+
+                // Ultrasonic
+                public static final int pingID = 5;
+                public static final int echoID = 4;
+                public static final int filterValue = 5;
+                public static final int ultrasonicThreshold = 100;
+                // Motor
+                public static final int climbMotorID = 7;
+                // Placeholder value
+                public static final double endPosition = 200.0;
+                // ALSO Placeholder value
+                public static final double extendoPosition = 50.0;
+                public static final double liftoffPos = 180.0;
+                // EVEN MORE Placeholder values
+                public static final double climbSpeed = 0.3;
+                // PLACEHOLDER PLACEHOLDER PLACEHOLDER
+                public static final double cancelSpeed = -0.3;
+                // P L A C E H O L D E R
+                public static final double extendoSpeed = -0.3;
+        
+            }
+            
   public static final double stickDeadband = 0.1;
 
       public static final class Swerve {

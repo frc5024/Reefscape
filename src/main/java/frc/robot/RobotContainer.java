@@ -3,12 +3,14 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.elevatorConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.CoralScored;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.CommandGroups.CoralScored;
+import frc.robot.commands.CommandGroups.LowerRampClimb;
 import frc.robot.commands.SetElevatorSetpointCmd;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,12 +29,12 @@ public class RobotContainer {
 
   //private final Swerve s_Swerve = Swerve.getInstance();
   private final Elevator elevatorSubsystem = new Elevator();
+  private final Coral coralSubsystem = new Coral();
+  private final Climb climbSubsystem = new Climb();
 
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
-
-  private final Coral coralSubsystem = new Coral();
 
   public RobotContainer() {
 
@@ -54,7 +56,12 @@ public class RobotContainer {
   private void configureBindings() {
     //buttons for elevator positions
     //operator.b().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
+
+    //COMMAND GROUPS//
     operator.b().onTrue(new CoralScored(coralSubsystem, elevatorSubsystem));
+    operator.rightTrigger().onTrue(new LowerRampClimb(coralSubsystem, climbSubsystem));
+
+
     operator.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
     operator.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
     operator.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
