@@ -44,7 +44,7 @@ public final class Constants {
 
         //position constants for the different levels to score
         public static final double rootPosition = Units.degreesToRadians(0);
-        public static final double L1Position = Units.degreesToRadians(355);
+        public static final double L1Position = Units.degreesToRadians(636);
         public static final double L2Position =Units.degreesToRadians(1012);
         public static final double Algae1 = Units.degreesToRadians(250);
         public static final double L3position = Units.degreesToRadians(1656);

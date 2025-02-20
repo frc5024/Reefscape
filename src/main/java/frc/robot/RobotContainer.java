@@ -56,6 +56,7 @@ public class RobotContainer {
     driver.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
     driver.x().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
     driver.y().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
+    driver.rightTrigger().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.rootPosition));
     driver.leftTrigger().onTrue(coralSubsystem.outtakeCommand());
     driver.leftBumper().onTrue(coralSubsystem.intakeCommand());
 

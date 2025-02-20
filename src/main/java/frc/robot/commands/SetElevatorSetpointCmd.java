@@ -34,6 +34,7 @@ public class SetElevatorSetpointCmd extends Command {
     @Override
     public void end(boolean interrupted) {
         elevatorSubsystem.controlMotor(0);
+        elevatorSubsystem.resetPID();
     }
 
    
