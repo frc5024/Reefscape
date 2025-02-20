@@ -7,6 +7,7 @@ import frc.robot.commands.Coral.IntakeCommand;
 import frc.robot.commands.Coral.OuttakeCommand;
 import frc.robot.commands.Coral.PlopCommand;
 import frc.robot.commands.Coral.LowerRampCommand;
+import frc.robot.commands.Coral.L1Command;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -125,6 +126,10 @@ public class Coral extends SubsystemBase{
 
     public Command lowerRampCommand(){
         return new LowerRampCommand(this);
+    }
+
+    public Command L1Command(){
+        return new L1Command(this);
     }
 
     //---------------SERVO STUFF --------------

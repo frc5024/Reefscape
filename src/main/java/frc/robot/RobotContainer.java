@@ -50,6 +50,7 @@ public class RobotContainer {
     driver.b().onTrue(coralSubsystem.outtakeCommand());
     driver.y().onTrue(coralSubsystem.cancelIntakeCommand());
     driver.x().onTrue(coralSubsystem.plopCommand());
+    driver.leftBumper().onTrue(coralSubsystem.L1Command());
     driver.rightBumper().onTrue(coralSubsystem.lowerRampCommand());
 
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
