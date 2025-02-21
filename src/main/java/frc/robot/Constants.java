@@ -55,7 +55,7 @@ public final class Constants {
 
         // Set to true to use FeedForwardCharacterization and
         // WheelRadiusCharacterization auto commands
-        public static final boolean TUNING_MODE = true;
+        public static final boolean TUNING_MODE = false;
 
         // AdvantageKit simulation
         public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
@@ -343,8 +343,12 @@ public final class Constants {
      * Be sure to update SwerveConstants to match robot
      */
     public static final class SwerveConstants {
-        public static final double trackWidth = Units.inchesToMeters(18.75);
-        public static final double wheelBase = Units.inchesToMeters(18.75);
+        /**
+         * Reefscape - 22.0
+         * Bealtoven - 18.75
+         */
+        public static final double trackWidth = Units.inchesToMeters(22.0);
+        public static final double wheelBase = Units.inchesToMeters(22.0);
         public static final double driveBaseRadius = Math.hypot(trackWidth / 2, wheelBase / 2);
         public static final double maxLinearSpeed = 4.69;
         public static final double maxLinearAcceleration = 4.0;
@@ -359,8 +363,12 @@ public final class Constants {
 
         public static final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(moduleTranslations);
 
-        public static final COTSTalonFXSwerveConstants cotsDriveConstants = MK4i.KrakenX60(MK4i.driveRatios.L3);
-        public static final COTSTalonFXSwerveConstants cotsTurnConstants = MK4i.Falcon500(MK4i.driveRatios.L3);
+        /**
+         * L1 - Reefscape
+         * L3 - Bealtoven
+         */
+        public static final COTSTalonFXSwerveConstants cotsDriveConstants = MK4i.KrakenX60(MK4i.driveRatios.L1);
+        public static final COTSTalonFXSwerveConstants cotsTurnConstants = MK4i.Falcon500(MK4i.driveRatios.L1);
     }
 
     /**
@@ -424,10 +432,10 @@ public final class Constants {
          * TODO: set list of enabled camera
          */
         public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(ARDUCAM2_CAMERA, ARDUCAM1_CAMERA);
-        public static final List<Camera> REEFSCAPE_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
-        public static final List<Camera> CAMERAS = BEALTOVEN_CAMERAS;
+        public static final List<Camera> REEFSCAPE_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA);
+        public static final List<Camera> CAMERAS = REEFSCAPE_CAMERAS;
         public static final Camera FRONT_CAMERA = CAMERAS.get(0);
-        public static final Camera REAR_CAMERA = CAMERAS.get(1);
+        public static final Camera REAR_CAMERA = CAMERAS.get(0);
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;

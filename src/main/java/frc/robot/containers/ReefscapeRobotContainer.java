@@ -6,6 +6,7 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.modules.gyro.GyroModuleIONavX;
 import frc.robot.modules.swerve.SwerveModuleIOTalonFX;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utils.SwerveModuleBuilder;
 
 /**
@@ -27,8 +28,8 @@ public class ReefscapeRobotContainer extends RobotContainer {
                 new SwerveModuleIOTalonFX(swerveModuleConfigs[2]),
                 new SwerveModuleIOTalonFX(swerveModuleConfigs[3]));
 
-        // this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
-        // this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
+        this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
+                this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
 
         // this.algaeIntakeSubsystem = new AlgaeIntakeSubsystem(new
         // AlgaeintakeModuleIOSparkMax());

@@ -231,6 +231,24 @@ public class ButtonBindings {
     private CommandXboxController setTuningBindings() {
         CommandXboxController commandXboxController = new CommandXboxController(TEST_PORT);
 
+        // Toggle game piece modes
+        commandXboxController.back()
+                .whileTrue(runOnce(() -> GameData.getInstance().toggleGamePieceMode()));
+
+        // Drive to right pole of best apriltag
+        commandXboxController.rightTrigger()
+                .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                        this.swerveDriveSubsystem::getPose,
+                        false,
+                        GameData.getInstance().getGamePieceMode()));
+
+        // Drive to left pole of best apriltag
+        commandXboxController.leftTrigger()
+                .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                        this.swerveDriveSubsystem::getPose,
+                        true,
+                        GameData.getInstance().getGamePieceMode()));
+
         return commandXboxController;
     }
 
