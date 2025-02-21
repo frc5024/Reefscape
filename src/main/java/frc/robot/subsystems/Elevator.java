@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.elevatorConstants;
 
 public class Elevator extends SubsystemBase {
@@ -38,6 +39,7 @@ public class Elevator extends SubsystemBase {
     private double speed;
 
     public double elevatorMode;
+    public double elevatorPosition;
 
     // created and named the limit switches
     private static DigitalInput zeroingLimitSwitch;
@@ -159,6 +161,7 @@ public class Elevator extends SubsystemBase {
     public void zeroingEncoder() {
         if (isBottomLimitSwitchBroken()) {
             elevatorMotor.getEncoder().setPosition(elevatorConstants.zeroPosition);
+            setElevatorPosition(Constants.elevatorConstants.rootPosition);
         }
     }
 
@@ -198,6 +201,14 @@ public class Elevator extends SubsystemBase {
 
     public double getElevatorMode() {
         return elevatorMode;
+    }
+
+    public void setElevatorPosition(double elevatorLevel) {
+        elevatorPosition = elevatorLevel;
+    }
+
+    public double getElevatorPosition() {
+        return elevatorPosition;
     }
 
 }

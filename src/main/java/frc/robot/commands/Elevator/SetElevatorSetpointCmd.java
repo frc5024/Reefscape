@@ -1,6 +1,7 @@
 package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
 public class SetElevatorSetpointCmd extends Command {
@@ -22,7 +23,9 @@ public class SetElevatorSetpointCmd extends Command {
     public void initialize() {
         // sets the setpoint to the position that is assigned to the button
         elevatorSubsystem.setSetPoint(setpoint);
-
+        if (setpoint != Constants.elevatorConstants.rootPosition) {
+            elevatorSubsystem.setElevatorPosition(setpoint);
+        }
     }
 
     // will use PID calculatioins to set the speed. Execute is used because it is

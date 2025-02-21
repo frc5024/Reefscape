@@ -39,9 +39,12 @@ public class Swerve extends SubsystemBase {
 
     boolean fieldRelative = true;
 
+    public boolean isSlowMode = false;
+
     public final double scaleValue = 3600.0 / 3831.020004272461;
 
     private static Swerve mInstance;
+    private Elevator elevatorSubsystem;
 
     public static Swerve getInstance() {
         if (mInstance == null) {
@@ -156,11 +159,15 @@ public class Swerve extends SubsystemBase {
         return fieldRelative;
     }
 
-    public void toggleSlowmode(boolean isSlowMode) {
-        if (isSlowMode) {
-            speedModifier = 0.3;
-        } else {
+    public void setSpeedModifier() {
+        if (elevatorSubsystem.getElevatorPosition() == Constants.elevatorConstants.rootPosition) {
             speedModifier = 1;
+        } else {
+            speedModifier = 0.1;
+        }
+
+        if (isSlowMode) {
+            speedModifier = 0.3 * speedModifier;
         }
     }
 
@@ -169,6 +176,8 @@ public class Swerve extends SubsystemBase {
      */
     public void drive(boolean isOpenLoop) {
         ChassisSpeeds chassisSpeeds = null;
+
+        setSpeedModifier();
 
         if (fieldRelative) {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(

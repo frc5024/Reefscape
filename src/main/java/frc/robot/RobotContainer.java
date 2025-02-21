@@ -77,8 +77,8 @@ public class RobotContainer {
         driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         // driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
 
-        driver.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.toggleSlowmode(true)));
-        driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.toggleSlowmode(false)));
+        driver.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.isSlowMode = true));
+        driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.isSlowMode = false));
 
         // two intake commands
         driver.rightBumper().whileTrue(coralSubsystem.intakeCommand());
