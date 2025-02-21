@@ -159,7 +159,7 @@ public class ButtonBindings {
 
         commandXboxController.a()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
-                        .addAction(ElevatorSubsystem.Action.MOVE_TO_IDLE)));
+                        .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM)));
         commandXboxController.x()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
                         .addAction(GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE

@@ -90,12 +90,15 @@ public final class Constants {
     public static class ElevatorConstants {
         public static final double HEIGHT_IN_METERS = 2.0;
         public static final double MAX_TORQUE = 20.0;
+        public static final double MAX_UP_SPEED = 0.2;
+        public static final double MAX_DOWN_SPEED = 0.1;
         public static final Rotation2d ANGLE = Rotation2d.fromDegrees(90.0);
         public static final double kS = 5.0;
         public static final double kG = 50.0;
 
         // Distance elevator must travel to align with outtake
         public enum ElevatorLevel {
+            Bottom(0.0, 0.0),
             AlgaeL1(Units.inchesToMeters(10.5), 0.0),
             AlgaeL2(Units.inchesToMeters(18.0), 0.0),
             Processor(Units.inchesToMeters(0.0), 0.0),
@@ -276,9 +279,9 @@ public final class Constants {
         public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 2.0;
 
         // PID constants for elevator
-        public static final double ELEVATOR_KP = 0.073;
+        public static final double ELEVATOR_KP = 0.033;
         public static final double ELEVATOR_KI = 0.0;
-        public static final double ELEVATOR_KD = 0.00001;
+        public static final double ELEVATOR_KD = 0.0;
 
         public static final double SIM_ELEVATOR_KP = 5000.0;
         public static final double SIM_ELEVATOR_KI = 0.0;
@@ -417,8 +420,8 @@ public final class Constants {
 
         public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight-two",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
-                Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(6.0),
-                0.0, Units.degreesToRadians(-20.0), Units.degreesToRadians(45.0));
+                Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.0),
+                0.0, Units.degreesToRadians(25.0), Units.degreesToRadians(-30.0));
 
         /**
          * TODO: set list of enabled camera

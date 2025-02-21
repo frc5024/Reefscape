@@ -19,7 +19,11 @@ public interface ElevatorModuleIO {
     default void updateInputs(ElevatorIOInputs inputs) {
     }
 
-    default boolean isAtDistance() {
+    default boolean isAtBottom() {
+        return true;
+    }
+
+    default boolean isAtTop() {
         return true;
     }
 
