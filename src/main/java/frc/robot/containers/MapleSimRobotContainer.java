@@ -100,7 +100,7 @@ public class MapleSimRobotContainer extends RobotContainer {
         /* Elevator Subsystem Commands */
         NamedCommands.registerCommand("Move Elevator to Idle",
                 new InstantCommand(() -> {
-                    this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_IDLE);
+                    this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM);
                 }));
         NamedCommands.registerCommand("Move Elevator to Algae 1",
                 new InstantCommand(() -> {

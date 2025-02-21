@@ -31,7 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final Alert disconnected;
 
     public static enum Action {
-        HOLD, MOVE_TO_IDLE, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1, MOVE_TO_CORAL_2,
+        STOP, MOVE_TO_BOTTOM, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1, MOVE_TO_CORAL_2,
         MOVE_TO_CORAL_3, MOVE_TO_CORAL_4
     }
 
@@ -67,14 +67,15 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Sets states for the arm, and what methods.
         this.stateMachine = new StateMachine<>(NAME);
-        this.stateMachine.setDefaultState(Action.MOVE_TO_IDLE, this::handleMoveToCoral1);
-        this.stateMachine.addState(Action.HOLD, this::handleHold);
+        this.stateMachine.setDefaultState(Action.MOVE_TO_BOTTOM, this::handleMoveToBottom);
+        this.stateMachine.addState(Action.STOP, this::handleStop);
         this.stateMachine.addState(Action.MOVE_TO_ALGAE_1, this::handleMoveToAlgae1);
         this.stateMachine.addState(Action.MOVE_TO_ALGAE_2, this::handleMoveToAlgae2);
         this.stateMachine.addState(Action.MOVE_TO_PROCESSOR, this::handleMoveToProcessor);
-        this.stateMachine.addState(Action.MOVE_TO_CORAL_1, this::handleMoveToCoral2);
-        this.stateMachine.addState(Action.MOVE_TO_CORAL_2, this::handleMoveToCoral3);
-        this.stateMachine.addState(Action.MOVE_TO_CORAL_3, this::handleMoveToCoral4);
+        this.stateMachine.addState(Action.MOVE_TO_CORAL_1, this::handleMoveToCoral1);
+        this.stateMachine.addState(Action.MOVE_TO_CORAL_2, this::handleMoveToCoral2);
+        this.stateMachine.addState(Action.MOVE_TO_CORAL_3, this::handleMoveToCoral3);
+        this.stateMachine.addState(Action.MOVE_TO_CORAL_4, this::handleMoveToCoral4);
 
         this.actionQueue = new LinkedList<Action>();
 
@@ -103,12 +104,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     /**
      * 
      */
-    protected void handleHold(StateMetadata<Action> stateMetadata) {
-    }
-
-    /**
-     * 
-     */
     protected void handleMoveToAlgae1(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.AlgaeL1;
@@ -123,6 +118,17 @@ public class ElevatorSubsystem extends SubsystemBase {
     protected void handleMoveToAlgae2(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.AlgaeL2;
+            setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.start();
+        }
+    }
+
+    /**
+     * 
+     */
+    protected void handleMoveToBottom(StateMetadata<Action> stateMetadata) {
+        if (stateMetadata.isFirstRun()) {
+            this.elevatorLevel = ElevatorLevel.Bottom;
             setGoal(this.elevatorLevel.heightInMeters);
             this.stateTimer.start();
         }
@@ -186,6 +192,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     /**
      * 
      */
+    protected void handleStop(StateMetadata<Action> stateMetadata) {
+        if (stateMetadata.isFirstRun()) {
+            this.elevatorModule.stop();
+            this.stateTimer.start();
+        }
+    }
+
+    /**
+     * 
+     */
     private boolean isActionComplete() {
         switch (this.stateMachine.getCurrentState()) {
             default:
@@ -223,16 +239,23 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
 
         if (isActionComplete()) {
-            this.stateMachine.setState(Action.HOLD);
+            this.stateMachine.setState(Action.STOP);
         }
 
         // Run any action in the queue
-        if (this.stateMachine.getCurrentState() == Action.HOLD && this.actionQueue.size() > 0) {
+        if (this.stateMachine.getCurrentState() == Action.STOP && this.actionQueue.size() > 0) {
             try {
                 Action nextAction = this.actionQueue.removeFirst();
                 this.stateMachine.setState(nextAction);
             } catch (NoSuchElementException e) {
             }
+        }
+
+        /**
+         * Stop motors if elevator reaches top or bottom
+         */
+        if (this.elevatorModule.isAtBottom() || this.elevatorModule.isAtTop()) {
+
         }
 
         this.elevatorVisualizer.update(getPositionMeters(), this.elevatorLevel, this.hasAlgaSupplier.get(),
