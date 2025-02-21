@@ -39,7 +39,7 @@ public class Elevator extends SubsystemBase {
     private double speed;
 
     public double elevatorMode;
-    public double elevatorPosition;
+    public double elevatorPosition = 0;
 
     // created and named the limit switches
     private static DigitalInput zeroingLimitSwitch;
@@ -57,8 +57,17 @@ public class Elevator extends SubsystemBase {
     GenericEntry SETsetPoint = tab.add("SET Dest (DEG)", 0.0).getEntry();
     GenericEntry motor1ManualEntry = tab.add("SET MANUAL SPEED", 0.0).getEntry();
 
+    private static Elevator mInstance;
+
+    public static Elevator getInstance() {
+        if (mInstance == null) {
+            mInstance = new Elevator();
+        }
+        return mInstance;
+    }
+
     // constructor
-    public Elevator() {
+    private Elevator() {
         // assigning the ID and values
         elevatorMotor = new SparkMax(elevatorConstants.motorID1, SparkLowLevel.MotorType.kBrushless);
         elevatorMotor2 = new SparkMax(elevatorConstants.motorID2, SparkLowLevel.MotorType.kBrushless);

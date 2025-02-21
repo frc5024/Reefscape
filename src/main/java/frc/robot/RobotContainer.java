@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Elevator.SetElevatorSetpointCmd;
+import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
 import frc.robot.commands.Vision.goToSetPositionPerTagOnTrueCmd;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
@@ -26,7 +27,7 @@ public class RobotContainer {
     private final Swerve s_Swerve = Swerve.getInstance();
     private final Limelight limelightSubsystem = new Limelight();
     private final Coral coralSubsystem = new Coral();
-    private final Elevator elevatorSubsystem = new Elevator();
+    private final Elevator elevatorSubsystem = Elevator.getInstance();
     private final LEDs s_LEDs = LEDs.getInstance();
 
     boolean visionMode = false;
@@ -95,7 +96,7 @@ public class RobotContainer {
         // operator.a().onTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
         // Constants.elevatorConstants.zeroPosition));
 
-        driver.rightTrigger().onTrue(coralSubsystem.outtakeCommand());
+        driver.rightTrigger().whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, 0));
 
         // (operator)
         driver.povLeft()

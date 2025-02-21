@@ -80,9 +80,9 @@ public class goToSetPositionPerTagCmd extends Command {
             if (detectedTagID == 18 || detectedTagID == 7 || detectedTagID == 9) {
                 tagAngle = 0;
             } else if (detectedTagID == 10 || detectedTagID == 21) {
-                tagAngle = -179.5;
+                tagAngle = -179.5; // change to 360 once within 5 degrees to prevent overspinning
             } else if (detectedTagID == 3 || detectedTagID == 16) {
-                tagAngle = 90; // change back to 90
+                tagAngle = 90;
             } else {
                 tagAngle = 0;
             }

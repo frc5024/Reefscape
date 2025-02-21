@@ -60,6 +60,9 @@ public class Swerve extends SubsystemBase {
         gyro.zeroYaw();
 
         speedModifier = 1;
+
+        elevatorSubsystem = Elevator.getInstance();
+
         mSwerveMods = new SwerveModule[] {
                 new SwerveModule(0, Constants.Swerve.Mod0.constants),
                 new SwerveModule(1, Constants.Swerve.Mod1.constants),
@@ -160,7 +163,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setSpeedModifier() {
-        if (elevatorSubsystem.getElevatorPosition() == Constants.elevatorConstants.rootPosition) {
+        if (elevatorSubsystem.isBottomLimitSwitchBroken()) {
             speedModifier = 1;
         } else {
             speedModifier = 0.1;
