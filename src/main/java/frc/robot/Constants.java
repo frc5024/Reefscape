@@ -82,9 +82,9 @@ public final class Constants {
         public static final double L1Position = Elevator.rotationsToInches(11.1);
         public static final double L2Position = Elevator.rotationsToInches(44 / 3);
         public static final double Algae1 = Elevator.rotationsToInches(4.36);
-        public static final double L3position = Elevator.rotationsToInches(28);
+        public static final double L3Position = Elevator.rotationsToInches(28);
         public static final double Algae2 = Elevator.rotationsToInches(6.108);
-        public static final double L4position = Elevator.rotationsToInches(46.827);
+        public static final double L4Position = Elevator.rotationsToInches(46.827);
 
     }
 

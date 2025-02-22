@@ -115,13 +115,13 @@ public class RobotContainer {
 
         // (operator)
         operator.povLeft()
-                .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
+                .onTrue(elevatorSubsystem.goToL1Position());
         operator.povDown()
-                .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
+                .onTrue(elevatorSubsystem.goToL2Position());
         operator.povRight()
-                .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
+                .onTrue(elevatorSubsystem.goToL3Position());
         operator.povUp()
-                .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
+                .onTrue(elevatorSubsystem.goToL4Position());
 
         operator.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
                 Constants.elevatorConstants.rootPosition));
@@ -135,4 +135,5 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
+
 }
