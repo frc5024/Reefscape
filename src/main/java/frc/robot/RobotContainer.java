@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Elevator.SetElevatorSetpointCmd;
-import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
 import frc.robot.commands.Vision.goToSetPositionPerTagOnTrueCmd;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
@@ -53,8 +52,13 @@ public class RobotContainer {
 
         configureBindings();
 
-        NamedCommands.registerCommand("Test Drive to AT",
-                new goToSetPositionPerTagOnTrueCmd(limelightSubsystem, s_Swerve, Constants.Vision.noOffset));
+        NamedCommands.registerCommand("DriveRightTag",
+                new goToSetPositionPerTagOnTrueCmd(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset));
+        NamedCommands.registerCommand("DriveLeftTag",
+                new goToSetPositionPerTagOnTrueCmd(limelightSubsystem, s_Swerve, Constants.Vision.leftOffset));
+
+        NamedCommands.registerCommand("ScoreCoral", coralSubsystem.outtakeCommand());
+        NamedCommands.registerCommand("IntakeCoral", coralSubsystem.intakeCommand());
 
         autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -71,8 +75,6 @@ public class RobotContainer {
         }
 
         SmartDashboard.putString("Robot Mode", mode);
-
-        configureBindings();
     }
 
     private void configureBindings() {
@@ -86,16 +88,22 @@ public class RobotContainer {
 
         // driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
 
-        driver.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.isSlowMode = true));
-        driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.isSlowMode = false));
+        // driver.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.isSlowMode =
+        // true));
+        // driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.isSlowMode =
+        // false));
 
         // two intake commands
         driver.rightBumper().whileTrue(coralSubsystem.intakeCommand());
         driver.rightBumper().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
                 Constants.elevatorConstants.rootPosition));
 
-        // (operator)
-        operator.b().onTrue(coralSubsystem.lowerRampCommand());
+        // driver.rightTrigger()
+        // .whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+        // Constants.Vision.rightOffset));
+        // driver.leftTrigger()
+        // .whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+        // Constants.Vision.leftOffset));
 
         // potential binding fix
         // operator.b().onTrue(new ConditionalCommand(getAutonomousCommand(),
@@ -104,21 +112,14 @@ public class RobotContainer {
         // operator.a().onTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
         // Constants.elevatorConstants.zeroPosition));
 
-        // driver.rightTrigger().whileTrue(coralSubsystem.outtakeCommand());
-
-        driver.rightTrigger()
-                .whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset));
-        driver.leftTrigger()
-                .whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.leftOffset));
-
         // (operator)
-        driver.povLeft()
+        operator.povLeft()
                 .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
-        driver.povDown()
+        operator.povDown()
                 .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
-        driver.povRight()
+        operator.povRight()
                 .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
-        driver.povUp()
+        operator.povUp()
                 .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
 
         operator.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
@@ -126,6 +127,8 @@ public class RobotContainer {
 
         operator.rightTrigger().onTrue(coralSubsystem.lowerRampCommand());
         // operator.rightTrigger().onTrue(extendClimb());
+
+        operator.b().onTrue(coralSubsystem.lowerRampCommand());
     }
 
     public Command getAutonomousCommand() {

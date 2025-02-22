@@ -163,11 +163,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setSpeedModifier() {
-        if (elevatorSubsystem.isBottomLimitSwitchBroken()) {
-            speedModifier = 1;
-        } else {
-            speedModifier = 0.1;
-        }
+        speedModifier = speedModifier - elevatorSubsystem.getElevatorPercent();
 
         if (isSlowMode) {
             speedModifier = 0.3 * speedModifier;

@@ -17,7 +17,8 @@ public class goToElevatorModeCmd extends Command {
     @Override
     public void initialize() {
         // sets the setpoint to the position that is assigned to the elevator mode
-        elevatorSubsystem.setSetPoint(elevatorSubsystem.getElevatorMode());
+        elevatorSubsystem.setGoal(elevatorSubsystem.getElevatorMode());
+        elevatorSubsystem.togglePID(true);
         elevatorSubsystem.setElevatorPosition(elevatorSubsystem.getElevatorMode());
 
     }
@@ -26,13 +27,13 @@ public class goToElevatorModeCmd extends Command {
     // called only when the command is running
     @Override
     public void execute() {
-        elevatorSubsystem.pidMotor();
     }
 
     // "end" is called when the button is no longer being pressed
     @Override
     public void end(boolean interrupted) {
-        elevatorSubsystem.controlMotor(0);
+        elevatorSubsystem.resetPID();
+        elevatorSubsystem.togglePID(false);
     }
 
 }
