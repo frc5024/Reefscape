@@ -11,6 +11,8 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
+import frc.robot.subsystems.Elevator;
+
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
@@ -20,22 +22,22 @@ public final class Constants {
         //elevator values
         public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
-        public static final double elevatorMaxSpeed = 12;
-        public static final double elevatorMaxAccel = 12;
+        public static final double elevatorMaxSpeed = 4;
+        public static final double elevatorMaxAccel = 4;
         public static final double zeroPosition = 0;
         public static final int motorID1 = 60;
         public static final int motorID2 = 61;
 
         //values for PID
-        public static final double kP =0.033;
+        public static final double kP = 0;
         public static final double kI = 0;
         public static final double kD = 0;
 
         //values for feed forward
-        public static final double kV = 0;
+        public static final double kV = 0.3;
         public static final double kA = 0;
 
-        public static final double G = 0.038;
+        public static final double G = 0.35;
         public static final double minimumBottomValue = 0.1;  //encoder value will not always be zero so we create a tolerance value
 
         //public static final double radianstoCM(double CM) {
@@ -46,14 +48,14 @@ public final class Constants {
         
         //one rotation equals 1.4765 cm
 
-        //position constants for the different levels to score
-        public static final double rootPosition = Units.degreesToRadians(0);
-        public static final double L1Position = Units.degreesToRadians(636);
-        public static final double L2Position =Units.degreesToRadians(1012);
-        public static final double Algae1 = Units.degreesToRadians(250);
-        public static final double L3position = Units.degreesToRadians(1656);
-        public static final double Algae2 = Units.degreesToRadians(350);
-        public static final double L4position = Units.degreesToRadians(2683);
+        //position constants for the different levels to score in rotations
+        public static final double rootPosition = 0;
+        public static final double L1Position = Elevator.rotationsToInches(11.1);
+        public static final double L2Position = Elevator.rotationsToInches(17.662);
+        public static final double Algae1 = Elevator.rotationsToInches(4.36);
+        public static final double L3position = Elevator.rotationsToInches(28.903);
+        public static final double Algae2 = Elevator.rotationsToInches(6.108);
+        public static final double L4position = Elevator.rotationsToInches(46.827);
 
   }
 

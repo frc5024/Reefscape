@@ -21,20 +21,15 @@ public class SetElevatorSetpointCmd extends Command {
     @Override
     public void initialize() {
         //sets the setpoint to the position that is assigned to the button
-        elevatorSubsystem.setSetPoint(setpoint);
-
-    }
-    //will use PID calculatioins to set the speed. Execute is used because it is called only when the command is running 
-    @Override
-    public void execute() {
-        elevatorSubsystem.pidMotor();
+        elevatorSubsystem.setGoal(setpoint);
+        elevatorSubsystem.togglePID(true);
     }
 
     //"end" is called when the button is no longer being pressed
     @Override
     public void end(boolean interrupted) {
-        elevatorSubsystem.controlMotor(0);
         elevatorSubsystem.resetPID();
+        elevatorSubsystem.togglePID(false);
     }
 
    
