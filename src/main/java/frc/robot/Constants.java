@@ -22,22 +22,22 @@ public final class Constants {
         //elevator values
         public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
-        public static final double elevatorMaxSpeed = 4;
-        public static final double elevatorMaxAccel = 4;
+        public static final double elevatorMaxSpeed = 12;
+        public static final double elevatorMaxAccel = 12;
         public static final double zeroPosition = 0;
         public static final int motorID1 = 60;
         public static final int motorID2 = 61;
 
         //values for PID
-        public static final double kP = 0;
+        public static final double kP = 0.05;
         public static final double kI = 0;
         public static final double kD = 0;
 
         //values for feed forward
         public static final double kV = 0.3;
-        public static final double kA = 0;
+        public static final double kA = 0.1;
 
-        public static final double G = 0.35;
+        public static final double G = 0.55;
         public static final double minimumBottomValue = 0.1;  //encoder value will not always be zero so we create a tolerance value
 
         //public static final double radianstoCM(double CM) {
