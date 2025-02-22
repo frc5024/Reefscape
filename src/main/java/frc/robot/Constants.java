@@ -33,8 +33,8 @@ public final class Constants {
 
     public static final class Vision {
 
-        public static final double leftOffset = -0.3; // in meters
-        public static final double rightOffset = 0.3; // in meters
+        public static final double rightOffset = -0.142; // in meters
+        public static final double leftOffset = 0.162; // in meters
         public static final double noOffset = 0; // in meters
 
     }
@@ -91,7 +91,7 @@ public final class Constants {
         public static final int servoChannel = 0;
 
         public static double intakeSpeed = -0.1;
-        public static double outtakeSpeed = -0.2;
+        public static double outtakeSpeed = -0.15;
         public static double L1Speed = -0.35;
         public static double plopSpeed = -0.05;
         public static double rampSpeed = -0.05;

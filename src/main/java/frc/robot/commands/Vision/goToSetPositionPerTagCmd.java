@@ -5,7 +5,6 @@ import java.util.Set;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,10 +13,10 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
 public class goToSetPositionPerTagCmd extends Command {
-    static ShuffleboardTab tab = Shuffleboard.getTab("Tag");
-    GenericEntry pEntry = tab.add("SET P...", 0.7).getEntry();
-    GenericEntry dEntry = tab.add("SET D...", 0.05).getEntry();
-    GenericEntry iEntry = tab.add("SET I...", 0).getEntry();
+    static ShuffleboardTab tab = Shuffleboard.getTab("Tags");
+    // GenericEntry pEntry = tab.add("SET P VISION", 0.7).getEntry();
+    // GenericEntry iEntry = tab.add("SET I VISION", 0).getEntry();
+    // GenericEntry dEntry = tab.add("SET D VISION", 0.05).getEntry();
 
     private final Limelight limelight;
     private final Swerve swerveDrive;
@@ -31,7 +30,7 @@ public class goToSetPositionPerTagCmd extends Command {
     private PIDController rotationPidController;
     private PIDController translationPidController;
 
-    double desiredz = 1; // in meters
+    double desiredz = 0.430; // in meters
     double desiredx = 0; // in meters? (+ right)?
 
     double tagAngle = 0;
@@ -122,13 +121,15 @@ public class goToSetPositionPerTagCmd extends Command {
                                                                      // field
 
         double atDeg = yawDeg - x;
-        double xDis = zDis * (Math.tan(Math.toRadians(rotationToTag))); // WAS atDeg BEFORE IF DOESNT WORK
+        double xDis = zDis * (Math.tan(Math.toRadians(botPose3D.getX()))); // WAS atDeg BEFORE IF DOESNT WORK
+
+        System.out.println(zDis);
 
         // Left/Right
         double zDiff = zDis - desiredz;
 
         // forward/back
-        double xDiff = xDis + xOffset;
+        double xDiff = botPose3D.getX() + xOffset;
 
         rotateToTag(rotationToTag);
         translateToTag(zDiff);
@@ -151,7 +152,7 @@ public class goToSetPositionPerTagCmd extends Command {
     public void translateToTag(double zDiff) {
         if (Math.abs(zDiff) > 0.015) { // In meters
             translationPidOutput = translationPidController.calculate(zDiff, 0);
-            translationPidOutput = -translationPidOutput * 1; // Speed multiplier
+            translationPidOutput = -translationPidOutput * .7; // Speed multiplier
             zPos = false;
         } else {
             translationPidOutput = 0;
@@ -162,7 +163,7 @@ public class goToSetPositionPerTagCmd extends Command {
     public void strafeToTag(double xDiff) {
         if (Math.abs(xDiff) > 0.015) { // In meters
             strafePidOutput = strafePidController.calculate(xDiff, 0);
-            strafePidOutput = -strafePidOutput * 1; // Speed multiplier
+            strafePidOutput = -strafePidOutput * .7; // Speed multiplier
             xPos = false;
         } else {
             strafePidOutput = 0;
@@ -180,7 +181,7 @@ public class goToSetPositionPerTagCmd extends Command {
 
     @Override
     public boolean isFinished() {
-        return false; // Stop when aligned
+        return xPos && zPos && rotationPos; // Stop when aligned
     }
 
     @Override

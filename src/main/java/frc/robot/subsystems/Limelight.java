@@ -26,9 +26,4 @@ public class Limelight extends SubsystemBase {
     public double getAprilTagID() {
         return limelightTable.getEntry("tid").getDouble(-1.0); // -1 if no target
     }
-
-    // public double[] botPose() {
-    // return limelightTable.getEntry("camerapose_targetspace").getDoubleArray(new
-    // double[6]);
-    // }
 }

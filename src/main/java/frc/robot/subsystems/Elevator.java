@@ -41,9 +41,13 @@ public class Elevator extends SubsystemBase {
     public double elevatorMode;
     public double elevatorPosition = 0;
 
+    public boolean zeroRumbled = false;
+
     // created and named the limit switches
     private static DigitalInput zeroingLimitSwitch;
     private static DigitalInput stoppingLimitSwitch;
+
+    private Rumble rumble;
 
     // added shuffleboard tabs to change the different values in the shuffle board
     // app
@@ -132,6 +136,16 @@ public class Elevator extends SubsystemBase {
 
         checkTopLimitSwitch();
         zeroingEncoder();
+
+        rumble = Rumble.getInstance();
+
+        if (!zeroRumbled && isBottomLimitSwitchBroken()) {
+            rumble.staticRumble(true);
+            rumble.staticRumble(false);
+            zeroRumbled = true;
+        } else if (!isBottomLimitSwitchBroken()) {
+            zeroRumbled = false;
+        }
     }
 
     // creates a command for calculating speed through PID which will be used in the

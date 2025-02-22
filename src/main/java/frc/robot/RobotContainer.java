@@ -17,6 +17,7 @@ import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Rumble;
 import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
@@ -25,6 +26,7 @@ public class RobotContainer {
     private final CommandXboxController operator = new CommandXboxController(1);
 
     private final Swerve s_Swerve = Swerve.getInstance();
+    private final Rumble rumble = Rumble.getInstance();
     private final Limelight limelightSubsystem = new Limelight();
     private final Coral coralSubsystem = new Coral();
     private final Elevator elevatorSubsystem = Elevator.getInstance();
@@ -76,6 +78,12 @@ public class RobotContainer {
     private void configureBindings() {
         // (driver)
         driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+
+        driver.y().onTrue(coralSubsystem.outtakeCommand());
+
+        driver.b().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
+                Constants.elevatorConstants.rootPosition));
+
         // driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
 
         driver.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.isSlowMode = true));
@@ -96,7 +104,12 @@ public class RobotContainer {
         // operator.a().onTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
         // Constants.elevatorConstants.zeroPosition));
 
-        driver.rightTrigger().whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, 0));
+        // driver.rightTrigger().whileTrue(coralSubsystem.outtakeCommand());
+
+        driver.rightTrigger()
+                .whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset));
+        driver.leftTrigger()
+                .whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.leftOffset));
 
         // (operator)
         driver.povLeft()
@@ -107,6 +120,9 @@ public class RobotContainer {
                 .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
         driver.povUp()
                 .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
+
+        operator.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
+                Constants.elevatorConstants.rootPosition));
 
         operator.rightTrigger().onTrue(coralSubsystem.lowerRampCommand());
         // operator.rightTrigger().onTrue(extendClimb());
