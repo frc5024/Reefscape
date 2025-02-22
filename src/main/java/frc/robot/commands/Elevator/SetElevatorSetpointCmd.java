@@ -36,4 +36,9 @@ public class SetElevatorSetpointCmd extends Command {
         elevatorSubsystem.togglePID(false);
     }
 
+    @Override
+    public boolean isFinished() {
+        return elevatorSubsystem.targetReached();
+    }
+
 }

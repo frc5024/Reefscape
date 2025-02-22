@@ -16,7 +16,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.elevatorConstants;
+import frc.robot.commands.Elevator.SetElevatorSetpointCmd;
 
 public class Elevator extends SubsystemBase {
     // created and named the motor controller
@@ -112,6 +114,7 @@ public class Elevator extends SubsystemBase {
         // tab.addDouble("actual Position", () ->
         // rotationsToInches(elevatorMotor.getEncoder().getPosition()));
         // tab.addDouble("estimated Position", () -> PID.getSetpoint().position);
+        tab.addDouble("encoder value", () -> elevatorMotor.getEncoder().getPosition());
 
         // TODO: log voltage anything else you think you need
 
@@ -178,6 +181,14 @@ public class Elevator extends SubsystemBase {
         elevatorMotor.setVoltage(voltageValue);
     }
 
+    public boolean targetReached() {
+        if (PID.atSetpoint()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // gets the position from the SetElevatorSetpointCmd
     public void setGoal(double inches) {
         // PID.setConstraints(new TrapezoidProfile.Constraints(
@@ -234,10 +245,11 @@ public class Elevator extends SubsystemBase {
         elevatorMotor.getEncoder().setPosition(0.0);
     }
 
-    @Override
-    public Command getDefaultCommand() {
-        return run(() -> elevatorMotor.set(0)); // ***set it to g constant so that it stays put in the future
-    }
+    // @Override
+    // public Command getDefaultCommand() {
+    // return run(() -> elevatorMotor.set(0)); // ***set it to g constant so that it
+    // stays put in the future
+    // }
 
     // public void motor1Manual() {
     // elevatorMotor.set(motor1ManualEntry.getDouble(0));
@@ -283,6 +295,30 @@ public class Elevator extends SubsystemBase {
         double percent = encoder / 50; // divide by amount of rotations
 
         return 0;
+    }
+
+    public Command goToL1Position() {
+        return new SetElevatorSetpointCmd(this, Constants.elevatorConstants.L1Position);
+    }
+
+    public Command goToL2Position() {
+        return new SetElevatorSetpointCmd(this, Constants.elevatorConstants.L2Position);
+    }
+
+    public Command goToL3Position() {
+        return new SetElevatorSetpointCmd(this, Constants.elevatorConstants.L3Position);
+    }
+
+    public Command goToL4Position() {
+        return new SetElevatorSetpointCmd(this, Constants.elevatorConstants.L4Position);
+    }
+
+    public Command goToAlgae1Position() {
+        return new SetElevatorSetpointCmd(this, Constants.elevatorConstants.Algae1);
+    }
+
+    public Command goToAlgae2Position() {
+        return new SetElevatorSetpointCmd(this, Constants.elevatorConstants.Algae2);
     }
 
 }
