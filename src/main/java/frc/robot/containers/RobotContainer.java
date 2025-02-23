@@ -68,7 +68,7 @@ abstract public class RobotContainer {
                 this.coralIntakeSubsystem, this.elevatorSubsystem, this.visionSubsystem);
 
         CommandXboxController commandXboxController = RobotConstants.TUNING_MODE
-                ? buttonBindings.getButtonTestController()
+                ? buttonBindings.getTestController()
                 : buttonBindings.getDriverController();
 
         Command closedLoopDrive = SwerveDriveCommands.closedLoopDrive(swerveDriveSubsystem,

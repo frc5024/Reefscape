@@ -91,13 +91,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
         // Configure SysId
         sysId = new SysIdRoutine(
-                new SysIdRoutine.Config(
-                        null,
-                        null,
-                        null,
+                new SysIdRoutine.Config(null, null, null,
                         (state) -> Logger.recordOutput("SwerveDrive/SysIdState", state.toString())),
-                new SysIdRoutine.Mechanism(
-                        (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+                new SysIdRoutine.Mechanism((voltage) -> runCharacterization(voltage.in(Volts)), null, this));
 
         this.isFieldRelative = true;
         this.isOpenLoop = false;

@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.DriveFromBestTagCommand;
 import frc.robot.commands.DriveNearestCoralStationCommand;
 import frc.robot.commands.DriveProcessorCommand;
@@ -32,7 +33,7 @@ public class ButtonBindings {
     /* Controllers */
     private final CommandXboxController driverController;
     private final CommandXboxController operatorController;
-    private final CommandXboxController buttonTestController;
+    private final CommandXboxController testController;
 
     /* Subsystems */
     private final SwerveDriveSubsystem swerveDriveSubsystem;
@@ -58,7 +59,7 @@ public class ButtonBindings {
 
         // Set this to whichever button bindings you want to test
         // this.buttonTestController = setLEDTestBindingsController();
-        this.buttonTestController = setTuningBindings();
+        this.testController = setTuningBindings();
     }
 
     /**
@@ -241,6 +242,23 @@ public class ButtonBindings {
     private CommandXboxController setTuningBindings() {
         CommandXboxController commandXboxController = new CommandXboxController(TEST_PORT);
 
+        /* Bindings for drivetrain characterization */
+        /*
+         * These bindings require multiple buttons pushed to swap between quastatic and
+         * dynamic
+         */
+        /*
+         * Back/Start select dynamic/quasistatic, Y/X select forward/reverse direction
+         */
+        commandXboxController.back().and(commandXboxController.y())
+                .whileTrue(this.swerveDriveSubsystem.sysIdDynamic(Direction.kForward));
+        commandXboxController.back().and(commandXboxController.x())
+                .whileTrue(this.swerveDriveSubsystem.sysIdDynamic(Direction.kReverse));
+        commandXboxController.start().and(commandXboxController.y())
+                .whileTrue(this.swerveDriveSubsystem.sysIdQuasistatic(Direction.kForward));
+        commandXboxController.start().and(commandXboxController.x())
+                .whileTrue(this.swerveDriveSubsystem.sysIdQuasistatic(Direction.kReverse));
+
         // Toggle game piece modes
         commandXboxController.back()
                 .whileTrue(runOnce(() -> GameData.getInstance().toggleGamePieceMode()));
@@ -280,7 +298,7 @@ public class ButtonBindings {
         return this.operatorController;
     }
 
-    public CommandXboxController getButtonTestController() {
-        return this.buttonTestController;
+    public CommandXboxController getTestController() {
+        return this.testController;
     }
 }
