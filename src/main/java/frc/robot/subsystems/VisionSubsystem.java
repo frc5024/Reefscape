@@ -39,6 +39,11 @@ public class VisionSubsystem extends SubsystemBase {
     private final HashMap<String, VisionIOInputsAutoLogged> inputs;
     private final HashMap<String, Alert> disconnectedAlerts;
 
+    private final List<Pose3d> allTagPoses = new LinkedList<>();
+    private final List<Pose3d> allRobotPoses = new LinkedList<>();
+    private final List<Pose3d> allRobotPosesAccepted = new LinkedList<>();
+    private final List<Pose3d> allRobotPosesRejected = new LinkedList<>();
+
     /**
      * 
      */
@@ -49,7 +54,7 @@ public class VisionSubsystem extends SubsystemBase {
 
         // Setup the vision modules
         for (Camera camera : VisionConstants.CAMERAS) {
-            if (!Robot.isReal()) {
+            if (Robot.isReal()) {
                 if (camera.getProcessor() == Camera.Processor.LIMELIGHT) {
                     this.visionModules.add(new VisionModuleIOLimelight(camera, rotationSupplier));
                 } else if (camera.getProcessor() == Camera.Processor.PHOTONVISION) {
@@ -90,10 +95,10 @@ public class VisionSubsystem extends SubsystemBase {
         }
 
         // Initialize logging values
-        List<Pose3d> allTagPoses = new LinkedList<>();
-        List<Pose3d> allRobotPoses = new LinkedList<>();
-        List<Pose3d> allRobotPosesAccepted = new LinkedList<>();
-        List<Pose3d> allRobotPosesRejected = new LinkedList<>();
+        this.allTagPoses.clear();
+        this.allRobotPoses.clear();
+        this.allRobotPosesAccepted.clear();
+        this.allRobotPosesRejected.clear();
 
         // Loop over cameras
         int cameraIndex = 0;
@@ -178,24 +183,25 @@ public class VisionSubsystem extends SubsystemBase {
                     robotPosesRejected.toArray(new Pose3d[robotPosesRejected.size()]));
             Logger.recordOutput("Subsystems/Vision/Camera " + name + "/Tags", inputs.tagIds);
 
-            allTagPoses.addAll(tagPoses);
-            allRobotPoses.addAll(robotPoses);
-            allRobotPosesAccepted.addAll(robotPosesAccepted);
-            allRobotPosesRejected.addAll(robotPosesRejected);
+            this.allTagPoses.addAll(tagPoses);
+            this.allRobotPoses.addAll(robotPoses);
+            this.allRobotPosesAccepted.addAll(robotPosesAccepted);
+            this.allRobotPosesRejected.addAll(robotPosesRejected);
 
             cameraIndex++;
         }
 
         // Log summary data
-        Logger.recordOutput("Subsystems/Vision/Summary/TagPoses", allTagPoses.toArray(new Pose3d[allTagPoses.size()]));
+        Logger.recordOutput("Subsystems/Vision/Summary/TagPoses",
+                this.allTagPoses.toArray(new Pose3d[this.allTagPoses.size()]));
         Logger.recordOutput("Subsystems/Vision/Summary/RobotPoses",
-                allRobotPoses.toArray(new Pose3d[allRobotPoses.size()]));
+                this.allRobotPoses.toArray(new Pose3d[this.allRobotPoses.size()]));
         Logger.recordOutput(
                 "Subsystems/Vision/Summary/RobotPosesAccepted",
-                allRobotPosesAccepted.toArray(new Pose3d[allRobotPosesAccepted.size()]));
+                this.allRobotPosesAccepted.toArray(new Pose3d[this.allRobotPosesAccepted.size()]));
         Logger.recordOutput(
                 "Subsystems/Vision/Summary/RobotPosesRejected",
-                allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
+                this.allRobotPosesRejected.toArray(new Pose3d[this.allRobotPosesRejected.size()]));
     }
 
     /**
@@ -208,6 +214,13 @@ public class VisionSubsystem extends SubsystemBase {
             return 0;
 
         return inputs.bestTargetId;
+    }
+
+    /**
+     * 
+     */
+    public Pose2d getBestRobotPose() {
+        return this.allRobotPosesAccepted.size() > 0 ? this.allRobotPosesAccepted.get(0).toPose2d() : new Pose2d();
     }
 
     /**

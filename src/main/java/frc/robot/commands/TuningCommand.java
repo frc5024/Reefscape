@@ -217,9 +217,9 @@ public class TuningCommand extends Command {
         // }
 
         if (this.driveOpenLoop.get()) {
-            handleDriveOpenClosedLoop(false);
-        } else if (this.driveClosedLoop.get()) {
             handleDriveOpenClosedLoop(true);
+        } else if (this.driveClosedLoop.get()) {
+            handleDriveOpenClosedLoop(false);
         } else if (this.driveByPathFinding.get()) {
             if (this.firstCall) {
                 this.xController.reset(this.swerveDriveSubsystem.getPose().getX());
@@ -354,16 +354,14 @@ public class TuningCommand extends Command {
         // Set controller variables
         Rotation2d angle = this.swerveDriveSubsystem.getPose().getRotation();
 
-        Translation2d linearVelocity = SwerveDriveCommands.getLinearVelocityFromJoysticks(xSupplier.getAsDouble(),
-                ySupplier.getAsDouble());
+        double xVelocity = -xSupplier.getAsDouble() * TeleopConstants.JOYSTICK_AXIS_MODIFIER;
+        double yVelocity = -ySupplier.getAsDouble() * TeleopConstants.JOYSTICK_AXIS_MODIFIER;
 
-        // Apply rotation deadband
-        double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), 0.1);
+        Translation2d linearVelocity = SwerveDriveCommands.getLinearVelocityFromJoysticks(xVelocity, yVelocity);
 
-        // Square rotation value for more precise control
+        double omega = MathUtil.applyDeadband(-omegaSupplier.getAsDouble(), TeleopConstants.DEADBAND);
         omega = Math.copySign(omega * omega, omega);
 
-        //
         if (omega == 0.0) {
             if (this.rotationalAngle != 360.0) {
                 double goalRotation = Units.degreesToRadians(this.rotationalAngle);
@@ -383,7 +381,10 @@ public class TuningCommand extends Command {
             this.alternateRotation.set(false);
         }
 
-        this.swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega, angle, isOpenLoop);
+        // this.swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(),
+        // omega, angle, isOpenLoop);
+        this.swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega,
+                this.swerveDriveSubsystem.getRotation(), isOpenLoop);
     }
 
     /**

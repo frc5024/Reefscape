@@ -78,6 +78,7 @@ public class SwerveModuleIOMapleSim implements SwerveModuleIO {
 
         // Update turn inputs
         inputs.turnConnected = true;
+        inputs.turnEncoderConnected = true;
         inputs.turnPosition = moduleSimulation.getSteerAbsoluteFacing();
         inputs.turnVelocityRadPerSec = moduleSimulation.getSteerAbsoluteEncoderSpeed().in(RadiansPerSecond);
         inputs.turnAppliedVolts = turnAppliedVolts;

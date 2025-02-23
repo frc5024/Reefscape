@@ -1,6 +1,7 @@
 package frc.robot.utils;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -100,8 +101,10 @@ public class SwerveModuleBuilder {
         this.driveTalonFXConfig.Slot0.kP = drivePIDs[0];
         this.driveTalonFXConfig.Slot0.kI = drivePIDs[1];
         this.driveTalonFXConfig.Slot0.kD = drivePIDs[2];
-        this.driveTalonFXConfig.Slot0.kS = 0.02482;
-        this.driveTalonFXConfig.Slot0.kV = 0.06334;
+
+        this.driveTalonFXConfig.Slot0.kS = drivePIDs[3];
+        this.driveTalonFXConfig.Slot0.kV = drivePIDs[4];
+        this.driveTalonFXConfig.Slot0.kA = drivePIDs[5];
 
         /* Open and Closed Loop Ramping */
         this.driveTalonFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.25;
@@ -109,6 +112,11 @@ public class SwerveModuleBuilder {
 
         this.driveTalonFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.0;
         this.driveTalonFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.0;
+
+        MotionMagicConfigs magicMagicConfigs = this.driveTalonFXConfig.MotionMagic;
+        // magicMagicConfigs.MotionMagicCruiseVelocity = 80;
+        magicMagicConfigs.MotionMagicAcceleration = 400;
+        magicMagicConfigs.MotionMagicJerk = 4000;
     }
 
     /**

@@ -22,4 +22,11 @@ public interface GyroModuleIO {
      */
     public default void updateInputs(GyroIOInputs inputs) {
     }
+
+    /**
+     * 
+     */
+    public default void zeroHeading() {
+
+    }
 }

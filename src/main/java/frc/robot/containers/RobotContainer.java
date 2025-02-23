@@ -14,6 +14,7 @@ import frc.robot.Robot;
 import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.commands.TeleopDriveCommand;
+import frc.robot.commands.TuningCommand;
 import frc.robot.commands.TuningSwerveCommand;
 import frc.robot.controls.ButtonBindings;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
@@ -21,7 +22,6 @@ import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.utils.AllianceFlipUtil;
 
 /**
  * 
@@ -72,9 +72,9 @@ abstract public class RobotContainer {
                 : buttonBindings.getDriverController();
 
         Command closedLoopDrive = SwerveDriveCommands.closedLoopDrive(swerveDriveSubsystem,
-                () -> -commandXboxController.getLeftY(),
-                () -> -commandXboxController.getLeftX(),
-                () -> -commandXboxController.getRightX());
+                () -> commandXboxController.getLeftY(),
+                () -> commandXboxController.getLeftX(),
+                () -> commandXboxController.getRightX());
 
         Command openLoopDrive = new TeleopDriveCommand(this.swerveDriveSubsystem,
                 () -> this.swerveDriveSubsystem.getPose().getRotation(),
@@ -82,13 +82,13 @@ abstract public class RobotContainer {
                 () -> commandXboxController.getLeftX(),
                 () -> commandXboxController.getRightX());
 
-        // Command tuningCommand = new TuningCommand(swerveDriveSubsystem,
-        // algaeIntakeSubsystem, coralIntakeSubsystem,
-        // elevatorSubsystem,
-        // () -> -commandXboxController.getLeftY(),
-        // () -> -commandXboxController.getLeftX(),
-        // () -> -commandXboxController.getRightX(),
-        // commandXboxController);
+        Command tuningCommand = new TuningCommand(swerveDriveSubsystem,
+                algaeIntakeSubsystem, coralIntakeSubsystem,
+                elevatorSubsystem,
+                () -> -commandXboxController.getLeftY(),
+                () -> -commandXboxController.getLeftX(),
+                () -> -commandXboxController.getRightX(),
+                commandXboxController);
 
         Command tuningSwerveCommand = new TuningSwerveCommand(swerveDriveSubsystem,
                 () -> -commandXboxController.getLeftY(),
@@ -97,7 +97,7 @@ abstract public class RobotContainer {
                 commandXboxController);
 
         // Default command, normal field-relative drive
-        swerveDriveSubsystem.setDefaultCommand(closedLoopDrive);
+        swerveDriveSubsystem.setDefaultCommand(RobotConstants.TUNING_MODE ? tuningCommand : closedLoopDrive);
     }
 
     /**
@@ -116,10 +116,11 @@ abstract public class RobotContainer {
      * @param alliance new alliance value
      */
     public void onAllianceChanged(Alliance alliance, int location) {
+        int index = alliance == Alliance.Blue ? 0 : 1;
         location -= 1;
 
-        Pose2d pose2d = AllianceFlipUtil.apply(RobotConstants.TUNING_MODE ? FieldConstants.TUNING_POSES[location]
-                : FieldConstants.STATION_POSES[location]);
+        Pose2d pose2d = RobotConstants.TUNING_MODE ? FieldConstants.TUNING_POSES[index][location]
+                : FieldConstants.STATION_POSES[index][location];
         this.swerveDriveSubsystem.resetPosition(pose2d);
         resetSimulationField(pose2d);
     }

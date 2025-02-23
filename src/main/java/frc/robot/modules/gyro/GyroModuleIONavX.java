@@ -52,4 +52,9 @@ public class GyroModuleIONavX implements GyroModuleIO {
 
         return angle;
     }
+
+    @Override
+    public void zeroHeading() {
+        this.gyro.reset();
+    }
 }

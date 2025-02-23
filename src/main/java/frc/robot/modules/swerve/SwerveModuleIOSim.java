@@ -26,7 +26,7 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     private static final double[] DRIVE_PIDs = PIDConstants.getDrivePIDs();
     private static final double[] TURN_PIDs = PIDConstants.getTurnPIDs();
 
-    private static final double DRIVE_KS = 0.0;
+    private static final double DRIVE_KS = 0.00865;
     private static final double DRIVE_KV_ROT = 0.91035; // Same units as TunerConstants: (volt * secs) / rotation
     private static final double DRIVE_KV = 1.0 / Units.rotationsToRadians(1.0 / DRIVE_KV_ROT);
 

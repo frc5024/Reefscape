@@ -54,10 +54,10 @@ public class SwerveDriveCommands {
             DoubleSupplier ySupplier, DoubleSupplier omegaSupplier) {
         return Commands.run(
                 () -> {
-                    Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(),
-                            ySupplier.getAsDouble());
+                    Translation2d linearVelocity = getLinearVelocityFromJoysticks(-xSupplier.getAsDouble(),
+                            -ySupplier.getAsDouble());
 
-                    double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), TeleopConstants.DEADBAND);
+                    double omega = MathUtil.applyDeadband(-omegaSupplier.getAsDouble(), TeleopConstants.DEADBAND);
                     omega = Math.copySign(omega * omega, omega);
 
                     swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega,

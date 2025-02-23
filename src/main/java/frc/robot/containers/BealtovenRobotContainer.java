@@ -42,7 +42,7 @@ public class BealtovenRobotContainer extends RobotContainer {
         this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim(), this.algaeIntakeSubsystem::hasAlgae,
                 this.coralIntakeSubsystem::hasCoral);
 
-        // registerNamedCommands();
+        registerNamedCommands();
         configureAutoBuilder();
         configureButtonBindings();
     }

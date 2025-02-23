@@ -55,7 +55,7 @@ public final class Constants {
 
         // Set to true to use FeedForwardCharacterization and
         // WheelRadiusCharacterization auto commands
-        public static final boolean TUNING_MODE = false;
+        public static final boolean TUNING_MODE = true;
 
         // AdvantageKit simulation
         public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
@@ -142,19 +142,34 @@ public final class Constants {
         public static final double WIDTH_METERS = Units.inchesToMeters(318.0);
         public static final double REEF_POLE_OFFSET = Units.inchesToMeters(12.94 / 2);
 
-        // starting poses for game mode for blue alliance station 1, 2, 3
-        public static final Pose2d[] STATION_POSES = new Pose2d[] {
-                // new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
-                new Pose2d(8.217, 7.272, Rotation2d.fromDegrees(180.0)),
-                new Pose2d(8.217, 6.166, Rotation2d.fromDegrees(180.0)),
-                new Pose2d(8.217, 5.074, Rotation2d.fromDegrees(180.0))
+        // starting poses for game mode for blue/red alliance station 1, 2, 3
+        public static final Pose2d[][] STATION_POSES = new Pose2d[][] {
+                {
+                        // new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(8.217, 7.272, Rotation2d.fromDegrees(180.0)),
+                        new Pose2d(8.217, 6.166, Rotation2d.fromDegrees(180.0)),
+                        new Pose2d(8.217, 5.074, Rotation2d.fromDegrees(180.0))
+                },
+                {
+                        // new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(9.383, 0.805, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(9.383, 1.991, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(9.383, 3.003, Rotation2d.fromDegrees(0.0))
+                }
         };
 
         // starting poses for tuning mode for station 1, 2, 3
-        public static final Pose2d[] TUNING_POSES = new Pose2d[] {
-                new Pose2d(8.217, 7.272, Rotation2d.fromDegrees(180.0)),
-                new Pose2d(8.217, 6.166, Rotation2d.fromDegrees(180.0)),
-                new Pose2d(8.217, 5.074, Rotation2d.fromDegrees(180.0))
+        public static final Pose2d[][] TUNING_POSES = new Pose2d[][] {
+                {
+                        new Pose2d(8.217, 7.272, Rotation2d.fromDegrees(180.0)),
+                        new Pose2d(8.217, 6.166, Rotation2d.fromDegrees(180.0)),
+                        new Pose2d(8.217, 5.074, Rotation2d.fromDegrees(180.0))
+                },
+                {
+                        new Pose2d(9.383, 0.805, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(9.383, 1.991, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(9.383, 3.003, Rotation2d.fromDegrees(0.0))
+                }
         };
 
         // left and right coral station poses as seen from driver's station
@@ -203,8 +218,9 @@ public final class Constants {
 
         public static final double driveSimP = 0.05;
         public static final double driveSimD = 0.0;
-        public static final double driveSimKs = 0.0;
-        public static final double driveSimKv = 0.0789;
+        public static final double driveSimKs = 0.00865;
+        private static final double DRIVE_KV_ROT = 0.91035; // Same units as TunerConstants: (volt * secs) / rotation
+        public static final double driveSimKv = 1.0 / Units.rotationsToRadians(1.0 / DRIVE_KV_ROT); // 0.0789;
 
         public static final double turnSimP = 8.0;
         public static final double turnSimD = 0.0;
@@ -238,10 +254,15 @@ public final class Constants {
      *
      */
     public static final class PIDConstants {
-        // PID constants for swerve modules
-        public static final double SWERVE_MODULE_DRIVE_KP = 0.112;
+        // PID constants for swerve modules for drive motor. Turn pid is set in cots
+        // constants
+        public static final double SWERVE_MODULE_DRIVE_KP = 1.0;
         public static final double SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SWERVE_MODULE_DRIVE_KD = 0.0;
+
+        public static final double SWERVE_MODULE_DRIVE_KS = 0.25;
+        public static final double SWERVE_MODULE_DRIVE_KV = 0.12;
+        public static final double SWERVE_MODULE_DRIVE_KA = 0.01;
 
         // PID constants for simulated swerve modules
         public static final double SIM_SWERVE_MODULE_DRIVE_KP = 0.1;
@@ -292,7 +313,8 @@ public final class Constants {
          */
         public static final double[] getDrivePIDs() {
             return Robot.isReal()
-                    ? new double[] { SWERVE_MODULE_DRIVE_KP, SWERVE_MODULE_DRIVE_KI, SWERVE_MODULE_DRIVE_KD }
+                    ? new double[] { SWERVE_MODULE_DRIVE_KP, SWERVE_MODULE_DRIVE_KI, SWERVE_MODULE_DRIVE_KD,
+                            SWERVE_MODULE_DRIVE_KS, SWERVE_MODULE_DRIVE_KV, SWERVE_MODULE_DRIVE_KA }
                     : new double[] { SIM_SWERVE_MODULE_DRIVE_KP, SIM_SWERVE_MODULE_DRIVE_KI,
                             SIM_SWERVE_MODULE_DRIVE_KD };
         }
@@ -350,8 +372,8 @@ public final class Constants {
          * Reefscape - 22.0
          * Bealtoven - 18.75
          */
-        public static final double trackWidth = Units.inchesToMeters(22.0);
-        public static final double wheelBase = Units.inchesToMeters(22.0);
+        public static final double trackWidth = Units.inchesToMeters(18.75);
+        public static final double wheelBase = Units.inchesToMeters(18.75);
         public static final double driveBaseRadius = Math.hypot(trackWidth / 2, wheelBase / 2);
         public static final double maxLinearSpeed = 4.69;
         public static final double maxLinearAcceleration = 4.0;
@@ -370,14 +392,15 @@ public final class Constants {
          * L1 - Reefscape
          * L3 - Bealtoven
          */
-        public static final COTSTalonFXSwerveConstants cotsDriveConstants = MK4i.KrakenX60(MK4i.driveRatios.L1);
-        public static final COTSTalonFXSwerveConstants cotsTurnConstants = MK4i.Falcon500(MK4i.driveRatios.L1);
+        public static final COTSTalonFXSwerveConstants cotsDriveConstants = MK4i.KrakenX60(MK4i.driveRatios.L3);
+        public static final COTSTalonFXSwerveConstants cotsTurnConstants = MK4i.Falcon500(MK4i.driveRatios.L3);
     }
 
     /**
      * 
      */
     public static final class TeleopConstants {
+        public static final double JOYSTICK_AXIS_MODIFIER = 1.0;
         public static final double DEADBAND = 0.1;
 
         public static final double X_RATE_LIMIT = 6.0;
@@ -416,6 +439,11 @@ public final class Constants {
                 Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
                 0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-150.0));
 
+        public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_UC626-2",
+                Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
+                Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
+                0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-150.0));
+
         public static final Camera GAME_PIECE_CAMERA = new Camera("WebCam",
                 Camera.Type.COLOURED_SHAPE, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(0.0), 0.0, Units.inchesToMeters(0.0),
@@ -434,11 +462,11 @@ public final class Constants {
         /**
          * TODO: set list of enabled camera
          */
-        public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(ARDUCAM2_CAMERA, ARDUCAM1_CAMERA);
-        public static final List<Camera> REEFSCAPE_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA);
-        public static final List<Camera> CAMERAS = REEFSCAPE_CAMERAS;
+        public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM3_CAMERA);
+        public static final List<Camera> REEFSCAPE_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
+        public static final List<Camera> CAMERAS = BEALTOVEN_CAMERAS;
         public static final Camera FRONT_CAMERA = CAMERAS.get(0);
-        public static final Camera REAR_CAMERA = CAMERAS.get(0);
+        public static final Camera REAR_CAMERA = CAMERAS.get(1);
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;

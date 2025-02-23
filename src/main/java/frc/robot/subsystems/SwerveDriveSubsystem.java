@@ -421,6 +421,13 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         }
     }
 
+    /**
+     * 
+     */
+    public void zeroHeading() {
+        this.gyroIO.zeroHeading();
+    }
+
     /** Getters and Setters */
     public boolean isFieldRelative() {
         return this.isFieldRelative;

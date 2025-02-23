@@ -48,7 +48,7 @@
   "folder": "GrabAlgae",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 178.2642954110714
+    "rotation": 178.26429541107143
   },
   "useDefaultConstraints": true
 }

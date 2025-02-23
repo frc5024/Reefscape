@@ -10,6 +10,8 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -51,6 +53,8 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
     private final PositionVoltage positionVoltageRequest = new PositionVoltage(0.0);
     private final VelocityVoltage velocityVoltageRequest = new VelocityVoltage(0.0);
+    private final MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0.0);
+    private final MotionMagicVelocityVoltage motionMagicVelocityVoltage = new MotionMagicVelocityVoltage(0.0);
 
     // Timestamp inputs from Phoenix thread
     private final Queue<Double> timestampQueue;
@@ -190,24 +194,25 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
 
     @Override
     public void runDriveOpenLoop(double output) {
-        this.driveTalon.setControl(dutyCycleRequest.withOutput(output));
+        this.driveTalon.setControl(this.dutyCycleRequest.withOutput(output));
         // this.driveTalon.setControl(voltageRequest.withOutput(output));
     }
 
     @Override
     public void runTurnOpenLoop(double output) {
-        this.turnTalon.setControl(voltageRequest.withOutput(output));
+        this.turnTalon.setControl(this.voltageRequest.withOutput(output));
     }
 
     @Override
     public void runDriveVelocity(double velocityRadPerSec) {
         double velocityRotPerSec = Units.radiansToRotations(velocityRadPerSec);
-        this.driveTalon.setControl(velocityVoltageRequest.withVelocity(velocityRotPerSec));
+        // this.driveTalon.setControl(velocityVoltageRequest.withVelocity(velocityRotPerSec));
+        this.driveTalon.setControl(this.motionMagicVelocityVoltage.withVelocity(velocityRotPerSec));
     }
 
     @Override
     public void runTurnPosition(Rotation2d rotation) {
-        this.turnTalon.setControl(positionVoltageRequest.withPosition(rotation.getRotations()));
+        this.turnTalon.setControl(this.positionVoltageRequest.withPosition(rotation.getRotations()));
     }
 
     @Override

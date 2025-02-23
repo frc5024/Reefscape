@@ -74,8 +74,8 @@ public class SwerveModule {
         state.cosineScale(inputs.turnPosition);
 
         // Apply setpoints
-        swerveModuleIO.runDriveVelocity(
-                state.speedMetersPerSecond / (SwerveConstants.cotsTurnConstants.wheelDiameter / 2));
+        double vRadPerSec = state.speedMetersPerSecond / (SwerveConstants.cotsTurnConstants.wheelDiameter / 2);
+        swerveModuleIO.runDriveVelocity(vRadPerSec);
         swerveModuleIO.runTurnPosition(state.angle);
     }
 

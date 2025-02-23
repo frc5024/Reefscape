@@ -6,12 +6,12 @@ import static edu.wpi.first.wpilibj2.command.Commands.startEnd;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveFromBestTagCommand;
 import frc.robot.commands.DriveNearestCoralStationCommand;
 import frc.robot.commands.DriveProcessorCommand;
 import frc.robot.commands.DriveReefStationCommand;
-import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.controls.GameData.CoralPole;
 import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
@@ -81,17 +81,27 @@ public class ButtonBindings {
                         this.swerveDriveSubsystem::isFieldRelative));
 
         // Lock to 0° when A button is held
-        commandXboxController.a()
-                .whileTrue(
-                        SwerveDriveCommands.joystickDriveAtAngle(
-                                swerveDriveSubsystem,
-                                () -> -commandXboxController.getLeftY(),
-                                () -> -commandXboxController.getLeftX(),
-                                () -> new Rotation2d()));
+        // commandXboxController.a()
+        // .whileTrue(
+        // SwerveDriveCommands.joystickDriveAtAngle(
+        // swerveDriveSubsystem,
+        // () -> -commandXboxController.getLeftY(),
+        // () -> -commandXboxController.getLeftX(),
+        // () -> new Rotation2d()));
 
         // Switch to X pattern when X button is pressed
         // controller.x().onTrue(Commands.runOnce(swerveDriveSubsystem::stopWithX,
         // swerveDriveSubsystem));
+
+        commandXboxController.a().onTrue(new InstantCommand(() -> this.swerveDriveSubsystem.zeroHeading()));
+
+        // Set robot pose based on best vision target
+        // commandXboxController.a()
+        // .onTrue(runOnce(() -> this.swerveDriveSubsystem.setPose(
+        // new Pose2d(this.visionSubsystem.getBestRobotPose().getTranslation(), new
+        // Rotation2d())),
+        // this.swerveDriveSubsystem)
+        // .ignoringDisable(true));
 
         // Reset gyro to 0° when B button is pressed
         commandXboxController.b()
@@ -234,6 +244,13 @@ public class ButtonBindings {
         // Toggle game piece modes
         commandXboxController.back()
                 .whileTrue(runOnce(() -> GameData.getInstance().toggleGamePieceMode()));
+
+        // Set robot pose based on best vision target
+        commandXboxController.b()
+                .onTrue(runOnce(() -> this.swerveDriveSubsystem.setPose(
+                        new Pose2d(this.visionSubsystem.getBestRobotPose().getTranslation(), new Rotation2d())),
+                        this.swerveDriveSubsystem)
+                        .ignoringDisable(true));
 
         // Drive to right pole of best apriltag
         commandXboxController.rightTrigger()
