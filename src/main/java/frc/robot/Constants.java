@@ -13,9 +13,6 @@ import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 
-import com.pathplanner.lib.config.ModuleConfig;
-import com.pathplanner.lib.config.RobotConfig;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MatBuilder;
@@ -52,6 +49,8 @@ public final class Constants {
         public static final double LENGTH_INCHES = 38;
         public static final double LENGTH_METERS = Units.inchesToMeters(LENGTH_INCHES);
         public static final double LOOP_PERIOD_SECS = 0.02;
+        public static final double MASS_KG = 74.088;
+        public static final double WHEEL_COF = 1.2;
 
         // Set to true to use FeedForwardCharacterization and
         // WheelRadiusCharacterization auto commands
@@ -66,23 +65,6 @@ public final class Constants {
             REPLAY // Replaying from a log file
         }
     }
-
-    // PathPlanner Config Constants
-    private static final double ROBOT_MASS_KG = 74.088;
-    private static final double ROBOT_MOI = 6.883;
-    private static final double WHEEL_COF = 1.2;
-    public static final RobotConfig PP_CONFIG = new RobotConfig(
-            ROBOT_MASS_KG,
-            ROBOT_MOI,
-            new ModuleConfig(
-                    SwerveConstants.cotsDriveConstants.wheelDiameter / 2,
-                    SwerveConstants.maxLinearSpeed,
-                    WHEEL_COF,
-                    DCMotor.getKrakenX60Foc(1)
-                            .withReduction(SwerveConstants.cotsDriveConstants.driveGearRatio),
-                    120,
-                    1),
-            SwerveConstants.moduleTranslations);
 
     /**
      * 
@@ -227,7 +209,7 @@ public final class Constants {
 
         public static final DriveTrainSimulationConfig mapleSimConfig = DriveTrainSimulationConfig.Default()
                 .withCustomModuleTranslations(SwerveConstants.moduleTranslations)
-                .withRobotMass(Kilogram.of(ROBOT_MASS_KG))
+                .withRobotMass(Kilogram.of(RobotConstants.MASS_KG))
                 .withGyro(COTS.ofPigeon2())
                 .withSwerveModule(new SwerveModuleSimulationConfig(
                         DCMotor.getNeoVortex(1),
@@ -238,7 +220,7 @@ public final class Constants {
                         Volts.of(0.1),
                         Meters.of(SwerveConstants.cotsDriveConstants.wheelDiameter / 2),
                         KilogramSquareMeters.of(0.02),
-                        WHEEL_COF));
+                        RobotConstants.WHEEL_COF));
     }
 
     /**
