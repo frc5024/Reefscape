@@ -1,5 +1,8 @@
 package frc.robot.controls;
 
+import static edu.wpi.first.wpilibj2.command.Commands.either;
+import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
@@ -50,7 +53,15 @@ public class ButtonBindings {
     private CommandXboxController setDriverBindingsController() {
         CommandXboxController commandXboxController = new CommandXboxController(DRIVER_PORT);
 
-        // (driver)
+        // switch from robot relative to field relative
+        commandXboxController.start()
+                .whileTrue(either(
+                        runOnce(this.swerveDriveSubsystem::disableFieldRelative,
+                                this.swerveDriveSubsystem),
+                        runOnce(this.swerveDriveSubsystem::enableFieldRelative,
+                                this.swerveDriveSubsystem),
+                        this.swerveDriveSubsystem::isFieldRelative));
+
         commandXboxController.x().onTrue(new InstantCommand(() -> this.swerveDriveSubsystem.zeroHeading()));
 
         commandXboxController.y().onTrue(this.coralSubsystem.outtakeCommand());
