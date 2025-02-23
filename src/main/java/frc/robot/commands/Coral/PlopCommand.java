@@ -20,7 +20,7 @@ public class PlopCommand extends Command {
     // to HOLDING
     @Override
     public void initialize() {
-        coralSubsystem.set(Constants.coralConstants.plopSpeed);
+        coralSubsystem.set(Constants.CoralConstants.plopSpeed);
 
     }
 

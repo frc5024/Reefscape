@@ -35,7 +35,7 @@ public class OuttakeCommand extends Command {
             cancel();
         }
 
-        coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
+        coralSubsystem.set(Constants.CoralConstants.outtakeSpeed);
 
         // if (elevatorSubsystem.getElevatorPosition() ==
         // Constants.elevatorConstants.L1position) {

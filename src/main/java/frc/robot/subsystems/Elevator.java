@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.elevatorConstants;
+import frc.robot.Constants.ElevatorContants;
 
 public class Elevator extends SubsystemBase {
     // created and named the motor controller
@@ -28,7 +28,7 @@ public class Elevator extends SubsystemBase {
     private final SparkBaseConfig elevatorMotor2Config = new SparkMaxConfig()
             .idleMode(IdleMode.kBrake)
             // .inverted(true)
-            .follow(elevatorConstants.motorID1, false);
+            .follow(ElevatorContants.motorID1, false);
 
     // created and named the PID controller
     private ProfiledPIDController PID;
@@ -78,8 +78,8 @@ public class Elevator extends SubsystemBase {
     // constructor
     public Elevator() {
         // assigning the ID and values
-        elevatorMotor = new SparkMax(elevatorConstants.motorID1, SparkLowLevel.MotorType.kBrushless);
-        elevatorMotor2 = new SparkMax(elevatorConstants.motorID2, SparkLowLevel.MotorType.kBrushless);
+        elevatorMotor = new SparkMax(ElevatorContants.motorID1, SparkLowLevel.MotorType.kBrushless);
+        elevatorMotor2 = new SparkMax(ElevatorContants.motorID2, SparkLowLevel.MotorType.kBrushless);
         elevatorMotor.configure(elevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         elevatorMotor2.configure(elevatorMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -87,16 +87,16 @@ public class Elevator extends SubsystemBase {
         stoppingLimitSwitch = new DigitalInput(1);
 
         // assigning values to the P, I and D
-        feedForwardConstraints = new TrapezoidProfile.Constraints(elevatorConstants.elevatorMaxSpeed,
-                elevatorConstants.elevatorMaxAccel);
-        PID = new ProfiledPIDController(elevatorConstants.kP, elevatorConstants.kI, elevatorConstants.kD,
+        feedForwardConstraints = new TrapezoidProfile.Constraints(ElevatorContants.elevatorMaxSpeed,
+                ElevatorContants.elevatorMaxAccel);
+        PID = new ProfiledPIDController(ElevatorContants.kP, ElevatorContants.kI, ElevatorContants.kD,
                 feedForwardConstraints);
         PID.setTolerance(0.25, 0.25); // TODO: put in constants
-        feedForward = new ElevatorFeedforward(0, elevatorConstants.G, elevatorConstants.kV, elevatorConstants.kA); // ks,
-                                                                                                                   // kg,
-                                                                                                                   // kv,
-                                                                                                                   // ka
-        elevatorMotor.getEncoder().setPosition(elevatorConstants.zeroPosition);
+        feedForward = new ElevatorFeedforward(0, ElevatorContants.G, ElevatorContants.kV, ElevatorContants.kA); // ks,
+                                                                                                                // kg,
+                                                                                                                // kv,
+                                                                                                                // ka
+        elevatorMotor.getEncoder().setPosition(ElevatorContants.zeroPosition);
 
         // elevatorMotor.setPosition(0);
 
@@ -151,7 +151,7 @@ public class Elevator extends SubsystemBase {
 
         // //safety precaution to prevent the motor from trying to go past the bottom
         // stop
-        if (speed < 0 && elevatorMotor.getEncoder().getPosition() <= elevatorConstants.minimumBottomValue) {
+        if (speed < 0 && elevatorMotor.getEncoder().getPosition() <= ElevatorContants.minimumBottomValue) {
             elevatorMotor.set(0); // TODO: verify our minimumBottomValue tolerance is working and reasonable
         }
 
@@ -213,7 +213,7 @@ public class Elevator extends SubsystemBase {
     // encoder value will reset to 0 once the bottom limit switch is triggered
     public void zeroingEncoder() {
         if (isBottomLimitSwitchBroken()) {
-            elevatorMotor.getEncoder().setPosition(elevatorConstants.zeroPosition);
+            elevatorMotor.getEncoder().setPosition(ElevatorContants.zeroPosition);
         }
     }
 

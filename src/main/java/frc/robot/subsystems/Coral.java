@@ -28,13 +28,13 @@ public class Coral extends SubsystemBase {
     private static DigitalInput linebreak;
 
     // all constants for coral
-    int coralMotorChannel = Constants.coralConstants.coralMotorChannel;
-    int coralMotorReversedChannel = Constants.coralConstants.coralMotorReversedChannel;
-    int linebreakChannel = Constants.coralConstants.linebreakChannel;
+    int coralMotorChannel = Constants.CoralConstants.coralMotorChannel;
+    int coralMotorReversedChannel = Constants.CoralConstants.coralMotorReversedChannel;
+    int linebreakChannel = Constants.CoralConstants.linebreakChannel;
 
-    double intakeSpeed = Constants.coralConstants.intakeSpeed;
-    double outtakeSpeed = Constants.coralConstants.outtakeSpeed;
-    double plopSpeed = Constants.coralConstants.plopSpeed;
+    double intakeSpeed = Constants.CoralConstants.intakeSpeed;
+    double outtakeSpeed = Constants.CoralConstants.outtakeSpeed;
+    double plopSpeed = Constants.CoralConstants.plopSpeed;
 
     // double servoRotate = Constants.coralConstants.servoRotate;
     // double servoReset = Constants.coralConstants.servoReset;
@@ -47,7 +47,7 @@ public class Coral extends SubsystemBase {
 
     // constructor for coralMotor
     public Coral() {
-        linebreak = new DigitalInput(Constants.coralConstants.linebreakChannel);
+        linebreak = new DigitalInput(Constants.CoralConstants.linebreakChannel);
         tab.addBoolean("linebreak", () -> linebreak.get());
 
         coralMotor = new SparkFlex(coralMotorChannel, SparkFlex.MotorType.kBrushless);

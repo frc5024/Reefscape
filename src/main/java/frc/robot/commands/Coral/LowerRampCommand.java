@@ -20,7 +20,7 @@ public class LowerRampCommand extends Command {
 
     // when start, rotate -plopspeed, lowers the ramp
     public void initialize() {
-        coralSubsystem.setBottom(Constants.coralConstants.rampSpeed);
+        coralSubsystem.setBottom(Constants.CoralConstants.rampSpeed);
         timer.reset();
         timer.start();
     }

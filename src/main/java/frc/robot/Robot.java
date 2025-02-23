@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import org.littletonrobotics.junction.LogFileUtil;
@@ -11,8 +7,12 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.RobotConstants;
+import frc.robot.containers.MantaRaiderRobotContainer;
+import frc.robot.containers.RobotContainer;
 
 /**
  * The methods in this class are called automatically corresponding to each
@@ -22,10 +22,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends LoggedRobot {
-    private Command m_autonomousCommand;
-    public static final CTREConfigs ctreConfigs = new CTREConfigs();
-
-    private final RobotContainer m_robotContainer;
+    private RobotContainer robotContainer;
+    private Command autonomousCommand;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -33,35 +31,35 @@ public class Robot extends LoggedRobot {
      * initialization code.
      */
     public Robot() {
+    }
+
+    @Override
+    public void robotInit() {
         // AdvantageKit Record metadata
-        // Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
-        // Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
-        // Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
-        // Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
-        // Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
-        // switch (BuildConstants.DIRTY) {
-        // case 0:
-        // Logger.recordMetadata("GitDirty", "All changes committed");
-        // break;
-        // case 1:
-        // Logger.recordMetadata("GitDirty", "Uncomitted changes");
-        // break;
-        // default:
-        // Logger.recordMetadata("GitDirty", "Unknown");
-        // break;
-        // }
+        Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+        Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+        Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+        Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+        switch (BuildConstants.DIRTY) {
+            case 0:
+                Logger.recordMetadata("GitDirty", "All changes committed");
+                break;
+            case 1:
+                Logger.recordMetadata("GitDirty", "Uncomitted changes");
+                break;
+            default:
+                Logger.recordMetadata("GitDirty", "Unknown");
+                break;
+        }
 
         // Set up data receivers & replay source
-        switch (Constants.currentMode) {
-            case REAL:
-                // Running on a real robot, log to a USB stick ("/U/logs")
-                Logger.addDataReceiver(new WPILOGWriter());
-                Logger.addDataReceiver(new NT4Publisher());
-                break;
-
+        switch (RobotConstants.currentMode) {
             case SIM:
                 // Running a physics simulator, log to NT
                 Logger.addDataReceiver(new NT4Publisher());
+
+                // this.robotContainer = new MapleSimRobotContainer();
                 break;
 
             case REPLAY:
@@ -71,15 +69,27 @@ public class Robot extends LoggedRobot {
                 Logger.setReplaySource(new WPILOGReader(logPath));
                 Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
                 break;
+
+            case REAL:
+            default:
+                // Running on a real robot, log to a USB stick ("/U/logs")
+                Logger.addDataReceiver(new WPILOGWriter());
+                Logger.addDataReceiver(new NT4Publisher());
+
+                // this.robotContainer = new BealtovenRobotContainer();
+                this.robotContainer = new MantaRaiderRobotContainer();
+                break;
         }
 
         // Start AdvantageKit logger
         Logger.start();
 
-        // Instantiate our RobotContainer. This will perform all our button bindings,
-        // and put our
-        // autonomous chooser on the dashboard.
-        m_robotContainer = new RobotContainer();
+        // Setup Limelight port forwarding - be sure to match against camera constants
+        // https://docs.limelightvision.io/docs/docs-limelight/getting-started/FRC/best-practices
+        for (int port = 5800; port <= 5809; port++) {
+            PortForwarder.add(port, "limelight.local", port);
+            // PortForwarder.add(port + 10, "limelight-two.local", port);
+        }
     }
 
     /**
@@ -119,11 +129,11 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        autonomousCommand = robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.schedule();
+        if (autonomousCommand != null) {
+            autonomousCommand.schedule();
         }
     }
 
@@ -138,8 +148,8 @@ public class Robot extends LoggedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.cancel();
+        if (autonomousCommand != null) {
+            autonomousCommand.cancel();
         }
     }
 

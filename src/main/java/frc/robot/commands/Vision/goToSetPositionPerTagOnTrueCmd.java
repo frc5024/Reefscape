@@ -6,14 +6,16 @@ import java.util.Set;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.utils.LimelightHelpers;
 
-public class goToSetPositionPerTagOnTrueCmd extends Command {
-
+/**
+ * 
+ */
+public class GoToSetPositionPerTagOnTrueCmd extends Command {
     private final Limelight limelight;
-    private final Swerve swerveDrive;
+    private final SwerveDriveSubsystem swerveDriveSubsystem;
     private final double xOffset;
 
     double strafePidOutput = 0;
@@ -35,16 +37,20 @@ public class goToSetPositionPerTagOnTrueCmd extends Command {
 
     double speedMultiplier;
 
-    public goToSetPositionPerTagOnTrueCmd(Limelight limelight, Swerve swerveDrive, double xOffset) {
+    /**
+     * 
+     */
+    public GoToSetPositionPerTagOnTrueCmd(Limelight limelight, SwerveDriveSubsystem swerveDriveSubsystem,
+            double xOffset) {
         this.limelight = limelight;
-        this.swerveDrive = swerveDrive;
+        this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.xOffset = xOffset;
 
         this.strafePidController = new PIDController(0.7, 0, 0.05);
         this.translationPidController = new PIDController(0.7, 0, 0.05);
         this.rotationPidController = new PIDController(0.008, 0, 0.0005);
 
-        addRequirements(swerveDrive); // might not work now but should fix errors
+        addRequirements(this.swerveDriveSubsystem); // might not work now but should fix errors
     }
 
     @Override
@@ -69,7 +75,7 @@ public class goToSetPositionPerTagOnTrueCmd extends Command {
         // a new variable to lie to the robot on which will be the quickest rotation
 
         if (validTagIDs.contains(detectedTagID)) {
-            swerveDrive.setFieldRelative(false);
+            this.swerveDriveSubsystem.setIsFieldRelative(false);
 
             // tag angle = angle based on the ROBOTS forward/heading
             if (detectedTagID == 18 || detectedTagID == 7) {
@@ -84,11 +90,11 @@ public class goToSetPositionPerTagOnTrueCmd extends Command {
 
             mathToTag();
         } else {
-            swerveDrive.visionTranslationalVal(0, false);
-            swerveDrive.visionStrafeVal(0, false);
-            swerveDrive.visionRotationVal(0, false);
+            // this.swerveDriveSubsystem.visionTranslationalVal(0, false);
+            // this.swerveDriveSubsystem.visionStrafeVal(0, false);
+            // this.swerveDriveSubsystem.visionRotationVal(0, false);
 
-            swerveDrive.setFieldRelative(true);
+            this.swerveDriveSubsystem.setIsFieldRelative(true);
 
             cancel();
         }
@@ -98,7 +104,7 @@ public class goToSetPositionPerTagOnTrueCmd extends Command {
     public void mathToTag() {
         double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
         Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
-        double robotHeading = swerveDrive.getGyroYaw().getDegrees();
+        double robotHeading = this.swerveDriveSubsystem.getYaw().getDegrees();
         // double robotHeading360 = swerveDrive.getGyroYaw360().getDegrees();
         double x = limelight.getX();
         double yawDeg = botPose[4];
@@ -163,11 +169,11 @@ public class goToSetPositionPerTagOnTrueCmd extends Command {
     }
 
     public void setDrive() {
-        swerveDrive.setFieldRelative(false);
+        this.swerveDriveSubsystem.setIsFieldRelative(false);
 
-        swerveDrive.visionRotationVal(rotationPidOutput, true);
-        swerveDrive.visionTranslationalVal(translationPidOutput, true);
-        swerveDrive.visionStrafeVal(strafePidOutput, true);
+        // this.swerveDriveSubsystem.visionRotationVal(rotationPidOutput, true);
+        // this.swerveDriveSubsystem.visionTranslationalVal(translationPidOutput, true);
+        // this.swerveDriveSubsystem.visionStrafeVal(strafePidOutput, true);
 
         // if within certain range set the elevator to start
 
@@ -186,10 +192,10 @@ public class goToSetPositionPerTagOnTrueCmd extends Command {
     @Override
     public void end(boolean interrupted) {
         // Stop all motion
-        swerveDrive.visionTranslationalVal(0, false);
-        swerveDrive.visionStrafeVal(0, false);
-        swerveDrive.visionRotationVal(0, false);
+        // this.swerveDriveSubsystem.visionTranslationalVal(0, false);
+        // this.swerveDriveSubsystem.visionStrafeVal(0, false);
+        // this.swerveDriveSubsystem.visionRotationVal(0, false);
 
-        swerveDrive.setFieldRelative(true);
+        this.swerveDriveSubsystem.setIsFieldRelative(true);
     }
 }

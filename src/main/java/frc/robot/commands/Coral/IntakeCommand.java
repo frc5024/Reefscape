@@ -26,7 +26,7 @@ public class IntakeCommand extends Command {
     @Override
     public void initialize() {
         if (!coralSubsystem.isLineBroken()) {
-            coralSubsystem.set(Constants.coralConstants.intakeSpeed);
+            coralSubsystem.set(Constants.CoralConstants.intakeSpeed);
             s_LEDs.setCommand(LEDPreset.Strobe.kGold).schedule();
         }
     }

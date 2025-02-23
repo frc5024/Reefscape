@@ -24,7 +24,7 @@ public class SetElevatorSetpointCmd extends Command {
         // sets the setpoint to the position that is assigned to the button
         elevatorSubsystem.setGoal(setpoint);
         elevatorSubsystem.togglePID(true);
-        if (setpoint != Constants.elevatorConstants.rootPosition) {
+        if (setpoint != Constants.ElevatorContants.rootPosition) {
             elevatorSubsystem.setElevatorPosition(setpoint);
         }
     }
