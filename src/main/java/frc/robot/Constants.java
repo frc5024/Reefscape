@@ -30,14 +30,24 @@ import frc.robot.utils.COTSTalonFXSwerveConstants;
 import frc.robot.utils.COTSTalonFXSwerveConstants.SDS.MK4i;
 
 public final class Constants {
+    // AdvantageKit simulation
+    public static final Mode simMode = Mode.SIM;
+    public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+
+    public static enum Mode {
+        REAL, // Running on a real robot
+        SIM, // Running a physics simulator
+        REPLAY // Replaying from a log file
+    }
+
     /**
      * 
      */
     public static final class RobotConstants {
-        public static final double LENGTH_INCHES = 38;
+        public static final double LENGTH_INCHES = 34; // including bumpers
         public static final double LENGTH_METERS = Units.inchesToMeters(LENGTH_INCHES);
         public static final double LOOP_PERIOD_SECS = 0.02;
-        public static final double MASS_KG = 74.088;
+        public static final double MASS_KG = 58.96;
         public static final double WHEEL_COF = 1.2;
 
         // Set to true to use FeedForwardCharacterization and
@@ -52,16 +62,6 @@ public final class Constants {
             SIM, // Running a physics simulator
             REPLAY // Replaying from a log file
         }
-    }
-
-    // AdvantageKit simulation
-    public static final Mode simMode = Mode.SIM;
-    public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
-
-    public static enum Mode {
-        REAL, // Running on a real robot
-        SIM, // Running a physics simulator
-        REPLAY // Replaying from a log file
     }
 
     public static class LEDsConstants { // changed name to LEDsConstants
@@ -360,8 +360,8 @@ public final class Constants {
          * Reefscape - 22.0
          * Bealtoven - 18.75
          */
-        public static final double trackWidth = Units.inchesToMeters(18.75);
-        public static final double wheelBase = Units.inchesToMeters(18.75);
+        public static final double trackWidth = Units.inchesToMeters(22.0);
+        public static final double wheelBase = Units.inchesToMeters(22.0);
         public static final double driveBaseRadius = Math.hypot(trackWidth / 2, wheelBase / 2);
         public static final double maxLinearSpeed = 4.69;
         public static final double maxLinearAcceleration = 4.0;
@@ -404,12 +404,6 @@ public final class Constants {
                 SwerveConstants.maxLinearSpeed, SwerveConstants.maxLinearAcceleration);
         public static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 SwerveConstants.maxAngularSpeed, SwerveConstants.maxLinearAcceleration);
-    }
-
-    public static final class Vision {
-        public static final double rightOffset = -0.142; // in meters
-        public static final double leftOffset = 0.162; // in meters
-        public static final double noOffset = 0; // in meters
     }
 
     /**
