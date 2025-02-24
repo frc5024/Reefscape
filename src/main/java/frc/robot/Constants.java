@@ -13,7 +13,6 @@ import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDPreset;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
-import frc.robot.subsystems.Elevator;
 
 public final class Constants {
     // AdvantageKit simulation
@@ -50,23 +49,23 @@ public final class Constants {
         // elevator values
         public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
-        public static final double elevatorMaxSpeed = 12;
-        public static final double elevatorMaxAccel = 12;
+        public static final double elevatorMaxSpeed = 75;
+        public static final double elevatorMaxAccel = 75;
         public static final double zeroPosition = 0;
         public static final int motorID1 = 60;
         public static final int motorID2 = 61;
 
         // values for PID
-        public static final double kP = 0.05;
+        public static final double kP = 0.03;
         public static final double kI = 0;
         public static final double kD = 0;
 
         // values for feed forward
-        public static final double kV = 0.3;
-        public static final double kA = 0.1;
+        public static final double kV = 0.1;
+        public static final double kA = 0.05;
 
-        public static final double G = 0.55;
-        public static final double minimumBottomValue = 0.1; // encoder value will not always be zero so we create a
+        public static final double G = 0.5;
+        public static final double minimumBottomValue = 1.5; // encoder value will not always be zero so we create a
                                                              // tolerance value
 
         // public static final double radianstoCM(double CM) {
@@ -79,12 +78,12 @@ public final class Constants {
 
         // position constants for the different levels to score in rotations
         public static final double rootPosition = 0;
-        public static final double L1Position = Elevator.rotationsToInches(11.1);
-        public static final double L2Position = Elevator.rotationsToInches(44 / 3);
-        public static final double Algae1 = Elevator.rotationsToInches(4.36);
-        public static final double L3Position = Elevator.rotationsToInches(28);
-        public static final double Algae2 = Elevator.rotationsToInches(6.108);
-        public static final double L4Position = Elevator.rotationsToInches(46.827);
+        public static final double L1Position = 15.212;
+        public static final double L2Position = 20.0999;
+        public static final double Algae1 = 5.97514;
+        public static final double L3Position = 38.37261;
+        public static final double Algae2 = 8.37068;
+        public static final double L4Position = 64.17406;
 
     }
 

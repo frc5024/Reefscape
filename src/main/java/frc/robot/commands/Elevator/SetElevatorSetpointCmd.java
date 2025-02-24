@@ -33,7 +33,7 @@ public class SetElevatorSetpointCmd extends Command {
     @Override
     public void end(boolean interrupted) {
         elevatorSubsystem.resetPID();
-        elevatorSubsystem.togglePID(false);
+        // elevatorSubsystem.togglePID(false);
     }
 
     @Override
