@@ -1,9 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.Climb.ClimbCancelCommand;
-import frc.robot.commands.Climb.ClimbCommand;
-import frc.robot.commands.Climb.ClimbExtendoCommand;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.LEDs;
 
@@ -36,10 +33,11 @@ public class RobotContainer {
 
     private void configureBindings() {
 
-        driver.a().onTrue(new ClimbCommand(m_climbSubsystem, s_LEDs));
-        driver.x().onTrue(new ClimbExtendoCommand(m_climbSubsystem, true));
-        driver.y().onTrue(new ClimbExtendoCommand(m_climbSubsystem, false));
-        driver.b().onTrue(new ClimbCancelCommand(m_climbSubsystem));
+        // Climb commands
+        driver.y().whileTrue(m_climbSubsystem.climbCommand(s_LEDs));
+        driver.rightTrigger().onTrue(m_climbSubsystem.extendingCommand());
+        driver.leftTrigger().whileTrue(m_climbSubsystem.retractingCommand());
+        driver.b().onTrue(m_climbSubsystem.cancelCommand());
         // driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         // driver.().onTrue(new SetLEDS(s_LEDs, LEDPreset.Solid.kBlue));// Sets to blue
         // driver.b().onTrue(new SetLEDSDefault(s_LEDs));// Sets to Default colour (Find

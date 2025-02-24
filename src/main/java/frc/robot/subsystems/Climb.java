@@ -5,17 +5,26 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
+import frc.robot.commands.Climb.ClimbCancelCommand;
+import frc.robot.commands.Climb.ClimbCommand;
+import frc.robot.commands.Climb.ClimbExtendoCommand;
+import frc.robot.commands.Climb.ClimbRetractCommand;
 
 public class Climb extends SubsystemBase {
     public static Climb mInstance = null;
 
     private TalonFX climbMotor;
 
+    // Shuffleboard
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
+    // Not currently being used
     GenericEntry encoder = tab.add("climbSpeed", .35).getEntry();
+
+    // ULTRASONIC NOT CURRENTLY BEING USED
 
     // Ultrasonic
     // private final Ultrasonic m_ultrasonic = new
@@ -25,6 +34,7 @@ public class Climb extends SubsystemBase {
     // double measurement;
     // MedianFilter filter = new MedianFilter(Constants.ClimbConstants.filterValue);
 
+    // Creating the Climb instance
     public static Climb getInstance() {
         if (mInstance == null) {
             mInstance = new Climb();
@@ -33,44 +43,44 @@ public class Climb extends SubsystemBase {
     }
 
     private Climb() {
+        // Creating motor
         climbMotor = new TalonFX(Constants.ClimbConstants.climbMotorID);
+
+        // Shuffleboard tab displaying the encoder's position value as a double
         tab.addDouble("encoder value", () -> climbMotor.getPosition().getValueAsDouble());
 
     }
 
     public void climbing() {
-        // speed = encoder.getDouble(0);
-        // if (climbMotor.getPosition().getValueAsDouble() >=
-        // Constants.ClimbConstants.liftoffPos && !overThreshold()) {
-        // System.out.println("CLIMB FAILED");
-        // climbMotor.set(0);
-        // LEDs.getInstance().setCommand(LEDPreset.Strobe.kRed).schedule();
-
-        // } else {
+        // Sets motor to climbing speed
         climbMotor.set(Constants.ClimbConstants.climbSpeed);
+        // Schedules the LED command
         LEDs.getInstance().setCommand(LEDPreset.LightChase.kBlue).schedule();
+
         // }
     }
 
     public void extending() {
-        // speed = encoder.getDouble(0);
+        // Sets motor to extending speed
         climbMotor.set(Constants.ClimbConstants.extendoSpeed);
-        LEDs.getInstance().setCommand(LEDPreset.Solid.kDarkBlue).schedule();
+        LEDs.getInstance().setCommand(LEDPreset.Solid.kViolet).schedule();
     }
 
     public void retracting() {
-        // speed = encoder.getDouble(0);
+        // Sets motor to reverse of extending speed
         climbMotor.set(-Constants.ClimbConstants.extendoSpeed);
         LEDs.getInstance().setCommand(LEDPreset.Solid.kDarkBlue).schedule();
     }
 
     public void cancel() {
+        // Sets motor to cancelling speed
         climbMotor.set(Constants.ClimbConstants.cancelSpeed);
         LEDs.getInstance().setCommand(LEDPreset.Strobe.kGold).schedule();
 
     }
 
     public void stopMotor() {
+        // Stops motor
         climbMotor.set(0);
     }
 
@@ -98,9 +108,18 @@ public class Climb extends SubsystemBase {
     // }
     // }
 
-    public boolean isClimbPosition() {
-        // Returns true if the Encoder detects the motor is at end position
-        if (climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.endPosition) {
+    // Booleans
+
+    public boolean isClimbed() {
+        // Returns true if the Encoder detects the motor is at climbed position
+        if (climbMotor.getPosition().getValueAsDouble() <= Constants.ClimbConstants.endPosition) {
+            // if (climbMotor.getPosition().getValueAsDouble() >=
+            // Constants.ClimbConstants.liftoffPos
+            // && !overThreshold()) {
+            // System.out.println("CLIMB FAILED");
+            // LEDs.getInstance().setCommand(LEDPreset.Strobe.kRed).schedule();
+            // } else {
+            // }
             return true;
         } else {
             return false;
@@ -108,11 +127,43 @@ public class Climb extends SubsystemBase {
     }
 
     public boolean isExtendoPosition() {
-        // Returns true if the Encoder detects the motor is at end position
-        if (climbMotor.getPosition().getValueAsDouble() <= Constants.ClimbConstants.extendoPosition) {
+        // Returns true if the Encoder detects the motor is at extended position
+        if (climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.extendoPosition) {
             return true;
         } else {
             return false;
         }
+    }
+
+    public boolean isRetractPosition() {
+        // Returns true if the Encoder detects the motor is at extended position
+        if (climbMotor.getPosition().getValueAsDouble() <= Constants.ClimbConstants.endPosition) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Commands
+
+    // Creates new climb command
+    public Command climbCommand(LEDs LEDs) {
+        // Only climbing uses LEDs in the command itself
+        return new ClimbCommand(this, LEDs);
+    }
+
+    // Creates new extending command
+    public Command extendingCommand() {
+        return new ClimbExtendoCommand(this);
+    }
+
+    // Creates new retracting command
+    public Command retractingCommand() {
+        return new ClimbRetractCommand(this);
+    }
+
+    // Creates new cancel command
+    public Command cancelCommand() {
+        return new ClimbCancelCommand(this);
     }
 }

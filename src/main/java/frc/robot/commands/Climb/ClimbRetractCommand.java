@@ -3,11 +3,11 @@ package frc.robot.commands.Climb;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climb;
 
-public class ClimbCancelCommand extends Command {
+public class ClimbRetractCommand extends Command {
 
     private Climb climbSubsystem;
 
-    public ClimbCancelCommand(Climb climbSubsystem) {
+    public ClimbRetractCommand(Climb climbSubsystem) {
         this.climbSubsystem = climbSubsystem;
 
         addRequirements(climbSubsystem);
@@ -18,7 +18,7 @@ public class ClimbCancelCommand extends Command {
     }
 
     public void execute() {
-        climbSubsystem.cancel();
+        climbSubsystem.retracting();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ClimbCancelCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        // stops when encoder reaches extended position
-        return climbSubsystem.isExtendoPosition();
+        // Stops when motor reaches retracted position
+        return climbSubsystem.isRetractPosition();
     }
 }

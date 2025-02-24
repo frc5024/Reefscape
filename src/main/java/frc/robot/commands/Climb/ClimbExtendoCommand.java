@@ -6,11 +6,9 @@ import frc.robot.subsystems.Climb;
 public class ClimbExtendoCommand extends Command {
 
     private Climb climbSubsystem;
-    private boolean forward;
 
-    public ClimbExtendoCommand(Climb climbSubsystem, boolean forward) {
+    public ClimbExtendoCommand(Climb climbSubsystem) {
         this.climbSubsystem = climbSubsystem;
-        this.forward = forward;
 
         addRequirements(climbSubsystem);
     }
@@ -20,21 +18,7 @@ public class ClimbExtendoCommand extends Command {
     }
 
     public void execute() {
-        // stops when encoder detects extended position
-        if (forward == true) {
-            if (climbSubsystem.isExtendoPosition()) {
-                climbSubsystem.stopMotor();
-            } else {
-                climbSubsystem.extending();
-            }
-        } else {
-            // retracting the arm goes back to the default climb position for now
-            if (climbSubsystem.isClimbPosition()) {
-                climbSubsystem.stopMotor();
-            } else {
-                climbSubsystem.retracting();
-            }
-        }
+        climbSubsystem.extending();
     }
 
     @Override
@@ -45,6 +29,6 @@ public class ClimbExtendoCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return climbSubsystem.isExtendoPosition();
     }
 }

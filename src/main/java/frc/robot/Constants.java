@@ -9,8 +9,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
-import frc.lib.leds.LEDPreset;
 import frc.lib.leds.ILEDPreset;
+import frc.lib.leds.LEDPreset;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -180,16 +180,16 @@ public final class Constants {
         // Motor
         public static final int climbMotorID = 7;
         // Placeholder value
-        public static final double endPosition = 200.0;
+        public static final double endPosition = 1;
         // ALSO Placeholder value
-        public static final double extendoPosition = 50.0;
-        public static final double liftoffPos = 180.0;
+        public static final double extendoPosition = 25;
+        // public static final double liftoffPos = 180.0;
         // EVEN MORE Placeholder values
-        public static final double climbSpeed = 0.3;
+        public static final double climbSpeed = -0.3;
         // PLACEHOLDER PLACEHOLDER PLACEHOLDER
         public static final double cancelSpeed = -0.3;
         // P L A C E H O L D E R
-        public static final double extendoSpeed = -0.3;
+        public static final double extendoSpeed = 0.3;
 
     }
 }
