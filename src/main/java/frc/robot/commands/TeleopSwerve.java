@@ -4,6 +4,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
@@ -14,16 +15,23 @@ public class TeleopSwerve extends Command {
     private DoubleSupplier strafeSup;
     private DoubleSupplier rotationSup;
     private BooleanSupplier robotCentricSup;
+    private SlewRateLimiter translationFilter = new SlewRateLimiter(0.5);
+    private SlewRateLimiter strafeFilter = new SlewRateLimiter(0.5);
+    private SlewRateLimiter rotationFilter = new SlewRateLimiter(0.5);
 
     public TeleopSwerve(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup,
-            DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
+            DoubleSupplier rotationSup) {
         this.s_Swerve = s_Swerve;
         addRequirements(s_Swerve);
 
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
-        this.robotCentricSup = robotCentricSup;
+    }
+
+    public TeleopSwerve(Swerve s_Swerve2, DoubleSupplier doubleSupplier, DoubleSupplier doubleSupplier2,
+            DoubleSupplier doubleSupplier3, Object object) {
+        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -33,10 +41,15 @@ public class TeleopSwerve extends Command {
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
+        /* Slew rate limiter */
+        double translationOutput = translationFilter.calculate(translationVal);
+        double strafeOutput = strafeFilter.calculate(strafeVal);
+        double rotationOutput = rotationFilter.calculate(rotationVal);
+
         /* Drive */
-        s_Swerve.controllerTranslationalVal(translationVal);
-        s_Swerve.controllerStrafeVal(strafeVal);
-        s_Swerve.controllerRotationVal(rotationVal);
+        s_Swerve.controllerTranslationalVal(translationOutput);
+        s_Swerve.controllerStrafeVal(strafeOutput);
+        s_Swerve.controllerRotationVal(rotationOutput);
 
         s_Swerve.drive(true);
     }
