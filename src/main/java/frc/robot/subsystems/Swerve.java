@@ -33,18 +33,19 @@ public class Swerve extends SubsystemBase {
     double strafeVal = 0;
     double rotationVal = 0;
 
+    double filteredTranslation = 0;
+    double filteredStrafe = 0;
+    double filteredRotation = 0;
+
     boolean lockRotation = false;
     boolean lockStrafe = false;
     boolean lockTranslation = false;
 
     boolean fieldRelative = true;
 
-    public boolean isSlowMode = false;
-
     public final double scaleValue = 3600.0 / 3831.020004272461;
 
     private static Swerve mInstance;
-    private Elevator elevatorSubsystem;
 
     public static Swerve getInstance() {
         if (mInstance == null) {
