@@ -114,22 +114,22 @@ public class RobotContainer {
         // Constants.elevatorConstants.zeroPosition));
 
         // (operator)
-        operator.povLeft()
-                .onTrue(elevatorSubsystem.goToL1Position());
-        operator.povDown()
-                .onTrue(elevatorSubsystem.goToL2Position());
-        operator.povRight()
-                .onTrue(elevatorSubsystem.goToL3Position());
-        operator.povUp()
-                .onTrue(elevatorSubsystem.goToL4Position());
+        operator.b()
+                .whileTrue(elevatorSubsystem.goToL1Position());
+        operator.a()
+                .whileTrue(elevatorSubsystem.goToL2Position());
+        operator.x()
+                .whileTrue(elevatorSubsystem.goToL3Position());
+        operator.y()
+                .whileTrue(elevatorSubsystem.goToL4Position());
 
-        operator.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
+        operator.rightTrigger().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
                 Constants.elevatorConstants.rootPosition));
 
-        operator.rightTrigger().onTrue(coralSubsystem.lowerRampCommand());
+        // operator.rightTrigger().onTrue(coralSubsystem.lowerRampCommand());
         // operator.rightTrigger().onTrue(extendClimb());
 
-        operator.b().onTrue(coralSubsystem.lowerRampCommand());
+        // operator.b().onTrue(coralSubsystem.lowerRampCommand());
     }
 
     public Command getAutonomousCommand() {
