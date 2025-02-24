@@ -69,13 +69,13 @@ public class Climb extends SubsystemBase {
     public void retracting() {
         // Sets motor to reverse of extending speed
         climbMotor.set(-Constants.ClimbConstants.extendoSpeed);
-        LEDs.getInstance().setCommand(LEDPreset.Solid.kDarkBlue).schedule();
+        LEDs.getInstance().setCommand(LEDPreset.Solid.kBlue).schedule();
     }
 
     public void cancel() {
         // Sets motor to cancelling speed
         climbMotor.set(Constants.ClimbConstants.cancelSpeed);
-        LEDs.getInstance().setCommand(LEDPreset.Strobe.kGold).schedule();
+        LEDs.getInstance().setCommand(LEDPreset.Solid.kDarkRed).schedule();
 
     }
 
