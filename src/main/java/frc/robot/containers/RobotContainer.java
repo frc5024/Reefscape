@@ -5,10 +5,9 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.SwerveDriveCommands;
@@ -84,27 +83,12 @@ abstract public class RobotContainer {
      */
     protected void registerNamedCommands() {
         NamedCommands.registerCommand("DriveRightTag", new GoToSetPositionPerTagOnTrueCmd(limelightSubsystem,
-                this.swerveDriveSubsystem, Constants.Vision.rightOffset));
+                this.swerveDriveSubsystem, -FieldConstants.REEF_POLE_RIGHT_OFFSET));
         NamedCommands.registerCommand("DriveLeftTag", new GoToSetPositionPerTagOnTrueCmd(limelightSubsystem,
-                this.swerveDriveSubsystem, Constants.Vision.leftOffset));
+                this.swerveDriveSubsystem, FieldConstants.REEF_POLE_LEFT_OFFSET));
 
         NamedCommands.registerCommand("ScoreCoral", coralSubsystem.outtakeCommand());
         NamedCommands.registerCommand("IntakeCoral", coralSubsystem.intakeCommand());
-    }
-
-    /**
-     * 
-     */
-    private void toggleVisionMode() {
-        visionMode = !visionMode;
-
-        if (visionMode) {
-            mode = "Vision";
-        } else {
-            mode = "Manual";
-        }
-
-        SmartDashboard.putString("Robot Mode", mode);
     }
 
     /**
