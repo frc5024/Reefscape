@@ -351,7 +351,7 @@ public final class Constants {
      */
     public static final class SwerveConstants {
         /**
-         * Reefscape - 22.0
+         * Manta Raider - 22.0
          * Bealtoven - 18.75
          */
         public static final double trackWidth = Units.inchesToMeters(18.75);
@@ -371,7 +371,7 @@ public final class Constants {
         public static final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(moduleTranslations);
 
         /**
-         * L1 - Reefscape
+         * L1 - Manta Raider
          * L3 - Bealtoven
          */
         public static final COTSTalonFXSwerveConstants cotsDriveConstants = MK4i.KrakenX60(MK4i.driveRatios.L3);
