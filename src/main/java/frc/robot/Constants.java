@@ -11,6 +11,7 @@ import java.util.List;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -22,6 +23,8 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.lib.camera.Camera;
 import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDPreset;
@@ -52,7 +55,7 @@ public final class Constants {
 
         // Set to true to use FeedForwardCharacterization and
         // WheelRadiusCharacterization auto commands
-        public static final boolean TUNING_MODE = true;
+        public static final boolean TUNING_MODE = false;
 
         // AdvantageKit simulation
         public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
@@ -236,6 +239,15 @@ public final class Constants {
                         Meters.of(SwerveConstants.cotsDriveConstants.wheelDiameter / 2),
                         KilogramSquareMeters.of(0.02),
                         RobotConstants.WHEEL_COF));
+    }
+
+    /**
+     * 
+     */
+    public static final class MechanismConstants {
+        public static final double CANVAS_SIZE_METERS = Units.inchesToMeters(98);
+        public static final LoggedMechanism2d CANVAS = new LoggedMechanism2d(CANVAS_SIZE_METERS, CANVAS_SIZE_METERS,
+                new Color8Bit(Color.kWheat));
     }
 
     /**
