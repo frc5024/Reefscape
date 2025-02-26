@@ -78,15 +78,16 @@ public class goToSetPositionPerTagCmd extends Command {
             swerveDrive.setFieldRelative(false);
 
             // tag angle = angle based on the ROBOTS forward/heading
-            if (detectedTagID == 18 || detectedTagID == 7) {
-                tagAngle = 0;
-            } else if (detectedTagID == 10 || detectedTagID == 21) {
-                tagAngle = -179.5; // change to 360 once within 10 degrees to prevent overspinning
-            } else if (detectedTagID == 3 || detectedTagID == 16) {
-                tagAngle = 90;
-            } else {
-                tagAngle = 0;
-            }
+            // if (detectedTagID == 18 || detectedTagID == 7) {
+            // tagAngle = 0;
+            // } else if (detectedTagID == 10 || detectedTagID == 21) {
+            // tagAngle = -179.5; // change to 360 once within 10 degrees to prevent
+            // overspinning
+            // } else if (detectedTagID == 3 || detectedTagID == 16) {
+            // tagAngle = 90;
+            // } else {
+            // tagAngle = 0;
+            // }
 
             // at___ = AprilTag____
             // translationPidController.setP(pEntry.getDouble(0));
@@ -124,7 +125,6 @@ public class goToSetPositionPerTagCmd extends Command {
 
         double zDis = Dis * Math.cos(Math.toRadians(rotationToTag)); // Distance from robot to tag in relation of the
                                                                      // field
-
         System.out.println(zDis);
 
         // Left/Right
@@ -177,9 +177,9 @@ public class goToSetPositionPerTagCmd extends Command {
         swerveDrive.setFieldRelative(false);
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
-        swerveDrive.visionTranslationalVal(translationPidOutput, true);
-        swerveDrive.visionStrafeVal(strafePidOutput, true);
-    }
+        //swerveDrive.visionTranslationalVal(translationPidOutput, true);
+        // swerveDrive.visionStrafeVal(strafePidOutput, true);
+    } 
 
     @Override
     public boolean isFinished() {
