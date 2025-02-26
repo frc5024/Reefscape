@@ -185,11 +185,12 @@ public final class Constants {
         public static final double extendoPosition = 25;
         // public static final double liftoffPos = 180.0;
         // EVEN MORE Placeholder values
-        public static final double climbSpeed = -0.3;
+
+        public static final double climbSpeed = -0.4;
         // PLACEHOLDER PLACEHOLDER PLACEHOLDER
-        public static final double cancelSpeed = -0.3;
+        public static final double cancelSpeed = -0.4;
         // P L A C E H O L D E R
-        public static final double extendoSpeed = 0.3;
+        public static final double extendoSpeed = 0.4;
 
     }
 }
