@@ -56,7 +56,7 @@ public class RobotContainer {
         changeRainbow.whileTrue(new TestLEDs());
         testFlash.whileTrue(new TestFlashLEDs());
         driver.y().onTrue(s_Algae.intake());
-        driver.x().onTrue(s_Algae.launch());
+        driver.x().whileTrue(s_Algae.launch());
         driver.a().onTrue(s_Algae.drop());
         driver.b().whileTrue(s_Algae.cancel());
 

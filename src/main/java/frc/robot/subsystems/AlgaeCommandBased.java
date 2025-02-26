@@ -52,8 +52,8 @@ public class AlgaeCommandBased extends SubsystemBase {
     // Set both sparkmax motors to one of the motor speed constants
     // (ex. idle, launch, drop, intake)
     public void setSpeed(Double speed) {
-        motor1.set(speed);
-        motor2.set(speed);
+        // motor1.set(speed); //bottom motor
+        motor2.set(speed); // top motor
     }
 
     // Gets the current value of the linebreak sensor and returns to systems outside
