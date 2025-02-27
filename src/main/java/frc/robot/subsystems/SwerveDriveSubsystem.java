@@ -224,12 +224,11 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      * 
      */
     public void drive(double xVelocity, double yVelocity, double rVelocity, Rotation2d angle, boolean isOpenLoop) {
-        ChassisSpeeds chassisSpeeds = null;
         xVelocity = xVelocity * SwerveConstants.maxLinearSpeed;
         yVelocity = yVelocity * SwerveConstants.maxLinearSpeed;
         rVelocity = rVelocity * SwerveConstants.maxAngularSpeed;
 
-        chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
 
         if (isFieldRelative) {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds,
