@@ -113,7 +113,7 @@ public class Elevator extends SubsystemBase {
         tab.addDouble("Estimated Velocity", () -> PID.getSetpoint().velocity);
         tab.addDouble("actual Position", () -> rotationsToInches(elevatorMotor.getEncoder().getPosition()));
         tab.addDouble("estimated Position", () -> PID.getSetpoint().position);
-        tab.addDouble("encoder value", () -> elevatorMotor.getEncoder().getPosition());
+        tab.addDouble("encoder value", () -> rotationsToInches(elevatorMotor.getEncoder().getPosition()));
 
         // TODO: log voltage anything else you think you need
 

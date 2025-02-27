@@ -64,8 +64,8 @@ public final class Constants {
         public static final double kV = 0.1;
         public static final double kA = 0.05;
 
-        public static final double G = 0.5;
-        public static final double minimumBottomValue = 1.5; // encoder value will not always be zero so we create a
+        public static final double G = 0.4;
+        public static final double minimumBottomValue = 2.5; // encoder value will not always be zero so we create a
                                                              // tolerance value
 
         // public static final double radianstoCM(double CM) {
@@ -79,11 +79,11 @@ public final class Constants {
         // position constants for the different levels to score in rotations
         public static final double rootPosition = 0;
         public static final double L1Position = 15.212;
-        public static final double L2Position = 20.0999;
+        public static final double L2Position = 18.0802; // 20.0999
         public static final double Algae1 = 5.97514;
-        public static final double L3Position = 38.37261;
+        public static final double L3Position = 31.37261; // 36
         public static final double Algae2 = 8.37068;
-        public static final double L4Position = 64.17406;
+        public static final double L4Position = 49.57406; // 64.17406
 
     }
 
