@@ -16,13 +16,16 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants.FieldConstants;
 
 /**
- * Utility functions for flipping from the blue to red alliance. By default, all translations and
- * poses in {@link FieldConstants} are stored with the origin at the rightmost point on the blue
+ * Utility functions for flipping from the blue to red alliance. By default, all
+ * translations and
+ * poses in {@link FieldConstants} are stored with the origin at the rightmost
+ * point on the blue
  * alliance wall.
  */
 public class AllianceFlipUtil {
     /**
-     * Flips a translation to the correct side of the field based on the current alliance color.
+     * Flips a translation to the correct side of the field based on the current
+     * alliance color.
      */
     public static Translation2d apply(Translation2d translation) {
         if (shouldFlip()) {
@@ -33,7 +36,8 @@ public class AllianceFlipUtil {
     }
 
     /**
-     * Flips an x coordinate to the correct side of the field based on the current alliance color.
+     * Flips an x coordinate to the correct side of the field based on the current
+     * alliance color.
      */
     public static double apply(double xCoordinate) {
         if (shouldFlip()) {
@@ -67,7 +71,8 @@ public class AllianceFlipUtil {
     }
 
     /**
-     * Flips a trajectory state to the correct side of the field based on the current alliance color.
+     * Flips a trajectory state to the correct side of the field based on the
+     * current alliance color.
      */
     public static Trajectory.State apply(Trajectory.State state) {
         if (shouldFlip()) {
@@ -79,8 +84,8 @@ public class AllianceFlipUtil {
                             FieldConstants.LENGTH_METERS - state.poseMeters.getX(),
                             state.poseMeters.getY(),
                             new Rotation2d(
-                                -state.poseMeters.getRotation().getCos(),
-                                state.poseMeters.getRotation().getSin())),
+                                    -state.poseMeters.getRotation().getCos(),
+                                    state.poseMeters.getRotation().getSin())),
                     -state.curvatureRadPerMeter);
         } else {
             return state;
@@ -89,16 +94,16 @@ public class AllianceFlipUtil {
 
     /** Flips a rotation sequence state based on the current alliance color. */
     // public static RotationSequence.State apply(RotationSequence.State state) {
-    //     if (shouldFlip()) {
-    //         return new RotationSequence.State(
-    //                 new Rotation2d(-state.position.getCos(), state.position.getSin()),
-    //                 -state.velocityRadiansPerSec);
-    //     } else {
-    //         return state;
-    //     }
+    // if (shouldFlip()) {
+    // return new RotationSequence.State(
+    // new Rotation2d(-state.position.getCos(), state.position.getSin()),
+    // -state.velocityRadiansPerSec);
+    // } else {
+    // return state;
+    // }
     // }
 
-    private static boolean shouldFlip() {
+    public static boolean shouldFlip() {
         return DriverStation.getAlliance().get() == Alliance.Red;
     }
 }

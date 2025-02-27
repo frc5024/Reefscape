@@ -172,7 +172,7 @@ public final class Constants {
                 }
         };
 
-        // left and right coral station poses as seen from driver's station
+        // left and right coral station poses as seen from blue driver's station
         public static final Pose2d[] CORAL_STATION_POSES = new Pose2d[] {
                 new Pose2d(Units.inchesToMeters(33.51), Units.inchesToMeters(291.20), Rotation2d.fromDegrees(306.0)),
                 new Pose2d(Units.inchesToMeters(33.51), Units.inchesToMeters(25.80), Rotation2d.fromDegrees(54.0))
