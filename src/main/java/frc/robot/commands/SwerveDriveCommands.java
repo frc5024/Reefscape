@@ -47,6 +47,14 @@ public class SwerveDriveCommands {
     }
 
     /**
+     * 
+     */
+    public static double getOmegaFromJoysticks(double driverOmega) {
+        double omega = MathUtil.applyDeadband(driverOmega, TeleopConstants.DEADBAND);
+        return omega * omega * Math.signum(omega);
+    }
+
+    /**
      * Field relative drive command using two joysticks (controlling linear and
      * angular velocities).
      */
@@ -54,11 +62,9 @@ public class SwerveDriveCommands {
             DoubleSupplier ySupplier, DoubleSupplier omegaSupplier, boolean isOpenLoop) {
         return Commands.run(
                 () -> {
-                    Translation2d linearVelocity = getLinearVelocityFromJoysticks(-xSupplier.getAsDouble(),
-                            -ySupplier.getAsDouble());
-
-                    double omega = MathUtil.applyDeadband(-omegaSupplier.getAsDouble(), TeleopConstants.DEADBAND);
-                    omega = Math.copySign(omega * omega, omega);
+                    Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(),
+                            ySupplier.getAsDouble());
+                    double omega = getOmegaFromJoysticks(omegaSupplier.getAsDouble());
 
                     swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega,
                             swerveDriveSubsystem.getRotation(), isOpenLoop);

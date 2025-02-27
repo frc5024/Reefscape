@@ -1,5 +1,7 @@
 package frc.robot.containers;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.NamedCommands;
@@ -65,10 +67,13 @@ abstract public class RobotContainer {
                 ? buttonBindings.getTestController()
                 : buttonBindings.getDriverController();
 
-        Command closedLoopDrive = SwerveDriveCommands.drive(swerveDriveSubsystem,
-                () -> commandXboxController.getLeftY(),
-                () -> commandXboxController.getLeftX(),
-                () -> commandXboxController.getRightX(), false);
+        // Drive suppliers
+        DoubleSupplier controllerX = () -> -commandXboxController.getLeftY();
+        DoubleSupplier controllerY = () -> -commandXboxController.getLeftX();
+        DoubleSupplier controllerOmega = () -> -commandXboxController.getRightX();
+
+        Command closedLoopDrive = SwerveDriveCommands.drive(swerveDriveSubsystem, controllerX, controllerY,
+                controllerOmega, false);
 
         // Default command, normal field-relative drive
         swerveDriveSubsystem.setDefaultCommand(closedLoopDrive);

@@ -67,10 +67,21 @@ public final class Constants {
         }
     }
 
-    public static class LEDsConstants { // changed name to LEDsConstants
-        public final static int ledPort = 0; // Port for LED, Make sure it is PWM not DIO
-        public final static ILEDPreset defaultLED = LEDPreset.Solid.kGold;// Default Colour
+    // constants for intake and channels
+    public static final class CoralConstants {
+        public static final int coralMotorChannel = 51;
+        public static final int coralMotorReversedChannel = 52;
+        public static final int linebreakChannel = 0;
+        public static final int servoChannel = 0;
 
+        public static double intakeSpeed = -0.1;
+        public static double outtakeSpeed = -0.15;
+        public static double L1Speed = -0.35;
+        public static double plopSpeed = -0.05;
+        public static double rampSpeed = -0.05;
+
+        // public static double servoRotate = 0.5;
+        // public static double servoReset = -0.5;
     }
 
     public static class ElevatorContants {
@@ -113,23 +124,6 @@ public final class Constants {
         public static final double Algae2 = Elevator.rotationsToInches(6.108);
         public static final double L4position = Elevator.rotationsToInches(46.827);
 
-    }
-
-    // constants for intake and channels
-    public static final class CoralConstants {
-        public static final int coralMotorChannel = 51;
-        public static final int coralMotorReversedChannel = 52;
-        public static final int linebreakChannel = 0;
-        public static final int servoChannel = 0;
-
-        public static double intakeSpeed = -0.1;
-        public static double outtakeSpeed = -0.15;
-        public static double L1Speed = -0.35;
-        public static double plopSpeed = -0.05;
-        public static double rampSpeed = -0.05;
-
-        // public static double servoRotate = 0.5;
-        // public static double servoReset = -0.5;
     }
 
     /**
@@ -207,6 +201,12 @@ public final class Constants {
      */
     public static class GyroContants {
         public static final double SCALE_VALUE = 3600.0 / 3831.020004272461;
+    }
+
+    public static class LEDsConstants { // changed name to LEDsConstants
+        public final static int ledPort = 0; // Port for LED, Make sure it is PWM not DIO
+        public final static ILEDPreset defaultLED = LEDPreset.Solid.kGold;// Default Colour
+
     }
 
     /**
@@ -494,5 +494,4 @@ public final class Constants {
         public static final int IMG_WIDTH = 960;
         public static final int IMG_HEIGHT = 720;
     }
-
 }
