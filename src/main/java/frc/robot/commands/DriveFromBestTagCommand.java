@@ -103,7 +103,8 @@ public class DriveFromBestTagCommand extends Command {
                 : VisionConstants.FRONT_CAMERA.getName();
         Pose3d targetPose = this.visionSubsystem.getBestTargetPose(cameraName);
 
-        if (targetPose == null) {
+        // return null if we don't have a best tag
+        if (targetPose == null || targetPose.equals(new Pose3d())) {
             return null;
         }
 
