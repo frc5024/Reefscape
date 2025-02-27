@@ -1,14 +1,14 @@
-package frc.robot.commands;
+package frc.robot.commands.Algae;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.AlgaeCommandBased;
+import frc.robot.subsystems.Algae;
 
 // Used to set motors to idle (off)
 public class AlgaeCancelCommand extends Command {
-    private final AlgaeCommandBased m_AlgaeCommandBased;
+    private final Algae m_AlgaeCommandBased;
 
-    public AlgaeCancelCommand(AlgaeCommandBased algaeCommandBased) {
+    public AlgaeCancelCommand(Algae algaeCommandBased) {
         this.m_AlgaeCommandBased = algaeCommandBased;
         addRequirements(m_AlgaeCommandBased);
     }

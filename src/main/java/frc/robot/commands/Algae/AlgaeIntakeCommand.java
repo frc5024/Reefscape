@@ -1,15 +1,15 @@
-package frc.robot.commands;
+package frc.robot.commands.Algae;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.AlgaeCommandBased;
+import frc.robot.subsystems.Algae;
 
 // Intakes 
 public class AlgaeIntakeCommand extends Command {
-    private final AlgaeCommandBased m_AlgaeCommandBased;
+    private final Algae m_AlgaeCommandBased;
     boolean hasAlgae = false;
 
-    public AlgaeIntakeCommand(AlgaeCommandBased algaeCommandBased) {
+    public AlgaeIntakeCommand(Algae algaeCommandBased) {
         this.m_AlgaeCommandBased = algaeCommandBased;
         addRequirements(m_AlgaeCommandBased);
     }
@@ -18,13 +18,9 @@ public class AlgaeIntakeCommand extends Command {
     public void initialize() {
 
         // If linebreak is false, set hasAlgae to false and set motors to intakeSpeed
-        // otherwise, set hasAlgae to true and set motors to idleSpeed
-        if (!m_AlgaeCommandBased.getLinebreak()) {
+        if (!m_AlgaeCommandBased.getAlgaeLinebreak()) {
             hasAlgae = false;
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.intakeSpeed);
-        } else {
-            m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
-            hasAlgae = true;
         }
 
     }
@@ -35,7 +31,7 @@ public class AlgaeIntakeCommand extends Command {
 
         // If linebreak is triggered, set motors to
         // idleSpeed and set hasAlgae to true
-        if (m_AlgaeCommandBased.getLinebreak()) {
+        if (m_AlgaeCommandBased.getAlgaeLinebreak()) {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
             hasAlgae = true;
         }

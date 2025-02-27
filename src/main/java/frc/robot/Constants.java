@@ -17,16 +17,13 @@ public final class Constants {
         public final static int ledPort = 9;
     }
 
+    // Constants for intake mechanism and IDs/Channels
     public static class Algaes {
-        public final static int motorID1 = 3;
-        public final static int motorID2 = 62;
-        public final static int linebreakPort = 0;
-        public final static int pinMotorPort = 2;
+        public final static int algaeMotor1_ID = 3;
+        public final static int algaeMotor2_ID = 62;
+        public final static int linebreakChannel = 0;
 
-        public final static double outtaketimer = 1.5;
-
-        public final static int pinRelease = 1;
-        public final static int pinReset = 0;
+        public final static double outtakeTimer = 1.5;
 
         public final static double intakeSpeed = -0.5;
         public final static double idleSpeed = 0.0;

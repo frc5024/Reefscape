@@ -1,17 +1,17 @@
-package frc.robot.commands;
+package frc.robot.commands.Algae;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.AlgaeCommandBased;
+import frc.robot.subsystems.Algae;
 
-public class AlgaeLaunchCommand extends Command {
-    private final AlgaeCommandBased m_AlgaeCommandBased;
+public class AlgaeDropCommand extends Command {
+    private final Algae m_AlgaeCommandBased;
     boolean hasAlgae = false;
 
-    Timer launchTimer = new Timer();
+    Timer dropTimer = new Timer();
 
-    public AlgaeLaunchCommand(AlgaeCommandBased algaeCommandBased) {
+    public AlgaeDropCommand(Algae algaeCommandBased) {
         this.m_AlgaeCommandBased = algaeCommandBased;
         addRequirements(m_AlgaeCommandBased);
     }
@@ -20,18 +20,11 @@ public class AlgaeLaunchCommand extends Command {
     public void initialize() {
 
         // Reset dropTimer (set to 0) and then start timer
-        launchTimer.reset();
-        launchTimer.start();
+        dropTimer.reset();
+        dropTimer.start();
 
-        // If there is something in the intake system, set motors to launchSpeed
-        if (m_AlgaeCommandBased.getLinebreak()) {
-            hasAlgae = true;
-            m_AlgaeCommandBased.setSpeed(Constants.Algaes.launchSpeed);
-        } else {
-            // If there is nothing in the intake system, set motors to idle and end command
-            hasAlgae = false;
-            m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
-        }
+        hasAlgae = true;
+        m_AlgaeCommandBased.setSpeed(Constants.Algaes.dropSpeed);
 
     }
 
@@ -41,7 +34,7 @@ public class AlgaeLaunchCommand extends Command {
 
         // Set the motors to idleSpeed and set hasAlgae to false (ending the command) if
         // timer has elapsed outtaketimer time (1.5 seconds)
-        if (launchTimer.hasElapsed(Constants.Algaes.outtaketimer)) {
+        if (dropTimer.hasElapsed(Constants.Algaes.outtakeTimer)) {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
             hasAlgae = false;
         }
