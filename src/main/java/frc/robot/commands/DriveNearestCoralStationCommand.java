@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.utils.AllianceFlipUtil;
 
 /**
  * Drives to nearest coral station based on pathplanner path
@@ -84,11 +85,18 @@ public class DriveNearestCoralStationCommand extends Command {
      */
     private String getNearestCoralStation() {
         Pose2d currentPose = this.swerveDriveSubsystem.getPose();
-        double leftStationDistance = Math.hypot(currentPose.getX() - FieldConstants.CORAL_STATION_POSES[0].getX(),
-                currentPose.getY() - FieldConstants.CORAL_STATION_POSES[0].getY());
-        double rightStationDistance = Math.hypot(currentPose.getX() - FieldConstants.CORAL_STATION_POSES[1].getX(),
-                currentPose.getY() - FieldConstants.CORAL_STATION_POSES[1].getY());
+        Pose2d leftStationPose = AllianceFlipUtil.apply(FieldConstants.CORAL_STATION_POSES[0]);
+        Pose2d rightStationPose = AllianceFlipUtil.apply(FieldConstants.CORAL_STATION_POSES[1]);
 
-        return leftStationDistance < rightStationDistance ? "DriveLeftStation - Path" : "DriveRightStation - Path";
+        double leftStationDistance = Math.hypot(currentPose.getX() - leftStationPose.getX(),
+                currentPose.getY() - leftStationPose.getY());
+        double rightStationDistance = Math.hypot(currentPose.getX() - rightStationPose.getX(),
+                currentPose.getY() - rightStationPose.getY());
+
+        if (AllianceFlipUtil.shouldFlip()) {
+            return leftStationDistance < rightStationDistance ? "DriveRightStation - Path" : "DriveLeftStation - Path";
+        } else {
+            return leftStationDistance < rightStationDistance ? "DriveLeftStation - Path" : "DriveRightStation - Path";
+        }
     }
 }
