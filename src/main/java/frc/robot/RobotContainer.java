@@ -46,10 +46,10 @@ public class RobotContainer {
     // Binding a key to each algae command
     private void configureBindings() {
 
-        driver.y().onTrue(s_Algae.intake());
-        driver.x().whileTrue(s_Algae.launch());
-        driver.a().onTrue(s_Algae.drop());
-        driver.b().whileTrue(s_Algae.cancel());
+        driver.back().onTrue(s_Algae.intake());
+        driver.start().whileTrue(s_Algae.launch());
+        // driver.a().onTrue(s_Algae.drop());
+        // driver.b().whileTrue(s_Algae.cancel());
 
     }
 
