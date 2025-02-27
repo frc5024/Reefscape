@@ -18,7 +18,6 @@ public class AlgaeLaunchCommand extends Command {
 
     @Override
     public void initialize() {
-
         // Reset dropTimer (set to 0) and then start timer
         launchTimer.reset();
         launchTimer.start();
@@ -26,20 +25,17 @@ public class AlgaeLaunchCommand extends Command {
         hasAlgae = true;
 
         m_AlgaeCommandBased.setSpeed(Constants.Algaes.launchSpeed);
-
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-
         // Set the motors to idleSpeed and set hasAlgae to false (ending the command) if
         // timer has elapsed outtaketimer time (1.5 seconds)
         if (launchTimer.hasElapsed(Constants.Algaes.outtakeTimer)) {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
             hasAlgae = false;
         }
-
     }
 
     // Called once the command ends or is interrupted.

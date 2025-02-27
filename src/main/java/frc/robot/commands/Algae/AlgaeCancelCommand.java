@@ -20,10 +20,8 @@ public class AlgaeCancelCommand extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-
         // Interrupts any ongoing commands and sets motor speeds to idleSpeed (off)
         m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
-
     }
 
     // Called once the command ends or is interrupted.

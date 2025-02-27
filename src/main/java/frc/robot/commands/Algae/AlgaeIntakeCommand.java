@@ -16,26 +16,22 @@ public class AlgaeIntakeCommand extends Command {
 
     @Override
     public void initialize() {
-
         // If linebreak is false, set hasAlgae to false and set motors to intakeSpeed
         if (!m_AlgaeCommandBased.getAlgaeLinebreak()) {
             hasAlgae = false;
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.intakeSpeed);
         }
-
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-
         // If linebreak is triggered, set motors to
         // idleSpeed and set hasAlgae to true
         if (m_AlgaeCommandBased.getAlgaeLinebreak()) {
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
             hasAlgae = true;
         }
-
     }
 
     // Called once the command ends or is interrupted.
