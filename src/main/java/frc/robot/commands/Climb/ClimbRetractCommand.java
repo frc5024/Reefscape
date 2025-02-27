@@ -30,6 +30,6 @@ public class ClimbRetractCommand extends Command {
     @Override
     public boolean isFinished() {
         // Stops when motor reaches retracted position
-        return climbSubsystem.isRetractPosition();
+        return false;
     }
 }

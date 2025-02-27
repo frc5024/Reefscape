@@ -187,9 +187,9 @@ public final class Constants {
         // EVEN MORE Placeholder values
         public static final double climbSpeed = -0.7;
         // PLACEHOLDER PLACEHOLDER PLACEHOLDER
-        public static final double cancelSpeed = -0.3;
+        public static final double cancelSpeed = -0.4;
         // P L A C E H O L D E R
-        public static final double extendoSpeed = 0.3;
+        public static final double extendoSpeed = 0.4;
 
     }
 }

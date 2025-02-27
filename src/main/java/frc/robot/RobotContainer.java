@@ -37,7 +37,7 @@ public class RobotContainer {
         driver.y().whileTrue(m_climbSubsystem.climbCommand(s_LEDs));
         driver.rightTrigger().whileTrue(m_climbSubsystem.extendingCommand());
         driver.leftTrigger().whileTrue(m_climbSubsystem.retractingCommand());
-        driver.b().onTrue(m_climbSubsystem.cancelCommand());
+        // driver.b().onTrue(m_climbSubsystem.cancelCommand());
         // driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         // driver.().onTrue(new SetLEDS(s_LEDs, LEDPreset.Solid.kBlue));// Sets to blue
         // driver.b().onTrue(new SetLEDSDefault(s_LEDs));// Sets to Default colour (Find

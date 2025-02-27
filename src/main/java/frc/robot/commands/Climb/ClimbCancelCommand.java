@@ -30,6 +30,6 @@ public class ClimbCancelCommand extends Command {
     @Override
     public boolean isFinished() {
         // stops when encoder reaches extended position
-        return climbSubsystem.isExtendoPosition();
+        return false;
     }
 }
