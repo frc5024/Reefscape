@@ -32,7 +32,7 @@ public class RobotContainer {
     private final Elevator elevatorSubsystem = Elevator.getInstance();
     private final LEDs s_LEDs = LEDs.getInstance();
 
-    boolean visionMode = false;
+    boolean visionMode = true;
     String mode;
 
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -82,7 +82,8 @@ public class RobotContainer {
         driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         // driver.y().onTrue(climb);
         driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
-        driver.b().whileTrue(new ConditionalCommand(elevatorSubsystem.goToModePosition(), null, () -> visionMode));
+        driver.b().whileTrue(
+                new ConditionalCommand(elevatorSubsystem.goToModePosition(), new InstantCommand(), () -> visionMode));
 
         driver.rightBumper().whileTrue(coralSubsystem.intakeCommand());
         driver.rightBumper().whileTrue(elevatorSubsystem.bottomElevator()); // fix to onTrue
@@ -100,14 +101,15 @@ public class RobotContainer {
         // vision
         driver.rightTrigger()
                 .whileTrue(new ConditionalCommand(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-                        Constants.Vision.rightOffset), null, () -> visionMode));
+                        Constants.Vision.rightOffset), new InstantCommand(), () -> visionMode));
         driver.leftTrigger()
                 .whileTrue(new ConditionalCommand(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-                        Constants.Vision.leftOffset), null, () -> visionMode));
+                        Constants.Vision.leftOffset), new InstantCommand(), () -> visionMode));
 
         // manual
         driver.rightTrigger()
-                .onTrue(new ConditionalCommand(null, coralSubsystem.outtakeCommand(), () -> visionMode));
+                .onTrue(new ConditionalCommand(new InstantCommand(), coralSubsystem.outtakeCommand(),
+                        () -> visionMode));
 
         // Vision = set mode | Manual = go to position
         // operator.povLeft().onTrue(
@@ -140,6 +142,9 @@ public class RobotContainer {
                 .whileTrue(elevatorSubsystem.goToL3Position());
         operator.povUp()
                 .whileTrue(elevatorSubsystem.goToL4Position());
+
+        operator.x().onTrue(new InstantCommand(() -> elevatorSubsystem.slow = true));
+        operator.x().onFalse(new InstantCommand(() -> elevatorSubsystem.slow = false));
     }
 
     public Command getAutonomousCommand() {

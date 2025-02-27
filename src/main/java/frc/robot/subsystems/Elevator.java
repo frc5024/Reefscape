@@ -43,6 +43,8 @@ public class Elevator extends SubsystemBase {
     private double voltageValue;
     private boolean enabled;
 
+    public boolean slow = false;
+
     // created and named the limit switches
     private static DigitalInput zeroingLimitSwitch;
     private static DigitalInput stoppingLimitSwitch;
@@ -79,7 +81,7 @@ public class Elevator extends SubsystemBase {
     }
 
     // constructor
-    public Elevator() {
+    private Elevator() {
         // assigning the ID and values
         elevatorMotor = new SparkMax(elevatorConstants.motorID1, SparkLowLevel.MotorType.kBrushless);
         elevatorMotor2 = new SparkMax(elevatorConstants.motorID2, SparkLowLevel.MotorType.kBrushless);
@@ -92,6 +94,7 @@ public class Elevator extends SubsystemBase {
         // assigning values to the P, I and D
         feedForwardConstraints = new TrapezoidProfile.Constraints(elevatorConstants.elevatorMaxSpeed,
                 elevatorConstants.elevatorMaxAccel);
+
         PID = new ProfiledPIDController(elevatorConstants.kP, elevatorConstants.kI, elevatorConstants.kD,
                 feedForwardConstraints);
         PID.setTolerance(0.25, 0.25); // TODO: put in constants
@@ -114,6 +117,7 @@ public class Elevator extends SubsystemBase {
         tab.addDouble("actual Position", () -> rotationsToInches(elevatorMotor.getEncoder().getPosition()));
         tab.addDouble("estimated Position", () -> PID.getSetpoint().position);
         tab.addDouble("encoder value", () -> elevatorMotor.getEncoder().getPosition());
+        tab.addDouble("appliedOutput", () -> speed);
 
         // TODO: log voltage anything else you think you need
 
@@ -191,9 +195,15 @@ public class Elevator extends SubsystemBase {
 
     // gets the position from the SetElevatorSetpointCmd
     public void setGoal(double inches) {
-        PID.setConstraints(new TrapezoidProfile.Constraints(
-                maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed),
-                maxAccelerationEntry.getDouble(elevatorConstants.elevatorMaxAccel)));
+        if (!slow) {
+            PID.setConstraints(new TrapezoidProfile.Constraints(
+                    maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed),
+                    maxAccelerationEntry.getDouble(elevatorConstants.elevatorMaxAccel)));
+        } else {
+            PID.setConstraints(new TrapezoidProfile.Constraints(
+                    maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed / 4),
+                    maxAccelerationEntry.getDouble(elevatorConstants.elevatorMaxAccel / 4)));
+        }
 
         PID.setGoal(inches);
         resetPID();
