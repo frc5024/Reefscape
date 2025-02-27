@@ -113,25 +113,26 @@ public class RobotContainer {
         // Constants.elevatorConstants.zeroPosition));
 
         // (operator)
-        operator.povLeft()
-                .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
-        operator.povDown()
-                .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
-        operator.povRight()
-                .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
-        operator.povUp()
-                .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
+        operator.b()
+                .whileTrue(elevatorSubsystem.goToL1Position());
+        operator.a()
+                .whileTrue(elevatorSubsystem.goToL2Position());
+        operator.x()
+                .whileTrue(elevatorSubsystem.goToL3Position());
+        operator.y()
+                .whileTrue(elevatorSubsystem.goToL4Position());
 
-        operator.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
+        operator.rightTrigger().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
                 Constants.elevatorConstants.rootPosition));
 
-        operator.rightTrigger().onTrue(coralSubsystem.lowerRampCommand());
+        // operator.rightTrigger().onTrue(coralSubsystem.lowerRampCommand());
         // operator.rightTrigger().onTrue(extendClimb());
 
-        operator.b().onTrue(coralSubsystem.lowerRampCommand());
+        // operator.b().onTrue(coralSubsystem.lowerRampCommand());
     }
 
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
+
 }
