@@ -271,7 +271,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public double getPositionMeters() {
-        return (inputs.positionRad - 0.0) * ElevatorConstants.drumRadiusMeters;
+        return (inputs.positionRads - 0.0) * ElevatorConstants.drumRadiusMeters;
     }
 
     public void setGoal(double goal) {

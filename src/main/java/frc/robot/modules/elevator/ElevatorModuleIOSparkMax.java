@@ -82,10 +82,11 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
         }
 
         inputs.connected = true;
-        inputs.positionRad = this.leftMotor.getEncoder().getPosition();
-        inputs.velocityRadPerSec = this.leftMotor.getEncoder().getVelocity();
-        inputs.appliedVolts = new double[] { this.leftMotor.getBusVoltage(), this.leftMotor.getAppliedOutput() };
-        inputs.currentAmps = new double[] { this.leftMotor.getOutputCurrent(), this.rightMotor.getOutputCurrent() };
+        inputs.positionRads = this.leftMotor.getEncoder().getPosition();
+        inputs.velocityRadsPerSec = this.leftMotor.getEncoder().getVelocity();
+        inputs.appliedVoltage = new double[] { this.leftMotor.getBusVoltage(), this.leftMotor.getAppliedOutput() };
+        inputs.supplyCurrentAmps = new double[] { this.leftMotor.getOutputCurrent(),
+                this.rightMotor.getOutputCurrent() };
         inputs.tempCelsius = new double[] { this.leftMotor.getMotorTemperature(),
                 this.rightMotor.getMotorTemperature() };
     }

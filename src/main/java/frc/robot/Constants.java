@@ -447,7 +447,7 @@ public final class Constants {
         public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM2_CAMERA, ARDUCAM1_CAMERA);
         public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM3_CAMERA);
         public static final List<Camera> REEFSCAPE_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
-        public static final List<Camera> CAMERAS = BEALTOVEN_CAMERAS;
+        public static final List<Camera> CAMERAS = SIMULATION_CAMERAS;
         public static final Camera FRONT_CAMERA = CAMERAS.get(0);
         public static final Camera REAR_CAMERA = CAMERAS.get(1);
 

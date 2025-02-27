@@ -54,10 +54,10 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
         }
 
         inputs.connected = true;
-        inputs.positionRad = this.simState.get(0) / ElevatorConstants.drumRadiusMeters;
-        inputs.velocityRadPerSec = this.simState.get(1) / ElevatorConstants.drumRadiusMeters;
-        inputs.appliedVolts = new double[] { this.appliedVolts };
-        inputs.currentAmps = new double[] { Math.copySign(this.inputTorqueCurrent, this.appliedVolts) };
+        inputs.positionRads = this.simState.get(0) / ElevatorConstants.drumRadiusMeters;
+        inputs.velocityRadsPerSec = this.simState.get(1) / ElevatorConstants.drumRadiusMeters;
+        inputs.appliedVoltage = new double[] { this.appliedVolts };
+        inputs.supplyCurrentAmps = new double[] { Math.copySign(this.inputTorqueCurrent, this.appliedVolts) };
     }
 
     @Override

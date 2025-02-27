@@ -9,10 +9,10 @@ public interface ElevatorModuleIO {
     @AutoLog
     class ElevatorIOInputs {
         public boolean connected = false;
-        public double positionRad = 0.0;
-        public double velocityRadPerSec = 0.0;
-        public double[] appliedVolts = new double[] {};
-        public double[] currentAmps = new double[] {};
+        public double positionRads = 0.0;
+        public double velocityRadsPerSec = 0.0;
+        public double[] appliedVoltage = new double[] {};
+        public double[] supplyCurrentAmps = new double[] {};
         public double[] tempCelsius = new double[] {};
     }
 
