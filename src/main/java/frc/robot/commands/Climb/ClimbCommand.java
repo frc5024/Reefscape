@@ -35,6 +35,7 @@ public class ClimbCommand extends Command {
     @Override
     public boolean isFinished() {
         // Stops when the motors are at climbed position
-        return climbSubsystem.isClimbed();
+        // return climbSubsystem.isClimbed();
+        return false;
     }
 }
