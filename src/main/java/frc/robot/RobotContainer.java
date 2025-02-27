@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.Elevator.SetElevatorSetpointCmd;
 import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
 import frc.robot.commands.Vision.goToSetPositionPerTagOnTrueCmd;
 import frc.robot.subsystems.Coral;
@@ -79,57 +79,67 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // (driver)
         driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        // driver.y().onTrue(climb);
+        driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
+        driver.b().whileTrue(new ConditionalCommand(elevatorSubsystem.goToModePosition(), null, () -> visionMode));
 
-        driver.y().onTrue(coralSubsystem.outtakeCommand());
-
-        driver.b().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
-                Constants.elevatorConstants.rootPosition));
-
-        // driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
-
-        // driver.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.isSlowMode =
-        // true));
-        // driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.isSlowMode =
-        // false));
-
-        // two intake commands
         driver.rightBumper().whileTrue(coralSubsystem.intakeCommand());
-        driver.rightBumper().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
-                Constants.elevatorConstants.rootPosition));
+        driver.rightBumper().whileTrue(elevatorSubsystem.bottomElevator()); // fix to onTrue
 
-        driver.rightTrigger()
-                .whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-                        Constants.Vision.rightOffset));
-        // driver.leftTrigger()
-        // .whileTrue(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.leftOffset));
+        driver.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.isSlowMode = true));
+        driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.isSlowMode = false));
 
-        // potential binding fix
-        // operator.b().onTrue(new ConditionalCommand(getAutonomousCommand(),
-        // getAutonomousCommand(), () -> visionMode));
-
-        // operator.a().onTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
-        // Constants.elevatorConstants.zeroPosition));
-
-        // (operator)
-        operator.povLeft()
-                .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L1Position));
-        operator.povDown()
-                .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L2Position));
-        operator.povRight()
-                .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L3position));
-        operator.povUp()
-                .whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem, Constants.elevatorConstants.L4position));
-
-        operator.a().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
-                Constants.elevatorConstants.rootPosition));
+        operator.a().whileTrue(elevatorSubsystem.bottomElevator()); // fix to onTrue
+        operator.b().onTrue(coralSubsystem.lowerRampCommand());
 
         operator.rightTrigger().onTrue(coralSubsystem.lowerRampCommand());
         // operator.rightTrigger().onTrue(extendClimb());
 
-        operator.b().onTrue(coralSubsystem.lowerRampCommand());
+        // CHANGING BINDINGS
+        // vision
+        driver.rightTrigger()
+                .whileTrue(new ConditionalCommand(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+                        Constants.Vision.rightOffset), null, () -> visionMode));
+        driver.leftTrigger()
+                .whileTrue(new ConditionalCommand(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+                        Constants.Vision.leftOffset), null, () -> visionMode));
+
+        // manual
+        driver.rightTrigger()
+                .onTrue(new ConditionalCommand(null, coralSubsystem.outtakeCommand(), () -> visionMode));
+
+        // Vision = set mode | Manual = go to position
+        // operator.povLeft().onTrue(
+        // new ConditionalCommand(
+        // new SetElevatorModeCmd(elevatorSubsystem,
+        // Constants.elevatorConstants.L1Position),
+        // elevatorSubsystem.goToL1Position(), () -> visionMode));
+        // operator.povDown().onTrue(
+        // new ConditionalCommand(
+        // new SetElevatorModeCmd(elevatorSubsystem,
+        // Constants.elevatorConstants.L2Position),
+        // elevatorSubsystem.goToL2Position(), () -> visionMode));
+        // operator.povRight().onTrue(
+        // new ConditionalCommand(
+        // new SetElevatorModeCmd(elevatorSubsystem,
+        // Constants.elevatorConstants.L3Position),
+        // elevatorSubsystem.goToL3Position(), () -> visionMode));
+        // operator.povUp().onTrue(
+        // new ConditionalCommand(
+        // new SetElevatorModeCmd(elevatorSubsystem,
+        // Constants.elevatorConstants.L4Position),
+        // elevatorSubsystem.goToL4Position(), () -> visionMode));
+
+        // delete once onTrue works
+        operator.povLeft()
+                .whileTrue(elevatorSubsystem.goToL1Position());
+        operator.povDown()
+                .whileTrue(elevatorSubsystem.goToL2Position());
+        operator.povRight()
+                .whileTrue(elevatorSubsystem.goToL3Position());
+        operator.povUp()
+                .whileTrue(elevatorSubsystem.goToL4Position());
     }
 
     public Command getAutonomousCommand() {

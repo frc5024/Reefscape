@@ -27,10 +27,10 @@ public class SetElevatorModeCmd extends Command {
         } else if (mode == Constants.elevatorConstants.L2Position) {
             elevatorSubsystem.setElevatorMode(mode);
             SmartDashboard.putString("ElevatorMode", "L2");
-        } else if (mode == Constants.elevatorConstants.L3position) {
+        } else if (mode == Constants.elevatorConstants.L3Position) {
             elevatorSubsystem.setElevatorMode(mode);
             SmartDashboard.putString("ElevatorMode", "L3");
-        } else if (mode == Constants.elevatorConstants.L4position) {
+        } else if (mode == Constants.elevatorConstants.L4Position) {
             elevatorSubsystem.setElevatorMode(mode);
             SmartDashboard.putString("ElevatorMode", "L4");
         }
