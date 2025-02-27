@@ -229,10 +229,13 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         yVelocity = yVelocity * SwerveConstants.maxLinearSpeed;
         rVelocity = rVelocity * SwerveConstants.maxAngularSpeed;
 
+        chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
+
         if (isFieldRelative) {
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, rVelocity, angle);
-        } else {
-            chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds,
+                    DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
+                            ? getRotation().plus(new Rotation2d(Math.PI))
+                            : getRotation());
         }
 
         this.desiredChassisSpeeds = ChassisSpeeds.discretize(chassisSpeeds, RobotConstants.LOOP_PERIOD_SECS);

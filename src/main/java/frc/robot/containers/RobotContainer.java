@@ -1,8 +1,12 @@
 package frc.robot.containers;
 
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -71,30 +75,23 @@ abstract public class RobotContainer {
                 ? buttonBindings.getTestController()
                 : buttonBindings.getDriverController();
 
-        Command closedLoopDrive = SwerveDriveCommands.closedLoopDrive(swerveDriveSubsystem,
-                () -> commandXboxController.getLeftY(),
-                () -> commandXboxController.getLeftX(),
-                () -> commandXboxController.getRightX());
+        // Drive suppliers
+        DoubleSupplier controllerX = () -> -commandXboxController.getLeftY();
+        DoubleSupplier controllerY = () -> -commandXboxController.getLeftX();
+        DoubleSupplier controllerOmega = () -> -commandXboxController.getRightX();
+        Supplier<Rotation2d> rotationSupplier = () -> this.swerveDriveSubsystem.getPose().getRotation();
 
-        Command openLoopDrive = new TeleopDriveCommand(this.swerveDriveSubsystem,
-                () -> this.swerveDriveSubsystem.getPose().getRotation(),
-                () -> commandXboxController.getLeftY(),
-                () -> commandXboxController.getLeftX(),
-                () -> commandXboxController.getRightX());
+        Command closedLoopDrive = SwerveDriveCommands.closedLoopDrive(swerveDriveSubsystem, controllerX, controllerY,
+                controllerOmega);
 
-        Command tuningCommand = new TuningCommand(swerveDriveSubsystem,
-                algaeIntakeSubsystem, coralIntakeSubsystem,
-                elevatorSubsystem,
-                () -> -commandXboxController.getLeftY(),
-                () -> -commandXboxController.getLeftX(),
-                () -> -commandXboxController.getRightX(),
-                commandXboxController);
+        Command openLoopDrive = new TeleopDriveCommand(this.swerveDriveSubsystem, rotationSupplier, controllerX,
+                controllerY, controllerOmega);
 
-        Command tuningSwerveCommand = new TuningSwerveCommand(swerveDriveSubsystem,
-                () -> -commandXboxController.getLeftY(),
-                () -> -commandXboxController.getLeftX(),
-                () -> -commandXboxController.getRightX(),
-                commandXboxController);
+        Command tuningCommand = new TuningCommand(swerveDriveSubsystem, algaeIntakeSubsystem, coralIntakeSubsystem,
+                elevatorSubsystem, controllerX, controllerY, controllerOmega, commandXboxController);
+
+        Command tuningSwerveCommand = new TuningSwerveCommand(swerveDriveSubsystem, controllerX, controllerY,
+                controllerOmega, commandXboxController);
 
         // Default command, normal field-relative drive
         swerveDriveSubsystem.setDefaultCommand(RobotConstants.TUNING_MODE ? tuningCommand : closedLoopDrive);
