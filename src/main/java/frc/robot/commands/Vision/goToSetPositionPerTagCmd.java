@@ -5,8 +5,10 @@ import java.util.Set;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
@@ -76,15 +78,16 @@ public class goToSetPositionPerTagCmd extends Command {
             swerveDrive.setFieldRelative(false);
 
             // tag angle = angle based on the ROBOTS forward/heading
-            if (detectedTagID == 18 || detectedTagID == 7 || detectedTagID == 9) {
-                tagAngle = 0;
-            } else if (detectedTagID == 10 || detectedTagID == 21) {
-                tagAngle = -179.5; // change to 360 once within 5 degrees to prevent overspinning
-            } else if (detectedTagID == 3 || detectedTagID == 16) {
-                tagAngle = 90;
-            } else {
-                tagAngle = 0;
-            }
+            // if (detectedTagID == 18 || detectedTagID == 7) {
+            // tagAngle = 0;
+            // } else if (detectedTagID == 10 || detectedTagID == 21) {
+            // tagAngle = -179.5; // change to 360 once within 10 degrees to prevent
+            // overspinning
+            // } else if (detectedTagID == 3 || detectedTagID == 16) {
+            // tagAngle = 90;
+            // } else {
+            // tagAngle = 0;
+            // }
 
             // at___ = AprilTag____
             // translationPidController.setP(pEntry.getDouble(0));
@@ -110,32 +113,31 @@ public class goToSetPositionPerTagCmd extends Command {
         double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
         Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
         double robotHeading = swerveDrive.getGyroYaw().getDegrees();
-        // double robotHeading360 = swerveDrive.getGyroYaw360().getDegrees();
-        double x = limelight.getX();
-        double yawDeg = botPose[4];
+
+        double yaw = botPose[4] - 29;
+
+        double ada = Units.radiansToDegrees(botPose3D.getRotation().getAngle());
+        SmartDashboard.putNumber("Testing yaw", ada);
+
         double Dis = -botPose3D.getZ(); // Distance from LL to tag
 
         double rotationToTag = robotHeading + tagAngle;
 
         double zDis = Dis * Math.cos(Math.toRadians(rotationToTag)); // Distance from robot to tag in relation of the
                                                                      // field
-
-        double atDeg = yawDeg - x;
-        double xDis = zDis * (Math.tan(Math.toRadians(botPose3D.getX()))); // WAS atDeg BEFORE IF DOESNT WORK
-
         System.out.println(zDis);
 
         // Left/Right
-        double zDiff = zDis - desiredz;
+        double zDiff = botPose3D.getZ() + desiredz; // normally zDis
 
         // forward/back
         double xDiff = botPose3D.getX() + xOffset;
 
-        rotateToTag(rotationToTag);
+        rotateToTag(yaw); // usually rotation to tag
         translateToTag(zDiff);
         strafeToTag(xDiff);
 
-        setDrive();
+        // setDrive();
     }
 
     public void rotateToTag(double rotationToTag) {
@@ -175,9 +177,9 @@ public class goToSetPositionPerTagCmd extends Command {
         swerveDrive.setFieldRelative(false);
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
-        swerveDrive.visionTranslationalVal(translationPidOutput, true);
-        swerveDrive.visionStrafeVal(strafePidOutput, true);
-    }
+        //swerveDrive.visionTranslationalVal(translationPidOutput, true);
+        // swerveDrive.visionStrafeVal(strafePidOutput, true);
+    } 
 
     @Override
     public boolean isFinished() {
