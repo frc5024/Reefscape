@@ -24,6 +24,7 @@ public class AlgaeLaunchCommand extends Command {
         launchTimer.start();
 
         hasAlgae = true;
+
         m_AlgaeCommandBased.setSpeed(Constants.Algaes.launchSpeed);
 
     }
@@ -44,12 +45,12 @@ public class AlgaeLaunchCommand extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-
+        m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return !hasAlgae;
+        return false;
     }
 }
