@@ -175,15 +175,15 @@ public class ButtonBindings {
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
                         .addAction(GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE
                                 ? ElevatorSubsystem.Action.MOVE_TO_ALGAE_1
-                                : ElevatorSubsystem.Action.MOVE_TO_CORAL_1)));
+                                : ElevatorSubsystem.Action.MOVE_TO_CORAL_2)));
         commandXboxController.b()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
                         .addAction(GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE
                                 ? ElevatorSubsystem.Action.MOVE_TO_ALGAE_2
-                                : ElevatorSubsystem.Action.MOVE_TO_CORAL_2)));
+                                : ElevatorSubsystem.Action.MOVE_TO_CORAL_3)));
         commandXboxController.y()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
-                        .addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_3)));
+                        .addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_4)));
 
         commandXboxController.leftTrigger()
                 .whileTrue(runOnce(() -> {

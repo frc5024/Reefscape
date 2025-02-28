@@ -88,7 +88,7 @@ public final class Constants {
             CoralL1(Units.inchesToMeters(0), 0.0),
             CoralL2(Units.inchesToMeters(10.0), -35.0),
             CoralL3(Units.inchesToMeters(18.0), -35.0),
-            CoralL4(Units.inchesToMeters(30.0), -90.0);
+            CoralL4(Units.inchesToMeters(30.0), -45.0);
 
             ElevatorLevel(double heightInMeters, double angleInDegrees) {
                 this.heightInMeters = heightInMeters;

@@ -97,6 +97,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     /**
      * 
      */
+    public boolean atGoal() {
+        return this.atGoal;
+    }
+
+    /**
+     * 
+     */
     public Action getCurrentState() {
         return this.stateMachine.getCurrentState();
     }

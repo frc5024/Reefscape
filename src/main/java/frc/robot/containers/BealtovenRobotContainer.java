@@ -1,7 +1,11 @@
 package frc.robot.containers;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.modules.algae.AlgaeIntakeModuleIOSim;
 import frc.robot.modules.coral.CoralIntakeModuleIOSim;
@@ -49,6 +53,21 @@ public class BealtovenRobotContainer extends RobotContainer {
 
     @Override
     public void registerNamedCommands() {
+        NamedCommands.registerCommand("ElevatorL0", new InstantCommand(() -> {
+            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM);
+        }));
+        NamedCommands.registerCommand("ElevatorL4", new InstantCommand(() -> {
+            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_3);
+        }));
+        NamedCommands.registerCommand("EjectCoral", new InstantCommand(() -> {
+            this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.EJECT);
+        }));
+        NamedCommands.registerCommand("IntakeCoral", new InstantCommand(() -> {
+            this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.INTAKE);
+        }));
+        NamedCommands.registerCommand("WaitForEject", new WaitUntilCommand(this.coralIntakeSubsystem::hasEjected));
+        NamedCommands.registerCommand("WaitForElevator", new WaitUntilCommand(this.elevatorSubsystem::atGoal));
+        NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(this.coralIntakeSubsystem::hasCoral));
     }
 
     /**

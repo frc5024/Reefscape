@@ -71,6 +71,22 @@ public class AllianceFlipUtil {
     }
 
     /**
+     * 
+     */
+    public static Pose2d[] apply(Pose2d[] poses) {
+        if (!shouldFlip()) {
+            return poses;
+        }
+
+        Pose2d[] flippedPoses = new Pose2d[poses.length];
+        for (int i = 0; i < poses.length; i++) {
+            flippedPoses[i] = apply(poses[i]);
+        }
+
+        return flippedPoses;
+    }
+
+    /**
      * Flips a trajectory state to the correct side of the field based on the
      * current alliance color.
      */

@@ -110,8 +110,10 @@ public class MapleSimUtil {
      */
     public static void ejectCoralFromStation() {
         Pose2d robotPose = getSwerveDriveSimulation().getSimulatedDriveTrainPose();
-        Pose2d nearestStation = robotPose.nearest(Arrays.asList(FieldConstants.CORAL_STATION_POSES));
-        Pose2d nearestDropStation = nearestStation.nearest(Arrays.asList(FieldConstants.CORAL_DROP_STATIONS));
+        Pose2d nearestStation = robotPose
+                .nearest(Arrays.asList(AllianceFlipUtil.apply(FieldConstants.CORAL_STATION_POSES)));
+        Pose2d nearestDropStation = nearestStation
+                .nearest(Arrays.asList(AllianceFlipUtil.apply(FieldConstants.CORAL_DROP_STATIONS)));
 
         SimulatedArena.getInstance()
                 .addGamePieceProjectile(new ReefscapeCoralOnFly(
