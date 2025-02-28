@@ -8,8 +8,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import com.pathplanner.lib.util.DriveFeedforwards;
-
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
@@ -204,7 +202,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      * Used for autonomous driving in AutoBuilder - chassis speeds are robot
      * relative
      */
-    public void drive(ChassisSpeeds chassisSpeeds, DriveFeedforwards driveFeedforwards) {
+    public void drive(ChassisSpeeds chassisSpeeds) {
         this.desiredChassisSpeeds = chassisSpeeds;
         this.isOpenLoop = false;
     }

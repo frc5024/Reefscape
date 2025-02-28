@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldConstants;
@@ -25,7 +26,7 @@ import frc.robot.subsystems.VisionSubsystem;
  * 
  */
 public class DriveFromBestTagCommand extends Command {
-    private final SwerveDriveSubsystem swerveDrive;
+    private final SwerveDriveSubsystem swerveDriveSubsystem;
     private final VisionSubsystem visionSubsystem;
     private final Supplier<Pose2d> poseProvider;
     private final boolean isLeftPole;
@@ -38,9 +39,9 @@ public class DriveFromBestTagCommand extends Command {
     /**
      * Drive to a provided translation/rotation away from vision system best tag
      */
-    public DriveFromBestTagCommand(SwerveDriveSubsystem swerveDrive, VisionSubsystem visionSubsystem,
+    public DriveFromBestTagCommand(SwerveDriveSubsystem swerveDriveSubsystem, VisionSubsystem visionSubsystem,
             Supplier<Pose2d> poseProvider, boolean isLeftPole, Supplier<GamePieceMode> gamePieceModeSupplier) {
-        this.swerveDrive = swerveDrive;
+        this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.visionSubsystem = visionSubsystem;
         this.poseProvider = poseProvider;
         this.isLeftPole = isLeftPole;
@@ -62,13 +63,12 @@ public class DriveFromBestTagCommand extends Command {
         this.omegaController.setTolerance(Units.degreesToRadians(1));
         this.omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        addRequirements(this.swerveDrive);
-        addRequirements(this.visionSubsystem);
+        addRequirements(this.swerveDriveSubsystem, this.visionSubsystem);
     }
 
     @Override
     public void end(boolean interrupted) {
-        this.swerveDrive.stop();
+        this.swerveDriveSubsystem.stop();
 
         Logger.recordOutput("Commands/Active Command", "");
     }
@@ -88,7 +88,9 @@ public class DriveFromBestTagCommand extends Command {
         if (this.omegaController.atGoal())
             omegaSpeed = 0;
 
-        this.swerveDrive.drive(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation(), false);
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed,
+                robotPose.getRotation());
+        this.swerveDriveSubsystem.drive(chassisSpeeds);
     }
 
     /**
