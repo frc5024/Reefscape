@@ -50,7 +50,6 @@ public class goToSetPositionPerTagCmd extends Command {
         this.translationPidController = new PIDController(0.7, 0, 0.05);
         this.rotationPidController = new PIDController(0.008, 0, 0.0005);
 
-        // addRequirements(swerveDrive); // might not work now but should fix errors
     }
 
     @Override
@@ -58,10 +57,14 @@ public class goToSetPositionPerTagCmd extends Command {
         strafePidController.reset();
         translationPidController.reset();
         rotationPidController.reset();
+
+        xPos = false;
+        zPos = false;
+        rotationPos = false;
     }
 
     Set<Integer> validTagIDs = new HashSet<>(
-            Set.of(1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22));
+            Set.of(2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22));
     // 3, 16 - processor
     // 1, 2, 12, 13 - coral station
     // 6, 7, 8, 9, 10, 11 - red reef
@@ -71,32 +74,8 @@ public class goToSetPositionPerTagCmd extends Command {
     public void execute() {
         int detectedTagID = (int) limelight.getAprilTagID();
 
-        // if robot rotates long ways, add the angle to the heading in
-        // a new variable to lie to the robot on which will be the quickest rotation
-
         if (validTagIDs.contains(detectedTagID)) {
             swerveDrive.setFieldRelative(false);
-
-            // tag angle = angle based on the ROBOTS forward/heading
-            // if (detectedTagID == 18 || detectedTagID == 7) {
-            // tagAngle = 0;
-            // } else if (detectedTagID == 10 || detectedTagID == 21) {
-            // tagAngle = -179.5; // change to 360 once within 10 degrees to prevent
-            // overspinning
-            // } else if (detectedTagID == 3 || detectedTagID == 16) {
-            // tagAngle = 90;
-            // } else {
-            // tagAngle = 0;
-            // }
-
-            // at___ = AprilTag____
-            // translationPidController.setP(pEntry.getDouble(0));
-            // translationPidController.setI(iEntry.getDouble(0));
-            // translationPidController.setD(dEntry.getDouble(0));
-
-            // strafePidController.setP(pEntry.getDouble(0));
-            // strafePidController.setI(iEntry.getDouble(0));
-            // strafePidController.setD(dEntry.getDouble(0));
 
             mathToTag();
         } else {
@@ -112,35 +91,26 @@ public class goToSetPositionPerTagCmd extends Command {
     public void mathToTag() {
         double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
         Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
-        double robotHeading = swerveDrive.getGyroYaw().getDegrees();
 
         double yaw = botPose[4] - cameraAngle;
 
         SmartDashboard.putNumber("Tag Yaw", yaw);
 
-        double Dis = -botPose3D.getZ(); // Distance from LL to tag
-
-        double rotationToTag = robotHeading + tagAngle;
-
-        double zDis = Dis * Math.cos(Math.toRadians(rotationToTag)); // Distance from robot to tag in relation of the
-                                                                     // field
-        // System.out.println(zDis);
-
         // Left/Right
-        double zDiff = botPose3D.getZ() + desiredz; // normally zDis
+        double zDiff = botPose3D.getZ() + desiredz;
 
         // forward/back
-        double xDiff = botPose3D.getX() + xOffset;
+        double xDiff = botPose3D.getX() - xOffset;
 
-        rotateToTag(yaw); // usually rotation to tag
+        rotateToTag(yaw);
         translateToTag(zDiff);
         strafeToTag(xDiff);
 
-        // setDrive();
+        setDrive();
     }
 
     public void rotateToTag(double rotationToTag) {
-        if (Math.abs(rotationToTag) > 1) { // Adjust tolerance as needed
+        if (Math.abs(rotationToTag) > 2) { // Adjust tolerance as needed
             rotationPidOutput = rotationPidController.calculate(rotationToTag, 0);
             rotationPidOutput = rotationPidOutput * 1; // Speed multiplier
             rotationPos = false;
@@ -148,21 +118,23 @@ public class goToSetPositionPerTagCmd extends Command {
             rotationPidOutput = 0;
             rotationPos = true;
         }
+        SmartDashboard.putNumber("thetaDiff", rotationToTag);
     }
 
     public void translateToTag(double zDiff) {
-        if (Math.abs(zDiff) > 0.015) { // In meters
+        if (Math.abs(zDiff) > 0.03) { // In meters
             translationPidOutput = translationPidController.calculate(zDiff, 0);
-            translationPidOutput = -translationPidOutput * .7; // Speed multiplier
+            translationPidOutput = translationPidOutput * .7; // Speed multiplier
             zPos = false;
         } else {
             translationPidOutput = 0;
             zPos = true;
         }
+        SmartDashboard.putNumber("zDiff", zDiff);
     }
 
     public void strafeToTag(double xDiff) {
-        if (Math.abs(xDiff) > 0.015) { // In meters
+        if (Math.abs(xDiff) > 0.03) { // In meters
             strafePidOutput = strafePidController.calculate(xDiff, 0);
             strafePidOutput = -strafePidOutput * .7; // Speed multiplier
             xPos = false;
@@ -170,14 +142,19 @@ public class goToSetPositionPerTagCmd extends Command {
             strafePidOutput = 0;
             xPos = true;
         }
+        SmartDashboard.putNumber("xDiff", xDiff);
     }
 
     public void setDrive() {
         swerveDrive.setFieldRelative(false);
 
+        SmartDashboard.putBoolean("rotationPos", rotationPos);
+        SmartDashboard.putBoolean("xPos", xPos);
+        SmartDashboard.putBoolean("zPos", zPos);
+
         swerveDrive.visionRotationVal(rotationPidOutput, true);
-        // swerveDrive.visionTranslationalVal(translationPidOutput, true);
-        // swerveDrive.visionStrafeVal(strafePidOutput, true);
+        swerveDrive.visionTranslationalVal(translationPidOutput, true);
+        swerveDrive.visionStrafeVal(strafePidOutput, true);
     }
 
     @Override
@@ -192,8 +169,10 @@ public class goToSetPositionPerTagCmd extends Command {
         swerveDrive.visionStrafeVal(0, false);
         swerveDrive.visionRotationVal(0, false);
 
-        System.out.println("IM DONE");
-
         swerveDrive.setFieldRelative(true);
+
+        if (xPos && zPos && rotationPos) {
+            System.out.println("amcoansocnasasdacs");
+        }
     }
 }

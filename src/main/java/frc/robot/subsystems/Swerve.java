@@ -185,7 +185,6 @@ public class Swerve extends SubsystemBase {
                     strafeVal * Constants.Swerve.maxSpeed * speedModifier,
                     rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier, getGyroYaw());
         } else {
-            System.out.println("translationVal");
             chassisSpeeds = new ChassisSpeeds(translationVal * Constants.Swerve.maxSpeed * speedModifier,
                     strafeVal * Constants.Swerve.maxSpeed * speedModifier,
                     rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier);
@@ -237,6 +236,9 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setPose(Pose2d pose) {
+        if (pose == null)
+            pose = Pose2d.kZero;
+
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
     }
 
@@ -322,19 +324,8 @@ public class Swerve extends SubsystemBase {
                 this.gyro.getWorldLinearAccelX(), this.gyro.getWorldLinearAccelY()
         };
 
-        double tagAngle = 0;
-
         Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
-        double robotHeading = getGyroYaw().getDegrees();
 
-        double Dis = -botPose3D.getZ(); // Distance from LL to tag
-
-        double rotationToTag = robotHeading + tagAngle;
-
-        double zDis = Dis * Math.cos(Math.toRadians(rotationToTag));
-        double xDis = zDis * (Math.tan(Math.toRadians(rotationToTag)));
-
-        SmartDashboard.putNumber("PotentialForwardOffest", zDis);
-        SmartDashboard.putNumber("PotentialSideOffest", xDis);
+        SmartDashboard.putNumber("SideOffest", botPose3D.getX());
     }
 }

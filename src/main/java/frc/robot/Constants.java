@@ -33,8 +33,8 @@ public final class Constants {
 
     public static final class Vision {
 
-        public static final double rightOffset = -0.142; // in meters
-        public static final double leftOffset = 0.162; // in meters
+        public static final double rightOffset = 0.1540; // in meters
+        public static final double leftOffset = -0.1745; // in meters
         public static final double noOffset = 0; // in meters
 
     }
@@ -56,7 +56,7 @@ public final class Constants {
         public static final int motorID2 = 61;
 
         // values for PID
-        public static final double kP = 0.03;
+        public static final double kP = 0.08;
         public static final double kI = 0;
         public static final double kD = 0;
 
@@ -64,7 +64,7 @@ public final class Constants {
         public static final double kV = 0.1;
         public static final double kA = 0.05;
 
-        public static final double G = 0.4;
+        public static final double G = 0.5;
         public static final double minimumBottomValue = 2.5; // encoder value will not always be zero so we create a
                                                              // tolerance value
 

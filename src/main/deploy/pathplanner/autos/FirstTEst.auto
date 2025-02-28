@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle to Middle Reef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveRightTag"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorRoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "New Folder",
+  "choreoAuto": false
+}

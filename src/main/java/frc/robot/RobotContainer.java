@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
-import frc.robot.commands.Vision.goToSetPositionPerTagOnTrueCmd;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.LEDs;
@@ -54,12 +53,18 @@ public class RobotContainer {
         configureBindings();
 
         NamedCommands.registerCommand("DriveRightTag",
-                new goToSetPositionPerTagOnTrueCmd(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset));
+                new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset));
         NamedCommands.registerCommand("DriveLeftTag",
-                new goToSetPositionPerTagOnTrueCmd(limelightSubsystem, s_Swerve, Constants.Vision.leftOffset));
+                new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.leftOffset));
 
         NamedCommands.registerCommand("ScoreCoral", coralSubsystem.outtakeCommand());
         NamedCommands.registerCommand("IntakeCoral", coralSubsystem.intakeCommand());
+
+        NamedCommands.registerCommand("L4", elevatorSubsystem.goToL4Position());
+        NamedCommands.registerCommand("L3", elevatorSubsystem.goToL3Position());
+        NamedCommands.registerCommand("L2", elevatorSubsystem.goToL2Position());
+        NamedCommands.registerCommand("L1", elevatorSubsystem.goToL1Position());
+        NamedCommands.registerCommand("ElevatorRoot", elevatorSubsystem.bottomElevator());
 
         autoChooser = AutoBuilder.buildAutoChooser();
 

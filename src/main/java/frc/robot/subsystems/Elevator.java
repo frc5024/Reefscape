@@ -97,7 +97,7 @@ public class Elevator extends SubsystemBase {
 
         PID = new ProfiledPIDController(elevatorConstants.kP, elevatorConstants.kI, elevatorConstants.kD,
                 feedForwardConstraints);
-        PID.setTolerance(0.25, 0.25); // TODO: put in constants
+        PID.setTolerance(2, 1.5); // TODO: put in constants
         feedForward = new ElevatorFeedforward(0, elevatorConstants.G, elevatorConstants.kV, elevatorConstants.kA); // ks,
                                                                                                                    // kg,
                                                                                                                    // kv,
@@ -118,6 +118,8 @@ public class Elevator extends SubsystemBase {
         tab.addDouble("estimated Position", () -> PID.getSetpoint().position);
         tab.addDouble("encoder value", () -> elevatorMotor.getEncoder().getPosition());
         tab.addDouble("appliedOutput", () -> speed);
+        tab.addDouble("goal", () -> PID.getGoal().position);
+        tab.addBoolean("atTarget", () -> targetReached());
 
         // TODO: log voltage anything else you think you need
 
