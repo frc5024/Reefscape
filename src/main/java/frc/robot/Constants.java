@@ -65,7 +65,7 @@ public final class Constants {
         public static final double kA = 0.05;
 
         public static final double G = 0.4;
-        public static final double minimumBottomValue = 2.5; // encoder value will not always be zero so we create a
+        public static final double minimumBottomValue = 1.5; // encoder value will not always be zero so we create a
                                                              // tolerance value
 
         // public static final double radianstoCM(double CM) {

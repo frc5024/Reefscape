@@ -157,8 +157,8 @@ public class Elevator extends SubsystemBase {
 
         // //safety precaution to prevent the motor from trying to go past the bottom
         // stop
-        if (speed < 0 && rotationsToInches(
-                elevatorMotor.getEncoder().getPosition()) <= elevatorConstants.minimumBottomValue) {
+        if (PID.getGoal().position == elevatorConstants.rootPosition
+                && elevatorHeight() <= elevatorConstants.minimumBottomValue) {
             elevatorMotor.set(0); // TODO: verify our minimumBottomValue tolerance is working and reasonable
         }
 
@@ -201,8 +201,8 @@ public class Elevator extends SubsystemBase {
                     maxAccelerationEntry.getDouble(elevatorConstants.elevatorMaxAccel)));
         } else {
             PID.setConstraints(new TrapezoidProfile.Constraints(
-                    maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed / 4),
-                    maxAccelerationEntry.getDouble(elevatorConstants.elevatorMaxAccel / 4)));
+                    maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed) / 4,
+                    maxAccelerationEntry.getDouble(elevatorConstants.elevatorMaxAccel) / 4));
         }
 
         PID.setGoal(inches);
@@ -304,6 +304,10 @@ public class Elevator extends SubsystemBase {
         double percent = encoder / 60; // divide by amount of rotations
 
         return percent;
+    }
+
+    public double elevatorHeight() {
+        return rotationsToInches(elevatorMotor.getEncoder().getPosition());
     }
 
     public Command goToL1Position() {
