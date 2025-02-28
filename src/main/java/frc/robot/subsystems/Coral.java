@@ -92,8 +92,8 @@ public class Coral extends SubsystemBase {
     }
 
     public void set(double speed) {
-        setTop(speed);
-        setBottom(-speed);
+        setTop(-speed);
+        setBottom(speed);
     }
 
     public void setTop(double speed) {

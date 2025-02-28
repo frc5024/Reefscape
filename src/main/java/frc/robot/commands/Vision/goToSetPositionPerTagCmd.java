@@ -5,7 +5,6 @@ import java.util.Set;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,6 +35,7 @@ public class goToSetPositionPerTagCmd extends Command {
     double desiredx = 0; // in meters? (+ right)?
 
     double tagAngle = 0;
+    private final double cameraAngle = 29;
 
     boolean xPos = false;
     boolean rotationPos = false;
@@ -114,10 +114,9 @@ public class goToSetPositionPerTagCmd extends Command {
         Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
         double robotHeading = swerveDrive.getGyroYaw().getDegrees();
 
-        double yaw = botPose[4] - 29;
+        double yaw = botPose[4] - cameraAngle;
 
-        double ada = Units.radiansToDegrees(botPose3D.getRotation().getAngle());
-        SmartDashboard.putNumber("Testing yaw", ada);
+        SmartDashboard.putNumber("Tag Yaw", yaw);
 
         double Dis = -botPose3D.getZ(); // Distance from LL to tag
 
@@ -125,7 +124,7 @@ public class goToSetPositionPerTagCmd extends Command {
 
         double zDis = Dis * Math.cos(Math.toRadians(rotationToTag)); // Distance from robot to tag in relation of the
                                                                      // field
-        System.out.println(zDis);
+        // System.out.println(zDis);
 
         // Left/Right
         double zDiff = botPose3D.getZ() + desiredz; // normally zDis
@@ -177,9 +176,9 @@ public class goToSetPositionPerTagCmd extends Command {
         swerveDrive.setFieldRelative(false);
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
-        //swerveDrive.visionTranslationalVal(translationPidOutput, true);
+        // swerveDrive.visionTranslationalVal(translationPidOutput, true);
         // swerveDrive.visionStrafeVal(strafePidOutput, true);
-    } 
+    }
 
     @Override
     public boolean isFinished() {
@@ -192,6 +191,8 @@ public class goToSetPositionPerTagCmd extends Command {
         swerveDrive.visionTranslationalVal(0, false);
         swerveDrive.visionStrafeVal(0, false);
         swerveDrive.visionRotationVal(0, false);
+
+        System.out.println("IM DONE");
 
         swerveDrive.setFieldRelative(true);
     }
