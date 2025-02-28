@@ -229,10 +229,19 @@ public class VisionSubsystem extends SubsystemBase {
     public Pose3d getBestTargetPose(String cameraName) {
         VisionIOInputsAutoLogged inputs = this.inputs.get(cameraName);
 
-        if (inputs == null)
+        if (inputs == null) {
             return null;
+        }
 
-        return inputs.bestTargetPose;
+        if (inputs.processor != Camera.Processor.LIMELIGHT) {
+            return inputs.bestTargetPose;
+        }
+
+        // Limelight best target pose is relative to the robot
+        Pose3d robotPose = new Pose3d(poseSupplier.get());
+        return robotPose;
+        // return robotPose.relativeTo(inputs.bestTargetPose);
+        // return inputs.bestTargetPose.relativeTo(robotPose);
     }
 
     /**

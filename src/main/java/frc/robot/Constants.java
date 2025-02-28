@@ -238,12 +238,12 @@ public final class Constants {
     public static final class PIDConstants {
         // PID constants for swerve modules for drive motor. Turn pid is set in cots
         // constants
-        public static final double SWERVE_MODULE_DRIVE_KP = 1.0;
+        public static final double SWERVE_MODULE_DRIVE_KP = 0.1;
         public static final double SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SWERVE_MODULE_DRIVE_KD = 0.0;
 
-        public static final double SWERVE_MODULE_DRIVE_KS = 0.25;
-        public static final double SWERVE_MODULE_DRIVE_KV = 0.12;
+        public static final double SWERVE_MODULE_DRIVE_KS = 0.125;
+        public static final double SWERVE_MODULE_DRIVE_KV = 0.06;
         public static final double SWERVE_MODULE_DRIVE_KA = 0.01;
 
         // PID constants for simulated swerve modules
@@ -423,7 +423,7 @@ public final class Constants {
 
         public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_UC626-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
+                Units.inchesToMeters(-10.0), Units.inchesToMeters(-7.5), Units.inchesToMeters(9.0),
                 0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-150.0));
 
         public static final Camera GAME_PIECE_CAMERA = new Camera("WebCam",
@@ -438,8 +438,8 @@ public final class Constants {
 
         public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight-two",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
-                Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.0),
-                0.0, Units.degreesToRadians(25.0), Units.degreesToRadians(-30.0));
+                Units.inchesToMeters(10.0), Units.inchesToMeters(-7.0), Units.inchesToMeters(9.0),
+                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-30.0));
 
         /**
          * TODO: set list of enabled camera
@@ -447,7 +447,7 @@ public final class Constants {
         public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM2_CAMERA, ARDUCAM1_CAMERA);
         public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM3_CAMERA);
         public static final List<Camera> REEFSCAPE_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
-        public static final List<Camera> CAMERAS = SIMULATION_CAMERAS;
+        public static final List<Camera> CAMERAS = BEALTOVEN_CAMERAS;
         public static final Camera FRONT_CAMERA = CAMERAS.get(0);
         public static final Camera REAR_CAMERA = CAMERAS.get(1);
 

@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.AutoLog;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import frc.lib.camera.Camera;
 
 /**
  * 
@@ -18,6 +19,7 @@ public interface VisionModuleIO {
         public int[] tagIds = new int[0];
         public int bestTargetId = 0;
         public Pose3d bestTargetPose = new Pose3d();
+        public Camera.Processor processor = Camera.Processor.LIMELIGHT;
     }
 
     /**
