@@ -5,7 +5,7 @@ import org.littletonrobotics.junction.AutoLog;
 /**
  * 
  */
-public interface AlgaeIntakeModuleIO {
+public interface AlgaeModuleIO {
     @AutoLog
     static class AlgaeIntakeIOInputs {
         public boolean connected = false;

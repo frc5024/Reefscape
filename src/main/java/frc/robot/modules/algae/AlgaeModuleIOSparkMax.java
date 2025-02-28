@@ -1,8 +1,9 @@
-package frc.robot.modules.coral;
+package frc.robot.modules.algae;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -14,14 +15,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 /**
  * 
  */
-public class CoralIntakeModuleIOSparkFlex implements CoralIntakeModuleIO {
-    /* Constants */
-    private final int TOP_MOTOR_CHANNEL = 51;
-    private final int BOTTOM_MOTOR_CHANNEL = 52;
-
-    private final int LINEBREAK_CHANNEL = 0;
-
-    private final int SERVO_CHANNEL = 0;
+public class AlgaeModuleIOSparkMax implements AlgaeModuleIO {
+    private final int TOP_MOTOR_ID = 3;
+    private final int BOTTOM_MOTOR_ID = 62;
+    private final int LINEBREAK_CHANNEL = 9;
 
     private final SparkBaseConfig TOP_MOTOR_CONFIG = new SparkMaxConfig()
             .idleMode(IdleMode.kBrake)
@@ -34,23 +31,21 @@ public class CoralIntakeModuleIOSparkFlex implements CoralIntakeModuleIO {
             .secondaryCurrentLimit(40)
             .inverted(true);
 
-    private final double MOTOR_INTAKE_SPEED = -0.1;
-    private final double MOTOR_EJECT_SPEED = 0.1;
+    private final double MOTOR_INTAKE_SPEED = -0.5;
+    private final double MOTOR_EJECT_SPEED = 0.5;
 
-    /* Hardware */
-    private final SparkFlex topMotor;
-    private final SparkFlex bottomMotor;
+    private final SparkMax topMotor;
+    private final SparkMax bottomMotor;
     private final DigitalInput lineBreak;
 
-    /* Variables */
     private double appliedVoltage = 0.0;
 
     /**
      * 
      */
-    public CoralIntakeModuleIOSparkFlex() {
-        this.topMotor = new SparkFlex(TOP_MOTOR_CHANNEL, SparkFlex.MotorType.kBrushless);
-        this.bottomMotor = new SparkFlex(BOTTOM_MOTOR_CHANNEL, SparkFlex.MotorType.kBrushless);
+    public AlgaeModuleIOSparkMax() {
+        this.topMotor = new SparkMax(TOP_MOTOR_ID, MotorType.kBrushless);
+        this.bottomMotor = new SparkMax(BOTTOM_MOTOR_ID, MotorType.kBrushless);
 
         this.topMotor.configure(TOP_MOTOR_CONFIG, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         this.bottomMotor.configure(BOTTOM_MOTOR_CONFIG, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -59,7 +54,7 @@ public class CoralIntakeModuleIOSparkFlex implements CoralIntakeModuleIO {
     }
 
     @Override
-    public void updateInputs(CoralIntakeIOInputs inputs) {
+    public void updateInputs(AlgaeIntakeIOInputs inputs) {
         if (DriverStation.isDisabled()) {
             stop();
         }
@@ -78,7 +73,7 @@ public class CoralIntakeModuleIOSparkFlex implements CoralIntakeModuleIO {
     }
 
     @Override
-    public boolean hasCoral() {
+    public boolean hasAlgae() {
         return this.lineBreak.get();
     }
 

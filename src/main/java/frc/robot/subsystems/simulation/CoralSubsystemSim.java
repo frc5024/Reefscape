@@ -1,17 +1,17 @@
 package frc.robot.subsystems.simulation;
 
 import frc.lib.statemachine.StateMetadata;
-import frc.robot.modules.coral.CoralIntakeModuleIO;
+import frc.robot.modules.coral.CoralModuleIO;
 import frc.robot.modules.elevator.ElevatorVisualizer;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.utils.MapleSimUtil;
 
-public class CoralIntakeSubsystemSim extends CoralIntakeSubsystem {
+public class CoralSubsystemSim extends CoralSubsystem {
     /**
      * 
      */
-    public CoralIntakeSubsystemSim(CoralIntakeModuleIO intakeModule) {
-        super(intakeModule);
+    public CoralSubsystemSim(CoralModuleIO coralModuleIO) {
+        super(coralModuleIO);
     }
 
     @Override

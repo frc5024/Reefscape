@@ -9,19 +9,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.AlgaeSubsystem;
 
 /**
  * 
  */
 public class GrabAlgae {
-    private final AlgaeIntakeSubsystem algaeIntakeSubsystem;
+    private final AlgaeSubsystem algaeSubsystem;
 
     /**
      * 
      */
-    public GrabAlgae(AlgaeIntakeSubsystem algaeIntakeSubsystem) {
-        this.algaeIntakeSubsystem = algaeIntakeSubsystem;
+    public GrabAlgae(AlgaeSubsystem algaeSubsystem) {
+        this.algaeSubsystem = algaeSubsystem;
     }
 
     /**
@@ -46,12 +46,12 @@ public class GrabAlgae {
 
                 AutoBuilder.followPath(pathGroup.get(0)),
                 new InstantCommand(() -> {
-                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.INTAKE);
+                    this.algaeSubsystem.addAction(AlgaeSubsystem.Action.INTAKE);
                 }),
-                new WaitUntilCommand(this.algaeIntakeSubsystem::hasAlgae),
+                new WaitUntilCommand(this.algaeSubsystem::hasAlgae),
                 AutoBuilder.followPath(pathGroup.get(1)),
                 new InstantCommand(() -> {
-                    this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.EJECT);
+                    this.algaeSubsystem.addAction(AlgaeSubsystem.Action.EJECT);
                 }),
 
                 Commands.print("*** Finished GrabAlgae ***"));

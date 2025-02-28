@@ -10,7 +10,7 @@ import frc.robot.Constants.RobotConstants;
 /**
  * 
  */
-public class AlgaeIntakeModuleIOSim implements AlgaeIntakeModuleIO {
+public class AlgaeModuleIOSim implements AlgaeModuleIO {
     private final double MOTOR_INTAKE_SPEED = 0.8;
     private final double MOTOR_EJECT_SPEED = -0.6;
 
@@ -26,7 +26,7 @@ public class AlgaeIntakeModuleIOSim implements AlgaeIntakeModuleIO {
     /**
      * 
      */
-    public AlgaeIntakeModuleIOSim() {
+    public AlgaeModuleIOSim() {
         this.dcMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(this.motor, this.moi, this.reduction),
                 this.motor);
     }

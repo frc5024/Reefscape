@@ -31,13 +31,13 @@ public class ReefscapeRobotContainer extends RobotContainer {
         this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
                 this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
 
-        // this.algaeIntakeSubsystem = new AlgaeIntakeSubsystem(new
+        // this.algaeSubsystem = new AlgaeSubsystem(new
         // AlgaeintakeModuleIOSparkMax());
-        // this.coralIntakeSubsystem = new CoralIntakeSubsystem(new
+        // this.coralSubsystem = new CoralSubsystem(new
         // CoralintakeModuleIOSparkFlex());
         // this.elevatorSubsystem = new ElevatorSubsystem(new
-        // ElevatorModuleIOSparkMax(), this.algaeIntakeSubsystem::hasAlgae(),
-        // this.coralIntakeSubsystem::hasCoral());
+        // ElevatorModuleIOSparkMax(), this.algaeSubsystem::hasAlgae(),
+        // this.coralSubsystem::hasCoral());
 
         // registerNamedCommands();
         // configureAutoBuilder();

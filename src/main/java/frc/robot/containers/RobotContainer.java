@@ -21,8 +21,8 @@ import frc.robot.commands.TeleopDriveCommand;
 import frc.robot.commands.TuningCommand;
 import frc.robot.commands.TuningSwerveCommand;
 import frc.robot.controls.ButtonBindings;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -32,8 +32,8 @@ import frc.robot.subsystems.VisionSubsystem;
  */
 abstract public class RobotContainer {
     /* Subsystems */
-    protected AlgaeIntakeSubsystem algaeIntakeSubsystem;
-    protected CoralIntakeSubsystem coralIntakeSubsystem;
+    protected AlgaeSubsystem algaeSubsystem;
+    protected CoralSubsystem coralSubsystem;
     protected ElevatorSubsystem elevatorSubsystem;
     protected SwerveDriveSubsystem swerveDriveSubsystem;
     protected VisionSubsystem visionSubsystem;
@@ -52,8 +52,8 @@ abstract public class RobotContainer {
      * ; *
      */
     protected void configureAutoBuilder() {
-        this.autoBuilder = new AutoBuilder(this.swerveDriveSubsystem, this.algaeIntakeSubsystem,
-                this.coralIntakeSubsystem, this.elevatorSubsystem);
+        this.autoBuilder = new AutoBuilder(this.swerveDriveSubsystem, this.algaeSubsystem,
+                this.coralSubsystem, this.elevatorSubsystem);
         this.autoBuilder.configureAutonomous();
         this.autonomousChooser = autoBuilder.getAutonomousChooser();
     }
@@ -68,8 +68,8 @@ abstract public class RobotContainer {
      */
     protected void configureButtonBindings() {
         ButtonBindings buttonBindings = new ButtonBindings(this.swerveDriveSubsystem,
-                this.algaeIntakeSubsystem,
-                this.coralIntakeSubsystem, this.elevatorSubsystem, this.visionSubsystem);
+                this.algaeSubsystem,
+                this.coralSubsystem, this.elevatorSubsystem, this.visionSubsystem);
 
         CommandXboxController commandXboxController = RobotConstants.TUNING_MODE
                 ? buttonBindings.getTestController()
@@ -87,7 +87,7 @@ abstract public class RobotContainer {
         Command openLoopDrive = new TeleopDriveCommand(this.swerveDriveSubsystem, rotationSupplier, controllerX,
                 controllerY, controllerOmega);
 
-        Command tuningCommand = new TuningCommand(swerveDriveSubsystem, algaeIntakeSubsystem, coralIntakeSubsystem,
+        Command tuningCommand = new TuningCommand(swerveDriveSubsystem, algaeSubsystem, coralSubsystem,
                 elevatorSubsystem, controllerX, controllerY, controllerOmega, commandXboxController);
 
         Command tuningSwerveCommand = new TuningSwerveCommand(swerveDriveSubsystem, controllerX, controllerY,

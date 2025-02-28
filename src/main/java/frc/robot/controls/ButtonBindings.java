@@ -15,8 +15,8 @@ import frc.robot.commands.DriveProcessorCommand;
 import frc.robot.commands.DriveReefStationCommand;
 import frc.robot.controls.GameData.CoralPole;
 import frc.robot.controls.GameData.GamePieceMode;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -37,20 +37,20 @@ public class ButtonBindings {
 
     /* Subsystems */
     private final SwerveDriveSubsystem swerveDriveSubsystem;
-    private final AlgaeIntakeSubsystem algaeIntakeSubsystem;
-    private final CoralIntakeSubsystem coralIntakeSubsystem;
+    private final AlgaeSubsystem algaeSubsystem;
+    private final CoralSubsystem coralSubsystem;
     private final ElevatorSubsystem elevatorSubsystem;
     private final VisionSubsystem visionSubsystem;
 
     /**
      * 
      */
-    public ButtonBindings(SwerveDriveSubsystem swerveDriveSubsystem, AlgaeIntakeSubsystem algaeIntakeSubsystem,
-            CoralIntakeSubsystem coralIntakeSubsystem,
+    public ButtonBindings(SwerveDriveSubsystem swerveDriveSubsystem, AlgaeSubsystem algaeSubsystem,
+            CoralSubsystem coralSubsystem,
             ElevatorSubsystem elevatorSubsystem, VisionSubsystem visionSubsystem) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
-        this.algaeIntakeSubsystem = algaeIntakeSubsystem;
-        this.coralIntakeSubsystem = coralIntakeSubsystem;
+        this.algaeSubsystem = algaeSubsystem;
+        this.coralSubsystem = coralSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;
         this.visionSubsystem = visionSubsystem;
 
@@ -188,28 +188,28 @@ public class ButtonBindings {
         commandXboxController.leftTrigger()
                 .whileTrue(runOnce(() -> {
                     if (GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE) {
-                        this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.EJECT);
+                        this.algaeSubsystem.addAction(AlgaeSubsystem.Action.EJECT);
                     } else {
-                        this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.EJECT);
+                        this.coralSubsystem.addAction(CoralSubsystem.Action.EJECT);
                     }
                 }));
 
         commandXboxController.rightTrigger()
                 .whileTrue(runOnce(() -> {
                     if (GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE) {
-                        this.algaeIntakeSubsystem.addAction(AlgaeIntakeSubsystem.Action.INTAKE);
+                        this.algaeSubsystem.addAction(AlgaeSubsystem.Action.INTAKE);
                     } else {
-                        this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.INTAKE);
+                        this.coralSubsystem.addAction(CoralSubsystem.Action.INTAKE);
                     }
                 }));
 
         // commandXboxController.leftBumper()
-        // .whileTrue(runOnce(() -> this.coralIntakeSubsystem
-        // .addAction(CoralIntakeSubsystem.Action.EJECT)));
+        // .whileTrue(runOnce(() -> this.coralSubsystem
+        // .addAction(CoralSubsystem.Action.EJECT)));
 
         // commandXboxController.rightBumper()
-        // .whileTrue(runOnce(() -> this.coralIntakeSubsystem
-        // .addAction(CoralIntakeSubsystem.Action.INTAKE)));
+        // .whileTrue(runOnce(() -> this.coralSubsystem
+        // .addAction(CoralSubsystem.Action.INTAKE)));
 
         return commandXboxController;
     }

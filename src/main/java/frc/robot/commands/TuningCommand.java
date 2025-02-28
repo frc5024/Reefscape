@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.TeleopConstants;
 import frc.robot.autonomous.AutoBuilder;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.utils.LoggedTunableNumber;
@@ -32,8 +32,8 @@ import frc.robot.utils.LoggedTunableNumber;
  */
 public class TuningCommand extends Command {
     /* Subsystems */
-    private final AlgaeIntakeSubsystem algaeIntakeSubsystem;
-    private final CoralIntakeSubsystem coralIntakeSubsystem;
+    private final AlgaeSubsystem algaeSubsystem;
+    private final CoralSubsystem coralSubsystem;
     private final ElevatorSubsystem elevatorSubsystem;
     private final SwerveDriveSubsystem swerveDriveSubsystem;
 
@@ -120,12 +120,12 @@ public class TuningCommand extends Command {
     /**
      * This command should only be run in robot tuning mode
      */
-    public TuningCommand(SwerveDriveSubsystem swerveDriveSubsystem, AlgaeIntakeSubsystem algaeIntakeSubsystem,
-            CoralIntakeSubsystem coralIntakeSubsystem, ElevatorSubsystem elevatorSubsystem, DoubleSupplier xSupplier,
+    public TuningCommand(SwerveDriveSubsystem swerveDriveSubsystem, AlgaeSubsystem algaeSubsystem,
+            CoralSubsystem coralSubsystem, ElevatorSubsystem elevatorSubsystem, DoubleSupplier xSupplier,
             DoubleSupplier ySupplier, DoubleSupplier omegaSupplier, CommandXboxController commandXboxController) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
-        this.algaeIntakeSubsystem = algaeIntakeSubsystem;
-        this.coralIntakeSubsystem = coralIntakeSubsystem;
+        this.algaeSubsystem = algaeSubsystem;
+        this.coralSubsystem = coralSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;
 
         this.xSupplier = xSupplier;
@@ -153,7 +153,7 @@ public class TuningCommand extends Command {
         this.firstCall = true;
         this.rotationalAngle = 360.0; // this value is used to determine if the driverPov has been pressed
 
-        addRequirements(swerveDriveSubsystem, algaeIntakeSubsystem, coralIntakeSubsystem, elevatorSubsystem);
+        addRequirements(swerveDriveSubsystem, algaeSubsystem, coralSubsystem, elevatorSubsystem);
     }
 
     @Override
@@ -213,7 +213,7 @@ public class TuningCommand extends Command {
         }
 
         // if (this.desiredRPM.hasChanged(hashCode())) {
-        // this.coralIntakeSubsystem.setDesiredRPM(this.desiredRPM.get());
+        // this.coralSubsystem.setDesiredRPM(this.desiredRPM.get());
         // }
 
         if (this.driveOpenLoop.get()) {

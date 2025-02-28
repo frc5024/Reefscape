@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants.RobotConstants;
 
-public class CoralIntakeModuleIOSim implements CoralIntakeModuleIO {
+public class CoralModuleIOSim implements CoralModuleIO {
     private final double MOTOR_INTAKE_SPEED = 0.8;
     private final double MOTOR_EJECT_SPEED = -0.6;
 
@@ -23,7 +23,7 @@ public class CoralIntakeModuleIOSim implements CoralIntakeModuleIO {
     /**
      * 
      */
-    public CoralIntakeModuleIOSim() {
+    public CoralModuleIOSim() {
         this.dcMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(this.motor, this.moi, this.reduction),
                 this.motor);
     }

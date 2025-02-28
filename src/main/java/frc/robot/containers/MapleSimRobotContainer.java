@@ -10,18 +10,18 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.modules.algae.AlgaeIntakeModuleIOSim;
-import frc.robot.modules.coral.CoralIntakeModuleIOSim;
+import frc.robot.modules.algae.AlgaeModuleIOSim;
+import frc.robot.modules.coral.CoralModuleIOSim;
 import frc.robot.modules.elevator.ElevatorModuleIOSim;
 import frc.robot.modules.gyro.GyroModuleIOSim;
 import frc.robot.modules.swerve.SwerveModuleIOMapleSim;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.simulation.AlgaeIntakeSubsystemSim;
-import frc.robot.subsystems.simulation.CoralIntakeSubsystemSim;
+import frc.robot.subsystems.simulation.AlgaeSubsystemSim;
+import frc.robot.subsystems.simulation.CoralSubsystemSim;
 import frc.robot.utils.MapleSimUtil;
 
 /**
@@ -48,10 +48,10 @@ public class MapleSimRobotContainer extends RobotContainer {
         this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
                 swerveDriveSimulation::getSimulatedDriveTrainPose, this.swerveDriveSubsystem::getRotation);
 
-        this.algaeIntakeSubsystem = new AlgaeIntakeSubsystemSim(new AlgaeIntakeModuleIOSim());
-        this.coralIntakeSubsystem = new CoralIntakeSubsystemSim(new CoralIntakeModuleIOSim());
-        this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim(), this.algaeIntakeSubsystem::hasAlgae,
-                this.coralIntakeSubsystem::hasCoral);
+        this.algaeSubsystem = new AlgaeSubsystemSim(new AlgaeModuleIOSim());
+        this.coralSubsystem = new CoralSubsystemSim(new CoralModuleIOSim());
+        this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim(), this.algaeSubsystem::hasAlgae,
+                this.coralSubsystem::hasCoral);
 
         registerNamedCommands();
         configureAutoBuilder();
@@ -84,14 +84,14 @@ public class MapleSimRobotContainer extends RobotContainer {
             this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_4);
         }));
         NamedCommands.registerCommand("EjectCoral", new InstantCommand(() -> {
-            this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.EJECT);
+            this.coralSubsystem.addAction(CoralSubsystem.Action.EJECT);
         }));
         NamedCommands.registerCommand("IntakeCoral", new InstantCommand(() -> {
-            this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.INTAKE);
+            this.coralSubsystem.addAction(CoralSubsystem.Action.INTAKE);
         }));
-        NamedCommands.registerCommand("WaitForEject", new WaitUntilCommand(this.coralIntakeSubsystem::hasEjected));
+        NamedCommands.registerCommand("WaitForEject", new WaitUntilCommand(this.coralSubsystem::hasEjected));
         NamedCommands.registerCommand("WaitForElevator", new WaitUntilCommand(this.elevatorSubsystem::atGoal));
-        NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(this.coralIntakeSubsystem::hasCoral));
+        NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(this.coralSubsystem::hasCoral));
     }
 
     /**

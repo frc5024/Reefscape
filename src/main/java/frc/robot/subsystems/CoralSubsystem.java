@@ -10,22 +10,22 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMetadata;
-import frc.robot.modules.algae.AlgaeIntakeIOInputsAutoLogged;
-import frc.robot.modules.algae.AlgaeIntakeModuleIO;
+import frc.robot.modules.coral.CoralIntakeIOInputsAutoLogged;
+import frc.robot.modules.coral.CoralModuleIO;
 
 /**
  * 
  */
-public class AlgaeIntakeSubsystem extends SubsystemBase {
-    private final String NAME = "AlgaeIntake";
+public class CoralSubsystem extends SubsystemBase {
+    private final String NAME = "CoralIntake";
     private final Alert disconnected;
 
     public static enum Action {
         STOP, EJECT, INTAKE
     }
 
-    private final AlgaeIntakeModuleIO intakeModule;
-    protected final AlgaeIntakeIOInputsAutoLogged inputs;
+    private final CoralModuleIO coralModuleIO;
+    protected final CoralIntakeIOInputsAutoLogged inputs;
     protected final Timer stateTimer;
 
     private final StateMachine<Action> stateMachine;
@@ -34,9 +34,9 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     /**
      * 
      */
-    public AlgaeIntakeSubsystem(AlgaeIntakeModuleIO intakeModule) {
-        this.intakeModule = intakeModule;
-        this.inputs = new AlgaeIntakeIOInputsAutoLogged();
+    public CoralSubsystem(CoralModuleIO coralModuleIO) {
+        this.coralModuleIO = coralModuleIO;
+        this.inputs = new CoralIntakeIOInputsAutoLogged();
         this.disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
         // Sets states for the arm, and what methods.
@@ -71,7 +71,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.stateTimer.reset();
             this.stateTimer.start();
-            this.intakeModule.eject();
+            this.coralModuleIO.eject();
         }
     }
 
@@ -82,9 +82,9 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.stateTimer.reset();
             this.stateTimer.start();
-            this.intakeModule.intake();
+            this.coralModuleIO.intake();
 
-            LEDSubsystem.getInstance().strobeAqua();
+            LEDSubsystem.getInstance().strobeWhite();
         }
     }
 
@@ -93,11 +93,11 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
      */
     protected void handleStop(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
-            this.intakeModule.stop();
+            this.coralModuleIO.stop();
             this.stateTimer.stop();
 
-            if (hasAlgae()) {
-                LEDSubsystem.getInstance().solidAqua();
+            if (hasCoral()) {
+                LEDSubsystem.getInstance().solidWhite();
             } else {
                 LEDSubsystem.getInstance().solidBlack();
             }
@@ -107,15 +107,15 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     /**
      * 
      */
-    public boolean hasAlgae() {
-        return this.intakeModule.hasAlgae();
+    public boolean hasCoral() {
+        return this.coralModuleIO.hasCoral();
     }
 
     /**
      * 
      */
     public boolean hasEjected() {
-        return !hasAlgae();
+        return !hasCoral();
     }
 
     /**
@@ -126,7 +126,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
             case EJECT:
                 return !this.stateTimer.isRunning() || hasEjected();
             case INTAKE:
-                return !this.stateTimer.isRunning() || hasAlgae();
+                return !this.stateTimer.isRunning() || hasCoral();
             default:
                 return !this.stateTimer.isRunning();
         }
@@ -138,7 +138,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     public void periodic() {
         this.stateMachine.update();
 
-        this.intakeModule.updateInputs(this.inputs);
+        this.coralModuleIO.updateInputs(this.inputs);
         Logger.processInputs(this.NAME, this.inputs);
 
         this.disconnected.set(!this.inputs.connected);
@@ -162,13 +162,13 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
         }
 
         Logger.recordOutput("Subsystems/" + this.NAME + "/Current State", this.stateMachine.getCurrentState());
-        Logger.recordOutput("Subsystems/" + this.NAME + "/Has Algae", hasAlgae());
+        Logger.recordOutput("Subsystems/" + this.NAME + "/Has Coral", this.hasCoral());
     }
 
     /**
      * Used in autonomous simulations
      */
-    public void setHasAlgae(boolean has_algae) {
-        this.intakeModule.setHasAlgae(has_algae);
+    public void setHasCoral(boolean has_coral) {
+        this.coralModuleIO.setHasCoral(has_coral);
     }
 }

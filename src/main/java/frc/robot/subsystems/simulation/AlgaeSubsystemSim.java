@@ -1,17 +1,17 @@
 package frc.robot.subsystems.simulation;
 
 import frc.lib.statemachine.StateMetadata;
-import frc.robot.modules.algae.AlgaeIntakeModuleIO;
+import frc.robot.modules.algae.AlgaeModuleIO;
 import frc.robot.modules.elevator.ElevatorVisualizer;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.utils.MapleSimUtil;
 
-public class AlgaeIntakeSubsystemSim extends AlgaeIntakeSubsystem {
+public class AlgaeSubsystemSim extends AlgaeSubsystem {
     /**
      * 
      */
-    public AlgaeIntakeSubsystemSim(AlgaeIntakeModuleIO intakeModule) {
-        super(intakeModule);
+    public AlgaeSubsystemSim(AlgaeModuleIO algaeModuleIO) {
+        super(algaeModuleIO);
     }
 
     @Override

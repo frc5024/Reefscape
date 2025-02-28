@@ -5,7 +5,7 @@ import org.littletonrobotics.junction.AutoLog;
 /**
  * 
  */
-public interface CoralIntakeModuleIO {
+public interface CoralModuleIO {
     @AutoLog
     static class CoralIntakeIOInputs {
         public boolean connected = false;

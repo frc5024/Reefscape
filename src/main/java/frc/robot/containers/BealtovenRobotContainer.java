@@ -7,13 +7,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.modules.algae.AlgaeIntakeModuleIOSim;
-import frc.robot.modules.coral.CoralIntakeModuleIOSim;
+import frc.robot.modules.algae.AlgaeModuleIOSim;
+import frc.robot.modules.coral.CoralModuleIOSim;
 import frc.robot.modules.elevator.ElevatorModuleIOSim;
 import frc.robot.modules.gyro.GyroModuleIONavX;
 import frc.robot.modules.swerve.SwerveModuleIOTalonFX;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -41,10 +41,10 @@ public class BealtovenRobotContainer extends RobotContainer {
         this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
                 this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
 
-        this.algaeIntakeSubsystem = new AlgaeIntakeSubsystem(new AlgaeIntakeModuleIOSim());
-        this.coralIntakeSubsystem = new CoralIntakeSubsystem(new CoralIntakeModuleIOSim());
-        this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim(), this.algaeIntakeSubsystem::hasAlgae,
-                this.coralIntakeSubsystem::hasCoral);
+        this.algaeSubsystem = new AlgaeSubsystem(new AlgaeModuleIOSim());
+        this.coralSubsystem = new CoralSubsystem(new CoralModuleIOSim());
+        this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim(), this.algaeSubsystem::hasAlgae,
+                this.coralSubsystem::hasCoral);
 
         registerNamedCommands();
         configureAutoBuilder();
@@ -57,17 +57,17 @@ public class BealtovenRobotContainer extends RobotContainer {
             this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM);
         }));
         NamedCommands.registerCommand("ElevatorL4", new InstantCommand(() -> {
-            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_3);
+            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_4);
         }));
         NamedCommands.registerCommand("EjectCoral", new InstantCommand(() -> {
-            this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.EJECT);
+            this.coralSubsystem.addAction(CoralSubsystem.Action.EJECT);
         }));
         NamedCommands.registerCommand("IntakeCoral", new InstantCommand(() -> {
-            this.coralIntakeSubsystem.addAction(CoralIntakeSubsystem.Action.INTAKE);
+            this.coralSubsystem.addAction(CoralSubsystem.Action.INTAKE);
         }));
-        NamedCommands.registerCommand("WaitForEject", new WaitUntilCommand(this.coralIntakeSubsystem::hasEjected));
+        NamedCommands.registerCommand("WaitForEject", new WaitUntilCommand(this.coralSubsystem::hasEjected));
         NamedCommands.registerCommand("WaitForElevator", new WaitUntilCommand(this.elevatorSubsystem::atGoal));
-        NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(this.coralIntakeSubsystem::hasCoral));
+        NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(this.coralSubsystem::hasCoral));
     }
 
     /**

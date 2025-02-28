@@ -22,8 +22,8 @@ import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.FeedForwardCharacterizationCommand;
 import frc.robot.commands.WheelRadiusCharacterizationCommand;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.utils.LocalADStarAK;
@@ -34,8 +34,8 @@ import frc.robot.utils.LocalADStarAK;
 public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
     /* Subsystems */
     private final SwerveDriveSubsystem swerveDriveSubsystem;
-    private final AlgaeIntakeSubsystem algaeIntakeSubsystem;
-    private final CoralIntakeSubsystem coralIntakeSubsystem;
+    private final AlgaeSubsystem algaeSubsystem;
+    private final CoralSubsystem coralSubsystem;
     private final ElevatorSubsystem elevatorSubsystem;
 
     /* Constraints */
@@ -63,11 +63,11 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
     /**
      * 
      */
-    public AutoBuilder(SwerveDriveSubsystem swerveDriveSubsystem, AlgaeIntakeSubsystem algaeIntakeSubsystem,
-            CoralIntakeSubsystem coralIntakeSubsystem, ElevatorSubsystem elevatorSubsystem) {
+    public AutoBuilder(SwerveDriveSubsystem swerveDriveSubsystem, AlgaeSubsystem algaeSubsystem,
+            CoralSubsystem coralSubsystem, ElevatorSubsystem elevatorSubsystem) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
-        this.algaeIntakeSubsystem = algaeIntakeSubsystem;
-        this.coralIntakeSubsystem = coralIntakeSubsystem;
+        this.algaeSubsystem = algaeSubsystem;
+        this.coralSubsystem = coralSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;
     }
 
@@ -110,9 +110,9 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
         // Load Game Autos
         this.autonomousChooser.addOption("Drive Away", new PathPlannerAuto("DriveAway"));
         this.autonomousChooser.addOption("Clear Algae",
-                new ClearAlgae(this.algaeIntakeSubsystem, this.coralIntakeSubsystem, this.elevatorSubsystem)
+                new ClearAlgae(this.algaeSubsystem, this.coralSubsystem, this.elevatorSubsystem)
                         .getAutoCommand());
-        this.autonomousChooser.addOption("Grab Algae", new GrabAlgae(this.algaeIntakeSubsystem).getAutoCommand());
+        this.autonomousChooser.addOption("Grab Algae", new GrabAlgae(this.algaeSubsystem).getAutoCommand());
     }
 
     /**
