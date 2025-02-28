@@ -19,7 +19,7 @@ import frc.robot.subsystems.VisionSubsystem;
 public class ButtonBindings {
     private final int DRIVER_PORT = 0;
     private final int OPERATOR_PORT = 1;
-    private final int TEST_PORT = 0;
+    private final int TEST_PORT = 2;
 
     /* Controllers */
     private final CommandXboxController driverController;
