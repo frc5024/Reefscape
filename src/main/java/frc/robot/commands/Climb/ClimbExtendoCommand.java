@@ -29,6 +29,7 @@ public class ClimbExtendoCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+        /* Checls if climb arm is at extended position */
         return false;
     }
 }

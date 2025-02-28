@@ -34,7 +34,7 @@ public class RobotContainer {
     private void configureBindings() {
 
         // Climb commands
-        driver.y().whileTrue(m_climbSubsystem.climbCommand(s_LEDs));
+        driver.y().whileTrue(m_climbSubsystem.climbCommand());
         driver.rightTrigger().whileTrue(m_climbSubsystem.extendingCommand());
         driver.leftTrigger().whileTrue(m_climbSubsystem.retractingCommand());
         // driver.b().onTrue(m_climbSubsystem.cancelCommand());

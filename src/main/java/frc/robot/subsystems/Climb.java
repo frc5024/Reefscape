@@ -3,13 +3,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
-import frc.robot.commands.Climb.ClimbCancelCommand;
 import frc.robot.commands.Climb.ClimbCommand;
 import frc.robot.commands.Climb.ClimbExtendoCommand;
 import frc.robot.commands.Climb.ClimbRetractCommand;
@@ -18,6 +18,7 @@ public class Climb extends SubsystemBase {
     public static Climb mInstance = null;
 
     private TalonFX climbMotor;
+    private DigitalInput limitSwitch = new DigitalInput(0);
 
     // Shuffleboard
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
@@ -48,6 +49,7 @@ public class Climb extends SubsystemBase {
 
         // Shuffleboard tab displaying the encoder's position value as a double
         tab.addDouble("encoder value", () -> climbMotor.getPosition().getValueAsDouble());
+        tab.addBoolean("is climbed?", () -> isClimbed());
 
     }
 
@@ -112,7 +114,7 @@ public class Climb extends SubsystemBase {
 
     public boolean isClimbed() {
         // Returns true if the Encoder detects the motor is at climbed position
-        if (climbMotor.getPosition().getValueAsDouble() <= Constants.ClimbConstants.endPosition) {
+        if (limitSwitch.get()) {
             // if (climbMotor.getPosition().getValueAsDouble() >=
             // Constants.ClimbConstants.liftoffPos
             // && !overThreshold()) {
@@ -147,9 +149,9 @@ public class Climb extends SubsystemBase {
     // Commands
 
     // Creates new climb command
-    public Command climbCommand(LEDs LEDs) {
+    public Command climbCommand() {
         // Only climbing uses LEDs in the command itself
-        return new ClimbCommand(this, LEDs);
+        return new ClimbCommand(this);
     }
 
     // Creates new extending command
@@ -160,10 +162,5 @@ public class Climb extends SubsystemBase {
     // Creates new retracting command
     public Command retractingCommand() {
         return new ClimbRetractCommand(this);
-    }
-
-    // Creates new cancel command
-    public Command cancelCommand() {
-        return new ClimbCancelCommand(this);
     }
 }

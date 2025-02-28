@@ -29,7 +29,7 @@ public class ClimbRetractCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        // Stops when motor reaches retracted position
+        /* Checks if climb arm is at retracted position */
         return false;
     }
 }
