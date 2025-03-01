@@ -241,7 +241,7 @@ public class VisionSubsystem extends SubsystemBase {
 
         // Limelight best target pose is relative to the robot
         Pose3d robotPose = new Pose3d(poseSupplier.get());
-        Pose3d targetPose = inputs.bestTargetPose;
+        Pose3d targetPose = inputs.bestTargetPose == null ? robotPose : inputs.bestTargetPose;
         return robotPose.transformBy(
                 new Transform3d(targetPose.getZ(), targetPose.getX(), robotPose.getZ(),
                         targetPose.getRotation().rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(180.0)))));

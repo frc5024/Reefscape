@@ -113,13 +113,13 @@ public class DriveFromBestTagCommand extends Command {
 
         double yOffset = 0.0;
         double yawOffset = 0.0;
-        if (!isCoralMode) {
+        if (isCoralMode) {
             yOffset = isLeftPole ? -FieldConstants.REEF_POLE_OFFSET : FieldConstants.REEF_POLE_OFFSET;
             yawOffset = Units.degreesToRadians(180.0);
         }
 
         Transform3d transformation = new Transform3d(
-                new Translation3d(-RobotConstants.LENGTH_METERS / 2, yOffset, 0.0),
+                new Translation3d(RobotConstants.LENGTH_METERS / 1.4, yOffset, 0.0),
                 new Rotation3d(0.0, 0.0, yawOffset));
 
         return targetPose.transformBy(transformation).toPose2d();

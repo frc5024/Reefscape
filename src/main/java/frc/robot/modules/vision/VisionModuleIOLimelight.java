@@ -84,9 +84,9 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
         // 250ms
         inputs.connected = ((RobotController.getFPGATime() - this.latencySubscriber.getLastChange()) / 1000) < 250;
         inputs.bestTargetId = (int) LimelightHelpers.getFiducialID(getName());
-        // inputs.bestTargetPose =
-        // LimelightHelpers.getTargetPose3d_RobotSpace(getName());
-        inputs.bestTargetPose = VisionConstants.TAG_FIELD_LAYOUT.getTagPose(inputs.bestTargetId).get();
+        inputs.bestTargetPose = VisionConstants.TAG_FIELD_LAYOUT.getTagPose(inputs.bestTargetId).isPresent()
+                ? VisionConstants.TAG_FIELD_LAYOUT.getTagPose(inputs.bestTargetId).get()
+                : null;
         inputs.processor = Camera.Processor.LIMELIGHT;
 
         // Update target observation
