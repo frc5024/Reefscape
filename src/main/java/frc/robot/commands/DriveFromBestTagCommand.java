@@ -97,11 +97,11 @@ public class DriveFromBestTagCommand extends Command {
      * 
      */
     private Pose2d getBestTagPose(Pose3d currentPose) {
-        boolean isAlgaeMode = this.gamePieceModeSupplier.get() == GamePieceMode.ALGAE;
+        boolean isCoralMode = this.gamePieceModeSupplier.get() == GamePieceMode.CORAL;
 
-        String cameraName = isAlgaeMode
-                ? VisionConstants.REAR_CAMERA.getName()
-                : VisionConstants.FRONT_CAMERA.getName();
+        String cameraName = isCoralMode
+                ? VisionConstants.FRONT_CAMERA.getName()
+                : VisionConstants.REAR_CAMERA.getName();
         Pose3d targetPose = this.visionSubsystem.getBestTargetPose(cameraName);
 
         // return null if we don't have a best tag
@@ -113,13 +113,13 @@ public class DriveFromBestTagCommand extends Command {
 
         double yOffset = 0.0;
         double yawOffset = 0.0;
-        if (!isAlgaeMode) {
+        if (!isCoralMode) {
             yOffset = isLeftPole ? -FieldConstants.REEF_POLE_OFFSET : FieldConstants.REEF_POLE_OFFSET;
             yawOffset = Units.degreesToRadians(180.0);
         }
 
         Transform3d transformation = new Transform3d(
-                new Translation3d(RobotConstants.LENGTH_METERS / 2, yOffset, 0.0),
+                new Translation3d(-RobotConstants.LENGTH_METERS / 2, yOffset, 0.0),
                 new Rotation3d(0.0, 0.0, yawOffset));
 
         return targetPose.transformBy(transformation).toPose2d();
