@@ -241,7 +241,7 @@ public class VisionSubsystem extends SubsystemBase {
         Pose3d robotPose = new Pose3d(poseSupplier.get());
         Pose3d targetPose = inputs.bestTargetPose;
         return robotPose.transformBy(
-                new Transform3d(targetPose.getX(), targetPose.getY(), targetPose.getZ(), targetPose.getRotation()));
+                new Transform3d(targetPose.getZ(), targetPose.getX(), robotPose.getZ(), targetPose.getRotation()));
     }
 
     /**

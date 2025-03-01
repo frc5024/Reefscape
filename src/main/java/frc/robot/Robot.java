@@ -110,6 +110,7 @@ public class Robot extends LoggedRobot {
             PortForwarder.add(port + 10, "limelight-two.local", port);
         }
 
+        DriverStation.silenceJoystickConnectionWarning(true);
         checkDriverStationUpdate();
     }
 

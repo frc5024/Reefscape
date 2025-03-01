@@ -277,7 +277,13 @@ public class COTSTalonFXSwerveConstants {
         public static final class MK4i {
             /** Swerve Drive Specialties - MK4i Module (Falcon 500) */
             public static final COTSTalonFXSwerveConstants Falcon500(double driveGearRatio) {
-                double wheelDiameter = globalWheelDiameter;
+                /**
+                 * From Wheel Radius Characterization
+                 * Manta Raider - ?
+                 * Bealtoven - 1.957
+                 */
+                double wheelDiameter = Units.inchesToMeters(1.957 * 2);
+                // double wheelDiameter = globalWheelDiameter;
 
                 /** (150 / 7) : 1 */
                 double angleGearRatio = ((150.0 / 7.0) / 1.0);

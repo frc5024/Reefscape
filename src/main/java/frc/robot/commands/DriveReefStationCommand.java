@@ -105,16 +105,16 @@ public class DriveReefStationCommand extends Command {
         GamePieceMode driveMode = this.driveModeSupplier.get();
 
         // Determine if we want to drive to left or right coral pole
-        this.goalPose = new Pose3d(FieldConstants.REEF_POSES[stationId - 1]);
+        Pose3d reefPose3d = new Pose3d(FieldConstants.REEF_POSES[stationId - 1]);
+        Pose2d reefPose2d = AllianceFlipUtil.apply(reefPose3d.toPose2d());
+        this.goalPose = new Pose3d(reefPose2d);
+
         double offset = poleId == CoralPole.LEFT ? FieldConstants.REEF_POLE_OFFSET : -FieldConstants.REEF_POLE_OFFSET;
         double robotYaw = driveMode == GamePieceMode.CORAL ? 0.0 : 180.0;
 
-        Transform3d polePose = new Transform3d(new Translation3d(-RobotConstants.LENGTH_METERS / 2, offset, 0.0),
+        Transform3d polePose = new Transform3d(new Translation3d(RobotConstants.LENGTH_METERS / 2, offset, 0.0),
                 new Rotation3d(0.0, 0.0, 0.0));
         Pose2d driveToPose = this.goalPose.transformBy(polePose).toPose2d();
-
-        // Flip pose if red alliance
-        driveToPose = AllianceFlipUtil.apply(driveToPose);
 
         this.xController.setGoal(driveToPose.getX());
         this.yController.setGoal(driveToPose.getY());

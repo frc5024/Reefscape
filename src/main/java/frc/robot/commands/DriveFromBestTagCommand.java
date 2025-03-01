@@ -109,11 +109,13 @@ public class DriveFromBestTagCommand extends Command {
             return null;
         }
 
+        Logger.recordOutput("Commands/Target Pose", targetPose);
+
         double yOffset = 0.0;
         double yawOffset = 0.0;
         if (!isAlgaeMode) {
             yOffset = isLeftPole ? -FieldConstants.REEF_POLE_OFFSET : FieldConstants.REEF_POLE_OFFSET;
-            yawOffset = Units.degreesToRadians(180.0);
+            // yawOffset = Units.degreesToRadians(180.0);
         }
 
         Transform3d transformation = new Transform3d(

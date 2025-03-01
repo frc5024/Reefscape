@@ -46,7 +46,11 @@ public final class Constants {
      * 
      */
     public static final class RobotConstants {
-        public static final double LENGTH_INCHES = 38;
+        /**
+         * Manta Raider - 38
+         * Bealtoven - 24
+         */
+        public static final double LENGTH_INCHES = 24;
         public static final double LENGTH_METERS = Units.inchesToMeters(LENGTH_INCHES);
         public static final double LOOP_PERIOD_SECS = 0.02;
         public static final double MASS_KG = 74.088;
@@ -256,15 +260,15 @@ public final class Constants {
         public static final double SIM_SWERVE_MODULE_TURN_KD = 0.0;
 
         // PID constants for autonomous/pathplanner mode
-        public static final double SWERVE_DRIVE_X_KP = 0.2;
+        public static final double SWERVE_DRIVE_X_KP = 10.0;
         public static final double SWERVE_DRIVE_X_KI = 0.0;
         public static final double SWERVE_DRIVE_X_KD = 0.0;
 
-        public static final double SWERVE_DRIVE_Y_KP = 0.2;
+        public static final double SWERVE_DRIVE_Y_KP = 10.0;
         public static final double SWERVE_DRIVE_Y_KI = 0.0;
         public static final double SWERVE_DRIVE_Y_KD = 0.0;
 
-        public static final double SWERVE_DRIVE_OMEGA_KP = 1.0;
+        public static final double SWERVE_DRIVE_OMEGA_KP = 2.0;
         public static final double SWERVE_DRIVE_OMEGA_KI = 0.0;
         public static final double SWERVE_DRIVE_OMEGA_KD = 0.0;
 
@@ -438,8 +442,8 @@ public final class Constants {
 
         public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight-two",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
-                Units.inchesToMeters(10.0), Units.inchesToMeters(-7.0), Units.inchesToMeters(9.0),
-                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-30.0));
+                Units.inchesToMeters(10.0), Units.inchesToMeters(7.0), Units.inchesToMeters(9.0),
+                0.0, Units.degreesToRadians(18.0), Units.degreesToRadians(30.0));
 
         /**
          * TODO: set list of enabled camera
@@ -447,7 +451,7 @@ public final class Constants {
         public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM2_CAMERA, ARDUCAM1_CAMERA);
         public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM3_CAMERA);
         public static final List<Camera> REEFSCAPE_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
-        public static final List<Camera> CAMERAS = SIMULATION_CAMERAS;
+        public static final List<Camera> CAMERAS = BEALTOVEN_CAMERAS;
         public static final Camera FRONT_CAMERA = CAMERAS.get(0);
         public static final Camera REAR_CAMERA = CAMERAS.get(1);
 
