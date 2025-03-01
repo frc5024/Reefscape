@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.elevatorConstants;
@@ -340,5 +341,12 @@ public class Elevator extends SubsystemBase {
 
     public Command goToModePosition() {
         return new SetElevatorSetpointCmd(this, elevatorMode);
+    }
+
+    public Command slowL2() {
+        return new SequentialCommandGroup(
+                runOnce(() -> slow = true),
+                goToL2Position())
+                .finallyDo(() -> slow = false);
     }
 }
