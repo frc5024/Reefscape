@@ -92,7 +92,7 @@ public final class Constants {
             CoralL1(Units.inchesToMeters(0), 0.0),
             CoralL2(Units.inchesToMeters(10.0), -35.0),
             CoralL3(Units.inchesToMeters(18.0), -35.0),
-            CoralL4(Units.inchesToMeters(30.0), -45.0);
+            CoralL4(Units.inchesToMeters(30.0), -60.0);
 
             ElevatorLevel(double heightInMeters, double angleInDegrees) {
                 this.heightInMeters = heightInMeters;
@@ -175,16 +175,18 @@ public final class Constants {
 
         // starts with one closest to driver station and rotates clockwise
         public static final Pose2d[] REEF_POSES = new Pose2d[] {
-                new Pose2d(Units.inchesToMeters(144.00), Units.inchesToMeters(158.50), Rotation2d.fromDegrees(0.0)), // Tag-18
-                new Pose2d(Units.inchesToMeters(160.39), Units.inchesToMeters(186.83),
+                new Pose2d(Units.inchesToMeters(107.87), Units.inchesToMeters(158.50),
+                        Rotation2d.fromDegrees(0.0)), // Tag-18
+                new Pose2d(Units.inchesToMeters(140.55), Units.inchesToMeters(225.98),
                         Rotation2d.fromDegrees(-60.0)), // Tag-19
-                new Pose2d(Units.inchesToMeters(193.10), Units.inchesToMeters(186.83),
+                new Pose2d(Units.inchesToMeters(217.72), Units.inchesToMeters(227.56),
                         Rotation2d.fromDegrees(-120.0)), // Tag-20
-                new Pose2d(Units.inchesToMeters(209.49), Units.inchesToMeters(158.50),
+                new Pose2d(Units.inchesToMeters(256.69), Units.inchesToMeters(158.50),
                         Rotation2d.fromDegrees(180.0)), // Tag-21
-                new Pose2d(Units.inchesToMeters(193.10), Units.inchesToMeters(130.17),
+                new Pose2d(Units.inchesToMeters(216.53), Units.inchesToMeters(89.37),
                         Rotation2d.fromDegrees(120.0)), // Tag-22
-                new Pose2d(Units.inchesToMeters(160.39), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(60.0)) // Tag-17
+                new Pose2d(Units.inchesToMeters(137.01), Units.inchesToMeters(88.98),
+                        Rotation2d.fromDegrees(60.0)) // Tag-17
         };
     }
 
@@ -451,7 +453,7 @@ public final class Constants {
         public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM2_CAMERA, ARDUCAM1_CAMERA);
         public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM3_CAMERA);
         public static final List<Camera> REEFSCAPE_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
-        public static final List<Camera> CAMERAS = BEALTOVEN_CAMERAS;
+        public static final List<Camera> CAMERAS = SIMULATION_CAMERAS;
         public static final Camera FRONT_CAMERA = CAMERAS.get(0);
         public static final Camera REAR_CAMERA = CAMERAS.get(1);
 

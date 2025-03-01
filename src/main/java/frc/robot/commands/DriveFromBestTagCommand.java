@@ -115,7 +115,7 @@ public class DriveFromBestTagCommand extends Command {
         double yawOffset = 0.0;
         if (!isAlgaeMode) {
             yOffset = isLeftPole ? -FieldConstants.REEF_POLE_OFFSET : FieldConstants.REEF_POLE_OFFSET;
-            // yawOffset = Units.degreesToRadians(180.0);
+            yawOffset = Units.degreesToRadians(180.0);
         }
 
         Transform3d transformation = new Transform3d(

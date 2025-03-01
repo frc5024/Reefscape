@@ -4,8 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "ClearAlgae",
+    "FourCoral",
     "GrabAlgae",
-    "FourCoral"
+    "StationPaths"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

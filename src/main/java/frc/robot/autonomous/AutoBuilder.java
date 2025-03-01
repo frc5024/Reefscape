@@ -75,13 +75,16 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
      * 
      */
     public void configureAutonomous() {
+        double[] driveXPIDs = frc.robot.Constants.PIDConstants.getDriveXPIDs();
+        double[] driveOmegaPIDs = frc.robot.Constants.PIDConstants.getDriveOmegaPIDs();
         // Configure AutoBuilder for PathPlanner
         AutoBuilder.configure(
                 this.swerveDriveSubsystem::getPose,
                 this.swerveDriveSubsystem::setPose,
                 this.swerveDriveSubsystem::getChassisSpeeds,
                 this.swerveDriveSubsystem::drive,
-                new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+                new PPHolonomicDriveController(new PIDConstants(driveXPIDs[0], driveXPIDs[1], driveXPIDs[2]),
+                        new PIDConstants(driveOmegaPIDs[0], driveOmegaPIDs[1], driveOmegaPIDs[2])),
                 PP_CONFIG,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this.swerveDriveSubsystem);

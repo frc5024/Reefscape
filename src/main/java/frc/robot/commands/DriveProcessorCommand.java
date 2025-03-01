@@ -23,6 +23,8 @@ public class DriveProcessorCommand extends Command {
      */
     public DriveProcessorCommand(SwerveDriveSubsystem swerveDriveSubsystem) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
+
+        addRequirements(this.swerveDriveSubsystem);
     }
 
     @Override
@@ -63,7 +65,7 @@ public class DriveProcessorCommand extends Command {
     /**
      * 
      */
-    public void schedulePathCommand() {
+    private void schedulePathCommand() {
         try {
 
             PathPlannerPath pathPlannerPath = PathPlannerPath.fromPathFile("DriveProcessor - Path");

@@ -116,9 +116,9 @@ public class DriveReefStationCommand extends Command {
                 new Rotation3d(0.0, 0.0, 0.0));
         Pose2d driveToPose = this.goalPose.transformBy(polePose).toPose2d();
 
-        this.xController.setGoal(driveToPose.getX());
-        this.yController.setGoal(driveToPose.getY());
-        this.omegaController.setGoal(driveToPose.getRotation().rotateBy(Rotation2d.fromDegrees(robotYaw)).getRadians());
+        this.xController.setGoal(reefPose2d.getX());
+        this.yController.setGoal(reefPose2d.getY());
+        this.omegaController.setGoal(reefPose2d.getRotation().rotateBy(Rotation2d.fromDegrees(robotYaw)).getRadians());
 
         Logger.recordOutput("Commands/Goal Pose", goalPose);
         Logger.recordOutput("Commands/Active Command", this.getName());
