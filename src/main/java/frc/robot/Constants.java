@@ -49,14 +49,14 @@ public final class Constants {
         // elevator values
         public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
-        public static final double elevatorMaxSpeed = 75;
-        public static final double elevatorMaxAccel = 75;
+        public static final double elevatorMaxSpeed = 70;
+        public static final double elevatorMaxAccel = 70;
         public static final double zeroPosition = 0;
         public static final int motorID1 = 60;
         public static final int motorID2 = 61;
 
         // values for PID
-        public static final double kP = 0.03;
+        public static final double kP = 0.05;
         public static final double kI = 0;
         public static final double kD = 0;
 
@@ -64,8 +64,8 @@ public final class Constants {
         public static final double kV = 0.1;
         public static final double kA = 0.05;
 
-        public static final double G = 0.4;
-        public static final double minimumBottomValue = 1.5; // encoder value will not always be zero so we create a
+        public static final double G = 0.5;
+        public static final double minimumBottomValue = 2.5; // encoder value will not always be zero so we create a
                                                              // tolerance value
 
         // public static final double radianstoCM(double CM) {
