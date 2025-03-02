@@ -89,13 +89,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
         // Configure SysId
         sysId = new SysIdRoutine(
-                new SysIdRoutine.Config(
-                        null,
-                        null,
-                        null,
+                new SysIdRoutine.Config(null, null, null,
                         (state) -> Logger.recordOutput("SwerveDrive/SysIdState", state.toString())),
-                new SysIdRoutine.Mechanism(
-                        (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+                new SysIdRoutine.Mechanism((voltage) -> runCharacterization(voltage.in(Volts)), null, this));
 
         this.isFieldRelative = true;
         this.isOpenLoop = false;
@@ -214,12 +210,12 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     /**
      * 
      */
-    public void drive(double xVelocity, double yVelocity, double rVelocity, boolean isOpenLoop) {
+    public void drive(double xVelocity, double yVelocity, double rVelocity) {
         drive(xVelocity, yVelocity, rVelocity,
                 DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
                         ? getRotation().plus(new Rotation2d(Math.PI))
                         : getRotation(),
-                isOpenLoop);
+                false);
     }
 
     /**

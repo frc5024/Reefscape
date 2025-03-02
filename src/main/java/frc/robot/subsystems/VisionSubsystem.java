@@ -229,10 +229,7 @@ public class VisionSubsystem extends SubsystemBase {
     public Pose3d getBestTargetPose(String cameraName) {
         VisionIOInputsAutoLogged inputs = this.inputs.get(cameraName);
 
-        if (inputs == null)
-            return null;
-
-        return inputs.bestTargetPose;
+        return inputs != null ? inputs.bestTargetPose : null;
     }
 
     /**

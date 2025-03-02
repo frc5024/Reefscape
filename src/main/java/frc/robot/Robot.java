@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.RobotConstants;
@@ -90,6 +91,7 @@ public class Robot extends LoggedRobot {
             PortForwarder.add(port, "limelight.local", port);
             // PortForwarder.add(port + 10, "limelight-two.local", port);
         }
+        DriverStation.silenceJoystickConnectionWarning(true);
     }
 
     /**

@@ -18,6 +18,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.lib.camera.Camera;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.utils.LimelightHelpers;
 
 /** IO implementation for real Limelight hardware. */
@@ -83,7 +84,9 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
         // 250ms
         inputs.connected = ((RobotController.getFPGATime() - this.latencySubscriber.getLastChange()) / 1000) < 250;
         inputs.bestTargetId = (int) LimelightHelpers.getFiducialID(getName());
-        inputs.bestTargetPose = LimelightHelpers.getBotPose3d(getName());
+        inputs.bestTargetPose = VisionConstants.TAG_FIELD_LAYOUT.getTagPose(inputs.bestTargetId).isPresent()
+                ? VisionConstants.TAG_FIELD_LAYOUT.getTagPose(inputs.bestTargetId).get()
+                : null;
 
         // Update target observation
         inputs.latestTargetObservation = new TargetObservation(Rotation2d.fromDegrees(this.txSubscriber.get()),
