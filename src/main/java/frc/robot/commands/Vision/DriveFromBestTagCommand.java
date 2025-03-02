@@ -119,7 +119,7 @@ public class DriveFromBestTagCommand extends Command {
         }
 
         Transform3d transformation = new Transform3d(
-                new Translation3d(RobotConstants.LENGTH_METERS / 1.4, yOffset, 0.0),
+                new Translation3d(RobotConstants.LENGTH_METERS / 2.0, yOffset, 0.0),
                 new Rotation3d(0.0, 0.0, yawOffset));
 
         return targetPose.transformBy(transformation).toPose2d();

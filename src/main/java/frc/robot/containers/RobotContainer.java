@@ -5,8 +5,10 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.SwerveDriveCommands;
@@ -24,8 +26,11 @@ import frc.robot.subsystems.VisionSubsystem;
 
 abstract public class RobotContainer {
     /* Subsystems */
-    protected Coral coral = new Coral();
-    protected Elevator elevator = Elevator.getInstance();
+    protected Coral coral;
+    protected Elevator elevator;
+    protected Rumble rumble;
+    protected Limelight limelightSubsystem;
+    protected LEDs lEDs;
 
     protected AlgaeSubsystem algaeSubsystem;
     protected CoralSubsystem coralSubsystem;
@@ -36,10 +41,6 @@ abstract public class RobotContainer {
     /* Autonomous */
     private AutoBuilder autoBuilder;
     private LoggedDashboardChooser<Command> autonomousChooser;
-
-    private final Rumble rumble = Rumble.getInstance();
-    private final Limelight limelightSubsystem = new Limelight();
-    private final LEDs s_LEDs = LEDs.getInstance();
 
     boolean visionMode = false;
     String mode;
@@ -87,6 +88,22 @@ abstract public class RobotContainer {
     }
 
     abstract public void registerNamedCommands();
+
+    /**
+     * Called when the alliance reported by the driverstation/FMS changes -
+     * Simulation Only
+     * 
+     * @param alliance new alliance value
+     */
+    public void onAllianceChanged(Alliance alliance, int location) {
+        int index = alliance == Alliance.Blue ? 0 : 1;
+        location -= 1;
+
+        Pose2d pose2d = RobotConstants.TUNING_MODE ? FieldConstants.TUNING_POSES[index][location]
+                : FieldConstants.STATION_POSES[index][location];
+        this.swerveDriveSubsystem.resetPosition(pose2d);
+        resetSimulationField(pose2d);
+    }
 
     /**
      * Maple Sim Routines

@@ -9,16 +9,15 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.vision.DriveFromBestTagCommand;
 import frc.robot.controls.GameData;
-import frc.robot.modules.algae.AlgaeModuleIOSim;
-import frc.robot.modules.coral.CoralModuleIOSparkFlex;
-import frc.robot.modules.elevator.ElevatorModuleIOSparkMax;
 import frc.robot.modules.gyro.GyroModuleIONavX;
 import frc.robot.modules.swerve.SwerveModuleIOTalonFX;
-import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Rumble;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utils.SwerveModuleBuilder;
@@ -45,13 +44,17 @@ public class MantaRaiderRobotContainer extends RobotContainer {
         this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
                 this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
 
-        this.algaeSubsystem = new AlgaeSubsystem(new AlgaeModuleIOSim());
-        this.coralSubsystem = new CoralSubsystem(new CoralModuleIOSparkFlex());
-        this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSparkMax(), this.algaeSubsystem::hasAlgae,
-                this.coralSubsystem::hasCoral);
+        // this.algaeSubsystem = new AlgaeSubsystem(new AlgaeModuleIOSim());
+        // this.coralSubsystem = new CoralSubsystem(new CoralModuleIOSparkFlex());
+        // this.elevatorSubsystem = new ElevatorSubsystem(new
+        // ElevatorModuleIOSparkMax(), this.algaeSubsystem::hasAlgae,
+        // this.coralSubsystem::hasCoral);
 
         this.coral = new Coral();
         this.elevator = Elevator.getInstance();
+        this.rumble = Rumble.getInstance();
+        this.limelightSubsystem = new Limelight();
+        this.lEDs = LEDs.getInstance();
 
         registerNamedCommands();
         configureAutoBuilder();

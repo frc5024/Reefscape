@@ -1,5 +1,7 @@
 package frc.robot.containers;
 
+import java.util.function.DoubleSupplier;
+
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
@@ -7,9 +9,13 @@ import org.littletonrobotics.junction.Logger;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.commands.SwerveDriveCommands;
+import frc.robot.controls.ButtonBindingsSim;
 import frc.robot.modules.algae.AlgaeModuleIOSim;
 import frc.robot.modules.coral.CoralModuleIOSim;
 import frc.robot.modules.elevator.ElevatorModuleIOSim;
@@ -53,13 +59,37 @@ public class MapleSimRobotContainer extends RobotContainer {
         this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim(), this.algaeSubsystem::hasAlgae,
                 this.coralSubsystem::hasCoral);
 
+        // If simulation set coral in
+        this.coralSubsystem.setHasCoral(true);
+        this.algaeSubsystem.setHasAlgae(false);
+
         registerNamedCommands();
         configureAutoBuilder();
         configureBindings();
 
         // Initiate the LEDSubsystem
         LEDSubsystem.getInstance();
+    }
 
+    @Override
+    public void configureBindings() {
+        ButtonBindingsSim buttonBindings = new ButtonBindingsSim(this.swerveDriveSubsystem, this.algaeSubsystem,
+                this.coralSubsystem, this.elevatorSubsystem, this.visionSubsystem);
+
+        CommandXboxController commandXboxController = RobotConstants.TUNING_MODE
+                ? buttonBindings.getTestController()
+                : buttonBindings.getDriverController();
+
+        // Drive suppliers
+        DoubleSupplier controllerX = () -> -commandXboxController.getLeftY();
+        DoubleSupplier controllerY = () -> -commandXboxController.getLeftX();
+        DoubleSupplier controllerOmega = () -> -commandXboxController.getRightX();
+
+        Command closedLoopDrive = SwerveDriveCommands.drive(this.swerveDriveSubsystem, controllerX, controllerY,
+                controllerOmega, false);
+
+        // Default command, normal field-relative drive
+        this.swerveDriveSubsystem.setDefaultCommand(closedLoopDrive);
     }
 
     /**

@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.util.NoSuchElementException;
+
+import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -9,12 +12,14 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.containers.MantaRaiderRobotContainer;
 import frc.robot.containers.MapleSimRobotContainer;
 import frc.robot.containers.RobotContainer;
+import frc.robot.controls.GameData;
 
 /**
  * The methods in this class are called automatically corresponding to each
@@ -26,6 +31,10 @@ import frc.robot.containers.RobotContainer;
 public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;
     private Command autonomousCommand;
+
+    // Variables used in simulation to set robot starting position
+    private Alliance alliance = Alliance.Blue;
+    private int location = 0;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -93,6 +102,7 @@ public class Robot extends LoggedRobot {
             // PortForwarder.add(port + 10, "limelight-two.local", port);
         }
         DriverStation.silenceJoystickConnectionWarning(true);
+        checkDriverStationUpdate();
     }
 
     /**
@@ -124,6 +134,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void disabledPeriodic() {
+        checkDriverStationUpdate();
     }
 
     /**
@@ -132,6 +143,8 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
+        checkDriverStationUpdate();
+
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)
@@ -159,6 +172,9 @@ public class Robot extends LoggedRobot {
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
+        Logger.recordOutput("GameData/Game Piece Mode", GameData.getInstance().getGamePieceModeAsString());
+        Logger.recordOutput("GameData/Pole Position", GameData.getInstance().getCoralPoleAsString());
+        Logger.recordOutput("GameData/Reef Position", GameData.getInstance().getReefStationIndexAsString());
     }
 
     @Override
@@ -180,5 +196,33 @@ public class Robot extends LoggedRobot {
     /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {
+        SimulatedArena.getInstance().simulationPeriodic();
+        this.robotContainer.displaySimFieldToAdvantageScope();
+    }
+
+    /**
+     * Checks the driverstation alliance. We have have to check repeatedly because
+     * we don't know when the
+     * driverstation/FMS will connect, and the alliance can change at any time in
+     * the shop.
+     */
+    private void checkDriverStationUpdate() {
+        // https://www.chiefdelphi.com/t/getalliance-always-returning-red/425782/27
+        try {
+
+            Alliance currentAlliance = DriverStation.getAlliance().get();
+
+            int currentLocation = DriverStation.getLocation().getAsInt();
+
+            // If we have data, and have a new alliance from last time
+            if (DriverStation.isDSAttached()
+                    && (currentAlliance.compareTo(this.alliance) != 0 || currentLocation != this.location)) {
+                this.robotContainer.onAllianceChanged(currentAlliance, currentLocation);
+                this.alliance = currentAlliance;
+                this.location = currentLocation;
+            }
+
+        } catch (NoSuchElementException e) {
+        }
     }
 }
