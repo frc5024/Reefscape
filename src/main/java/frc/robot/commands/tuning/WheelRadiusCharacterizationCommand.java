@@ -56,7 +56,7 @@ public class WheelRadiusCharacterizationCommand {
                         Commands.run(
                                 () -> {
                                     double speed = limiter.calculate(WHEEL_RADIUS_MAX_VELOCITY);
-                                    this.swerveDriveSubsystem.drive(0.0, 0.0, speed, false);
+                                    this.swerveDriveSubsystem.drive(0.0, 0.0, speed);
                                 },
                                 this.swerveDriveSubsystem)),
 

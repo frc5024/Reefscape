@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.commands.Elevator.SetElevatorSetpointCmd;
-import frc.robot.commands.Vision.DriveFromBestTagCommand;
+import frc.robot.commands.vision.DriveFromBestTagCommand;
+import frc.robot.controls.GameData.CoralPole;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -53,6 +54,10 @@ public class ButtonBindings {
     private CommandXboxController setDriverBindingsController() {
         CommandXboxController commandXboxController = new CommandXboxController(DRIVER_PORT);
 
+        // Toggle game piece modes
+        commandXboxController.back()
+                .whileTrue(runOnce(() -> GameData.getInstance().toggleGamePieceMode()));
+
         // switch from robot relative to field relative
         commandXboxController.start()
                 .whileTrue(either(
@@ -88,13 +93,37 @@ public class ButtonBindings {
         commandXboxController.rightTrigger()
                 .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
                         this.swerveDriveSubsystem::getPose,
-                        false));
+                        false,
+                        GameData.getInstance().getGamePieceMode()));
 
         // Drive to left pole of best apriltag
         commandXboxController.leftTrigger()
                 .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
                         this.swerveDriveSubsystem::getPose,
-                        true));
+                        true,
+                        GameData.getInstance().getGamePieceMode()));
+
+        // Drive to selected reef station
+        // commandXboxController.rightBumper()
+        // .whileTrue(new DriveReefStationCommand(this.swerveDriveSubsystem,
+        // this.swerveDriveSubsystem::getPose,
+        // GameData.getInstance()::getReefStationIndex,
+        // GameData.getInstance().getCoralPole(),
+        // GameData.getInstance().getGamePieceMode()));
+
+        // // Drive to selected reef station
+        // commandXboxController.leftBumper()
+        // .whileTrue(new DriveReefStationCommand(this.swerveDriveSubsystem,
+        // this.swerveDriveSubsystem::getPose,
+        // GameData.getInstance()::getReefStationIndex,
+        // GameData.getInstance().getCoralPole(),
+        // GameData.getInstance().getGamePieceMode()));
+
+        // Set reef position
+        commandXboxController.povUp().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(1)));
+        commandXboxController.povDown().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(-1)));
+        commandXboxController.povLeft().onTrue(runOnce(() -> GameData.getInstance().setCoralPole(CoralPole.LEFT)));
+        commandXboxController.povRight().onTrue(runOnce(() -> GameData.getInstance().setCoralPole(CoralPole.RIGHT)));
 
         return commandXboxController;
     }

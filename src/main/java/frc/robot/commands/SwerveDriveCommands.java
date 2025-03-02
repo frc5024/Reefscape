@@ -73,10 +73,6 @@ public class SwerveDriveCommands {
     }
 
     /**
-     * 
-     */
-
-    /**
      * Field relative drive command using joystick for linear control and PID for
      * angular control.
      * Possible use cases include snapping to an angle, aiming at a vision target,
@@ -102,7 +98,7 @@ public class SwerveDriveCommands {
                     double omega = angleController.calculate(swerveDriveSubsystem.getRotation().getRadians(),
                             rotationSupplier.get().getRadians());
 
-                    swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega, false);
+                    swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega);
                 },
                 swerveDriveSubsystem)
 
