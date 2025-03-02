@@ -429,8 +429,8 @@ public final class Constants {
 
         public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_UC626-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(-10.0), Units.inchesToMeters(-7.5), Units.inchesToMeters(9.0),
-                0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-150.0));
+                Units.inchesToMeters(10.0), Units.inchesToMeters(7.25), Units.inchesToMeters(8.5),
+                0.0, Units.degreesToRadians(20), Units.degreesToRadians(-150.0));
 
         public static final Camera GAME_PIECE_CAMERA = new Camera("WebCam",
                 Camera.Type.COLOURED_SHAPE, Camera.Processor.PHOTONVISION, 0,
@@ -444,7 +444,7 @@ public final class Constants {
 
         public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight-two",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
-                Units.inchesToMeters(10.0), Units.inchesToMeters(7.0), Units.inchesToMeters(9.0),
+                Units.inchesToMeters(10.0), Units.inchesToMeters(7.0), Units.inchesToMeters(9.5),
                 0.0, Units.degreesToRadians(18.0), Units.degreesToRadians(30.0));
 
         /**
