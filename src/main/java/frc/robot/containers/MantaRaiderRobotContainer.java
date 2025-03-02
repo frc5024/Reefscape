@@ -1,12 +1,24 @@
 package frc.robot.containers;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.vision.DriveFromBestTagCommand;
+import frc.robot.controls.GameData;
+import frc.robot.modules.algae.AlgaeModuleIOSim;
+import frc.robot.modules.coral.CoralModuleIOSparkFlex;
+import frc.robot.modules.elevator.ElevatorModuleIOSparkMax;
 import frc.robot.modules.gyro.GyroModuleIONavX;
 import frc.robot.modules.swerve.SwerveModuleIOTalonFX;
+import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.Coral;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.utils.SwerveModuleBuilder;
@@ -33,12 +45,49 @@ public class MantaRaiderRobotContainer extends RobotContainer {
         this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
                 this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
 
+        this.algaeSubsystem = new AlgaeSubsystem(new AlgaeModuleIOSim());
+        this.coralSubsystem = new CoralSubsystem(new CoralModuleIOSparkFlex());
+        this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSparkMax(), this.algaeSubsystem::hasAlgae,
+                this.coralSubsystem::hasCoral);
+
         this.coral = new Coral();
         this.elevator = Elevator.getInstance();
 
         registerNamedCommands();
         configureAutoBuilder();
         configureBindings();
+    }
+
+    @Override
+    public void registerNamedCommands() {
+        NamedCommands.registerCommand("ScoreCoral", new InstantCommand(() -> {
+            this.coralSubsystem.addAction(CoralSubsystem.Action.EJECT);
+        }));
+        NamedCommands.registerCommand("IntakeCoral", new InstantCommand(() -> {
+            this.coralSubsystem.addAction(CoralSubsystem.Action.INTAKE);
+        }));
+        NamedCommands.registerCommand("DriveRightTag",
+                new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                        this.swerveDriveSubsystem::getPose, false, GameData.getInstance().getGamePieceMode()));
+        NamedCommands.registerCommand("DriveLeftTag",
+                new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                        this.swerveDriveSubsystem::getPose, true, GameData.getInstance().getGamePieceMode()));
+
+        NamedCommands.registerCommand("ElevatorL0", new InstantCommand(() -> {
+            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM);
+        }));
+        NamedCommands.registerCommand("ElevatorL4", new InstantCommand(() -> {
+            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_4);
+        }));
+        NamedCommands.registerCommand("EjectCoral", new InstantCommand(() -> {
+            this.coralSubsystem.addAction(CoralSubsystem.Action.EJECT);
+        }));
+        NamedCommands.registerCommand("IntakeCoral", new InstantCommand(() -> {
+            this.coralSubsystem.addAction(CoralSubsystem.Action.INTAKE);
+        }));
+        NamedCommands.registerCommand("WaitForEject", new WaitUntilCommand(this.coralSubsystem::hasEjected));
+        NamedCommands.registerCommand("WaitForElevator", new WaitUntilCommand(this.elevatorSubsystem::atGoal));
+        NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(this.coralSubsystem::hasCoral));
     }
 
     /**
