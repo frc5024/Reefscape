@@ -45,7 +45,7 @@
     "rotation": -52.0
   },
   "reversed": false,
-  "folder": "StationPaths",
+  "folder": "TeleopPaths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -52.0

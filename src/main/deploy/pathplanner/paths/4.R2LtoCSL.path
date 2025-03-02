@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8554285714285714,
-        "y": 5.417857142857142
+        "x": 3.964,
+        "y": 5.242
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0864285714285713,
-        "y": 6.766
+        "x": 3.1879764560167496,
+        "y": 6.5861122060486466
       },
       "isLocked": false,
       "linkedName": null
@@ -45,7 +45,7 @@
     "rotation": -53.0
   },
   "reversed": false,
-  "folder": "FourCoral",
+  "folder": "ThreeCoral",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -61.0

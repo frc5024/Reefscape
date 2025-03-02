@@ -3,7 +3,9 @@
   "robotLength": 0.8636,
   "holonomicMode": true,
   "pathFolders": [
-    "Test Feature"
+    "TeleopPaths",
+    "Test Feature",
+    "ThreeCoral"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
