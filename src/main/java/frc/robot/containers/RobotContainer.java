@@ -1,12 +1,10 @@
 package frc.robot.containers;
 
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -17,7 +15,6 @@ import frc.robot.Constants.RobotConstants;
 import frc.robot.Robot;
 import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.SwerveDriveCommands;
-import frc.robot.commands.TeleopDriveCommand;
 import frc.robot.commands.TuningCommand;
 import frc.robot.commands.TuningSwerveCommand;
 import frc.robot.controls.ButtonBindings;
@@ -79,15 +76,14 @@ abstract public class RobotContainer {
         DoubleSupplier controllerX = () -> -commandXboxController.getLeftY();
         DoubleSupplier controllerY = () -> -commandXboxController.getLeftX();
         DoubleSupplier controllerOmega = () -> -commandXboxController.getRightX();
-        Supplier<Rotation2d> rotationSupplier = () -> this.swerveDriveSubsystem.getPose().getRotation();
 
-        Command closedLoopDrive = SwerveDriveCommands.closedLoopDrive(swerveDriveSubsystem, controllerX, controllerY,
-                controllerOmega);
+        Command closedLoopDrive = SwerveDriveCommands.drive(this.swerveDriveSubsystem, controllerX, controllerY,
+                controllerOmega, false);
 
-        Command openLoopDrive = new TeleopDriveCommand(this.swerveDriveSubsystem, rotationSupplier, controllerX,
-                controllerY, controllerOmega);
+        Command openLoopDrive = SwerveDriveCommands.drive(this.swerveDriveSubsystem, controllerX, controllerY,
+                controllerOmega, true);
 
-        Command tuningCommand = new TuningCommand(swerveDriveSubsystem, algaeSubsystem, coralSubsystem,
+        Command tuningCommand = new TuningCommand(this.swerveDriveSubsystem, algaeSubsystem, coralSubsystem,
                 elevatorSubsystem, controllerX, controllerY, controllerOmega, commandXboxController);
 
         Command tuningSwerveCommand = new TuningSwerveCommand(swerveDriveSubsystem, controllerX, controllerY,

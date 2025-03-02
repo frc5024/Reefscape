@@ -87,7 +87,6 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
         inputs.bestTargetPose = VisionConstants.TAG_FIELD_LAYOUT.getTagPose(inputs.bestTargetId).isPresent()
                 ? VisionConstants.TAG_FIELD_LAYOUT.getTagPose(inputs.bestTargetId).get()
                 : null;
-        inputs.processor = Camera.Processor.LIMELIGHT;
 
         // Update target observation
         inputs.latestTargetObservation = new TargetObservation(Rotation2d.fromDegrees(this.txSubscriber.get()),

@@ -76,7 +76,6 @@ public class VisionModuleIOPhotonVision implements VisionModuleIO {
     @Override
     public void updateInputs(VisionIOInputs inputs) {
         inputs.connected = this.photonCamera.isConnected();
-        inputs.processor = Camera.Processor.PHOTONVISION;
 
         // Read new camera observations
         Set<Short> tagIds = new HashSet<>();

@@ -58,8 +58,8 @@ public class SwerveDriveCommands {
      * Field relative drive command using two joysticks (controlling linear and
      * angular velocities).
      */
-    public static Command closedLoopDrive(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier xSupplier,
-            DoubleSupplier ySupplier, DoubleSupplier omegaSupplier) {
+    public static Command drive(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier xSupplier,
+            DoubleSupplier ySupplier, DoubleSupplier omegaSupplier, boolean isOpenLoop) {
         return Commands.run(
                 () -> {
                     Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(),
@@ -67,7 +67,7 @@ public class SwerveDriveCommands {
                     double omega = getOmegaFromJoysticks(omegaSupplier.getAsDouble());
 
                     swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega,
-                            swerveDriveSubsystem.getRotation(), false);
+                            swerveDriveSubsystem.getRotation(), isOpenLoop);
                 },
                 swerveDriveSubsystem);
     }

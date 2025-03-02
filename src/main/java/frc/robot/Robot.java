@@ -104,10 +104,7 @@ public class Robot extends LoggedRobot {
         // https://docs.limelightvision.io/docs/docs-limelight/getting-started/FRC/best-practices
         for (int port = 5800; port <= 5809; port++) {
             PortForwarder.add(port, "limelight.local", port);
-        }
-
-        for (int port = 5800; port <= 5809; port++) {
-            PortForwarder.add(port + 10, "limelight-two.local", port);
+            // PortForwarder.add(port + 10, "limelight-two.local", port);
         }
 
         DriverStation.silenceJoystickConnectionWarning(true);
