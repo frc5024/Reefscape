@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.lib.camera.Camera;
 import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDPreset;
-import frc.robot.subsystems.Elevator;
 import frc.robot.utils.COTSTalonFXSwerveConstants;
 import frc.robot.utils.COTSTalonFXSwerveConstants.SDS.MK4i;
 
@@ -84,12 +83,12 @@ public final class Constants {
         // public static double servoReset = -0.5;
     }
 
-    public static class ElevatorContants {
+    public static class ElevatorConstants {
         // elevator values
         public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
-        public static final double elevatorMaxSpeed = 12;
-        public static final double elevatorMaxAccel = 12;
+        public static final double elevatorMaxSpeed = 70;
+        public static final double elevatorMaxAccel = 70;
         public static final double zeroPosition = 0;
         public static final int motorID1 = 60;
         public static final int motorID2 = 61;
@@ -100,11 +99,11 @@ public final class Constants {
         public static final double kD = 0;
 
         // values for feed forward
-        public static final double kV = 0.3;
-        public static final double kA = 0.1;
+        public static final double kV = 0.1;
+        public static final double kA = 0.05;
 
-        public static final double G = 0.55;
-        public static final double minimumBottomValue = 0.1; // encoder value will not always be zero so we create a
+        public static final double G = 0.5;
+        public static final double minimumBottomValue = 2.5; // encoder value will not always be zero so we create a
                                                              // tolerance value
 
         // public static final double radianstoCM(double CM) {
@@ -117,13 +116,12 @@ public final class Constants {
 
         // position constants for the different levels to score in rotations
         public static final double rootPosition = 0;
-        public static final double L1Position = Elevator.rotationsToInches(11.1);
-        public static final double L2Position = Elevator.rotationsToInches(44 / 3);
-        public static final double Algae1 = Elevator.rotationsToInches(4.36);
-        public static final double L3position = Elevator.rotationsToInches(28);
-        public static final double Algae2 = Elevator.rotationsToInches(6.108);
-        public static final double L4position = Elevator.rotationsToInches(46.827);
-
+        public static final double L1Position = 15.212;
+        public static final double L2Position = 18.0802;
+        public static final double Algae1 = 5.97514;
+        public static final double L3Position = 31.37261;
+        public static final double Algae2 = 8.37068;
+        public static final double L4Position = 49.57406;
     }
 
     /**
@@ -260,9 +258,9 @@ public final class Constants {
         public static final double SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SWERVE_MODULE_DRIVE_KD = 0.0;
 
-        public static final double SWERVE_MODULE_DRIVE_KS = 0.25;
+        public static final double SWERVE_MODULE_DRIVE_KS = 0.32;
         public static final double SWERVE_MODULE_DRIVE_KV = 0.12;
-        public static final double SWERVE_MODULE_DRIVE_KA = 0.01;
+        public static final double SWERVE_MODULE_DRIVE_KA = 0.27;
 
         // PID constants for simulated swerve modules
         public static final double SIM_SWERVE_MODULE_DRIVE_KP = 0.1;

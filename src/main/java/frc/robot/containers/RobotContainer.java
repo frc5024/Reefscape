@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.SwerveDriveCommands;
+import frc.robot.commands.vision.DriveFromBestTagCommand;
 import frc.robot.controls.ButtonBindings;
+import frc.robot.controls.GameData;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.LEDs;
@@ -70,11 +72,11 @@ abstract public class RobotContainer {
         DoubleSupplier controllerY = () -> -commandXboxController.getLeftX();
         DoubleSupplier controllerOmega = () -> -commandXboxController.getRightX();
 
-        Command closedLoopDrive = SwerveDriveCommands.drive(swerveDriveSubsystem, controllerX, controllerY,
+        Command closedLoopDrive = SwerveDriveCommands.drive(this.swerveDriveSubsystem, controllerX, controllerY,
                 controllerOmega, false);
 
         // Default command, normal field-relative drive
-        swerveDriveSubsystem.setDefaultCommand(closedLoopDrive);
+        this.swerveDriveSubsystem.setDefaultCommand(closedLoopDrive);
     }
 
     public Command getAutonomousCommand() {
@@ -87,6 +89,12 @@ abstract public class RobotContainer {
     protected void registerNamedCommands() {
         NamedCommands.registerCommand("ScoreCoral", coralSubsystem.outtakeCommand());
         NamedCommands.registerCommand("IntakeCoral", coralSubsystem.intakeCommand());
+        NamedCommands.registerCommand("DriveRightTag",
+                new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                        this.swerveDriveSubsystem::getPose, false, GameData.getInstance().getGamePieceMode()));
+        NamedCommands.registerCommand("DriveLefttTag",
+                new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                        this.swerveDriveSubsystem::getPose, true, GameData.getInstance().getGamePieceMode()));
     }
 
     /**

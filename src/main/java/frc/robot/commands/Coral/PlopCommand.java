@@ -2,7 +2,7 @@
 package frc.robot.commands.Coral;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.subsystems.Coral;
 
 public class PlopCommand extends Command {
@@ -20,7 +20,7 @@ public class PlopCommand extends Command {
     // to HOLDING
     @Override
     public void initialize() {
-        coralSubsystem.set(Constants.CoralConstants.plopSpeed);
+        coralSubsystem.set(CoralConstants.plopSpeed);
 
     }
 

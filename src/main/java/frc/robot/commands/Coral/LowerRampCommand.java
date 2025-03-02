@@ -2,7 +2,7 @@ package frc.robot.commands.Coral;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.subsystems.Coral;
 
 public class LowerRampCommand extends Command {
@@ -20,7 +20,7 @@ public class LowerRampCommand extends Command {
 
     // when start, rotate -plopspeed, lowers the ramp
     public void initialize() {
-        coralSubsystem.setBottom(Constants.CoralConstants.rampSpeed);
+        coralSubsystem.setBottom(CoralConstants.rampSpeed);
         timer.reset();
         timer.start();
     }

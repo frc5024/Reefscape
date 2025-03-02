@@ -114,7 +114,7 @@ public class DriveFromBestTagCommand extends Command {
         double yOffset = 0.0;
         double yawOffset = 0.0;
         if (isCoralMode) {
-            yOffset = isLeftPole ? -FieldConstants.REEF_POLE_OFFSET : FieldConstants.REEF_POLE_OFFSET;
+            yOffset = isLeftPole ? -FieldConstants.REEF_POLE_LEFT_OFFSET : FieldConstants.REEF_POLE_RIGHT_OFFSET;
             yawOffset = Units.degreesToRadians(180.0);
         }
 

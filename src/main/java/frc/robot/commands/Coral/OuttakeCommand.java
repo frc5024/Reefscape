@@ -1,7 +1,7 @@
 package frc.robot.commands.Coral;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Rumble;
@@ -35,7 +35,7 @@ public class OuttakeCommand extends Command {
             cancel();
         }
 
-        coralSubsystem.set(Constants.CoralConstants.outtakeSpeed);
+        coralSubsystem.set(CoralConstants.outtakeSpeed);
 
         // if (elevatorSubsystem.getElevatorPosition() ==
         // Constants.elevatorConstants.L1position) {

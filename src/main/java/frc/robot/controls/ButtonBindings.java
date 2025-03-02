@@ -5,7 +5,7 @@ import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.Elevator.SetElevatorSetpointCmd;
 import frc.robot.commands.vision.DriveFromBestTagCommand;
 import frc.robot.controls.GameData.CoralPole;
@@ -72,7 +72,7 @@ public class ButtonBindings {
         commandXboxController.y().onTrue(this.coralSubsystem.outtakeCommand());
 
         commandXboxController.b().whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem,
-                Constants.ElevatorContants.rootPosition));
+                ElevatorConstants.rootPosition));
 
         // commandXboxController.a().onTrue(new InstantCommand(() ->
         // toggleVisionMode()));
@@ -87,7 +87,7 @@ public class ButtonBindings {
         // two intake commands
         commandXboxController.rightBumper().whileTrue(this.coralSubsystem.intakeCommand());
         commandXboxController.rightBumper().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
-                Constants.ElevatorContants.rootPosition));
+                ElevatorConstants.rootPosition));
 
         // Drive to right pole of best apriltag
         commandXboxController.rightTrigger()
@@ -143,16 +143,16 @@ public class ButtonBindings {
         // Constants.elevatorConstants.zeroPosition));
 
         commandXboxController.povLeft()
-                .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, Constants.ElevatorContants.L1Position));
+                .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, ElevatorConstants.L1Position));
         commandXboxController.povDown()
-                .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, Constants.ElevatorContants.L2Position));
+                .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, ElevatorConstants.L2Position));
         commandXboxController.povRight()
-                .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, Constants.ElevatorContants.L3position));
+                .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, ElevatorConstants.L3Position));
         commandXboxController.povUp()
-                .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, Constants.ElevatorContants.L4position));
+                .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, ElevatorConstants.L4Position));
 
         commandXboxController.a().whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem,
-                Constants.ElevatorContants.rootPosition));
+                ElevatorConstants.rootPosition));
 
         commandXboxController.rightTrigger().onTrue(this.coralSubsystem.lowerRampCommand());
         // operator.rightTrigger().onTrue(extendClimb());

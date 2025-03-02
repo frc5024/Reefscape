@@ -1,7 +1,7 @@
 package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator;
 
 public class SetElevatorSetpointCmd extends Command {
@@ -24,7 +24,7 @@ public class SetElevatorSetpointCmd extends Command {
         // sets the setpoint to the position that is assigned to the button
         elevatorSubsystem.setGoal(setpoint);
         elevatorSubsystem.togglePID(true);
-        if (setpoint != Constants.ElevatorContants.rootPosition) {
+        if (setpoint != ElevatorConstants.rootPosition) {
             elevatorSubsystem.setElevatorPosition(setpoint);
         }
     }
@@ -33,7 +33,12 @@ public class SetElevatorSetpointCmd extends Command {
     @Override
     public void end(boolean interrupted) {
         elevatorSubsystem.resetPID();
-        elevatorSubsystem.togglePID(false);
+        // elevatorSubsystem.togglePID(false);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return elevatorSubsystem.targetReached();
     }
 
 }

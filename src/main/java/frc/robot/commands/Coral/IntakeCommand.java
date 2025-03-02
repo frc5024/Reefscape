@@ -3,7 +3,7 @@ package frc.robot.commands.Coral;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.leds.LEDPreset;
-import frc.robot.Constants;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Rumble;
@@ -26,7 +26,7 @@ public class IntakeCommand extends Command {
     @Override
     public void initialize() {
         if (!coralSubsystem.isLineBroken()) {
-            coralSubsystem.set(Constants.CoralConstants.intakeSpeed);
+            coralSubsystem.set(CoralConstants.intakeSpeed);
             s_LEDs.setCommand(LEDPreset.Strobe.kGold).schedule();
         }
     }

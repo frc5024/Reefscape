@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.commands.Coral.CancelIntakeCommand;
 import frc.robot.commands.Coral.IntakeCommand;
 import frc.robot.commands.Coral.LowerRampCommand;
@@ -28,13 +28,13 @@ public class Coral extends SubsystemBase {
     private static DigitalInput linebreak;
 
     // all constants for coral
-    int coralMotorChannel = Constants.CoralConstants.coralMotorChannel;
-    int coralMotorReversedChannel = Constants.CoralConstants.coralMotorReversedChannel;
-    int linebreakChannel = Constants.CoralConstants.linebreakChannel;
+    int coralMotorChannel = CoralConstants.coralMotorChannel;
+    int coralMotorReversedChannel = CoralConstants.coralMotorReversedChannel;
+    int linebreakChannel = CoralConstants.linebreakChannel;
 
-    double intakeSpeed = Constants.CoralConstants.intakeSpeed;
-    double outtakeSpeed = Constants.CoralConstants.outtakeSpeed;
-    double plopSpeed = Constants.CoralConstants.plopSpeed;
+    double intakeSpeed = CoralConstants.intakeSpeed;
+    double outtakeSpeed = CoralConstants.outtakeSpeed;
+    double plopSpeed = CoralConstants.plopSpeed;
 
     // double servoRotate = Constants.coralConstants.servoRotate;
     // double servoReset = Constants.coralConstants.servoReset;
@@ -47,7 +47,7 @@ public class Coral extends SubsystemBase {
 
     // constructor for coralMotor
     public Coral() {
-        linebreak = new DigitalInput(Constants.CoralConstants.linebreakChannel);
+        linebreak = new DigitalInput(CoralConstants.linebreakChannel);
         tab.addBoolean("linebreak", () -> linebreak.get());
 
         coralMotor = new SparkFlex(coralMotorChannel, SparkFlex.MotorType.kBrushless);
@@ -92,8 +92,8 @@ public class Coral extends SubsystemBase {
     }
 
     public void set(double speed) {
-        setTop(speed);
-        setBottom(-speed);
+        setTop(-speed);
+        setBottom(speed);
     }
 
     public void setTop(double speed) {
