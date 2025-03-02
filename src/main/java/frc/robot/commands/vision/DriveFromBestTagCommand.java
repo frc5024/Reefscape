@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.vision;
 
 import java.util.function.Supplier;
 
@@ -7,13 +7,13 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.TeleopConstants;
@@ -21,12 +21,15 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.utils.AllianceFlipUtil;
 
-public class DriveToBestTagCommand extends Command {
+/**
+ * 
+ */
+public class DriveFromBestTagCommand extends Command {
     private final SwerveDriveSubsystem swerveDriveSubsystem;
     private final VisionSubsystem visionSubsystem;
     private final Supplier<Pose2d> poseProvider;
+    private final boolean isLeftPole;
     private final Supplier<GamePieceMode> gamePieceModeSupplier;
 
     private final ProfiledPIDController xController;
@@ -34,13 +37,14 @@ public class DriveToBestTagCommand extends Command {
     private final ProfiledPIDController omegaController;
 
     /**
-     * Drive to best tag plus any pole offset
+     * Drive to a provided translation/rotation away from vision system best tag
      */
-    public DriveToBestTagCommand(SwerveDriveSubsystem swerveDriveSubsystem, VisionSubsystem visionSubsystem,
-            Supplier<Pose2d> poseProvider, Supplier<GamePieceMode> gamePieceModeSupplier) {
+    public DriveFromBestTagCommand(SwerveDriveSubsystem swerveDriveSubsystem, VisionSubsystem visionSubsystem,
+            Supplier<Pose2d> poseProvider, boolean isLeftPole, Supplier<GamePieceMode> gamePieceModeSupplier) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.visionSubsystem = visionSubsystem;
         this.poseProvider = poseProvider;
+        this.isLeftPole = isLeftPole;
         this.gamePieceModeSupplier = gamePieceModeSupplier;
 
         double[] driveXPIDs = PIDConstants.getDriveXPIDs();
@@ -89,6 +93,38 @@ public class DriveToBestTagCommand extends Command {
         this.swerveDriveSubsystem.drive(chassisSpeeds);
     }
 
+    /**
+     * 
+     */
+    private Pose2d getBestTagPose(Pose3d currentPose) {
+        boolean isCoralMode = this.gamePieceModeSupplier.get() == GamePieceMode.CORAL;
+
+        String cameraName = isCoralMode
+                ? VisionConstants.FRONT_CAMERA.getName()
+                : VisionConstants.REAR_CAMERA.getName();
+        Pose3d targetPose = this.visionSubsystem.getBestTargetPose(cameraName);
+
+        // return null if we don't have a best tag
+        if (targetPose == null || targetPose.equals(new Pose3d())) {
+            return null;
+        }
+
+        Logger.recordOutput("Commands/Target Pose", targetPose);
+
+        double yOffset = 0.0;
+        double yawOffset = 0.0;
+        if (isCoralMode) {
+            yOffset = isLeftPole ? -FieldConstants.REEF_POLE_OFFSET : FieldConstants.REEF_POLE_OFFSET;
+            yawOffset = Units.degreesToRadians(180.0);
+        }
+
+        Transform3d transformation = new Transform3d(
+                new Translation3d(RobotConstants.LENGTH_METERS / 1.4, yOffset, 0.0),
+                new Rotation3d(0.0, 0.0, yawOffset));
+
+        return targetPose.transformBy(transformation).toPose2d();
+    }
+
     @Override
     public void initialize() {
         resetPIDControllers();
@@ -98,49 +134,15 @@ public class DriveToBestTagCommand extends Command {
                 new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
 
         Pose2d goalPose = getBestTagPose(robotPose);
-        if (goalPose == null) {
+        if (goalPose == null)
             goalPose = robotPose2d;
-        }
-
-        // Flip pose if red alliance
-        goalPose = AllianceFlipUtil.apply(goalPose);
-
-        // Determine if we want to drive to coral pole or algae
-        GamePieceMode driveMode = this.gamePieceModeSupplier.get();
-        double robotYaw = 0.0;
-        if (driveMode == GamePieceMode.CORAL) {
-            robotYaw = 180.0;
-        }
 
         this.xController.setGoal(goalPose.getX());
         this.yController.setGoal(goalPose.getY());
-        this.omegaController.setGoal(goalPose.getRotation().rotateBy(Rotation2d.fromDegrees(robotYaw)).getRadians());
+        this.omegaController.setGoal(goalPose.getRotation().getRadians());
 
+        Logger.recordOutput("Commands/Goal Pose", goalPose);
         Logger.recordOutput("Commands/Active Command", this.getName());
-    }
-
-    @Override
-    public boolean isFinished() {
-        return isAtGoal();
-    }
-
-    /**
-     * 
-     */
-    private Pose2d getBestTagPose(Pose3d currentPose) {
-        String cameraName = this.gamePieceModeSupplier.get() == GamePieceMode.ALGAE
-                ? VisionConstants.REAR_CAMERA.getName()
-                : VisionConstants.FRONT_CAMERA.getName();
-        Pose3d targetPose = this.visionSubsystem.getBestTargetPose(cameraName);
-
-        if (targetPose == null) {
-            return null;
-        }
-
-        Transform3d ROBOT_TO_TAG = new Transform3d(new Translation3d(RobotConstants.LENGTH_METERS / 2, 0.0, 0.0),
-                new Rotation3d(0.0, 0.0, 0.0));
-
-        return targetPose.transformBy(ROBOT_TO_TAG).toPose2d();
     }
 
     /**
@@ -148,6 +150,11 @@ public class DriveToBestTagCommand extends Command {
      */
     private boolean isAtGoal() {
         return this.xController.atGoal() && this.yController.atGoal() && this.omegaController.atGoal();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return isAtGoal();
     }
 
     /**

@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.tuning;
 
 import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 
@@ -12,29 +12,28 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.PIDConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.TeleopConstants;
 import frc.robot.autonomous.AutoBuilder;
-import frc.robot.subsystems.AlgaeSubsystem;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.utils.LoggedTunableNumber;
 
 /**
  * 
  */
-public class TuningCommand extends Command {
+public class TuningSwerveCommand extends Command {
     /* Subsystems */
-    private final AlgaeSubsystem algaeSubsystem;
-    private final CoralSubsystem coralSubsystem;
-    private final ElevatorSubsystem elevatorSubsystem;
     private final SwerveDriveSubsystem swerveDriveSubsystem;
 
     /* Suppliers */
@@ -90,7 +89,7 @@ public class TuningCommand extends Command {
     private LoggedTunableNumber vyMPS;
     private LoggedTunableNumber omRPS;
     private LoggedTunableNumber angle;
-    private LoggedNetworkBoolean driveOpenLoop;
+    private LoggedNetworkBoolean driveByController;
     private LoggedNetworkBoolean driveByPathFinding;
     private LoggedNetworkBoolean driveByPosition;
     private LoggedNetworkBoolean driveByVelocities;
@@ -107,12 +106,8 @@ public class TuningCommand extends Command {
     private final ProfiledPIDController yController;
     private final ProfiledPIDController omegaController;
 
-    private double xGoal;
-    private double yGoal;
-    private double oGoal;
-
     //
-    private final double DRIVE_DISTANCE = 5.0;
+    private final double BACK_AND_FORTH_DISTANCE = 5.0;
     private final Timer timer;
     private double rotationalAngle;
     private boolean firstCall;
@@ -120,13 +115,9 @@ public class TuningCommand extends Command {
     /**
      * This command should only be run in robot tuning mode
      */
-    public TuningCommand(SwerveDriveSubsystem swerveDriveSubsystem, AlgaeSubsystem algaeSubsystem,
-            CoralSubsystem coralSubsystem, ElevatorSubsystem elevatorSubsystem, DoubleSupplier xSupplier,
+    public TuningSwerveCommand(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier xSupplier,
             DoubleSupplier ySupplier, DoubleSupplier omegaSupplier, CommandXboxController commandXboxController) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
-        this.algaeSubsystem = algaeSubsystem;
-        this.coralSubsystem = coralSubsystem;
-        this.elevatorSubsystem = elevatorSubsystem;
 
         this.xSupplier = xSupplier;
         this.ySupplier = ySupplier;
@@ -146,14 +137,14 @@ public class TuningCommand extends Command {
 
         this.xController.setTolerance(0.01);
         this.yController.setTolerance(0.01);
-        this.omegaController.setTolerance(Units.degreesToRadians(3));
+        this.omegaController.setTolerance(Units.degreesToRadians(1));
         this.omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
         this.timer = new Timer();
         this.firstCall = true;
         this.rotationalAngle = 360.0; // this value is used to determine if the driverPov has been pressed
 
-        addRequirements(swerveDriveSubsystem, algaeSubsystem, coralSubsystem, elevatorSubsystem);
+        addRequirements(swerveDriveSubsystem);
     }
 
     @Override
@@ -168,7 +159,8 @@ public class TuningCommand extends Command {
         // Check for dashboard changes
         if (this.elevatorKp.hasChanged(hashCode()) || this.elevatorKi.hasChanged(hashCode())
                 || this.elevatorKd.hasChanged(hashCode())) {
-            this.elevatorSubsystem.updatePID(this.elevatorKp.get(), this.elevatorKi.get(), this.elevatorKd.get());
+            // this.elevatorSubsystem.updatePID(this.elevatorKp.get(),
+            // this.elevatorKi.get(), this.elevatorKd.get());
         }
 
         if (this.driveKp.hasChanged(hashCode()) || this.driveKi.hasChanged(hashCode())
@@ -197,8 +189,7 @@ public class TuningCommand extends Command {
         if (this.xInitialPosition.hasChanged(hashCode()) || this.yInitialPosition.hasChanged(hashCode())
                 || this.rInitialAngle.hasChanged(hashCode())) {
             this.swerveDriveSubsystem.setPose(new Pose2d(this.xInitialPosition.get(), this.yInitialPosition.get(),
-                    new Rotation2d(Units.degreesToRadians(this.rInitialAngle.get()))));
-            this.firstCall = false;
+                    new Rotation2d(this.rInitialAngle.get())));
         }
 
         if (this.xDriveToPosition.hasChanged(hashCode()) || this.yDriveToPosition.hasChanged(hashCode())
@@ -209,17 +200,15 @@ public class TuningCommand extends Command {
         }
 
         if (this.desiredHeight.hasChanged(hashCode())) {
-            this.elevatorSubsystem.setGoal(this.desiredHeight.get());
+            // this.elevatorSubsystem.setGoal(this.desiredHeight.get());
         }
 
         // if (this.desiredRPM.hasChanged(hashCode())) {
         // this.coralSubsystem.setDesiredRPM(this.desiredRPM.get());
         // }
 
-        if (this.driveOpenLoop.get()) {
-            handleDriveOpenClosedLoop(true);
-        } else if (this.driveClosedLoop.get()) {
-            handleDriveOpenClosedLoop(false);
+        if (this.driveByController.get()) {
+            handleDriveByController();
         } else if (this.driveByPathFinding.get()) {
             if (this.firstCall) {
                 this.xController.reset(this.swerveDriveSubsystem.getPose().getX());
@@ -246,22 +235,6 @@ public class TuningCommand extends Command {
             this.swerveDriveSubsystem.drive(this.vxMPS.get(), this.vyMPS.get(), this.omRPS.get(),
                     new Rotation2d(this.angle.get()), false);
         } else if (this.driveBackAndForth.get() || this.driveSideToSide.get() || this.alternateRotation.get()) {
-            if (this.firstCall) {
-                Pose2d pose2d = this.swerveDriveSubsystem.getPose();
-                this.xGoal = pose2d.getX();
-                this.yGoal = pose2d.getY();
-                this.oGoal = pose2d.getRotation().getDegrees();
-                this.firstCall = false;
-
-                if (this.driveBackAndForth.get()) {
-                    this.xGoal = this.xGoal + DRIVE_DISTANCE;
-                } else if (this.driveSideToSide.get()) {
-                    this.yGoal = this.yGoal + DRIVE_DISTANCE;
-                } else if (this.alternateRotation.get()) {
-                    this.oGoal = 90;
-                }
-            }
-
             handleAutonomousDriving();
         } else {
             this.swerveDriveSubsystem.stop();
@@ -292,20 +265,19 @@ public class TuningCommand extends Command {
             this.timer.start();
         }
 
+        if (this.driveBackAndForth.get()) {
+            double xCurrent = this.swerveDriveSubsystem.getPose().getX();
+            double xGoal = xCurrent >= 2.5 ? 0 : BACK_AND_FORTH_DISTANCE;
+            this.xController.setGoal(xGoal);
+        } else if (this.alternateRotation.get()) {
+            double oCurrent = this.swerveDriveSubsystem.getPose().getRotation().getDegrees();
+            double oGoal = oCurrent >= 89 ? 0 : 90;
+            this.omegaController.setGoal(Units.degreesToRadians(oGoal));
+        }
+
         if (isAtGoal()) {
             this.swerveDriveSubsystem.stop();
             this.timer.stop();
-
-            if (this.driveBackAndForth.get()) {
-                this.xGoal = this.xGoal == DRIVE_DISTANCE ? 0 : DRIVE_DISTANCE;
-                this.xController.setGoal(xGoal);
-            } else if (this.driveSideToSide.get()) {
-                this.yGoal = this.yGoal == DRIVE_DISTANCE ? 0 : DRIVE_DISTANCE;
-                this.yController.setGoal(yGoal);
-            } else if (this.alternateRotation.get()) {
-                this.oGoal = this.oGoal == 90 ? -90 : 90;
-                this.omegaController.setGoal(Units.degreesToRadians(oGoal));
-            }
         } else if (this.timer.isRunning() && this.timer.hasElapsed(5.0)) {
             this.timer.stop();
         } else {
@@ -323,14 +295,6 @@ public class TuningCommand extends Command {
                 omegaSpeed = 0;
 
             this.swerveDriveSubsystem.drive(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation(), false);
-
-            Logger.recordOutput("Commands/" + getName() + "/Goals/xGoal", this.xController.getGoal().position);
-            Logger.recordOutput("Commands/" + getName() + "/Goals/yGoal", this.yController.getGoal().position);
-            Logger.recordOutput("Commands/" + getName() + "/Goals/oGoal", this.omegaController.getGoal().position);
-
-            Logger.recordOutput("Commands/" + getName() + "/Speeds/xSpeed", xSpeed);
-            Logger.recordOutput("Commands/" + getName() + "/Speeds/ySpeed", ySpeed);
-            Logger.recordOutput("Commands/" + getName() + "/Speeds/oSpeed", omegaSpeed);
         }
     }
 
@@ -350,18 +314,20 @@ public class TuningCommand extends Command {
     /**
      * 
      */
-    private void handleDriveOpenClosedLoop(boolean isOpenLoop) {
+    private void handleDriveByController() {
         // Set controller variables
         Rotation2d angle = this.swerveDriveSubsystem.getPose().getRotation();
 
-        double xVelocity = -xSupplier.getAsDouble() * TeleopConstants.JOYSTICK_AXIS_MODIFIER;
-        double yVelocity = -ySupplier.getAsDouble() * TeleopConstants.JOYSTICK_AXIS_MODIFIER;
+        Translation2d linearVelocity = SwerveDriveCommands.getLinearVelocityFromJoysticks(xSupplier.getAsDouble(),
+                ySupplier.getAsDouble());
 
-        Translation2d linearVelocity = SwerveDriveCommands.getLinearVelocityFromJoysticks(xVelocity, yVelocity);
+        // Apply rotation deadband
+        double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), 0.1);
 
-        double omega = MathUtil.applyDeadband(-omegaSupplier.getAsDouble(), TeleopConstants.DEADBAND);
+        // Square rotation value for more precise control
         omega = Math.copySign(omega * omega, omega);
 
+        //
         if (omega == 0.0) {
             if (this.rotationalAngle != 360.0) {
                 double goalRotation = Units.degreesToRadians(this.rotationalAngle);
@@ -381,10 +347,16 @@ public class TuningCommand extends Command {
             this.alternateRotation.set(false);
         }
 
-        // this.swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(),
-        // omega, angle, isOpenLoop);
-        this.swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega,
-                this.swerveDriveSubsystem.getRotation(), isOpenLoop);
+        // Convert to field relative speeds & send command
+        ChassisSpeeds speeds = new ChassisSpeeds(
+                linearVelocity.getX() * SwerveConstants.maxLinearSpeed,
+                linearVelocity.getY() * SwerveConstants.maxLinearSpeed,
+                omega * SwerveConstants.maxAngularSpeed);
+
+        boolean isFlipped = DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get() == Alliance.Red;
+
+        swerveDriveSubsystem.drive(linearVelocity.getX(), linearVelocity.getY(), omega);
     }
 
     /**
@@ -469,14 +441,14 @@ public class TuningCommand extends Command {
         this.driveBackAndForth = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive Back and Forth", false);
         this.driveSideToSide = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive Side to Side", false);
         this.alternateRotation = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Alternate Rotation", false);
+        this.driveClosedLoop = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive Closed Loop", false);
 
         this.vxMPS = new LoggedTunableNumber("Robot/Chassis/vxMPS", 0.0);
         this.vyMPS = new LoggedTunableNumber("Robot/Chassis/vyMPS", 0.0);
         this.omRPS = new LoggedTunableNumber("Robot/Chassis/omRPS", 0.0);
         this.angle = new LoggedTunableNumber("Robot/Chassis/Angle", 0.0);
 
-        this.driveOpenLoop = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive Open Loop", false);
-        this.driveClosedLoop = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive Closed Loop", false);
+        this.driveByController = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive By Controller", false);
         this.driveByPathFinding = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive By Path Finding", false);
         this.driveByPosition = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive By Position", false);
         this.driveByVelocities = new LoggedNetworkBoolean("Tuning/Robot/Toggles/Drive By Velocities", false);

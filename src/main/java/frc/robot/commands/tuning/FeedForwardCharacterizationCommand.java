@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.tuning;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
