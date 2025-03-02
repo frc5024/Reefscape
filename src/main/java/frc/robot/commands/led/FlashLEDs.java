@@ -1,4 +1,4 @@
-package frc.robot.commands.LEDs;
+package frc.robot.commands.led;
 
 //Imports
 import edu.wpi.first.wpilibj.Timer;
@@ -8,7 +8,7 @@ import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
 import frc.robot.subsystems.LEDs;
 
-public class flashLEDs extends Command {
+public class FlashLEDs extends Command {
     // Variables
     private LEDs leds; // LED Subsystem for calling
     private ILEDPreset colour1; // Colour #1 we wish to set colour to (See constructor)
@@ -24,13 +24,13 @@ public class flashLEDs extends Command {
     private int flashCount = 0; // A counter to ensure amount of flashes
 
     // Constructor for one colour
-    public flashLEDs(LEDs leds, ILEDPreset colour, int flashSeconds) {
+    public FlashLEDs(LEDs leds, ILEDPreset colour, int flashSeconds) {
         this(leds, colour, LEDPreset.Solid.kBlack, flashSeconds);// does the command again with the second colour set to
                                                                  // black
     }
 
     // Constructor for two colours
-    public flashLEDs(LEDs leds, ILEDPreset colour1, ILEDPreset colour2, int flashSeconds) {
+    public FlashLEDs(LEDs leds, ILEDPreset colour1, ILEDPreset colour2, int flashSeconds) {
         this.leds = leds; // Subsystem set
         this.colour1 = colour1; // Colour 1 set
         this.colour2 = colour2; // Colour 2 set

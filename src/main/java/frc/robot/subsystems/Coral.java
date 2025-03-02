@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralConstants;
-import frc.robot.commands.Coral.CancelIntakeCommand;
-import frc.robot.commands.Coral.IntakeCommand;
-import frc.robot.commands.Coral.LowerRampCommand;
-import frc.robot.commands.Coral.OuttakeCommand;
-import frc.robot.commands.Coral.PlopCommand;
+import frc.robot.commands.coral.CancelIntakeCommand;
+import frc.robot.commands.coral.IntakeCommand;
+import frc.robot.commands.coral.LowerRampCommand;
+import frc.robot.commands.coral.OuttakeCommand;
+import frc.robot.commands.coral.PlopCommand;
 
 public class Coral extends SubsystemBase {
     // motor controller for coral

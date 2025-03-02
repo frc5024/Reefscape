@@ -2,18 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.LEDs;
+package frc.robot.commands.led;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.leds.ILEDPreset;
 import frc.robot.subsystems.LEDs;
 
-public class setLEDS extends Command {
+public class SetLEDS extends Command {
     private LEDs leds;
     private ILEDPreset colour;
 
     // Constructor, intakes LED subsystem and LED Preset colour
-    public setLEDS(LEDs leds, ILEDPreset colour) {
+    public SetLEDS(LEDs leds, ILEDPreset colour) {
         this.leds = leds;
         this.colour = colour;
     }
