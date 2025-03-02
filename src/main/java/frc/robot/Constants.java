@@ -15,10 +15,16 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -122,6 +128,53 @@ public final class Constants {
         public static final double L3Position = 31.37261;
         public static final double Algae2 = 8.37068;
         public static final double L4Position = 49.57406;
+
+        // used in simulation
+        public static final double HEIGHT_IN_METERS = 2.0;
+        public static final double MAX_TORQUE = 20.0;
+        public static final double MAX_UP_SPEED = 0.2;
+        public static final double MAX_DOWN_SPEED = 0.1;
+        public static final Rotation2d ANGLE = Rotation2d.fromDegrees(90.0);
+        public static final double kS = 5.0;
+        public static final double kG = 50.0;
+
+        // Distance elevator must travel to align with outtake
+        public enum ElevatorLevel {
+            Bottom(0.0, 0.0),
+            AlgaeL1(Units.inchesToMeters(10.5), 0.0),
+            AlgaeL2(Units.inchesToMeters(18.0), 0.0),
+            Processor(Units.inchesToMeters(0.0), 0.0),
+
+            CoralL1(Units.inchesToMeters(0), 0.0),
+            CoralL2(Units.inchesToMeters(10.0), -35.0),
+            CoralL3(Units.inchesToMeters(18.0), -35.0),
+            CoralL4(Units.inchesToMeters(30.0), -60.0);
+
+            ElevatorLevel(double heightInMeters, double angleInDegrees) {
+                this.heightInMeters = heightInMeters;
+                this.angleInDegrees = angleInDegrees;
+            }
+
+            public final double heightInMeters;
+            public final double angleInDegrees;
+        }
+
+        // used in simulation
+        public static final double drumRadiusMeters = Units.inchesToMeters(6.0);
+        public static final double reduction = 5.0;
+        public static final double carriageMassKg = Units.lbsToKilograms(6.0);
+        public static final double stagesMassKg = Units.lbsToKilograms(12.0);
+        public static final DCMotor gearbox = DCMotor.getKrakenX60Foc(2).withReduction(reduction);
+
+        public static final Matrix<N2, N2> A = MatBuilder.fill(Nat.N2(), Nat.N2(), 0, 1, 0,
+                -gearbox.KtNMPerAmp
+                        / (gearbox.rOhms
+                                * Math.pow(drumRadiusMeters, 2)
+                                * (carriageMassKg + stagesMassKg)
+                                * gearbox.KvRadPerSecPerVolt));
+
+        public static final Vector<N2> B = VecBuilder.fill(
+                0.0, gearbox.KtNMPerAmp / (drumRadiusMeters * (carriageMassKg + stagesMassKg)));
     }
 
     /**

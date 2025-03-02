@@ -33,8 +33,8 @@ public class MantaRaiderRobotContainer extends RobotContainer {
         this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
                 this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
 
-        this.coralSubsystem = new Coral();
-        this.elevatorSubsystem = Elevator.getInstance();
+        this.coral = new Coral();
+        this.elevator = Elevator.getInstance();
 
         registerNamedCommands();
         configureAutoBuilder();

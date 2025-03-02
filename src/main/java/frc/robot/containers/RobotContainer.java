@@ -15,8 +15,11 @@ import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.commands.vision.DriveFromBestTagCommand;
 import frc.robot.controls.ButtonBindings;
 import frc.robot.controls.GameData;
+import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.Coral;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Rumble;
@@ -25,8 +28,12 @@ import frc.robot.subsystems.VisionSubsystem;
 
 abstract public class RobotContainer {
     /* Subsystems */
-    protected Coral coralSubsystem = new Coral();
-    protected Elevator elevatorSubsystem = Elevator.getInstance();
+    protected Coral coral = new Coral();
+    protected Elevator elevator = Elevator.getInstance();
+
+    protected AlgaeSubsystem algaeSubsystem;
+    protected CoralSubsystem coralSubsystem;
+    protected ElevatorSubsystem elevatorSubsystem;
     protected SwerveDriveSubsystem swerveDriveSubsystem;
     protected VisionSubsystem visionSubsystem;
 
@@ -51,7 +58,7 @@ abstract public class RobotContainer {
      *
      */
     protected void configureAutoBuilder() {
-        this.autoBuilder = new AutoBuilder(this.swerveDriveSubsystem, this.coralSubsystem, this.elevatorSubsystem);
+        this.autoBuilder = new AutoBuilder(this.swerveDriveSubsystem, this.coral, this.elevator);
         this.autoBuilder.configureAutonomous();
         this.autonomousChooser = this.autoBuilder.getAutonomousChooser();
     }
@@ -61,7 +68,7 @@ abstract public class RobotContainer {
      */
     protected void configureBindings() {
         ButtonBindings buttonBindings = new ButtonBindings(this.swerveDriveSubsystem,
-                this.coralSubsystem, this.elevatorSubsystem, this.visionSubsystem);
+                this.coral, this.elevator, this.visionSubsystem);
 
         CommandXboxController commandXboxController = RobotConstants.TUNING_MODE
                 ? buttonBindings.getTestController()
@@ -87,8 +94,8 @@ abstract public class RobotContainer {
      * 
      */
     protected void registerNamedCommands() {
-        NamedCommands.registerCommand("ScoreCoral", coralSubsystem.outtakeCommand());
-        NamedCommands.registerCommand("IntakeCoral", coralSubsystem.intakeCommand());
+        NamedCommands.registerCommand("ScoreCoral", coral.outtakeCommand());
+        NamedCommands.registerCommand("IntakeCoral", coral.intakeCommand());
         NamedCommands.registerCommand("DriveRightTag",
                 new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
                         this.swerveDriveSubsystem::getPose, false, GameData.getInstance().getGamePieceMode()));
