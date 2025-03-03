@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -275,11 +276,11 @@ public final class Constants {
         public static final double SWERVE_DRIVE_OMEGA_KD = 0.0;
 
         // PID constants for simulated autonomous/pathplanner mode
-        public static final double SIM_SWERVE_DRIVE_X_KP = 2.0;
+        public static final double SIM_SWERVE_DRIVE_X_KP = 1.0;
         public static final double SIM_SWERVE_DRIVE_X_KI = 0.0;
         public static final double SIM_SWERVE_DRIVE_X_KD = 0.0;
 
-        public static final double SIM_SWERVE_DRIVE_Y_KP = 2.0;
+        public static final double SIM_SWERVE_DRIVE_Y_KP = 1.0;
         public static final double SIM_SWERVE_DRIVE_Y_KI = 0.0;
         public static final double SIM_SWERVE_DRIVE_Y_KD = 0.0;
 
@@ -453,9 +454,11 @@ public final class Constants {
         public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM2_CAMERA, ARDUCAM1_CAMERA);
         public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM3_CAMERA);
         public static final List<Camera> REEFSCAPE_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
-        public static final List<Camera> CAMERAS = BEALTOVEN_CAMERAS;
-        public static final Camera FRONT_CAMERA = CAMERAS.get(0);
-        public static final Camera REAR_CAMERA = CAMERAS.get(1);
+        public static final List<Camera> NO_CAMERAS = new ArrayList<>();
+        public static final List<Camera> CAMERAS = NO_CAMERAS;
+
+        public static final Camera FRONT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
+        public static final Camera REAR_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;
