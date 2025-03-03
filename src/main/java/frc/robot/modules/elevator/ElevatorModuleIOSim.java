@@ -6,10 +6,12 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.NumericalIntegration;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.RobotConstants;
@@ -24,9 +26,9 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
     private double inputTorqueCurrent = 0.0;
     private double appliedVolts = 0.0;
 
-    private final PIDController pidController;
+    private final ProfiledPIDController pidController;
+    private final ElevatorFeedforward elevatorFeedforward;
     private boolean closedLoop = false;
-    private double feedforward = 0.0;
 
     /**
      * 
@@ -35,20 +37,24 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
         this.simState = VecBuilder.fill(0.0, 0.0);
 
         double[] elevatorPIDs = PIDConstants.getElevatorPIDs();
-        this.pidController = new PIDController(elevatorPIDs[0], elevatorPIDs[1], elevatorPIDs[2]);
+        this.pidController = new ProfiledPIDController(elevatorPIDs[0], elevatorPIDs[1], elevatorPIDs[2],
+                new TrapezoidProfile.Constraints(ElevatorConstants.elevatorMaxSpeed,
+                        ElevatorConstants.elevatorMaxAccel));
+        this.pidController.setTolerance(0.25, 0.25);
+        this.elevatorFeedforward = new ElevatorFeedforward(0, ElevatorConstants.G, elevatorPIDs[3], elevatorPIDs[4]);
     }
 
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
         if (!closedLoop) {
-            this.pidController.reset();
+            this.pidController.reset(0.0);
             update(RobotConstants.LOOP_PERIOD_SECS);
         } else {
             // Run control at 1khz
             for (int i = 0; i < RobotConstants.LOOP_PERIOD_SECS / (1.0 / 1000.0); i++) {
                 setInputTorqueCurrent(
                         this.pidController.calculate(simState.get(0) / ElevatorConstants.drumRadiusMeters)
-                                + this.feedforward);
+                                + this.elevatorFeedforward.calculate(this.pidController.getSetpoint().velocity));
                 update(1.0 / 1000.0);
             }
         }
@@ -67,10 +73,9 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
     }
 
     @Override
-    public void runPosition(double positionRad, double feedforward) {
+    public void runPosition(double positionRad) {
         closedLoop = true;
-        this.pidController.setSetpoint(positionRad);
-        this.feedforward = feedforward;
+        this.pidController.setGoal(positionRad);
     }
 
     @Override

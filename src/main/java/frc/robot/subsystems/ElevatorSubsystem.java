@@ -229,10 +229,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                 this.goal.get().velocity);
         this.setpoint = profile.calculate(RobotConstants.LOOP_PERIOD_SECS, setpoint, goalState);
 
-        this.elevatorModule.runPosition(
-                setpoint.position / ElevatorConstants.drumRadiusMeters,
-                ElevatorConstants.kS * Math.signum(setpoint.velocity) // Magnitude irrelevant
-                        + ElevatorConstants.kG * ElevatorConstants.ANGLE.getSin());
+        this.elevatorModule.runPosition(setpoint.position / ElevatorConstants.drumRadiusMeters);
 
         // Check at goal
         this.atGoal = EqualsUtil.epsilonEquals(setpoint.position, goalState.position)

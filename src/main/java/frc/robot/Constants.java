@@ -322,6 +322,10 @@ public final class Constants {
         public static final double SIM_SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SIM_SWERVE_MODULE_DRIVE_KD = 0.0;
 
+        public static final double SIM_SWERVE_MODULE_DRIVE_KS = 0.0392;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KV = 0.0602;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KA = 0.27;
+
         public static final double SIM_SWERVE_MODULE_TURN_KP = 0.5;
         public static final double SIM_SWERVE_MODULE_TURN_KI = 0.0;
         public static final double SIM_SWERVE_MODULE_TURN_KD = 0.0;
@@ -353,13 +357,17 @@ public final class Constants {
         public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 2.0;
 
         // PID constants for elevator
-        public static final double ELEVATOR_KP = 0.033;
+        public static final double ELEVATOR_KP = 0.05;
         public static final double ELEVATOR_KI = 0.0;
         public static final double ELEVATOR_KD = 0.0;
+        public static final double ELEVATOR_KV = 0.1;
+        public static final double ELEVATOR_KA = 0.05;
 
         public static final double SIM_ELEVATOR_KP = 5000.0;
         public static final double SIM_ELEVATOR_KI = 0.0;
         public static final double SIM_ELEVATOR_KD = 2000.0;
+        public static final double SIM_ELEVATOR_KV = 0.1;
+        public static final double SIM_ELEVATOR_KA = 0.05;
 
         /**
          * Should only be call by simulation as TunerContants has real values
@@ -368,8 +376,8 @@ public final class Constants {
             return Robot.isReal()
                     ? new double[] { SWERVE_MODULE_DRIVE_KP, SWERVE_MODULE_DRIVE_KI, SWERVE_MODULE_DRIVE_KD,
                             SWERVE_MODULE_DRIVE_KS, SWERVE_MODULE_DRIVE_KV, SWERVE_MODULE_DRIVE_KA }
-                    : new double[] { SIM_SWERVE_MODULE_DRIVE_KP, SIM_SWERVE_MODULE_DRIVE_KI,
-                            SIM_SWERVE_MODULE_DRIVE_KD };
+                    : new double[] { SIM_SWERVE_MODULE_DRIVE_KP, SIM_SWERVE_MODULE_DRIVE_KI, SIM_SWERVE_MODULE_DRIVE_KD,
+                            SIM_SWERVE_MODULE_DRIVE_KS, SIM_SWERVE_MODULE_DRIVE_KV, SIM_SWERVE_MODULE_DRIVE_KA };
         }
 
         /**
@@ -412,8 +420,9 @@ public final class Constants {
          */
         public static final double[] getElevatorPIDs() {
             return Robot.isReal()
-                    ? new double[] { ELEVATOR_KP, ELEVATOR_KI, ELEVATOR_KD }
-                    : new double[] { SIM_ELEVATOR_KP, SIM_ELEVATOR_KI, SIM_ELEVATOR_KD };
+                    ? new double[] { ELEVATOR_KP, ELEVATOR_KI, ELEVATOR_KD, ELEVATOR_KV, ELEVATOR_KA }
+                    : new double[] { SIM_ELEVATOR_KP, SIM_ELEVATOR_KI, SIM_ELEVATOR_KD, SIM_ELEVATOR_KV,
+                            SIM_ELEVATOR_KA };
         }
     }
 

@@ -9,7 +9,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants.PIDConstants;
@@ -26,9 +25,9 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     private static final double[] DRIVE_PIDs = PIDConstants.getDrivePIDs();
     private static final double[] TURN_PIDs = PIDConstants.getTurnPIDs();
 
-    private static final double DRIVE_KS = 0.00865;
+    private static final double DRIVE_KS = DRIVE_PIDs[3]; // 0.00865;
     private static final double DRIVE_KV_ROT = 0.91035; // Same units as TunerConstants: (volt * secs) / rotation
-    private static final double DRIVE_KV = 1.0 / Units.rotationsToRadians(1.0 / DRIVE_KV_ROT);
+    private static final double DRIVE_KV = DRIVE_PIDs[4]; // 1.0 / Units.rotationsToRadians(1.0 / DRIVE_KV_ROT);
 
     private static final DCMotor DRIVE_GEARBOX = DCMotor.getKrakenX60Foc(1);
     private static final DCMotor TURN_GEARBOX = DCMotor.getKrakenX60Foc(1);

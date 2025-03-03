@@ -39,7 +39,7 @@ public interface ElevatorModuleIO {
     /**
      * Run elevator output shaft to positionRad with additional feedforward output
      */
-    default void runPosition(double positionRad, double feedforward) {
+    default void runPosition(double positionRad) {
     }
 
     default void setBrakeMode(boolean enabled) {

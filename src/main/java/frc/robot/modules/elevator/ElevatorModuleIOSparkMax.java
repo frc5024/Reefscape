@@ -9,9 +9,12 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PIDConstants;
 
 /**
@@ -44,10 +47,10 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
     private DigitalInput bottomLimitSwitch;
 
     /* Variables */
-    private final PIDController pidController;
-    private boolean closedLoop = false;
-    private double feedforward = 0.145;
+    private final ProfiledPIDController pidController;
+    private final ElevatorFeedforward elevatorFeedforward;
 
+    private boolean closedLoop = false;
     private double appliedVoltage = 0.0;
 
     /**
@@ -64,7 +67,11 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
         this.bottomLimitSwitch = new DigitalInput(STOPPING_LIMIT_CHANNEL_ID);
 
         double[] elevatorPIDs = PIDConstants.getElevatorPIDs();
-        this.pidController = new PIDController(elevatorPIDs[0], elevatorPIDs[1], elevatorPIDs[2]);
+        this.pidController = new ProfiledPIDController(elevatorPIDs[0], elevatorPIDs[1], elevatorPIDs[2],
+                new TrapezoidProfile.Constraints(ElevatorConstants.elevatorMaxSpeed,
+                        ElevatorConstants.elevatorMaxAccel));
+        this.pidController.setTolerance(0.25, 0.25);
+        this.elevatorFeedforward = new ElevatorFeedforward(0, ElevatorConstants.G, elevatorPIDs[3], elevatorPIDs[4]);
 
         // reset the encoder
         this.leftMotor.getEncoder().setPosition(ENCODER_ZERO_POSITION);
@@ -77,8 +84,9 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
         }
 
         if (this.closedLoop) {
-            double output = this.pidController.calculate(this.leftMotor.getEncoder().getPosition() + this.feedforward);
-            this.runPosition(output, this.feedforward);
+            double output = this.pidController.calculate(this.leftMotor.getEncoder().getPosition()
+                    + this.elevatorFeedforward.calculate(this.pidController.getSetpoint().velocity));
+            this.runPosition(output);
         }
 
         inputs.connected = true;
@@ -109,10 +117,9 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
     }
 
     @Override
-    public void runPosition(double positionRad, double feedforward) {
+    public void runPosition(double positionRad) {
         this.closedLoop = true;
-        this.pidController.setSetpoint(positionRad);
-        this.feedforward = feedforward;
+        this.pidController.setGoal(positionRad);
     }
 
     @Override
