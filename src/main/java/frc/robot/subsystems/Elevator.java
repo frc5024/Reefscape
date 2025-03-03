@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.commands.Elevators.SetElevatorSetpointCmd;
+import frc.robot.commands.elevator.SetElevatorSetpointCmd;
 
 public class Elevator extends SubsystemBase {
     // created and named the motor controller

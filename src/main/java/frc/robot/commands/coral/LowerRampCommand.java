@@ -1,4 +1,4 @@
-package frc.robot.commands.Corals;
+package frc.robot.commands.coral;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;

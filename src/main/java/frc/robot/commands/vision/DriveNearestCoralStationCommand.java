@@ -1,4 +1,4 @@
-package frc.robot.commands.Visions;
+package frc.robot.commands.vision;
 
 import org.littletonrobotics.junction.Logger;
 

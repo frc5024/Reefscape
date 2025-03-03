@@ -1,4 +1,4 @@
-package frc.robot.commands.Visions;
+package frc.robot.commands.vision;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -10,23 +10,21 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
- * A command that runs pathfindThenFollowPath based on the current drive mode.
+ * Drives to processor station based on pathplanner plan
  */
-public class PathFinderAndFollowCommand extends Command {
-    private final SwerveDriveSubsystem swerveDrive;
-    private final String pathName;
+public class DriveProcessorCommand extends Command {
+    private final SwerveDriveSubsystem swerveDriveSubsystem;
 
     private Command commandGroup;
     private Command followPathCommand;
 
     /**
-     * Creates a new PathFinderAndFollow command.
-     *
-     * @param stationModeSupplier a supplier for the drive mode type
+     * 
      */
-    public PathFinderAndFollowCommand(SwerveDriveSubsystem swerveDrive, String pathName) {
-        this.swerveDrive = swerveDrive;
-        this.pathName = pathName;
+    public DriveProcessorCommand(SwerveDriveSubsystem swerveDriveSubsystem) {
+        this.swerveDriveSubsystem = swerveDriveSubsystem;
+
+        addRequirements(this.swerveDriveSubsystem);
     }
 
     @Override
@@ -34,7 +32,7 @@ public class PathFinderAndFollowCommand extends Command {
         super.end(interrupted);
         if (this.commandGroup != null)
             this.commandGroup.cancel();
-        this.swerveDrive.resetDrivePID();
+        this.swerveDriveSubsystem.resetDrivePID();
 
         Logger.recordOutput("Commands/Active Command", "");
     }
@@ -46,7 +44,7 @@ public class PathFinderAndFollowCommand extends Command {
     @Override
     public void initialize() {
         // zero drive pid since we are driving closed loop
-        this.swerveDrive.zeroDrivePID();
+        this.swerveDriveSubsystem.zeroDrivePID();
 
         schedulePathCommand();
 
@@ -64,11 +62,13 @@ public class PathFinderAndFollowCommand extends Command {
         }
     }
 
-    /** Runs a new autonomous path based on the current drive mode. */
-    public void schedulePathCommand() {
+    /**
+     * 
+     */
+    private void schedulePathCommand() {
         try {
 
-            PathPlannerPath pathPlannerPath = PathPlannerPath.fromPathFile(this.pathName);
+            PathPlannerPath pathPlannerPath = PathPlannerPath.fromPathFile("DriveProcessor - Path");
 
             this.followPathCommand = AutoBuilder.pathfindThenFollowPath(pathPlannerPath,
                     frc.robot.autonomous.AutoBuilder.CONSTRAINTS);
