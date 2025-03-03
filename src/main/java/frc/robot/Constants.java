@@ -234,9 +234,9 @@ public final class Constants {
 
         // starts with one closest to driver station and rotates clockwise
         public static final Pose2d[] REEF_POSES = new Pose2d[] {
-                new Pose2d(Units.inchesToMeters(107.87), Units.inchesToMeters(158.50),
+                new Pose2d(Units.inchesToMeters(96.46), Units.inchesToMeters(158.50),
                         Rotation2d.fromDegrees(0.0)), // Tag-18
-                new Pose2d(Units.inchesToMeters(140.55), Units.inchesToMeters(225.98),
+                new Pose2d(Units.inchesToMeters(134.25), Units.inchesToMeters(223.23),
                         Rotation2d.fromDegrees(-60.0)), // Tag-19
                 new Pose2d(Units.inchesToMeters(217.72), Units.inchesToMeters(227.56),
                         Rotation2d.fromDegrees(-120.0)), // Tag-20
