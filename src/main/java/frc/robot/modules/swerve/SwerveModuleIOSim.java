@@ -6,10 +6,10 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants.PIDConstants;
@@ -26,10 +26,6 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     private static final double[] DRIVE_PIDs = PIDConstants.getDrivePIDs();
     private static final double[] TURN_PIDs = PIDConstants.getTurnPIDs();
 
-    private static final double DRIVE_KS = 0.00865;
-    private static final double DRIVE_KV_ROT = 0.91035; // Same units as TunerConstants: (volt * secs) / rotation
-    private static final double DRIVE_KV = 1.0 / Units.rotationsToRadians(1.0 / DRIVE_KV_ROT);
-
     private static final DCMotor DRIVE_GEARBOX = DCMotor.getKrakenX60Foc(1);
     private static final DCMotor TURN_GEARBOX = DCMotor.getKrakenX60Foc(1);
 
@@ -38,10 +34,11 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
 
     private PIDController driveController = new PIDController(DRIVE_PIDs[0], DRIVE_PIDs[1], DRIVE_PIDs[2]);
     private PIDController turnController = new PIDController(TURN_PIDs[0], TURN_PIDs[1], TURN_PIDs[2]);
+    private SimpleMotorFeedforward simpleMotorFeedforward = new SimpleMotorFeedforward(DRIVE_PIDs[3], DRIVE_PIDs[4],
+            DRIVE_PIDs[5]);
 
     private boolean driveClosedLoop = false;
     private boolean turnClosedLoop = false;
-    private double driveFFVolts = 0.0;
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;
 
@@ -68,8 +65,8 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     public void updateInputs(SwerveModuleIOInputs inputs) {
         // Run closed-loop control
         if (this.driveClosedLoop) {
-            this.driveAppliedVolts = driveFFVolts
-                    + driveController.calculate(this.driveMotorSim.getAngularVelocityRadPerSec());
+            this.driveAppliedVolts = driveController.calculate(this.driveMotorSim.getAngularVelocityRadPerSec())
+                    + this.simpleMotorFeedforward.calculate(this.driveMotorSim.getAngularVelocityRadPerSec());
         } else {
             this.driveController.reset();
         }
@@ -80,8 +77,8 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
         }
 
         // Update simulation state
-        this.driveMotorSim.setInputVoltage(MathUtil.clamp(driveAppliedVolts, -12.0, 12.0));
-        this.turnMotorSim.setInputVoltage(MathUtil.clamp(turnAppliedVolts, -12.0, 12.0));
+        this.driveMotorSim.setInputVoltage(MathUtil.clamp(driveAppliedVolts, -16.0, 16.0));
+        this.turnMotorSim.setInputVoltage(MathUtil.clamp(turnAppliedVolts, -16.0, 16.0));
         this.driveMotorSim.update(RobotConstants.LOOP_PERIOD_SECS);
         this.turnMotorSim.update(RobotConstants.LOOP_PERIOD_SECS);
 
@@ -123,7 +120,6 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     @Override
     public void runDriveVelocity(double velocityRadPerSec) {
         this.driveClosedLoop = true;
-        this.driveFFVolts = DRIVE_KS * Math.signum(velocityRadPerSec) + DRIVE_KV * velocityRadPerSec;
         this.driveController.setSetpoint(velocityRadPerSec);
     }
 

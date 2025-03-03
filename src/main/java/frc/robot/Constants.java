@@ -205,11 +205,11 @@ public final class Constants {
         public static final int driveMotorCurrentLimit = 60;
         public static final int turnMotorCurrentLimit = 20;
 
-        public static final double driveSimP = 0.05;
+        public static final double driveSimP = 1.0;
         public static final double driveSimD = 0.0;
-        public static final double driveSimKs = 0.00865;
+        public static final double driveSimKs = 0.25; // 0.00865;
         private static final double DRIVE_KV_ROT = 0.91035; // Same units as TunerConstants: (volt * secs) / rotation
-        public static final double driveSimKv = 1.0 / Units.rotationsToRadians(1.0 / DRIVE_KV_ROT); // 0.0789;
+        public static final double driveSimKv = 0.12; // 1.0 / Units.rotationsToRadians(1.0 / DRIVE_KV_ROT); // 0.0789;
 
         public static final double turnSimP = 8.0;
         public static final double turnSimD = 0.0;
@@ -249,9 +249,9 @@ public final class Constants {
         public static final double SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SWERVE_MODULE_DRIVE_KD = 0.0;
 
-        public static final double SWERVE_MODULE_DRIVE_KS = 0.125;
-        public static final double SWERVE_MODULE_DRIVE_KV = 0.06;
-        public static final double SWERVE_MODULE_DRIVE_KA = 0.01;
+        public static final double SWERVE_MODULE_DRIVE_KS = 0.25;
+        public static final double SWERVE_MODULE_DRIVE_KV = 0.12;
+        public static final double SWERVE_MODULE_DRIVE_KA = 0.1;
 
         // PID constants for simulated swerve modules
         public static final double SIM_SWERVE_MODULE_DRIVE_KP = 0.1;
