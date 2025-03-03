@@ -1,4 +1,4 @@
-package frc.robot.commands.vision;
+package frc.robot.commands.Visions;
 
 import java.util.function.Supplier;
 
@@ -6,34 +6,49 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PIDConstants;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.TeleopConstants;
+import frc.robot.controls.GameData.CoralPole;
+import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.utils.AllianceFlipUtil;
 
 /**
- *
+ * Drives to reef station based on game piece mode settings
  */
-public class DriveToPoseCommand extends Command {
+public class DriveReefStationCommand extends Command {
     private final SwerveDriveSubsystem swerveDriveSubsystem;
     private final Supplier<Pose2d> poseProvider;
-    private Pose2d goalPose;
+    private final Supplier<Integer> stationSupplier;
+    private final Supplier<CoralPole> poleSupplier;
+    private final Supplier<GamePieceMode> driveModeSupplier;
+    private Pose3d goalPose;
 
     private final ProfiledPIDController xController;
     private final ProfiledPIDController yController;
     private final ProfiledPIDController omegaController;
 
     /**
-     * 
+     * Drives to reef station based on pose and pole selection from elastic input
      */
-    public DriveToPoseCommand(SwerveDriveSubsystem swerveDriveSubsystem, Supplier<Pose2d> poseProvider,
-            Pose2d goalPose) {
+    public DriveReefStationCommand(SwerveDriveSubsystem swerveDriveSubsystem, Supplier<Pose2d> poseProvider,
+            Supplier<Integer> stationSupplier, Supplier<CoralPole> poleSupplier,
+            Supplier<GamePieceMode> driveModeSupplier) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.poseProvider = poseProvider;
-        this.goalPose = goalPose;
+        this.stationSupplier = stationSupplier;
+        this.poleSupplier = poleSupplier;
+        this.driveModeSupplier = driveModeSupplier;
 
         double[] driveXPIDs = PIDConstants.getDriveXPIDs();
         double[] driveYPIDs = PIDConstants.getDriveXPIDs();
@@ -85,13 +100,27 @@ public class DriveToPoseCommand extends Command {
     public void initialize() {
         resetPIDControllers();
 
-        // Flip pose if red alliance
-        this.goalPose = AllianceFlipUtil.apply(goalPose);
+        int stationId = this.stationSupplier.get().intValue();
+        CoralPole poleId = this.poleSupplier.get();
+        GamePieceMode driveMode = this.driveModeSupplier.get();
 
-        this.xController.setGoal(this.goalPose.getX());
-        this.yController.setGoal(this.goalPose.getY());
-        this.omegaController.setGoal(this.goalPose.getRotation().getRadians());
+        // Determine if we want to drive to left or right coral pole
+        Pose3d reefPose3d = new Pose3d(FieldConstants.REEF_POSES[stationId - 1]);
+        Pose2d reefPose2d = AllianceFlipUtil.apply(reefPose3d.toPose2d());
+        this.goalPose = new Pose3d(reefPose2d);
 
+        double offset = poleId == CoralPole.LEFT ? FieldConstants.REEF_POLE_OFFSET : -FieldConstants.REEF_POLE_OFFSET;
+        double robotYaw = driveMode == GamePieceMode.CORAL ? 0.0 : 180.0;
+
+        Transform3d polePose = new Transform3d(new Translation3d(RobotConstants.LENGTH_METERS / 2, offset, 0.0),
+                new Rotation3d(0.0, 0.0, 0.0));
+        Pose2d driveToPose = this.goalPose.transformBy(polePose).toPose2d();
+
+        this.xController.setGoal(reefPose2d.getX());
+        this.yController.setGoal(reefPose2d.getY());
+        this.omegaController.setGoal(reefPose2d.getRotation().rotateBy(Rotation2d.fromDegrees(robotYaw)).getRadians());
+
+        Logger.recordOutput("Commands/Goal Pose", goalPose);
         Logger.recordOutput("Commands/Active Command", this.getName());
     }
 

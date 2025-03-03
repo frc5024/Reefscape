@@ -1,5 +1,5 @@
 
-package frc.robot.commands.coral;
+package frc.robot.commands.Corals;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Coral;
