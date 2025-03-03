@@ -5,21 +5,28 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Middle to Middle Reef"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveRightTag"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "DriveRightTag"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
+            "name": "ScoreCoral"
           }
         },
         {
@@ -38,6 +45,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "New Folder",
+  "folder": null,
   "choreoAuto": false
 }

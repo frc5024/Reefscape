@@ -40,6 +40,7 @@ public class Swerve extends SubsystemBase {
     boolean fieldRelative = true;
 
     public boolean isSlowMode = false;
+    public boolean visionSlowMode = false;
 
     public final double scaleValue = 3600.0 / 3831.020004272461;
 
@@ -83,6 +84,7 @@ public class Swerve extends SubsystemBase {
         }
 
         // Configure AutoBuilder last
+
         AutoBuilder.configure(
                 this::getPose, // Robot pose supplier
                 this::setPose, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -168,6 +170,8 @@ public class Swerve extends SubsystemBase {
 
         if (isSlowMode) {
             speedModifier = 0.3 * speedModifier;
+        } else if (visionSlowMode) {
+            speedModifier = 0.4 * speedModifier;
         }
     }
 
@@ -176,6 +180,8 @@ public class Swerve extends SubsystemBase {
      */
     public void drive(boolean isOpenLoop) {
         ChassisSpeeds chassisSpeeds = null;
+
+        System.out.println("Drive Called; " + fieldRelative);
 
         setSpeedModifier();
 
@@ -188,6 +194,11 @@ public class Swerve extends SubsystemBase {
             chassisSpeeds = new ChassisSpeeds(translationVal * Constants.Swerve.maxSpeed * speedModifier,
                     strafeVal * Constants.Swerve.maxSpeed * speedModifier,
                     rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier);
+
+            System.out.println("Translation " + translationVal);
+            System.out.println("Strafe " + strafeVal);
+            System.out.println("Rotation " + rotationVal);
+            System.out.println("SpeedMod " + speedModifier);
         }
 
         drive(chassisSpeeds, isOpenLoop);
@@ -240,6 +251,12 @@ public class Swerve extends SubsystemBase {
             pose = Pose2d.kZero;
 
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+    }
+
+    public void resetSwerve() {
+        for (SwerveModule mod : mSwerveMods) {
+            mod.resetToAbsolute();
+        }
     }
 
     public Rotation2d getHeading() {

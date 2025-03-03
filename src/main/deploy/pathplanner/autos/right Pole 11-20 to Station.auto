@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 meter turn"
+            "pathName": "New Path"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Working",
   "choreoAuto": false
 }

@@ -5,33 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "DriveRightTag"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "elevator"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Outtake"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "elevator"
+            "pathName": "Josh Test"
           }
         }
       ]

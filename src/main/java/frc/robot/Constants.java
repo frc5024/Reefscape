@@ -33,7 +33,7 @@ public final class Constants {
 
     public static final class Vision {
 
-        public static final double rightOffset = 0.1540; // in meters
+        public static final double rightOffset = 0.18228740684869218; // in meters
         public static final double leftOffset = -0.1745; // in meters
         public static final double noOffset = 0; // in meters
 
@@ -79,9 +79,9 @@ public final class Constants {
         // position constants for the different levels to score in rotations
         public static final double rootPosition = 0;
         public static final double L1Position = 15.212;
-        public static final double L2Position = 18.0802;
+        public static final double L2Position = 18.0802 - 1;
         public static final double Algae1 = 5.97514;
-        public static final double L3Position = 31.37261;
+        public static final double L3Position = 31.37261 - 1.5;
         public static final double Algae2 = 8.37068;
         public static final double L4Position = 49.57406;
 

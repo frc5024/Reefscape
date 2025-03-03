@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.Vision.autoSetPositionTagID;
 import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
@@ -56,6 +57,15 @@ public class RobotContainer {
                 new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset));
         NamedCommands.registerCommand("DriveLeftTag",
                 new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.leftOffset));
+
+        NamedCommands.registerCommand("DriveLeftTag11",
+                new autoSetPositionTagID(limelightSubsystem, s_Swerve, Constants.Vision.leftOffset, 11));
+
+        NamedCommands.registerCommand("DriveRightTag11",
+                new autoSetPositionTagID(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset, 11));
+
+        NamedCommands.registerCommand("DriveRightTag6",
+                new autoSetPositionTagID(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset, 6));
 
         NamedCommands.registerCommand("ScoreCoral", coralSubsystem.outtakeCommand());
         NamedCommands.registerCommand("IntakeCoral", coralSubsystem.intakeCommand());
@@ -154,5 +164,6 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
+        // return new TwoPiece();
     }
 }

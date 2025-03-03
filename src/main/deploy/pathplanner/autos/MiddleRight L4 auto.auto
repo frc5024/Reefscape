@@ -25,7 +25,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.3
+            "waitTime": 1.0
           }
         },
         {
@@ -38,6 +38,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "New Folder",
+  "folder": "Working",
   "choreoAuto": false
 }
