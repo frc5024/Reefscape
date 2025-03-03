@@ -30,6 +30,6 @@ public class ClimbExtendoCommand extends Command {
     @Override
     public boolean isFinished() {
         /* Checls if climb arm is at extended position */
-        return false;
+        return climbSubsystem.isExtendoPosition();
     }
 }

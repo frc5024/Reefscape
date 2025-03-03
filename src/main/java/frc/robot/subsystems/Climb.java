@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.networktables.GenericEntry;
@@ -50,7 +52,7 @@ public class Climb extends SubsystemBase {
         // Shuffleboard tab displaying the encoder's position value as a double
         tab.addDouble("encoder value", () -> climbMotor.getPosition().getValueAsDouble());
         tab.addBoolean("is climbed?", () -> isClimbed());
-
+        tab.addDouble("voltage", () -> climbMotor.getMotorVoltage().getValueAsDouble());
     }
 
     public void climbing() {
@@ -58,7 +60,7 @@ public class Climb extends SubsystemBase {
         climbMotor.set(Constants.ClimbConstants.climbSpeed);
         // Schedules the LED command
         LEDs.getInstance().setCommand(LEDPreset.LightChase.kBlue).schedule();
-
+        System.out.println(climbMotor.getMotorVoltage());
         // }
     }
 
@@ -74,13 +76,6 @@ public class Climb extends SubsystemBase {
         LEDs.getInstance().setCommand(LEDPreset.Solid.kBlue).schedule();
     }
 
-    public void cancel() {
-        // Sets motor to cancelling speed
-        climbMotor.set(Constants.ClimbConstants.cancelSpeed);
-        LEDs.getInstance().setCommand(LEDPreset.Solid.kDarkRed).schedule();
-
-    }
-
     public void stopMotor() {
         // Stops motor
         climbMotor.set(0);
@@ -88,6 +83,11 @@ public class Climb extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        Logger.recordOutput("Climb Motor Velocity", climbMotor.getVelocity().getValueAsDouble());
+        Logger.recordOutput("Climb Motor Voltage", climbMotor.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Climb Motor Position", climbMotor.getPosition().getValueAsDouble());
+        Logger.recordOutput("Is Climbed", isClimbed());
         // Ultrasonic.setAutomaticMode(true);
         // m_ultrasonic.setEnabled(true);
 
@@ -114,7 +114,8 @@ public class Climb extends SubsystemBase {
 
     public boolean isClimbed() {
         // Returns true if the Encoder detects the motor is at climbed position
-        if (limitSwitch.get()) {
+        if (/* limitSwitch.get() */ climbMotor.getPosition()
+                .getValueAsDouble() <= Constants.ClimbConstants.endPosition) {
             // if (climbMotor.getPosition().getValueAsDouble() >=
             // Constants.ClimbConstants.liftoffPos
             // && !overThreshold()) {
