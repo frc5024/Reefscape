@@ -81,7 +81,7 @@ public class MapleSimUtil {
                         getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),
                         getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation(),
                         Meters.of(algaeTransform.getZ()),
-                        MetersPerSecond.of(2),
+                        MetersPerSecond.of(4),
                         Degrees.of(0.0)));
     }
 
