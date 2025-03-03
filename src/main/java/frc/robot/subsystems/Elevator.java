@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.elevatorConstants;
@@ -159,8 +160,8 @@ public class Elevator extends SubsystemBase {
 
         // //safety precaution to prevent the motor from trying to go past the bottom
         // stop
-        if (speed < 0 && rotationsToInches(
-                elevatorMotor.getEncoder().getPosition()) <= elevatorConstants.minimumBottomValue) {
+        if (PID.getGoal().position == elevatorConstants.rootPosition
+                && elevatorHeight() <= elevatorConstants.minimumBottomValue) {
             elevatorMotor.set(0); // TODO: verify our minimumBottomValue tolerance is working and reasonable
         }
 
@@ -203,8 +204,8 @@ public class Elevator extends SubsystemBase {
                     maxAccelerationEntry.getDouble(elevatorConstants.elevatorMaxAccel)));
         } else {
             PID.setConstraints(new TrapezoidProfile.Constraints(
-                    maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed / 4),
-                    maxAccelerationEntry.getDouble(elevatorConstants.elevatorMaxAccel / 4)));
+                    maxSpeedEntry.getDouble(elevatorConstants.elevatorMaxSpeed) / 4,
+                    maxAccelerationEntry.getDouble(elevatorConstants.elevatorMaxAccel) / 4));
         }
 
         PID.setGoal(inches);
@@ -308,6 +309,10 @@ public class Elevator extends SubsystemBase {
         return percent;
     }
 
+    public double elevatorHeight() {
+        return rotationsToInches(elevatorMotor.getEncoder().getPosition());
+    }
+
     public Command goToL1Position() {
         return new SetElevatorSetpointCmd(this, Constants.elevatorConstants.L1Position);
     }
@@ -338,5 +343,12 @@ public class Elevator extends SubsystemBase {
 
     public Command goToModePosition() {
         return new SetElevatorSetpointCmd(this, elevatorMode);
+    }
+
+    public Command slowL2() {
+        return new SequentialCommandGroup(
+                runOnce(() -> slow = true),
+                goToL2Position())
+                .finallyDo(() -> slow = false);
     }
 }

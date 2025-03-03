@@ -49,14 +49,14 @@ public final class Constants {
         // elevator values
         public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
-        public static final double elevatorMaxSpeed = 75;
-        public static final double elevatorMaxAccel = 75;
+        public static final double elevatorMaxSpeed = 70;
+        public static final double elevatorMaxAccel = 70;
         public static final double zeroPosition = 0;
         public static final int motorID1 = 60;
         public static final int motorID2 = 61;
 
         // values for PID
-        public static final double kP = 0.08;
+        public static final double kP = 0.05;
         public static final double kI = 0;
         public static final double kD = 0;
 

@@ -150,16 +150,17 @@ public class RobotContainer {
 
         // delete once onTrue works
         operator.povLeft()
-                .whileTrue(elevatorSubsystem.goToL1Position());
+                .onTrue(elevatorSubsystem.goToL1Position());
         operator.povDown()
-                .whileTrue(elevatorSubsystem.goToL2Position());
+                .onTrue(elevatorSubsystem.goToL2Position());
         operator.povRight()
-                .whileTrue(elevatorSubsystem.goToL3Position());
+                .onTrue(elevatorSubsystem.goToL3Position());
         operator.povUp()
-                .whileTrue(elevatorSubsystem.goToL4Position());
+                .onTrue(elevatorSubsystem.goToL4Position());
 
-        operator.x().onTrue(new InstantCommand(() -> elevatorSubsystem.slow = true));
-        operator.x().onFalse(new InstantCommand(() -> elevatorSubsystem.slow = false));
+        operator.start().whileTrue(elevatorSubsystem.slowL2());
+        // operator.start().whileTrue(new
+        // PrintCommand("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
     }
 
     public Command getAutonomousCommand() {
