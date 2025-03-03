@@ -1,5 +1,8 @@
 package frc.robot.commands.Vision;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -24,6 +27,10 @@ public class autoSetPositionTagID extends Command {
     double strafePidOutput = 0;
     double rotationPidOutput = 0;
     double translationPidOutput = 0;
+
+    double lastSeenStrafe = 0;
+    double lastSeenRotation = 0;
+    double lastSeenTranslation = 0;
 
     private PIDController strafePidController;
     private PIDController rotationPidController;
@@ -60,29 +67,51 @@ public class autoSetPositionTagID extends Command {
         translationPidController.reset();
         rotationPidController.reset();
 
-        validTagID = tag;
-
         xPos = false;
         zPos = false;
         rotationPos = false;
+
+        lastSeenRotation = 0;
+        lastSeenStrafe = 0;
     }
+
+    Set<Integer> tag6 = new HashSet<>(
+            Set.of(6, 19));
+
+    Set<Integer> tag7 = new HashSet<>(
+            Set.of(7, 18));
+
+    Set<Integer> tag8 = new HashSet<>(
+            Set.of(8, 17));
+
+    Set<Integer> tag9 = new HashSet<>(
+            Set.of(9, 22));
+
+    Set<Integer> tag10 = new HashSet<>(
+            Set.of(10, 21));
+
+    Set<Integer> tag11 = new HashSet<>(
+            Set.of(11, 20));
 
     @Override
     public void execute() {
         int detectedTagID = (int) limelight.getAprilTagID();
 
-        if (validTagID == detectedTagID) {
+        if (tag == detectedTagID) {
             swerveDrive.setFieldRelative(false);
 
-            System.out.println("executed");
+            if (strafePidOutput != 0) {
+                lastSeenStrafe = strafePidOutput;
+            }
+
+            if (rotationPidOutput != 0) {
+                lastSeenRotation = rotationPidOutput;
+            }
 
             mathToTag();
         } else {
-            swerveDrive.visionTranslationalVal(0, false);
-            swerveDrive.visionStrafeVal(0, false);
-            swerveDrive.visionRotationVal(0, false);
-
-            swerveDrive.setFieldRelative(true);
+            swerveDrive.visionRotationVal(lastSeenRotation, true);
+            swerveDrive.visionStrafeVal(lastSeenStrafe, true);
         }
 
     }
@@ -91,15 +120,16 @@ public class autoSetPositionTagID extends Command {
         double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
         Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
 
+        // Rotation
         double yaw = botPose[4] - cameraAngle;
-
-        SmartDashboard.putNumber("Tag Yaw", yaw);
 
         // Left/Right
         double zDiff = botPose3D.getZ() + desiredz;
 
         // forward/back
         double xDiff = botPose3D.getX() - xOffset;
+
+        SmartDashboard.putNumber("Tag Yaw", yaw);
 
         rotateToTag(yaw);
         translateToTag(zDiff);
@@ -111,37 +141,47 @@ public class autoSetPositionTagID extends Command {
     public void rotateToTag(double rotationToTag) {
         if (Math.abs(rotationToTag) > 1) { // Adjust tolerance as needed
             rotationPidOutput = rotationPidController.calculate(rotationToTag, 0);
-            rotationPidOutput = rotationPidOutput * 2; // Speed multiplier
+            rotationPidOutput = rotationPidOutput * 1.5; // Speed multiplier
+            // if (rotationPidOutput > 2)
+            // rotationPidOutput = 2; // check values at certain distance to find good speed
+            // for all below
             rotationPos = false;
         } else {
             rotationPidOutput = 0;
             rotationPos = true;
         }
         SmartDashboard.putNumber("thetaDiff", rotationToTag);
+        SmartDashboard.putNumber("RotationPid", rotationPidOutput);
     }
 
     public void translateToTag(double zDiff) {
         if (Math.abs(zDiff) > 0.06) { // In meters
             translationPidOutput = translationPidController.calculate(zDiff, 0);
             translationPidOutput = translationPidOutput * 1; // Speed multiplier
+            // if (translationPidOutput > 2)
+            // translationPidOutput = 2;
             zPos = false;
         } else {
             translationPidOutput = 0;
             zPos = true;
         }
         SmartDashboard.putNumber("zDiff", zDiff);
+        SmartDashboard.putNumber("TranslatPID", translationPidOutput);
     }
 
     public void strafeToTag(double xDiff) {
         if (Math.abs(xDiff) > 0.025) { // In meters
             strafePidOutput = strafePidController.calculate(xDiff, 0);
-            strafePidOutput = -strafePidOutput * 1.2; // Speed multiplier
+            strafePidOutput = -strafePidOutput * 1; // Speed multiplier
+            // if (strafePidOutput > 2)
+            // strafePidOutput = 2;
             xPos = false;
         } else {
             strafePidOutput = 0;
             xPos = true;
         }
         SmartDashboard.putNumber("xDiff", xDiff);
+        SmartDashboard.putNumber("StrafePID", strafePidOutput);
     }
 
     public void setDrive() {
