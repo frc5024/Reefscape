@@ -276,13 +276,14 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      */
     private void setSpeedModifier() {
         this.speedModifier = 1;
-        this.speedModifier = this.speedModifier - Elevator.getInstance().getElevatorPercent();
+        // this.speedModifier = this.speedModifier -
+        // Elevator.getInstance().getElevatorPercent();
 
-        if (this.isSlowMode) {
-            this.speedModifier = 0.3 * this.speedModifier;
-        } else if (visionSlowMode) {
-            this.speedModifier = 0.4 * this.speedModifier;
-        }
+        // if (this.isSlowMode) {
+        // this.speedModifier = 0.3 * this.speedModifier;
+        // } else if (visionSlowMode) {
+        // this.speedModifier = 0.4 * this.speedModifier;
+        // }
     }
 
     /**

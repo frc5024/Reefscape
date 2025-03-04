@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -550,9 +551,10 @@ public final class Constants {
          */
         public static final List<Camera> MANTARAIDER_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
         public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM2_CAMERA, ARDUCAM1_CAMERA);
-        public static final List<Camera> CAMERAS = SIMULATION_CAMERAS;
-        public static final Camera FRONT_CAMERA = CAMERAS.get(0);
-        public static final Camera REAR_CAMERA = CAMERAS.get(1);
+        public static final List<Camera> NO_CAMERAS = new ArrayList<>();
+        public static final List<Camera> CAMERAS = NO_CAMERAS;
+        public static final Camera FRONT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
+        public static final Camera REAR_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;

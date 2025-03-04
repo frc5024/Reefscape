@@ -63,8 +63,8 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
         inputs.data = new ElevatorModuleIOData(
                 true,
                 true,
-                this.simState.get(0),
-                this.simState.get(1),
+                this.simState.get(0) / ElevatorConstants.drumRadiusMeters,
+                this.simState.get(1) / ElevatorConstants.drumRadiusMeters,
                 this.appliedVolts,
                 Math.copySign(this.inputTorqueCurrent, this.appliedVolts),
                 Math.copySign(this.inputTorqueCurrent, this.appliedVolts),

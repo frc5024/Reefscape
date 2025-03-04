@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.commands.SwerveDriveCommands;
+import frc.robot.commands.tuning.TuningCommand;
 import frc.robot.controls.ButtonBindingsSim;
 import frc.robot.modules.algae.AlgaeModuleIOSim;
 import frc.robot.modules.climb.ClimbModuleIOSim;
@@ -91,8 +92,11 @@ public class MapleSimRobotContainer extends RobotContainer {
         Command closedLoopDrive = SwerveDriveCommands.drive(this.swerveDriveSubsystem, controllerX, controllerY,
                 controllerOmega, false);
 
+        Command tuningCommand = new TuningCommand(this.swerveDriveSubsystem, this.elevatorSubsystem, controllerX,
+                controllerY, controllerOmega, commandXboxController);
+
         // Default command, normal field-relative drive
-        this.swerveDriveSubsystem.setDefaultCommand(closedLoopDrive);
+        this.swerveDriveSubsystem.setDefaultCommand(RobotConstants.TUNING_MODE ? tuningCommand : closedLoopDrive);
     }
 
     /**
