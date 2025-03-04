@@ -27,6 +27,9 @@ public interface ElevatorModuleIO {
         return true;
     }
 
+    default public void runCharacterization(double output) {
+    }
+
     default void runOpenLoop(double output) {
     }
 

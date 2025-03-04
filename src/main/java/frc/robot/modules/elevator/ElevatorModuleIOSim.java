@@ -41,7 +41,8 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
                 new TrapezoidProfile.Constraints(ElevatorConstants.elevatorMaxSpeed,
                         ElevatorConstants.elevatorMaxAccel));
         this.pidController.setTolerance(0.25, 0.25);
-        this.elevatorFeedforward = new ElevatorFeedforward(0, ElevatorConstants.G, elevatorPIDs[3], elevatorPIDs[4]);
+        this.elevatorFeedforward = new ElevatorFeedforward(elevatorPIDs[3], ElevatorConstants.G, elevatorPIDs[4],
+                elevatorPIDs[5]);
     }
 
     @Override
@@ -64,6 +65,12 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
         inputs.velocityRadsPerSec = this.simState.get(1) / ElevatorConstants.drumRadiusMeters;
         inputs.appliedVoltage = new double[] { this.appliedVolts };
         inputs.supplyCurrentAmps = new double[] { Math.copySign(this.inputTorqueCurrent, this.appliedVolts) };
+    }
+
+    @Override
+    public void runCharacterization(double output) {
+        closedLoop = false;
+        setInputVoltage(output);
     }
 
     @Override

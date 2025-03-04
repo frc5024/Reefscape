@@ -71,7 +71,8 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
                 new TrapezoidProfile.Constraints(ElevatorConstants.elevatorMaxSpeed,
                         ElevatorConstants.elevatorMaxAccel));
         this.pidController.setTolerance(0.25, 0.25);
-        this.elevatorFeedforward = new ElevatorFeedforward(0, ElevatorConstants.G, elevatorPIDs[3], elevatorPIDs[4]);
+        this.elevatorFeedforward = new ElevatorFeedforward(elevatorPIDs[3], ElevatorConstants.G, elevatorPIDs[4],
+                elevatorPIDs[5]);
 
         // reset the encoder
         this.leftMotor.getEncoder().setPosition(ENCODER_ZERO_POSITION);
@@ -107,6 +108,11 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
     @Override
     public boolean isAtTop() {
         return !this.topLimitSwitch.get();
+    }
+
+    @Override
+    public void runCharacterization(double output) {
+        this.leftMotor.setVoltage(output);
     }
 
     @Override

@@ -55,7 +55,7 @@ abstract public class RobotContainer {
      *
      */
     protected void configureAutoBuilder() {
-        this.autoBuilder = new AutoBuilder(this.swerveDriveSubsystem, this.coral, this.elevator);
+        this.autoBuilder = new AutoBuilder(this.swerveDriveSubsystem, this.elevatorSubsystem);
         this.autoBuilder.configureAutonomous();
         this.autonomousChooser = this.autoBuilder.getAutonomousChooser();
     }

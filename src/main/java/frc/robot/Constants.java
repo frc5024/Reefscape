@@ -361,13 +361,15 @@ public final class Constants {
         public static final double ELEVATOR_KP = 0.05;
         public static final double ELEVATOR_KI = 0.0;
         public static final double ELEVATOR_KD = 0.0;
+        public static final double ELEVATOR_KS = 0.0;
         public static final double ELEVATOR_KV = 0.1;
         public static final double ELEVATOR_KA = 0.05;
 
         public static final double SIM_ELEVATOR_KP = 5000.0;
         public static final double SIM_ELEVATOR_KI = 0.0;
         public static final double SIM_ELEVATOR_KD = 2000.0;
-        public static final double SIM_ELEVATOR_KV = 0.1;
+        public static final double SIM_ELEVATOR_KS = 0.86822;
+        public static final double SIM_ELEVATOR_KV = 3.10238;
         public static final double SIM_ELEVATOR_KA = 0.05;
 
         /**
@@ -421,9 +423,9 @@ public final class Constants {
          */
         public static final double[] getElevatorPIDs() {
             return Robot.isReal()
-                    ? new double[] { ELEVATOR_KP, ELEVATOR_KI, ELEVATOR_KD, ELEVATOR_KV, ELEVATOR_KA }
-                    : new double[] { SIM_ELEVATOR_KP, SIM_ELEVATOR_KI, SIM_ELEVATOR_KD, SIM_ELEVATOR_KV,
-                            SIM_ELEVATOR_KA };
+                    ? new double[] { ELEVATOR_KP, ELEVATOR_KI, ELEVATOR_KD, ELEVATOR_KS, ELEVATOR_KV, ELEVATOR_KA }
+                    : new double[] { SIM_ELEVATOR_KP, SIM_ELEVATOR_KI, SIM_ELEVATOR_KD, SIM_ELEVATOR_KS,
+                            SIM_ELEVATOR_KV, SIM_ELEVATOR_KA };
         }
     }
 

@@ -17,7 +17,7 @@ import frc.robot.modules.algae.AlgaeModuleIO;
  * 
  */
 public class AlgaeSubsystem extends SubsystemBase {
-    private final String NAME = "AlgaeIntake";
+    private final String NAME = "Algae";
     private final Alert disconnected;
 
     public static enum Action {

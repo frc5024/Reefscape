@@ -17,7 +17,7 @@ import frc.robot.modules.coral.CoralModuleIO;
  * 
  */
 public class CoralSubsystem extends SubsystemBase {
-    private final String NAME = "CoralIntake";
+    private final String NAME = "Coral";
     private final Alert disconnected;
 
     public static enum Action {

@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.ExponentialProfile;
 import edu.wpi.first.math.trajectory.ExponentialProfile.Constraints;
 import edu.wpi.first.math.trajectory.ExponentialProfile.State;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -272,8 +273,23 @@ public class ElevatorSubsystem extends SubsystemBase {
         Logger.recordOutput("Subsystems/" + this.NAME + "/GoalVelocityMetersPerSec", goalState.velocity);
     }
 
+    /**
+     * Returns the average velocity of the modules in rotations/sec (Phoenix native
+     * units).
+     */
+    public double getFFCharacterizationVelocity() {
+        return Units.radiansToRotations(this.inputs.velocityRadsPerSec);
+    }
+
     public double getPositionMeters() {
         return (inputs.positionRads - 0.0) * ElevatorConstants.drumRadiusMeters;
+    }
+
+    /**
+     * Runs the elevator in a straight line with the specified output.
+     */
+    public void runCharacterization(double output) {
+        this.elevatorModule.runCharacterization(output);
     }
 
     public void setGoal(double goal) {

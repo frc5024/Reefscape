@@ -20,10 +20,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.tuning.ElevatorFeedForwardCharacterizationCommand;
 import frc.robot.commands.tuning.FeedForwardCharacterizationCommand;
 import frc.robot.commands.tuning.WheelRadiusCharacterizationCommand;
-import frc.robot.subsystems.Coral;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.utils.LocalADStarAK;
 
@@ -33,8 +33,7 @@ import frc.robot.utils.LocalADStarAK;
 public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
     /* Subsystems */
     private final SwerveDriveSubsystem swerveDriveSubsystem;
-    private final Coral coralSubsystem;
-    private final Elevator elevatorSubsystem;
+    private final ElevatorSubsystem elevatorSubsystem;
 
     /* Constraints */
     public static final PathConstraints CONSTRAINTS = new PathConstraints(
@@ -61,10 +60,8 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
     /**
      * 
      */
-    public AutoBuilder(SwerveDriveSubsystem swerveDriveSubsystem, Coral coralSubsystem,
-            Elevator elevatorSubsystem) {
+    public AutoBuilder(SwerveDriveSubsystem swerveDriveSubsystem, ElevatorSubsystem elevatorSubsystem) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
-        this.coralSubsystem = coralSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;
     }
 
@@ -105,6 +102,8 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
                     new FeedForwardCharacterizationCommand(this.swerveDriveSubsystem).get());
             this.autonomousChooser.addOption("Wheel Radius Characterization",
                     new WheelRadiusCharacterizationCommand(this.swerveDriveSubsystem).get());
+            this.autonomousChooser.addOption("Elevator Characterization",
+                    new ElevatorFeedForwardCharacterizationCommand(this.elevatorSubsystem).get());
         }
 
         // Load Game Autos
