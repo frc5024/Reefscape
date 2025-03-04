@@ -2,7 +2,7 @@ package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
 public class SetElevatorModeCmd extends Command {
@@ -21,16 +21,16 @@ public class SetElevatorModeCmd extends Command {
     // stores the elevator desired mode as its degree form
     @Override
     public void initialize() {
-        if (mode == ElevatorConstants.L1Position) {
+        if (mode == Constants.ElevatorConstants.L1Position) {
             elevatorSubsystem.setElevatorMode(mode);
             SmartDashboard.putString("ElevatorMode", "L1");
-        } else if (mode == ElevatorConstants.L2Position) {
+        } else if (mode == Constants.ElevatorConstants.L2Position) {
             elevatorSubsystem.setElevatorMode(mode);
             SmartDashboard.putString("ElevatorMode", "L2");
-        } else if (mode == ElevatorConstants.L3Position) {
+        } else if (mode == Constants.ElevatorConstants.L3Position) {
             elevatorSubsystem.setElevatorMode(mode);
             SmartDashboard.putString("ElevatorMode", "L3");
-        } else if (mode == ElevatorConstants.L4Position) {
+        } else if (mode == Constants.ElevatorConstants.L4Position) {
             elevatorSubsystem.setElevatorMode(mode);
             SmartDashboard.putString("ElevatorMode", "L4");
         }

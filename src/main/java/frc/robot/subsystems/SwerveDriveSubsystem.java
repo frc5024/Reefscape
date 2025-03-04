@@ -70,6 +70,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     private boolean isFieldRelative;
     private boolean isOpenLoop;
 
+    public double speedModifier;
+    public boolean isSlowMode = false;
+    public boolean visionSlowMode = false;
+
     /**
      * 
      */
@@ -222,9 +226,11 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      * 
      */
     public void drive(double xVelocity, double yVelocity, double rVelocity, Rotation2d angle, boolean isOpenLoop) {
-        xVelocity = xVelocity * SwerveConstants.maxLinearSpeed;
-        yVelocity = yVelocity * SwerveConstants.maxLinearSpeed;
-        rVelocity = rVelocity * SwerveConstants.maxAngularSpeed;
+        setSpeedModifier();
+
+        xVelocity = xVelocity * SwerveConstants.maxLinearSpeed * this.speedModifier;
+        yVelocity = yVelocity * SwerveConstants.maxLinearSpeed * this.speedModifier;
+        rVelocity = rVelocity * SwerveConstants.maxAngularSpeed * this.speedModifier;
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
 
@@ -257,6 +263,20 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     public void runCharacterization(double output) {
         for (int i = 0; i < 4; i++) {
             this.swerveModules[i].runCharacterization(output);
+        }
+    }
+
+    /**
+     * 
+     */
+    private void setSpeedModifier() {
+        this.speedModifier = 1;
+        this.speedModifier = this.speedModifier - Elevator.getInstance().getElevatorPercent();
+
+        if (this.isSlowMode) {
+            this.speedModifier = 0.3 * this.speedModifier;
+        } else if (visionSlowMode) {
+            this.speedModifier = 0.4 * this.speedModifier;
         }
     }
 

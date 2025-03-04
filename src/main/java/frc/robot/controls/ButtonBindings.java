@@ -3,16 +3,18 @@ package frc.robot.controls;
 import static edu.wpi.first.wpilibj2.command.Commands.either;
 import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.elevator.SetElevatorSetpointCmd;
-import frc.robot.commands.vision.DriveFromBestTagCommand;
-import frc.robot.controls.GameData.CoralPole;
+import frc.robot.commands.vision.GoToSetPositionPerTagCmd;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 
 /**
  * 
@@ -31,17 +33,21 @@ public class ButtonBindings {
     Coral coralSubsystem;
     Elevator elevatorSubsystem;
     private final SwerveDriveSubsystem swerveDriveSubsystem;
-    private final VisionSubsystem visionSubsystem;
+    private final Limelight limelightSubsystem;
+
+    /* Variables */
+    boolean visionMode = true;
+    String mode;
 
     /**
      * 
      */
     public ButtonBindings(SwerveDriveSubsystem swerveDriveSubsystem, Coral coralSubsystem, Elevator elevatorSubsystem,
-            VisionSubsystem visionSubsystem) {
+            Limelight limelightSubsystem) {
         this.coralSubsystem = coralSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;
         this.swerveDriveSubsystem = swerveDriveSubsystem;
-        this.visionSubsystem = visionSubsystem;
+        this.limelightSubsystem = limelightSubsystem;
 
         this.driverController = setDriverBindingsController();
         this.operatorController = setOperatorBindingsController();
@@ -68,62 +74,35 @@ public class ButtonBindings {
                         this.swerveDriveSubsystem::isFieldRelative));
 
         commandXboxController.x().onTrue(new InstantCommand(() -> this.swerveDriveSubsystem.zeroHeading()));
+        commandXboxController.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
+        commandXboxController.b().whileTrue(
+                new ConditionalCommand(this.elevatorSubsystem.goToModePosition(), new InstantCommand(),
+                        () -> this.visionMode));
 
-        commandXboxController.y().onTrue(this.coralSubsystem.outtakeCommand());
-
-        commandXboxController.b().whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem,
-                ElevatorConstants.rootPosition));
-
-        // commandXboxController.a().onTrue(new InstantCommand(() ->
-        // toggleVisionMode()));
-
-        // commandXboxController.leftBumper().onTrue(new InstantCommand(() ->
-        // s_Swerve.isSlowMode =
-        // true));
-        // commandXboxController.leftBumper().onFalse(new InstantCommand(() ->
-        // s_Swerve.isSlowMode =
-        // false));
-
-        // two intake commands
         commandXboxController.rightBumper().whileTrue(this.coralSubsystem.intakeCommand());
-        commandXboxController.rightBumper().whileTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
-                ElevatorConstants.rootPosition));
+        commandXboxController.rightBumper().whileTrue(this.elevatorSubsystem.bottomElevator());
 
-        // Drive to right pole of best apriltag
+        commandXboxController.leftBumper()
+                .onTrue(new InstantCommand(() -> this.swerveDriveSubsystem.isSlowMode = true));
+        commandXboxController.leftBumper()
+                .onFalse(new InstantCommand(() -> this.swerveDriveSubsystem.isSlowMode = false));
+
         commandXboxController.rightTrigger()
-                .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
-                        this.swerveDriveSubsystem::getPose,
-                        false,
-                        GameData.getInstance().getGamePieceMode()));
-
-        // Drive to left pole of best apriltag
+                .whileTrue(
+                        new ConditionalCommand(
+                                new GoToSetPositionPerTagCmd(limelightSubsystem, this.swerveDriveSubsystem,
+                                        -FieldConstants.REEF_POLE_RIGHT_OFFSET),
+                                new InstantCommand(), () -> visionMode));
         commandXboxController.leftTrigger()
-                .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
-                        this.swerveDriveSubsystem::getPose,
-                        true,
-                        GameData.getInstance().getGamePieceMode()));
+                .whileTrue(new ConditionalCommand(
+                        new GoToSetPositionPerTagCmd(limelightSubsystem, this.swerveDriveSubsystem,
+                                FieldConstants.REEF_POLE_LEFT_OFFSET),
+                        new InstantCommand(), () -> visionMode));
 
-        // Drive to selected reef station
-        // commandXboxController.rightBumper()
-        // .whileTrue(new DriveReefStationCommand(this.swerveDriveSubsystem,
-        // this.swerveDriveSubsystem::getPose,
-        // GameData.getInstance()::getReefStationIndex,
-        // GameData.getInstance().getCoralPole(),
-        // GameData.getInstance().getGamePieceMode()));
-
-        // // Drive to selected reef station
-        // commandXboxController.leftBumper()
-        // .whileTrue(new DriveReefStationCommand(this.swerveDriveSubsystem,
-        // this.swerveDriveSubsystem::getPose,
-        // GameData.getInstance()::getReefStationIndex,
-        // GameData.getInstance().getCoralPole(),
-        // GameData.getInstance().getGamePieceMode()));
-
-        // Set reef position
-        commandXboxController.povUp().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(1)));
-        commandXboxController.povDown().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(-1)));
-        commandXboxController.povLeft().onTrue(runOnce(() -> GameData.getInstance().setCoralPole(CoralPole.LEFT)));
-        commandXboxController.povRight().onTrue(runOnce(() -> GameData.getInstance().setCoralPole(CoralPole.RIGHT)));
+        // manual
+        commandXboxController.rightTrigger()
+                .onTrue(new ConditionalCommand(new InstantCommand(), coralSubsystem.outtakeCommand(),
+                        () -> visionMode));
 
         return commandXboxController;
     }
@@ -134,13 +113,10 @@ public class ButtonBindings {
     private CommandXboxController setOperatorBindingsController() {
         CommandXboxController commandXboxController = new CommandXboxController(OPERATOR_PORT);
 
-        // (operator)
-        // potential binding fix
-        // operator.b().onTrue(new ConditionalCommand(getAutonomousCommand(),
-        // getAutonomousCommand(), () -> visionMode));
+        commandXboxController.a().whileTrue(this.elevatorSubsystem.bottomElevator());
+        commandXboxController.b().onTrue(coralSubsystem.lowerRampCommand());
 
-        // operator.a().onTrue(new SetElevatorSetpointCmd(elevatorSubsystem,
-        // Constants.elevatorConstants.zeroPosition));
+        commandXboxController.rightTrigger().onTrue(this.coralSubsystem.lowerRampCommand());
 
         commandXboxController.povLeft()
                 .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, ElevatorConstants.L1Position));
@@ -151,13 +127,7 @@ public class ButtonBindings {
         commandXboxController.povUp()
                 .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, ElevatorConstants.L4Position));
 
-        commandXboxController.a().whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem,
-                ElevatorConstants.rootPosition));
-
-        commandXboxController.rightTrigger().onTrue(this.coralSubsystem.lowerRampCommand());
-        // operator.rightTrigger().onTrue(extendClimb());
-
-        commandXboxController.b().onTrue(coralSubsystem.lowerRampCommand());
+        commandXboxController.start().whileTrue(this.elevatorSubsystem.slowL2());
 
         return commandXboxController;
     }
@@ -169,6 +139,21 @@ public class ButtonBindings {
         CommandXboxController commandXboxController = new CommandXboxController(TEST_PORT);
 
         return commandXboxController;
+    }
+
+    /**
+     * 
+     */
+    private void toggleVisionMode() {
+        visionMode = !visionMode;
+
+        if (visionMode) {
+            mode = "Vision";
+        } else {
+            mode = "Manual";
+        }
+
+        SmartDashboard.putString("Robot Mode", mode);
     }
 
     /**

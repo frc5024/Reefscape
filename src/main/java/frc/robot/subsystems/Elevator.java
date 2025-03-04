@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.elevator.SetElevatorSetpointCmd;
 
@@ -94,9 +95,10 @@ public class Elevator extends SubsystemBase {
         // assigning values to the P, I and D
         feedForwardConstraints = new TrapezoidProfile.Constraints(ElevatorConstants.elevatorMaxSpeed,
                 ElevatorConstants.elevatorMaxAccel);
+
         PID = new ProfiledPIDController(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD,
                 feedForwardConstraints);
-        PID.setTolerance(0.25, 0.25); // TODO: put in constants
+        PID.setTolerance(2, 1.5); // TODO: put in constants
         feedForward = new ElevatorFeedforward(0, ElevatorConstants.G, ElevatorConstants.kV, ElevatorConstants.kA); // ks,
                                                                                                                    // kg,
                                                                                                                    // kv,
@@ -117,6 +119,8 @@ public class Elevator extends SubsystemBase {
         tab.addDouble("estimated Position", () -> PID.getSetpoint().position);
         tab.addDouble("encoder value", () -> elevatorMotor.getEncoder().getPosition());
         tab.addDouble("appliedOutput", () -> speed);
+        tab.addDouble("goal", () -> PID.getGoal().position);
+        tab.addBoolean("atTarget", () -> targetReached());
 
         // TODO: log voltage anything else you think you need
 
@@ -144,12 +148,12 @@ public class Elevator extends SubsystemBase {
 
         // //if the boolean enabled is true then run this command
 
-        // if (speed >= maxUpSpeedEntry.getDouble(elevatorConstants.elevatorMaxUpSpeed))
+        // if (speed >= maxUpSpeedEntry.getDouble(ElevatorConstants.elevatorMaxUpSpeed))
         // {
-        // elevatorMotor.set(maxUpSpeedEntry.getDouble(elevatorConstants.elevatorMaxUpSpeed));
+        // elevatorMotor.set(maxUpSpeedEntry.getDouble(ElevatorConstants.elevatorMaxUpSpeed));
         // } else if (speed <=
-        // -maxDownSpeedEntry.getDouble(elevatorConstants.elevatorMaxDownSpeed)) {
-        // elevatorMotor.set(-maxDownSpeedEntry.getDouble(elevatorConstants.elevatorMaxDownSpeed));
+        // -maxDownSpeedEntry.getDouble(ElevatorConstants.elevatorMaxDownSpeed)) {
+        // elevatorMotor.set(-maxDownSpeedEntry.getDouble(ElevatorConstants.elevatorMaxDownSpeed));
         // } else {
         // elevatorMotor.set(speed);
         // }
@@ -310,31 +314,31 @@ public class Elevator extends SubsystemBase {
     }
 
     public Command goToL1Position() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.L1Position);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.L1Position);
     }
 
     public Command goToL2Position() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.L2Position);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.L2Position);
     }
 
     public Command goToL3Position() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.L3Position);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.L3Position);
     }
 
     public Command goToL4Position() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.L4Position);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.L4Position);
     }
 
     public Command goToAlgae1Position() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.Algae1);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.Algae1);
     }
 
     public Command goToAlgae2Position() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.Algae2);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.Algae2);
     }
 
     public Command bottomElevator() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.rootPosition);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.rootPosition);
     }
 
     public Command goToModePosition() {
