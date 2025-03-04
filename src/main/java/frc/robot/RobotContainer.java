@@ -98,8 +98,11 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+
+        driver.y().whileTrue(m_climbSubsystem.climbCommand());
+        driver.rightTrigger().whileTrue(m_climbSubsystem.extendingCommand());
+        driver.leftTrigger().whileTrue(m_climbSubsystem.retractingCommand());
         driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        // driver.y().onTrue(climb);
         driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
         driver.b().whileTrue(
                 new ConditionalCommand(elevatorSubsystem.goToModePosition(), new InstantCommand(), () -> visionMode));
