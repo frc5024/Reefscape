@@ -15,6 +15,15 @@ import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
+    public static class LEDs {
+        public final static int ledPort = 9; // Port for LED, Make sure it is PWM not DIO
+        public final static ILEDPreset defaultLED = LEDPreset.Solid.kGold;// Default Colour
+    }
+
+    public static class Servo {
+        public final static int servoPort = 8;// Port for Servo, Make sure it is PWM not DIO
+    }
+
     // AdvantageKit simulation
     public static final Mode simMode = Mode.SIM;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
@@ -112,9 +121,14 @@ public final class Constants {
 
         public static final COTSTalonFXSwerveConstants chosenDriveModule = // TODO: This must be tuned to specific robot
                 COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L1);
+                COTSTalonFXSwerveConstants.SDS.MK4i.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L1);
+
+        public static final COTSTalonFXSwerveConstants chosenDriveModule = // TODO: This must be tuned to specific robot
+                COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L1);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(18.5); // TODO: This must be tuned to specific
+        public static final double trackWidth = Units.inchesToMeters(18.5); // TODO: This must be tuned to
+                                                                            // specific
                                                                             // robot
         public static final double wheelBase = Units.inchesToMeters(18.5); // TODO: This must be tuned to specific robot
         public static final double wheelCircumference = chosenDriveModule.wheelCircumference;
@@ -227,4 +241,30 @@ public final class Constants {
                     canCoderID, angleOffset);
         }
     }
+
+    public final class ClimbConstants {
+
+        // Ultrasonic
+        public static final int pingID = 5;
+        public static final int echoID = 4;
+        public static final int filterValue = 5;
+        public static final int ultrasonicThreshold = 100;
+
+        // Motor
+        public static final int climbMotorID = 7;
+        // Placeholder value
+        public static final double endPosition = -18;
+        public static final double startPosition = -6.00;
+        // ALSO Placeholder value
+        public static final double extendoPosition = 35;
+        // public static final double liftoffPos = 180.0;
+        // EVEN MORE Placeholder values
+        public static final double climbSpeed = -0.7;
+        // PLACEHOLDER PLACEHOLDER PLACEHOLDER
+        // public static final double cancelSpeed = -0.4;
+        // P L A C E H O L D E R
+        public static final double extendoSpeed = 0.4;
+
+    }
 }
+// hey guys

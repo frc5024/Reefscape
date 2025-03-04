@@ -74,7 +74,7 @@ public class Robot extends LoggedRobot {
         }
 
         // Start AdvantageKit logger
-        Logger.start();
+        // Logger.start();
 
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
@@ -119,12 +119,6 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-        // schedule the autonomous command (example)
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.schedule();
-        }
     }
 
     /** This function is called periodically during autonomous. */
