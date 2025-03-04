@@ -58,8 +58,8 @@ public final class Constants {
         // elevator values
         public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
-        public static final double elevatorMaxSpeed = 70;
-        public static final double elevatorMaxAccel = 70;
+        public static final double elevatorMaxSpeed = 75;
+        public static final double elevatorMaxAccel = 75;
         public static final double zeroPosition = 0;
         public static final int motorID1 = 60;
         public static final int motorID2 = 61;
@@ -74,8 +74,7 @@ public final class Constants {
         public static final double kA = 0.05;
 
         public static final double G = 0.5;
-        public static final double minimumBottomValue = 2.5; // encoder value will not always be zero so we create a
-                                                             // tolerance value
+        public static final double minimumBottomValue = 2.5; // encoder value will not always be zero so we create a tolerance value
 
         // public static final double radianstoCM(double CM) {
         // double radians;
@@ -123,9 +122,7 @@ public final class Constants {
                 COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L1);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(18.5); // TODO: This must be tuned to
-                                                                            // specific
-                                                                            // robot
+        public static final double trackWidth = Units.inchesToMeters(18.5); // TODO: This must be tuned tos pecific robot
         public static final double wheelBase = Units.inchesToMeters(18.5); // TODO: This must be tuned to specific robot
         public static final double wheelCircumference = chosenDriveModule.wheelCircumference;
 
@@ -213,8 +210,7 @@ public final class Constants {
             public static final int angleMotorID = 12;
             public static final int canCoderID = 1;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(92.9 + 180); //
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                    canCoderID, angleOffset);
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
         /* Back Left Module - Module 2 */
@@ -223,8 +219,7 @@ public final class Constants {
             public static final int angleMotorID = 32;
             public static final int canCoderID = 3;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-60); //
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                    canCoderID, angleOffset);
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
         /* Back Right Module - Module 3 */
@@ -233,13 +228,11 @@ public final class Constants {
             public static final int angleMotorID = 22;
             public static final int canCoderID = 2;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-35.7); //
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                    canCoderID, angleOffset);
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
     }
 
     public final class ClimbConstants {
-
         // Ultrasonic
         public static final int pingID = 5;
         public static final int echoID = 4;
@@ -248,19 +241,19 @@ public final class Constants {
 
         // Motor
         public static final int climbMotorID = 7;
+
         // Placeholder value
         public static final double endPosition = -18;
         public static final double startPosition = -6.00;
+
         // ALSO Placeholder value
         public static final double extendoPosition = 35;
         // public static final double liftoffPos = 180.0;
+
         // EVEN MORE Placeholder values
         public static final double climbSpeed = -0.7;
-        // PLACEHOLDER PLACEHOLDER PLACEHOLDER
         // public static final double cancelSpeed = -0.4;
-        // P L A C E H O L D E R
         public static final double extendoSpeed = 0.4;
 
     }
 }
-// hey guys
