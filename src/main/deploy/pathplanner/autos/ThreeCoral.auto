@@ -13,12 +13,6 @@
         {
           "type": "named",
           "data": {
-            "name": "ElevatorL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "WaitForElevator"
           }
         },
@@ -35,21 +29,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ElevatorL0"
+            "pathName": "2.R4LtoCSL"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "WaitForElevator"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2.R4LtoCSL"
           }
         },
         {
@@ -73,12 +61,6 @@
         {
           "type": "named",
           "data": {
-            "name": "ElevatorL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "WaitForElevator"
           }
         },
@@ -95,21 +77,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ElevatorL0"
+            "pathName": "4.R2LtoCSL"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "WaitForElevator"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "4.R2LtoCSL"
           }
         },
         {
@@ -133,12 +109,6 @@
         {
           "type": "named",
           "data": {
-            "name": "ElevatorL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "WaitForElevator"
           }
         },
@@ -155,21 +125,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ElevatorL0"
+            "pathName": "6.R2RtoCSL"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "WaitForElevator"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "6.R2RtoCSL"
           }
         },
         {
