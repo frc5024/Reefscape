@@ -20,7 +20,7 @@ public class Climb extends SubsystemBase {
     public static Climb mInstance = null;
 
     private TalonFX climbMotor;
-    private DigitalInput limitSwitch = new DigitalInput(0);
+    // private DigitalInput limitSwitch = new DigitalInput(0);
 
     // Shuffleboard
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
