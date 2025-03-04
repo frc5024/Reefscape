@@ -11,6 +11,7 @@ import frc.robot.commands.vision.DriveFromBestTagCommand;
 import frc.robot.controls.GameData;
 import frc.robot.modules.gyro.GyroModuleIONavX;
 import frc.robot.modules.swerve.SwerveModuleIOTalonFX;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.Elevator;
@@ -45,11 +46,13 @@ public class MantaRaiderRobotContainer extends RobotContainer {
                 this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
 
         // this.algaeSubsystem = new AlgaeSubsystem(new AlgaeModuleIOSim());
+        // this.climbSubsystem = new ClimbSubsystem(new ClimbModuleIOTalonFX());
         // this.coralSubsystem = new CoralSubsystem(new CoralModuleIOSparkFlex());
         // this.elevatorSubsystem = new ElevatorSubsystem(new
         // ElevatorModuleIOSparkMax(), this.algaeSubsystem::hasAlgae,
         // this.coralSubsystem::hasCoral);
 
+        this.climb = Climb.getInstance();
         this.coral = new Coral();
         this.elevator = Elevator.getInstance();
         this.rumble = Rumble.getInstance();

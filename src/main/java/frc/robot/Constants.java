@@ -72,6 +72,27 @@ public final class Constants {
         }
     }
 
+    public final class ClimbConstants {
+        public static final int pingID = 5;
+        public static final int echoID = 4;
+        public static final int filterValue = 5;
+        public static final int ultrasonicThreshold = 100;
+
+        public static final int climbMotorID = 7;
+
+        public static final int deployCurrent = 30;
+        public static final int deployAngle = 130;
+        public static final int climbCurrent = 65;
+        public static final int climbCurrentRampRate = 80;
+        public static final int climbStopAngle = 225;
+
+        public static final double endPosition = -18;
+        public static final double startPosition = -6.00;
+        public static final double extendoPosition = 35;
+        public static final double climbSpeed = -0.7;
+        public static final double extendoSpeed = 0.4;
+    }
+
     // constants for intake and channels
     public static final class CoralConstants {
         public static final int coralMotorChannel = 51;

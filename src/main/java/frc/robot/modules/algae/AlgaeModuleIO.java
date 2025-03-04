@@ -7,15 +7,21 @@ import org.littletonrobotics.junction.AutoLog;
  */
 public interface AlgaeModuleIO {
     @AutoLog
-    static class AlgaeIntakeIOInputs {
-        public boolean connected = false;
-        public double appliedVoltage = 0.0;
-        public double supplyCurrentAmps = 0.0;
-        public double torqueCurrentAmps = 0.0;
-        public double tempCelsius = 0.0;
+    class AlgaeModuleIOInputs {
+        public AlgaeModuleIOData data = new AlgaeModuleIOData(false, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     }
 
-    default void updateInputs(AlgaeIntakeIOInputs inputs) {
+    record AlgaeModuleIOData(
+            boolean connected,
+            double positionRads,
+            double velocityRadsPerSec,
+            double appliedVoltage,
+            double torqueCurrentAmps,
+            double supplyCurrentAmps,
+            double tempCelsius) {
+    }
+
+    default void updateInputs(AlgaeModuleIOInputs inputs) {
     }
 
     default void eject() {

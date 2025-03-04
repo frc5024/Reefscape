@@ -11,7 +11,6 @@ import edu.wpi.first.math.trajectory.ExponentialProfile;
 import edu.wpi.first.math.trajectory.ExponentialProfile.Constraints;
 import edu.wpi.first.math.trajectory.ExponentialProfile.State;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.statemachine.StateMachine;
@@ -23,13 +22,13 @@ import frc.robot.modules.elevator.ElevatorIOInputsAutoLogged;
 import frc.robot.modules.elevator.ElevatorModuleIO;
 import frc.robot.modules.elevator.ElevatorVisualizer;
 import frc.robot.utils.EqualsUtil;
+import frc.robot.utils.LoggedTracer;
 
 /**
  * 
  */
 public class ElevatorSubsystem extends SubsystemBase {
     private final String NAME = "Elevator";
-    private final Alert disconnected;
 
     public static enum Action {
         STOP, MOVE_TO_BOTTOM, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1, MOVE_TO_CORAL_2,
@@ -64,7 +63,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.hasCoralSupplier = hasCoralSupplier;
 
         this.inputs = new ElevatorIOInputsAutoLogged();
-        this.disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
         // Sets states for the arm, and what methods.
         this.stateMachine = new StateMachine<>(NAME);
@@ -224,8 +222,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.elevatorModule.updateInputs(this.inputs);
         Logger.processInputs(this.NAME, this.inputs);
 
-        this.disconnected.set(!this.inputs.connected);
-
         State goalState = new State(MathUtil.clamp(this.goal.get().position, 0.0, ElevatorConstants.HEIGHT_IN_METERS),
                 this.goal.get().velocity);
         this.setpoint = profile.calculate(RobotConstants.LOOP_PERIOD_SECS, setpoint, goalState);
@@ -271,6 +267,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         Logger.recordOutput("Subsystems/" + this.NAME + "/SetpointVelocityMetersPerSec", setpoint.velocity);
         Logger.recordOutput("Subsystems/" + this.NAME + "/GoalPositionMeters", goalState.position);
         Logger.recordOutput("Subsystems/" + this.NAME + "/GoalVelocityMetersPerSec", goalState.velocity);
+
+        // Record cycle time
+        LoggedTracer.record(this.NAME);
     }
 
     /**
@@ -278,11 +277,11 @@ public class ElevatorSubsystem extends SubsystemBase {
      * units).
      */
     public double getFFCharacterizationVelocity() {
-        return Units.radiansToRotations(this.inputs.velocityRadsPerSec);
+        return Units.radiansToRotations(this.inputs.data.velocityRadsPerSec());
     }
 
     public double getPositionMeters() {
-        return (inputs.positionRads - 0.0) * ElevatorConstants.drumRadiusMeters;
+        return (this.inputs.data.positionRads() - 0.0) * ElevatorConstants.drumRadiusMeters;
     }
 
     /**

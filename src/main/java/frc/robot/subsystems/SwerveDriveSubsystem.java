@@ -35,12 +35,14 @@ import frc.robot.modules.gyro.GyroIOInputsAutoLogged;
 import frc.robot.modules.gyro.GyroModuleIO;
 import frc.robot.modules.swerve.SwerveModule;
 import frc.robot.modules.swerve.SwerveModuleIO;
+import frc.robot.utils.LoggedTracer;
 import frc.robot.utils.PhoenixOdometryThread;
 
 /**
  * 
  */
 public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsystem.VisionConsumer {
+    private final String NAME = "SwerveDrive";
     public static final Lock odometryLock = new ReentrantLock();
 
     private final GyroModuleIO gyroIO;
@@ -196,6 +198,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", this.desiredModuleStates);
         Logger.recordOutput("Subsystems/SwerveDrive/SwerveChassisSpeeds/Setpoints", this.desiredChassisSpeeds);
         Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/SetpointsOptimized", this.desiredModuleStates);
+
+        // Record cycle time
+        LoggedTracer.record(this.NAME);
 
         // Always reset desiredChassisSpeeds to null to prevent latching to the last
         // state (aka motor safety)!!

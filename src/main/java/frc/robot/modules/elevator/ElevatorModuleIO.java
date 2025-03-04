@@ -8,12 +8,23 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ElevatorModuleIO {
     @AutoLog
     class ElevatorIOInputs {
-        public boolean connected = false;
-        public double positionRads = 0.0;
-        public double velocityRadsPerSec = 0.0;
-        public double[] appliedVoltage = new double[] {};
-        public double[] supplyCurrentAmps = new double[] {};
-        public double[] tempCelsius = new double[] {};
+        public ElevatorModuleIOData data = new ElevatorModuleIOData(false, false, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0);
+    }
+
+    record ElevatorModuleIOData(
+            boolean connected,
+            boolean followerConnected,
+            double positionRads,
+            double velocityRadsPerSec,
+            double appliedVoltage,
+            double torqueCurrentAmps,
+            double supplyCurrentAmps,
+            double tempCelsius,
+            double followerAppliedVolts,
+            double followerTorqueCurrentAmps,
+            double followerSupplyCurrentAmps,
+            double followerTempCelsius) {
     }
 
     default void updateInputs(ElevatorIOInputs inputs) {

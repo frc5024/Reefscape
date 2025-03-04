@@ -14,6 +14,8 @@ import frc.robot.autonomous.AutoBuilder;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.controls.ButtonBindings;
 import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.Elevator;
@@ -26,6 +28,7 @@ import frc.robot.subsystems.VisionSubsystem;
 
 abstract public class RobotContainer {
     /* Subsystems */
+    protected Climb climb;
     protected Coral coral;
     protected Elevator elevator;
     protected Rumble rumble;
@@ -33,6 +36,7 @@ abstract public class RobotContainer {
     protected LEDs lEDs;
 
     protected AlgaeSubsystem algaeSubsystem;
+    protected ClimbSubsystem climbSubsystem;
     protected CoralSubsystem coralSubsystem;
     protected ElevatorSubsystem elevatorSubsystem;
     protected SwerveDriveSubsystem swerveDriveSubsystem;

@@ -5,27 +5,26 @@ import java.util.NoSuchElementException;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMetadata;
-import frc.robot.modules.algae.AlgaeIntakeIOInputsAutoLogged;
 import frc.robot.modules.algae.AlgaeModuleIO;
+import frc.robot.modules.algae.AlgaeModuleIOInputsAutoLogged;
+import frc.robot.utils.LoggedTracer;
 
 /**
  * 
  */
 public class AlgaeSubsystem extends SubsystemBase {
     private final String NAME = "Algae";
-    private final Alert disconnected;
 
     public static enum Action {
         STOP, EJECT, INTAKE
     }
 
     private final AlgaeModuleIO algaeModuleIO;
-    protected final AlgaeIntakeIOInputsAutoLogged inputs;
+    protected final AlgaeModuleIOInputsAutoLogged inputs;
     protected final Timer stateTimer;
 
     private final StateMachine<Action> stateMachine;
@@ -36,8 +35,7 @@ public class AlgaeSubsystem extends SubsystemBase {
      */
     public AlgaeSubsystem(AlgaeModuleIO algaeModuleIO) {
         this.algaeModuleIO = algaeModuleIO;
-        this.inputs = new AlgaeIntakeIOInputsAutoLogged();
-        this.disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
+        this.inputs = new AlgaeModuleIOInputsAutoLogged();
 
         // Sets states for the arm, and what methods.
         this.stateMachine = new StateMachine<>(NAME);
@@ -132,16 +130,12 @@ public class AlgaeSubsystem extends SubsystemBase {
         }
     }
 
-    /**
-     * 
-     */
+    @Override
     public void periodic() {
         this.stateMachine.update();
 
         this.algaeModuleIO.updateInputs(this.inputs);
         Logger.processInputs(this.NAME, this.inputs);
-
-        this.disconnected.set(!this.inputs.connected);
 
         // actions run for no longer than 3 seconds
         if (this.stateTimer.isRunning() && this.stateTimer.hasElapsed(3)) {
@@ -163,6 +157,9 @@ public class AlgaeSubsystem extends SubsystemBase {
 
         Logger.recordOutput("Subsystems/" + this.NAME + "/Current State", this.stateMachine.getCurrentState());
         Logger.recordOutput("Subsystems/" + this.NAME + "/Has Algae", hasAlgae());
+
+        // Record cycle time
+        LoggedTracer.record(this.NAME);
     }
 
     /**

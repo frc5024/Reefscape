@@ -17,10 +17,12 @@ import frc.robot.Constants.RobotConstants;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.controls.ButtonBindingsSim;
 import frc.robot.modules.algae.AlgaeModuleIOSim;
+import frc.robot.modules.climb.ClimbModuleIOSim;
 import frc.robot.modules.coral.CoralModuleIOSim;
 import frc.robot.modules.elevator.ElevatorModuleIOSim;
 import frc.robot.modules.gyro.GyroModuleIOSim;
 import frc.robot.modules.swerve.SwerveModuleIOMapleSim;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -55,6 +57,7 @@ public class MapleSimRobotContainer extends RobotContainer {
                 swerveDriveSimulation::getSimulatedDriveTrainPose, this.swerveDriveSubsystem::getRotation);
 
         this.algaeSubsystem = new AlgaeSubsystemSim(new AlgaeModuleIOSim());
+        this.climbSubsystem = new ClimbSubsystem(new ClimbModuleIOSim());
         this.coralSubsystem = new CoralSubsystemSim(new CoralModuleIOSim());
         this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim(), this.algaeSubsystem::hasAlgae,
                 this.coralSubsystem::hasCoral);

@@ -32,15 +32,21 @@ public class AlgaeModuleIOSim implements AlgaeModuleIO {
     }
 
     @Override
-    public void updateInputs(AlgaeIntakeIOInputs inputs) {
+    public void updateInputs(AlgaeModuleIOInputs inputs) {
         if (DriverStation.isDisabled()) {
             stop();
         }
 
-        inputs.connected = true;
         this.dcMotorSim.update(RobotConstants.LOOP_PERIOD_SECS);
-        inputs.appliedVoltage = this.appliedVoltage;
-        inputs.supplyCurrentAmps = this.dcMotorSim.getCurrentDrawAmps();
+
+        inputs.data = new AlgaeModuleIOData(
+                true,
+                this.dcMotorSim.getAngularPositionRad(),
+                this.dcMotorSim.getAngularVelocityRadPerSec(),
+                this.appliedVoltage,
+                0.0,
+                this.dcMotorSim.getCurrentDrawAmps(),
+                0.0);
     }
 
     @Override

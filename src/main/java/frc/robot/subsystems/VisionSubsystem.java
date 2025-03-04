@@ -28,8 +28,11 @@ import frc.robot.modules.vision.VisionModuleIO.PoseObservationType;
 import frc.robot.modules.vision.VisionModuleIOLimelight;
 import frc.robot.modules.vision.VisionModuleIOPhotonVision;
 import frc.robot.modules.vision.VisionModuleIOPhotonVisionSim;
+import frc.robot.utils.LoggedTracer;
 
 public class VisionSubsystem extends SubsystemBase {
+    private final String NAME = "Vision";
+
     /* Modules */
     private List<VisionModuleIO> visionModules = new ArrayList<VisionModuleIO>();
 
@@ -189,6 +192,9 @@ public class VisionSubsystem extends SubsystemBase {
             this.allRobotPosesRejected.addAll(robotPosesRejected);
 
             cameraIndex++;
+
+            // Record cycle time
+            LoggedTracer.record(this.NAME);
         }
 
         // Log summary data
