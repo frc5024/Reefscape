@@ -23,10 +23,11 @@ public class GyroModuleIOSim implements GyroModuleIO {
 
     @Override
     public void updateInputs(GyroIOInputs inputs) {
-        inputs.connected = this.gyroSimulation != null;
-        inputs.yawPosition = this.gyroSimulation != null ? this.gyroSimulation.getGyroReading() : new Rotation2d();
-        inputs.yawVelocityRadPerSec = this.gyroSimulation != null ? Units.degreesToRadians(
-                gyroSimulation.getMeasuredAngularVelocity().in(RadiansPerSecond)) : 0.0;
+        inputs.data = new GyroIOData(
+                this.gyroSimulation != null,
+                this.gyroSimulation != null ? this.gyroSimulation.getGyroReading() : new Rotation2d(),
+                this.gyroSimulation != null ? Units.degreesToRadians(
+                        gyroSimulation.getMeasuredAngularVelocity().in(RadiansPerSecond)) : 0.0);
 
         inputs.odometryYawTimestamps = SparkUtil.getSimulationOdometryTimeStamps();
         inputs.odometryYawPositions = this.gyroSimulation != null ? gyroSimulation.getCachedGyroReadings()

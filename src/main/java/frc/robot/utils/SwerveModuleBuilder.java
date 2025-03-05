@@ -91,10 +91,10 @@ public class SwerveModuleBuilder {
         this.driveTalonFXConfig.Feedback.SensorToMechanismRatio = this.cotsDriveConstants.driveGearRatio;
 
         /* Current Limiting */
-        this.driveTalonFXConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        this.driveTalonFXConfig.CurrentLimits.SupplyCurrentLimit = 35;
-        // this.driveTalonFXConfig.CurrentLimits.SupplyCurrentThreshold = 60;
-        // this.driveTalonFXConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
+        this.driveTalonFXConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
+        this.driveTalonFXConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
+        this.driveTalonFXConfig.CurrentLimits.StatorCurrentLimit = 80.0;
+        this.driveTalonFXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         /* PID Config */
         double[] drivePIDs = PIDConstants.getDrivePIDs();
@@ -111,6 +111,7 @@ public class SwerveModuleBuilder {
         this.driveTalonFXConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.25;
 
         this.driveTalonFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.0;
+        this.driveTalonFXConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
         this.driveTalonFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.0;
 
         MotionMagicConfigs magicMagicConfigs = this.driveTalonFXConfig.MotionMagic;
@@ -138,10 +139,10 @@ public class SwerveModuleBuilder {
         this.turnTalonFXConfig.ClosedLoopGeneral.ContinuousWrap = true;
 
         /* Current Limiting */
-        this.turnTalonFXConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        this.turnTalonFXConfig.CurrentLimits.SupplyCurrentLimit = 25;
-        // this.turnTalonFXConfig.CurrentLimits.SupplyCurrentThreshold = 40;
-        // this.turnTalonFXConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
+        this.turnTalonFXConfig.TorqueCurrent.PeakForwardTorqueCurrent = 40.0;
+        this.turnTalonFXConfig.TorqueCurrent.PeakReverseTorqueCurrent = -40.0;
+        this.turnTalonFXConfig.CurrentLimits.StatorCurrentLimit = 40.0;
+        this.turnTalonFXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         /* PID Config */
         this.turnTalonFXConfig.Slot0.kP = this.cotsTurnConstants.angleKP;

@@ -44,7 +44,7 @@ public class SwerveModule {
      */
     public void periodic() {
         // Calculate positions for odometry
-        int sampleCount = inputs.odometryTimestamps.length; // All signals are sampled together
+        int sampleCount = inputs.odometryDrivePositionsRad.length; // All signals are sampled together
         this.odometryPositions = new SwerveModulePosition[sampleCount];
         for (int i = 0; i < sampleCount; i++) {
             double positionMeters = inputs.odometryDrivePositionsRad[i]
@@ -54,9 +54,9 @@ public class SwerveModule {
         }
 
         // Update alerts
-        this.driveDisconnectedAlert.set(!inputs.driveConnected);
-        this.turnDisconnectedAlert.set(!inputs.turnConnected);
-        this.turnEncoderDisconnectedAlert.set(!inputs.turnEncoderConnected);
+        this.driveDisconnectedAlert.set(!inputs.data.driveConnected());
+        this.turnDisconnectedAlert.set(!inputs.data.turnConnected());
+        this.turnEncoderDisconnectedAlert.set(!inputs.data.turnEncoderConnected());
 
         // SmartDashboard.putNumber("Mod " + index + " CANcoder",
         // this.cancoder.getDegrees());
@@ -71,7 +71,7 @@ public class SwerveModule {
     public void runSetpoint(SwerveModuleState state) {
         // Optimize velocity setpoint
         state.optimize(getAngle());
-        state.cosineScale(inputs.turnPosition);
+        state.cosineScale(inputs.data.turnPosition());
 
         // Apply setpoints
         double vRadPerSec = state.speedMetersPerSecond / (SwerveConstants.cotsTurnConstants.wheelDiameter / 2);
@@ -92,7 +92,7 @@ public class SwerveModule {
      */
     public void runVelocity(SwerveModuleState state) {
         state.optimize(getAngle());
-        state.cosineScale(this.inputs.turnPosition);
+        state.cosineScale(this.inputs.data.turnPosition());
 
         // Apply setpoints
         swerveModuleIO.runDriveOpenLoop(state.speedMetersPerSecond / SwerveConstants.maxLinearSpeed);
@@ -112,8 +112,8 @@ public class SwerveModule {
      */
     public Rotation2d getAngle() {
         SwerveModuleState swerveModuleState = new SwerveModuleState(
-                this.inputs.driveVelocityRotPerSec * SwerveConstants.cotsDriveConstants.wheelCircumference,
-                this.inputs.turnPosition);
+                this.inputs.data.driveVelocityRadPerSec() * SwerveConstants.cotsDriveConstants.wheelCircumference,
+                this.inputs.data.turnPosition());
         return swerveModuleState.angle;
         // return this.inputs.turnPosition;
     }
@@ -129,14 +129,14 @@ public class SwerveModule {
      * Returns the current drive position of the module in meters.
      */
     public double getPositionMeters() {
-        return this.inputs.drivePositionRad * (SwerveConstants.cotsTurnConstants.wheelDiameter / 2);
+        return this.inputs.data.drivePositionRad() * (SwerveConstants.cotsTurnConstants.wheelDiameter / 2);
     }
 
     /**
      * Returns the current drive velocity of the module in meters per second.
      */
     public double getVelocityMetersPerSec() {
-        return inputs.driveVelocityRadPerSec * (SwerveConstants.cotsTurnConstants.wheelDiameter / 2);
+        return inputs.data.driveVelocityRadPerSec() * (SwerveConstants.cotsTurnConstants.wheelDiameter / 2);
     }
 
     /**
@@ -171,14 +171,14 @@ public class SwerveModule {
      * Returns the module position in radians.
      */
     public double getWheelRadiusCharacterizationPosition() {
-        return this.inputs.drivePositionRad;
+        return this.inputs.data.drivePositionRad();
     }
 
     /**
      * Returns the module velocity in rotations/sec (Phoenix native units).
      */
     public double getFFCharacterizationVelocity() {
-        return Units.radiansToRotations(this.inputs.driveVelocityRadPerSec);
+        return Units.radiansToRotations(this.inputs.data.driveVelocityRadPerSec());
     }
 
     /**
