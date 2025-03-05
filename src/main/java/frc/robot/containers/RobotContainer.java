@@ -110,6 +110,20 @@ abstract public class RobotContainer {
     }
 
     /**
+     * 
+     */
+    public void resetDrivePID() {
+        this.swerveDriveSubsystem.resetDrivePID();
+    }
+
+    /**
+     * 
+     */
+    public void zeroDrivePID() {
+        this.swerveDriveSubsystem.zeroDrivePID();
+    }
+
+    /**
      * Maple Sim Routines
      */
     abstract public void displaySimFieldToAdvantageScope();

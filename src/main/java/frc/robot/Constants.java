@@ -171,7 +171,7 @@ public final class Constants {
             CoralL1(Units.inchesToMeters(0), 0.0),
             CoralL2(Units.inchesToMeters(10.0), -35.0),
             CoralL3(Units.inchesToMeters(18.0), -35.0),
-            CoralL4(Units.inchesToMeters(30.0), -60.0);
+            CoralL4(Units.inchesToMeters(31.0), -60.0);
 
             ElevatorLevel(double heightInMeters, double angleInDegrees) {
                 this.heightInMeters = heightInMeters;
@@ -332,52 +332,64 @@ public final class Constants {
     public static final class PIDConstants {
         // PID constants for swerve modules for drive motor. Turn pid is set in cots
         // constants
-        public static final double SWERVE_MODULE_DRIVE_KP = 1.0;
+        public static final double SWERVE_MODULE_DRIVE_KP = 0.1;
         public static final double SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SWERVE_MODULE_DRIVE_KD = 0.0;
 
-        public static final double SWERVE_MODULE_DRIVE_KS = 0.32;
-        public static final double SWERVE_MODULE_DRIVE_KV = 0.12;
-        public static final double SWERVE_MODULE_DRIVE_KA = 0.27;
+        public static final double SWERVE_MODULE_DRIVE_KS = 0.0;
+        public static final double SWERVE_MODULE_DRIVE_KV = 0.124;
+        public static final double SWERVE_MODULE_DRIVE_KA = 0.0;
+
+        public static final double SWERVE_MODULE_TURN_KP = 100.0;
+        public static final double SWERVE_MODULE_TURN_KI = 0.0;
+        public static final double SWERVE_MODULE_TURN_KD = 0.5;
+
+        public static final double SWERVE_MODULE_TURN_KS = 0.1;
+        public static final double SWERVE_MODULE_TURN_KV = 1.91;
+        public static final double SWERVE_MODULE_TURN_KA = 0.0;
 
         // PID constants for simulated swerve modules
         public static final double SIM_SWERVE_MODULE_DRIVE_KP = 0.1;
         public static final double SIM_SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SIM_SWERVE_MODULE_DRIVE_KD = 0.0;
 
-        public static final double SIM_SWERVE_MODULE_DRIVE_KS = 0.0392;
-        public static final double SIM_SWERVE_MODULE_DRIVE_KV = 0.0602;
-        public static final double SIM_SWERVE_MODULE_DRIVE_KA = 0.27;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KS = 0.25;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KV = 0.124;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KA = 0.0;
 
-        public static final double SIM_SWERVE_MODULE_TURN_KP = 0.5;
+        public static final double SIM_SWERVE_MODULE_TURN_KP = 70.0;
         public static final double SIM_SWERVE_MODULE_TURN_KI = 0.0;
-        public static final double SIM_SWERVE_MODULE_TURN_KD = 0.0;
+        public static final double SIM_SWERVE_MODULE_TURN_KD = 4.5;
+
+        public static final double SIM_SWERVE_MODULE_TURN_KS = 0.0;
+        public static final double SIM_SWERVE_MODULE_TURN_KV = 1.91;
+        public static final double SIM_SWERVE_MODULE_TURN_KA = 0.0;
 
         // PID constants for autonomous/pathplanner mode
-        public static final double SWERVE_DRIVE_X_KP = 0.2;
+        public static final double SWERVE_DRIVE_X_KP = 5.0;
         public static final double SWERVE_DRIVE_X_KI = 0.0;
         public static final double SWERVE_DRIVE_X_KD = 0.0;
 
-        public static final double SWERVE_DRIVE_Y_KP = 0.2;
+        public static final double SWERVE_DRIVE_Y_KP = 5.0;
         public static final double SWERVE_DRIVE_Y_KI = 0.0;
         public static final double SWERVE_DRIVE_Y_KD = 0.0;
 
-        public static final double SWERVE_DRIVE_OMEGA_KP = 1.0;
+        public static final double SWERVE_DRIVE_OMEGA_KP = 5.0;
         public static final double SWERVE_DRIVE_OMEGA_KI = 0.0;
         public static final double SWERVE_DRIVE_OMEGA_KD = 0.0;
 
         // PID constants for simulated autonomous/pathplanner mode
-        public static final double SIM_SWERVE_DRIVE_X_KP = 2.0;
+        public static final double SIM_SWERVE_DRIVE_X_KP = 5.0;
         public static final double SIM_SWERVE_DRIVE_X_KI = 0.0;
         public static final double SIM_SWERVE_DRIVE_X_KD = 0.0;
 
-        public static final double SIM_SWERVE_DRIVE_Y_KP = 2.0;
+        public static final double SIM_SWERVE_DRIVE_Y_KP = 5.0;
         public static final double SIM_SWERVE_DRIVE_Y_KI = 0.0;
         public static final double SIM_SWERVE_DRIVE_Y_KD = 0.0;
 
-        public static final double SIM_SWERVE_DRIVE_OMEGA_KP = 25.0;
+        public static final double SIM_SWERVE_DRIVE_OMEGA_KP = 5.0;
         public static final double SIM_SWERVE_DRIVE_OMEGA_KI = 0.0;
-        public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 2.0;
+        public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 0.0;
 
         // PID constants for elevator
         public static final double ELEVATOR_KP = 0.05;
@@ -409,7 +421,11 @@ public final class Constants {
          * Should only be call by simulation as TunerContants has real values
          */
         public static final double[] getTurnPIDs() {
-            return new double[] { SIM_SWERVE_MODULE_TURN_KP, SIM_SWERVE_MODULE_TURN_KI, SIM_SWERVE_MODULE_TURN_KD };
+            return Robot.isReal()
+                    ? new double[] { SWERVE_MODULE_TURN_KP, SWERVE_MODULE_TURN_KI, SWERVE_MODULE_TURN_KD,
+                            SWERVE_MODULE_TURN_KS, SWERVE_MODULE_TURN_KV, SWERVE_MODULE_TURN_KA }
+                    : new double[] { SIM_SWERVE_MODULE_TURN_KP, SIM_SWERVE_MODULE_TURN_KI, SIM_SWERVE_MODULE_TURN_KD,
+                            SIM_SWERVE_MODULE_TURN_KS, SIM_SWERVE_MODULE_TURN_KV, SIM_SWERVE_MODULE_TURN_KA };
         }
 
         /**
@@ -552,7 +568,7 @@ public final class Constants {
         public static final List<Camera> MANTARAIDER_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
         public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM2_CAMERA, ARDUCAM1_CAMERA);
         public static final List<Camera> NO_CAMERAS = new ArrayList<>();
-        public static final List<Camera> CAMERAS = NO_CAMERAS;
+        public static final List<Camera> CAMERAS = SIMULATION_CAMERAS;
         public static final Camera FRONT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
         public static final Camera REAR_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
 

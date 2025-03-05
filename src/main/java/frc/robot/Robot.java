@@ -145,11 +145,12 @@ public class Robot extends LoggedRobot {
     public void autonomousInit() {
         checkDriverStationUpdate();
 
-        autonomousCommand = robotContainer.getAutonomousCommand();
+        this.robotContainer.zeroDrivePID();
+        this.autonomousCommand = this.robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)
-        if (autonomousCommand != null) {
-            autonomousCommand.schedule();
+        if (this.autonomousCommand != null) {
+            this.autonomousCommand.schedule();
         }
     }
 
@@ -164,9 +165,11 @@ public class Robot extends LoggedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (autonomousCommand != null) {
-            autonomousCommand.cancel();
+        if (this.autonomousCommand != null) {
+            this.autonomousCommand.cancel();
         }
+
+        this.robotContainer.resetDrivePID();
     }
 
     /** This function is called periodically during operator control. */
