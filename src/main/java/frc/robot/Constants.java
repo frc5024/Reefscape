@@ -132,16 +132,14 @@ public final class Constants {
         // starting poses for game mode for blue/red alliance station 1, 2, 3
         public static final Pose2d[][] STATION_POSES = new Pose2d[][] {
                 {
-                        // new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
-                        new Pose2d(8.217, 7.272, Rotation2d.fromDegrees(180.0)),
-                        new Pose2d(8.217, 6.166, Rotation2d.fromDegrees(180.0)),
-                        new Pose2d(8.217, 5.074, Rotation2d.fromDegrees(180.0))
+                        new Pose2d(7.272, 7.272, Rotation2d.fromDegrees(180.0)),
+                        new Pose2d(7.272, 6.166, Rotation2d.fromDegrees(180.0)),
+                        new Pose2d(7.272, 5.074, Rotation2d.fromDegrees(180.0))
                 },
                 {
-                        // new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
-                        new Pose2d(9.383, 0.805, Rotation2d.fromDegrees(0.0)),
-                        new Pose2d(9.383, 1.991, Rotation2d.fromDegrees(0.0)),
-                        new Pose2d(9.383, 3.003, Rotation2d.fromDegrees(0.0))
+                        new Pose2d(10.340, 0.805, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(10.340, 1.991, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(10.340, 3.003, Rotation2d.fromDegrees(0.0))
                 }
         };
 

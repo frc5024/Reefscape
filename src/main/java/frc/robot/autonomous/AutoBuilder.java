@@ -3,7 +3,6 @@ package frc.robot.autonomous;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -109,13 +108,6 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
             this.autonomousChooser.addOption("Wheel Radius Characterization",
                     new WheelRadiusCharacterizationCommand(this.swerveDriveSubsystem).get());
         }
-
-        // Load Game Autos
-        this.autonomousChooser.addOption("Drive Away", new PathPlannerAuto("DriveAway"));
-        this.autonomousChooser.addOption("Clear Algae",
-                new ClearAlgae(this.algaeSubsystem, this.coralSubsystem, this.elevatorSubsystem)
-                        .getAutoCommand());
-        this.autonomousChooser.addOption("Grab Algae", new GrabAlgae(this.algaeSubsystem).getAutoCommand());
     }
 
     /**
