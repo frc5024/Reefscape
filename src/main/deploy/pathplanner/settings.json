@@ -3,9 +3,6 @@
   "robotLength": 0.6096,
   "holonomicMode": true,
   "pathFolders": [
-    "ClearAlgae",
-    "FourCoral",
-    "GrabAlgae",
     "StationPaths"
   ],
   "autoFolders": [],

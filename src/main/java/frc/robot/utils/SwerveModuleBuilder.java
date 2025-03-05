@@ -145,8 +145,17 @@ public class SwerveModuleBuilder {
         this.turnTalonFXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         /* PID Config */
-        this.turnTalonFXConfig.Slot0.kP = this.cotsTurnConstants.angleKP;
-        this.turnTalonFXConfig.Slot0.kI = this.cotsTurnConstants.angleKI;
-        this.turnTalonFXConfig.Slot0.kD = this.cotsTurnConstants.angleKD;
+        // this.turnTalonFXConfig.Slot0.kP = this.cotsTurnConstants.angleKP;
+        // this.turnTalonFXConfig.Slot0.kI = this.cotsTurnConstants.angleKI;
+        // this.turnTalonFXConfig.Slot0.kD = this.cotsTurnConstants.angleKD;
+
+        double[] turnPIDs = PIDConstants.getTurnPIDs();
+        this.turnTalonFXConfig.Slot0.kP = turnPIDs[0];
+        this.turnTalonFXConfig.Slot0.kI = turnPIDs[1];
+        this.turnTalonFXConfig.Slot0.kD = turnPIDs[2];
+
+        this.turnTalonFXConfig.Slot0.kS = turnPIDs[3];
+        this.turnTalonFXConfig.Slot0.kV = turnPIDs[4];
+        this.turnTalonFXConfig.Slot0.kA = turnPIDs[5];
     }
 }

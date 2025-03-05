@@ -249,44 +249,60 @@ public final class Constants {
         public static final double SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SWERVE_MODULE_DRIVE_KD = 0.0;
 
-        public static final double SWERVE_MODULE_DRIVE_KS = 0.25;
-        public static final double SWERVE_MODULE_DRIVE_KV = 0.12;
-        public static final double SWERVE_MODULE_DRIVE_KA = 0.1;
+        public static final double SWERVE_MODULE_DRIVE_KS = 0.0;
+        public static final double SWERVE_MODULE_DRIVE_KV = 0.124;
+        public static final double SWERVE_MODULE_DRIVE_KA = 0.0;
+
+        public static final double SWERVE_MODULE_TURN_KP = 100.0;
+        public static final double SWERVE_MODULE_TURN_KI = 0.0;
+        public static final double SWERVE_MODULE_TURN_KD = 0.5;
+
+        public static final double SWERVE_MODULE_TURN_KS = 0.1;
+        public static final double SWERVE_MODULE_TURN_KV = 1.91;
+        public static final double SWERVE_MODULE_TURN_KA = 0.0;
 
         // PID constants for simulated swerve modules
         public static final double SIM_SWERVE_MODULE_DRIVE_KP = 0.1;
         public static final double SIM_SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SIM_SWERVE_MODULE_DRIVE_KD = 0.0;
 
-        public static final double SIM_SWERVE_MODULE_TURN_KP = 0.5;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KS = 0.25;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KV = 0.124;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KA = 0.0;
+
+        public static final double SIM_SWERVE_MODULE_TURN_KP = 70.0;
         public static final double SIM_SWERVE_MODULE_TURN_KI = 0.0;
-        public static final double SIM_SWERVE_MODULE_TURN_KD = 0.0;
+        public static final double SIM_SWERVE_MODULE_TURN_KD = 4.5;
+
+        public static final double SIM_SWERVE_MODULE_TURN_KS = 0.0;
+        public static final double SIM_SWERVE_MODULE_TURN_KV = 1.91;
+        public static final double SIM_SWERVE_MODULE_TURN_KA = 0.0;
 
         // PID constants for autonomous/pathplanner mode
-        public static final double SWERVE_DRIVE_X_KP = 10.0;
+        public static final double SWERVE_DRIVE_X_KP = 5.0;
         public static final double SWERVE_DRIVE_X_KI = 0.0;
         public static final double SWERVE_DRIVE_X_KD = 0.0;
 
-        public static final double SWERVE_DRIVE_Y_KP = 10.0;
+        public static final double SWERVE_DRIVE_Y_KP = 5.0;
         public static final double SWERVE_DRIVE_Y_KI = 0.0;
         public static final double SWERVE_DRIVE_Y_KD = 0.0;
 
-        public static final double SWERVE_DRIVE_OMEGA_KP = 2.0;
+        public static final double SWERVE_DRIVE_OMEGA_KP = 5.0;
         public static final double SWERVE_DRIVE_OMEGA_KI = 0.0;
         public static final double SWERVE_DRIVE_OMEGA_KD = 0.0;
 
         // PID constants for simulated autonomous/pathplanner mode
-        public static final double SIM_SWERVE_DRIVE_X_KP = 1.0;
+        public static final double SIM_SWERVE_DRIVE_X_KP = 5.0;
         public static final double SIM_SWERVE_DRIVE_X_KI = 0.0;
         public static final double SIM_SWERVE_DRIVE_X_KD = 0.0;
 
-        public static final double SIM_SWERVE_DRIVE_Y_KP = 1.0;
+        public static final double SIM_SWERVE_DRIVE_Y_KP = 5.0;
         public static final double SIM_SWERVE_DRIVE_Y_KI = 0.0;
         public static final double SIM_SWERVE_DRIVE_Y_KD = 0.0;
 
-        public static final double SIM_SWERVE_DRIVE_OMEGA_KP = 25.0;
+        public static final double SIM_SWERVE_DRIVE_OMEGA_KP = 5.0;
         public static final double SIM_SWERVE_DRIVE_OMEGA_KI = 0.0;
-        public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 2.0;
+        public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 0.0;
 
         // PID constants for elevator
         public static final double ELEVATOR_KP = 0.033;
@@ -312,7 +328,11 @@ public final class Constants {
          * Should only be call by simulation as TunerContants has real values
          */
         public static final double[] getTurnPIDs() {
-            return new double[] { SIM_SWERVE_MODULE_TURN_KP, SIM_SWERVE_MODULE_TURN_KI, SIM_SWERVE_MODULE_TURN_KD };
+            return Robot.isReal()
+                    ? new double[] { SWERVE_MODULE_TURN_KP, SWERVE_MODULE_TURN_KI, SWERVE_MODULE_TURN_KD,
+                            SWERVE_MODULE_TURN_KS, SWERVE_MODULE_TURN_KV, SWERVE_MODULE_TURN_KA }
+                    : new double[] { SIM_SWERVE_MODULE_TURN_KP, SIM_SWERVE_MODULE_TURN_KI, SIM_SWERVE_MODULE_TURN_KD,
+                            SIM_SWERVE_MODULE_TURN_KS, SIM_SWERVE_MODULE_TURN_KV, SIM_SWERVE_MODULE_TURN_KA };
         }
 
         /**
