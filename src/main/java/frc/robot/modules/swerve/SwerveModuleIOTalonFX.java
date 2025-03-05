@@ -12,7 +12,10 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -28,6 +31,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.utils.PhoenixOdometryThread;
+import frc.robot.utils.PhoenixUtil;
 import frc.robot.utils.SwerveModuleBuilder;
 
 /**
@@ -56,15 +60,18 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     private final MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0.0);
     private final MotionMagicVelocityVoltage motionMagicVelocityVoltage = new MotionMagicVelocityVoltage(0.0);
 
-    // Timestamp inputs from Phoenix thread
-    private final Queue<Double> timestampQueue;
+    // Torque-current control requests
+    protected final TorqueCurrentFOC torqueCurrentRequest = new TorqueCurrentFOC(0);
+    protected final PositionTorqueCurrentFOC positionTorqueCurrentRequest = new PositionTorqueCurrentFOC(0.0);
+    protected final VelocityTorqueCurrentFOC velocityTorqueCurrentRequest = new VelocityTorqueCurrentFOC(0.0);
 
     // Inputs from drive motor
     private final StatusSignal<Angle> drivePosition;
     private final Queue<Double> drivePositionQueue;
     private final StatusSignal<AngularVelocity> driveVelocity;
     private final StatusSignal<Voltage> driveAppliedVolts;
-    private final StatusSignal<Current> driveCurrent;
+    private final StatusSignal<Current> driveSupplyCurrentAmps;
+    private final StatusSignal<Current> driveTorqueCurrentAmps;
 
     // Inputs from turn motor
     private final StatusSignal<Angle> turnAbsolutePosition;
@@ -72,7 +79,8 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     private final Queue<Double> turnPositionQueue;
     private final StatusSignal<AngularVelocity> turnVelocity;
     private final StatusSignal<Voltage> turnAppliedVolts;
-    private final StatusSignal<Current> turnCurrent;
+    private final StatusSignal<Current> turnSupplyCurrentAmps;
+    private final StatusSignal<Current> turnTorqueCurrentAmps;
 
     // Connection debouncers
     private final Debouncer driveConnectedDebounce = new Debouncer(0.5);
@@ -104,15 +112,13 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         CANcoderConfiguration cancoderConfig = swerveModuleBuilder.getCancoderConfig();
         tryUntilOk(5, () -> this.cancoder.getConfigurator().apply(cancoderConfig));
 
-        // Create timestamp queue
-        this.timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
-
         // Create drive status signals
         this.drivePosition = this.driveTalon.getPosition();
         this.drivePositionQueue = PhoenixOdometryThread.getInstance().registerSignal(this.driveTalon.getPosition());
         this.driveVelocity = this.driveTalon.getVelocity();
         this.driveAppliedVolts = this.driveTalon.getMotorVoltage();
-        this.driveCurrent = this.driveTalon.getStatorCurrent();
+        this.driveSupplyCurrentAmps = this.driveTalon.getSupplyCurrent();
+        this.driveTorqueCurrentAmps = this.driveTalon.getTorqueCurrent();
 
         // Create turn status signals
         this.turnAbsolutePosition = this.cancoder.getAbsolutePosition();
@@ -120,7 +126,8 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         this.turnPositionQueue = PhoenixOdometryThread.getInstance().registerSignal(this.turnTalon.getPosition());
         this.turnVelocity = this.turnTalon.getVelocity();
         this.turnAppliedVolts = this.turnTalon.getMotorVoltage();
-        this.turnCurrent = this.turnTalon.getStatorCurrent();
+        this.turnSupplyCurrentAmps = this.turnTalon.getSupplyCurrent();
+        this.turnTorqueCurrentAmps = this.turnTalon.getTorqueCurrent();
 
         // Configure periodic frames
         BaseStatusSignal.setUpdateFrequencyForAll(PhoenixOdometryThread.ODOMETRY_FREQUENCY, this.drivePosition,
@@ -129,50 +136,64 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
                 50.0,
                 this.driveVelocity,
                 this.driveAppliedVolts,
-                this.driveCurrent,
+                this.driveSupplyCurrentAmps,
+                this.driveTorqueCurrentAmps,
                 this.turnAbsolutePosition,
                 this.turnVelocity,
                 this.turnAppliedVolts,
-                this.turnCurrent);
-        ParentDevice.optimizeBusUtilizationForAll(driveTalon, turnTalon);
+                this.turnSupplyCurrentAmps,
+                this.turnTorqueCurrentAmps);
+        tryUntilOk(5, () -> ParentDevice.optimizeBusUtilizationForAll(this.driveTalon, this.turnTalon, this.cancoder));
+
+        // Register signals for refresh
+        PhoenixUtil.registerSignals(
+                false,
+                this.drivePosition,
+                this.driveVelocity,
+                this.driveAppliedVolts,
+                this.driveSupplyCurrentAmps,
+                this.driveTorqueCurrentAmps,
+                this.turnPosition,
+                this.turnAbsolutePosition,
+                this.turnVelocity,
+                this.turnAppliedVolts,
+                this.turnSupplyCurrentAmps,
+                this.turnTorqueCurrentAmps);
     }
 
     @Override
     public void updateInputs(SwerveModuleIOInputs inputs) {
-        // Refresh all signals
-        var driveStatus = BaseStatusSignal.refreshAll(this.drivePosition, this.driveVelocity, this.driveAppliedVolts,
-                this.driveCurrent);
-        var turnStatus = BaseStatusSignal.refreshAll(this.turnPosition, this.turnVelocity, this.turnAppliedVolts,
-                this.turnCurrent);
-        var turnEncoderStatus = BaseStatusSignal.refreshAll(this.turnAbsolutePosition);
-
-        // Update drive inputs
-        inputs.driveConnected = this.driveConnectedDebounce.calculate(driveStatus.isOK());
-        inputs.drivePositionRad = Units.rotationsToRadians(this.drivePosition.getValueAsDouble());
-        inputs.driveVelocityRotPerSec = this.driveVelocity.getValueAsDouble();
-        inputs.driveVelocityRadPerSec = Units.rotationsToRadians(this.driveVelocity.getValueAsDouble());
-        inputs.driveAppliedVolts = this.driveAppliedVolts.getValueAsDouble();
-        inputs.driveCurrentAmps = this.driveCurrent.getValueAsDouble();
-
-        // Update turn inputs
-        inputs.turnConnected = this.turnConnectedDebounce.calculate(turnStatus.isOK());
-        inputs.turnEncoderConnected = this.turnEncoderConnectedDebounce.calculate(turnEncoderStatus.isOK());
-        inputs.turnAbsolutePosition = Rotation2d.fromRotations(this.turnAbsolutePosition.getValueAsDouble())
-                .minus(this.encoderOffset);
-        inputs.turnPosition = Rotation2d.fromRotations(this.turnPosition.getValueAsDouble());
-        inputs.turnVelocityRadPerSec = Units.rotationsToRadians(this.turnVelocity.getValueAsDouble());
-        inputs.turnAppliedVolts = this.turnAppliedVolts.getValueAsDouble();
-        inputs.turnCurrentAmps = this.turnCurrent.getValueAsDouble();
+        inputs.data = new SwerveModuleIOData(
+                this.driveConnectedDebounce.calculate(BaseStatusSignal.isAllGood(
+                        this.drivePosition,
+                        this.driveVelocity,
+                        this.driveAppliedVolts,
+                        this.driveSupplyCurrentAmps,
+                        this.driveTorqueCurrentAmps)),
+                Units.rotationsToRadians(this.drivePosition.getValueAsDouble()),
+                Units.rotationsToRadians(this.driveVelocity.getValueAsDouble()),
+                this.driveAppliedVolts.getValueAsDouble(),
+                this.driveSupplyCurrentAmps.getValueAsDouble(),
+                this.driveTorqueCurrentAmps.getValueAsDouble(),
+                this.turnConnectedDebounce.calculate(BaseStatusSignal.isAllGood(
+                        this.turnPosition,
+                        this.turnVelocity,
+                        this.turnAppliedVolts,
+                        this.turnSupplyCurrentAmps,
+                        this.turnTorqueCurrentAmps)),
+                this.turnEncoderConnectedDebounce.calculate(BaseStatusSignal.isAllGood(this.turnAbsolutePosition)),
+                Rotation2d.fromRotations(this.turnAbsolutePosition.getValueAsDouble()).minus(this.encoderOffset),
+                Rotation2d.fromRotations(this.turnPosition.getValueAsDouble()),
+                Units.rotationsToRadians(this.turnVelocity.getValueAsDouble()),
+                this.turnAppliedVolts.getValueAsDouble(),
+                this.turnSupplyCurrentAmps.getValueAsDouble(),
+                this.turnTorqueCurrentAmps.getValueAsDouble());
 
         // Update odometry inputs
-        inputs.odometryTimestamps = this.timestampQueue.stream().mapToDouble((Double value) -> value).toArray();
         inputs.odometryDrivePositionsRad = this.drivePositionQueue.stream()
-                .mapToDouble((Double value) -> Units.rotationsToRadians(value))
-                .toArray();
+                .mapToDouble(Units::rotationsToRadians).toArray();
         inputs.odometryTurnPositions = this.turnPositionQueue.stream()
-                .map((Double value) -> Rotation2d.fromRotations(value))
-                .toArray(Rotation2d[]::new);
-        this.timestampQueue.clear();
+                .map(Rotation2d::fromRotations).toArray(Rotation2d[]::new);
         this.drivePositionQueue.clear();
         this.turnPositionQueue.clear();
     }

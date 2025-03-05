@@ -9,7 +9,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.RobotConstants;
@@ -60,7 +59,7 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
                 TURN_GEARBOX);
 
         // Enable wrapping for turn PID
-        turnController.enableContinuousInput(-Math.PI, Math.PI);
+        this.turnController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     @Override
@@ -73,7 +72,7 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
             this.driveController.reset();
         }
         if (this.turnClosedLoop) {
-            this.turnAppliedVolts = turnController.calculate(turnMotorSim.getAngularPositionRad());
+            this.turnAppliedVolts = this.turnController.calculate(turnMotorSim.getAngularPositionRad());
         } else {
             this.turnController.reset();
         }
@@ -85,26 +84,26 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
         this.turnMotorSim.update(RobotConstants.LOOP_PERIOD_SECS);
 
         // Update drive inputs
-        inputs.driveConnected = true;
-        inputs.drivePositionRad = driveMotorSim.getAngularPositionRad();
-        inputs.driveVelocityRadPerSec = driveMotorSim.getAngularVelocityRadPerSec();
-        inputs.driveAppliedVolts = driveAppliedVolts;
-        inputs.driveCurrentAmps = Math.abs(driveMotorSim.getCurrentDrawAmps());
-
-        // Update turn inputs
-        inputs.turnConnected = true;
-        inputs.turnEncoderConnected = true;
-        inputs.turnAbsolutePosition = new Rotation2d(turnMotorSim.getAngularPositionRad());
-        inputs.turnPosition = new Rotation2d(turnMotorSim.getAngularPositionRad());
-        inputs.turnVelocityRadPerSec = turnMotorSim.getAngularVelocityRadPerSec();
-        inputs.turnAppliedVolts = turnAppliedVolts;
-        inputs.turnCurrentAmps = Math.abs(turnMotorSim.getCurrentDrawAmps());
+        inputs.data = new SwerveModuleIOData(
+                true,
+                this.driveMotorSim.getAngularPositionRad(),
+                this.driveMotorSim.getAngularVelocityRadPerSec(),
+                this.driveAppliedVolts,
+                Math.abs(this.driveMotorSim.getCurrentDrawAmps()),
+                0.0,
+                true,
+                true,
+                new Rotation2d(this.turnMotorSim.getAngularPositionRad()),
+                new Rotation2d(this.turnMotorSim.getAngularPositionRad()),
+                this.turnMotorSim.getAngularVelocityRadPerSec(),
+                this.turnAppliedVolts,
+                Math.abs(this.turnMotorSim.getCurrentDrawAmps()),
+                0.0);
 
         // Update odometry inputs (50Hz because high-frequency odometry in sim doesn't
         // matter)
-        inputs.odometryTimestamps = new double[] { Timer.getFPGATimestamp() };
-        inputs.odometryDrivePositionsRad = new double[] { inputs.drivePositionRad };
-        inputs.odometryTurnPositions = new Rotation2d[] { inputs.turnPosition };
+        inputs.odometryDrivePositionsRad = new double[] { inputs.data.drivePositionRad() };
+        inputs.odometryTurnPositions = new Rotation2d[] { inputs.data.turnPosition() };
     }
 
     @Override

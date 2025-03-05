@@ -26,11 +26,13 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Robot;
 import frc.robot.modules.gyro.GyroIOInputsAutoLogged;
 import frc.robot.modules.gyro.GyroModuleIO;
 import frc.robot.modules.swerve.SwerveModule;
@@ -151,8 +153,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
         // Stop moving when disabled
         if (DriverStation.isDisabled()) {
-            for (var module : this.swerveModules) {
-                module.stop();
+            for (SwerveModule swerveModule : this.swerveModules) {
+                swerveModule.stop();
             }
         }
 
@@ -163,7 +165,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         }
 
         // Update odometry
-        double[] sampleTimestamps = this.swerveModules[0].getOdometryTimestamps(); // All signals are sampled together
+        double[] sampleTimestamps = Robot.isReal()
+                ? this.gyroInputs.odometryYawTimestamps
+                : new double[] { Timer.getTimestamp() };
+
         int sampleCount = sampleTimestamps.length;
         for (int i = 0; i < sampleCount; i++) {
             // Read wheel positions and deltas from each module
@@ -179,20 +184,21 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
             }
 
             // Update gyro angle
-            if (this.gyroInputs.connected) {
-                rawGyroRotation = gyroInputs.odometryYawPositions[i];
+            if (this.gyroInputs.data.connected()) {
+                this.rawGyroRotation = this.gyroInputs.odometryYawPositions[i];
             } else {
                 // Use the angle delta from the kinematics and module deltas
                 Twist2d twist = SwerveConstants.swerveDriveKinematics.toTwist2d(moduleDeltas);
-                rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
+                this.rawGyroRotation = this.rawGyroRotation.plus(new Rotation2d(twist.dtheta));
             }
 
             // Apply update
-            poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+            this.poseEstimator.updateWithTime(sampleTimestamps[i], this.rawGyroRotation, modulePositions);
         }
 
         // Update gyro alert
-        gyroDisconnectedAlert.set(!gyroInputs.connected && RobotConstants.currentMode != RobotConstants.Mode.SIM);
+        gyroDisconnectedAlert
+                .set(!gyroInputs.data.connected() && RobotConstants.currentMode != RobotConstants.Mode.SIM);
 
         Logger.recordOutput("Subsystems/SwerveDrive/IsFieldOriented", this.isFieldRelative);
         Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", this.desiredModuleStates);
@@ -379,7 +385,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      */
     @AutoLogOutput(key = "Odometry/Robot")
     public Pose2d getPose() {
-        return poseEstimator.getEstimatedPosition();
+        return this.poseEstimator.getEstimatedPosition();
     }
 
     /**
@@ -400,7 +406,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      * Resets the current odometry pose.
      */
     public void setPose(Pose2d pose) {
-        poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+        this.poseEstimator.resetPosition(this.rawGyroRotation, getModulePositions(), pose);
     }
 
     /**
@@ -410,7 +416,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
             Pose2d visionRobotPoseMeters,
             double timestampSeconds,
             Matrix<N3, N1> visionMeasurementStdDevs) {
-        poseEstimator.addVisionMeasurement(
+        this.poseEstimator.addVisionMeasurement(
                 visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
     }
 

@@ -14,7 +14,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants.MapleSimConstants;
-import frc.robot.utils.SparkUtil;
 
 /**
  * Physics sim implementation of module IO.
@@ -45,7 +44,7 @@ public class SwerveModuleIOMapleSim implements SwerveModuleIO {
                 .withCurrentLimit(Amps.of(MapleSimConstants.turnMotorCurrentLimit));
 
         // Enable wrapping for turn PID
-        turnController.enableContinuousInput(-Math.PI, Math.PI);
+        this.turnController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     @Override
@@ -53,70 +52,69 @@ public class SwerveModuleIOMapleSim implements SwerveModuleIO {
         // Run closed-loop control
         if (driveClosedLoop) {
             driveAppliedVolts = driveFFVolts
-                    + driveController.calculate(
-                            moduleSimulation.getDriveWheelFinalSpeed().in(RadiansPerSecond));
+                    + this.driveController.calculate(
+                            this.moduleSimulation.getDriveWheelFinalSpeed().in(RadiansPerSecond));
         } else {
-            driveController.reset();
+            this.driveController.reset();
         }
         if (turnClosedLoop) {
-            turnAppliedVolts = turnController.calculate(
-                    moduleSimulation.getSteerAbsoluteFacing().getRadians());
+            turnAppliedVolts = this.turnController.calculate(
+                    this.moduleSimulation.getSteerAbsoluteFacing().getRadians());
         } else {
-            turnController.reset();
+            this.turnController.reset();
         }
 
         // Update simulation state
-        driveMotor.requestVoltage(Volts.of(driveAppliedVolts));
-        turnMotor.requestVoltage(Volts.of(turnAppliedVolts));
+        this.driveMotor.requestVoltage(Volts.of(driveAppliedVolts));
+        this.turnMotor.requestVoltage(Volts.of(turnAppliedVolts));
 
         // Update drive inputs
-        inputs.driveConnected = true;
-        inputs.drivePositionRad = moduleSimulation.getDriveWheelFinalPosition().in(Radians);
-        inputs.driveVelocityRadPerSec = moduleSimulation.getDriveWheelFinalSpeed().in(RadiansPerSecond);
-        inputs.driveAppliedVolts = driveAppliedVolts;
-        inputs.driveCurrentAmps = Math.abs(moduleSimulation.getDriveMotorStatorCurrent().in(Amps));
-
-        // Update turn inputs
-        inputs.turnConnected = true;
-        inputs.turnEncoderConnected = true;
-        inputs.turnPosition = moduleSimulation.getSteerAbsoluteFacing();
-        inputs.turnVelocityRadPerSec = moduleSimulation.getSteerAbsoluteEncoderSpeed().in(RadiansPerSecond);
-        inputs.turnAppliedVolts = turnAppliedVolts;
-        inputs.turnCurrentAmps = Math.abs(moduleSimulation.getSteerMotorStatorCurrent().in(Amps));
+        inputs.data = new SwerveModuleIOData(
+                true,
+                this.moduleSimulation.getDriveWheelFinalPosition().in(Radians),
+                this.moduleSimulation.getDriveWheelFinalSpeed().in(RadiansPerSecond),
+                this.driveAppliedVolts,
+                Math.abs(this.moduleSimulation.getDriveMotorSupplyCurrent().in(Amps)),
+                0.0,
+                true,
+                true,
+                this.moduleSimulation.getSteerAbsoluteFacing(),
+                this.moduleSimulation.getSteerAbsoluteFacing(),
+                this.moduleSimulation.getSteerAbsoluteEncoderSpeed().in(RadiansPerSecond),
+                this.turnAppliedVolts,
+                Math.abs(this.moduleSimulation.getSteerMotorSupplyCurrent().in(Amps)),
+                0.0);
 
         // Update odometry inputs
-        inputs.odometryTimestamps = SparkUtil.getSimulationOdometryTimeStamps();
-        inputs.odometryDrivePositionsRad = Arrays.stream(moduleSimulation.getCachedDriveWheelFinalPositions())
+        inputs.odometryDrivePositionsRad = Arrays.stream(this.moduleSimulation.getCachedDriveWheelFinalPositions())
                 .mapToDouble(angle -> angle.in(Radians))
                 .toArray();
-        inputs.odometryTurnPositions = moduleSimulation.getCachedSteerAbsolutePositions();
+        inputs.odometryTurnPositions = this.moduleSimulation.getCachedSteerAbsolutePositions();
     }
 
     @Override
     public void runDriveOpenLoop(double output) {
-        driveClosedLoop = false;
-        driveAppliedVolts = MathUtil.clamp(output * 12, -12.0, 12.0);
-        ;
+        this.driveClosedLoop = false;
+        this.driveAppliedVolts = MathUtil.clamp(output * 12, -12.0, 12.0);
     }
 
     @Override
     public void runTurnOpenLoop(double output) {
-        turnClosedLoop = false;
-        turnAppliedVolts = MathUtil.clamp(output * 12, -12.0, 12.0);
-        ;
+        this.turnClosedLoop = false;
+        this.turnAppliedVolts = MathUtil.clamp(output * 12, -12.0, 12.0);
     }
 
     @Override
     public void runDriveVelocity(double velocityRadPerSec) {
-        driveClosedLoop = true;
-        driveFFVolts = MapleSimConstants.driveSimKs * Math.signum(velocityRadPerSec)
+        this.driveClosedLoop = true;
+        this.driveFFVolts = MapleSimConstants.driveSimKs * Math.signum(velocityRadPerSec)
                 + MapleSimConstants.driveSimKv * velocityRadPerSec;
-        driveController.setSetpoint(velocityRadPerSec);
+        this.driveController.setSetpoint(velocityRadPerSec);
     }
 
     @Override
     public void runTurnPosition(Rotation2d rotation) {
-        turnClosedLoop = true;
-        turnController.setSetpoint(rotation.getRadians());
+        this.turnClosedLoop = true;
+        this.turnController.setSetpoint(rotation.getRadians());
     }
 }
