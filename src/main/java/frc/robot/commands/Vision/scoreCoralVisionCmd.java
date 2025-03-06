@@ -105,7 +105,6 @@ public class scoreCoralVisionCmd extends Command {
             swerveDrive.visionRotationVal(0, false);
 
             swerveDrive.setFieldRelative(true);
-            swerveDrive.visionSlowMode = false;
         }
 
     }
@@ -128,46 +127,49 @@ public class scoreCoralVisionCmd extends Command {
         translateToTag(zDiff);
         strafeToTag(xDiff);
 
-        swerveDrive.visionSlowMode = true;
         setDrive();
 
         // activeFunctions();
     }
 
     public void rotateToTag(double rotationToTag) {
-        if (Math.abs(rotationToTag) > 1) { // Adjust tolerance as needed
+        if (Math.abs(rotationToTag) > 1.5) { // Adjust tolerance as needed
             rotationPidOutput = rotationPidController.calculate(rotationToTag, 0);
-            rotationPidOutput = rotationPidOutput * 1.5; // Speed multiplier
+            rotationPidOutput = rotationPidOutput * 2.2; // Speed multiplier
             rotationPos = false;
         } else {
             rotationPidOutput = 0;
             rotationPos = true;
         }
-        SmartDashboard.putNumber("thetaDiff V", rotationToTag);
     }
 
     public void translateToTag(double zDiff) {
         if (Math.abs(zDiff) > 0.06) { // In meters
             translationPidOutput = translationPidController.calculate(zDiff, 0);
-            translationPidOutput = translationPidOutput * 1.2; // Speed multiplier
+            translationPidOutput = translationPidOutput * 2.6; // Speed multiplier (1.2)
+            if (translationPidOutput > 0.3)
+                translationPidOutput = 0.3;
             zPos = false;
         } else {
             translationPidOutput = 0;
             zPos = true;
         }
-        SmartDashboard.putNumber("zDiff V", zDiff);
     }
 
     public void strafeToTag(double xDiff) {
         if (Math.abs(xDiff) > 0.025) { // In meters
             strafePidOutput = strafePidController.calculate(xDiff, 0);
-            strafePidOutput = -strafePidOutput * 1.2; // Speed multiplier
+            strafePidOutput = -strafePidOutput * 2.3; // Speed multiplier
+            if (strafePidOutput > 0.2)
+                strafePidOutput = 0.2;
+            if (strafePidOutput < -0.2)
+                strafePidOutput = -0.2;
+
             xPos = false;
         } else {
             strafePidOutput = 0;
             xPos = true;
         }
-        SmartDashboard.putNumber("xDiff V", xDiff);
     }
 
     public void setDrive() {
@@ -186,9 +188,9 @@ public class scoreCoralVisionCmd extends Command {
     }
 
     public void elevator() {
-        if (elevatorSet) {
+        if (!elevatorSet) {
             elevatorSet = true;
-            elevatorSubsystem.setGoal(elevatorSubsystem.getElevatorMode());
+            elevatorSubsystem.setGoal(Constants.elevatorConstants.L4Position);
             elevatorSubsystem.togglePID(true);
             if (elevatorSubsystem.getElevatorMode() != Constants.elevatorConstants.rootPosition) {
                 elevatorSubsystem.setElevatorPosition(elevatorSubsystem.getElevatorMode());
@@ -228,6 +230,5 @@ public class scoreCoralVisionCmd extends Command {
         coralSubsystem.cancelIntakeCommand();
 
         swerveDrive.setFieldRelative(true);
-        swerveDrive.visionSlowMode = false;
     }
 }

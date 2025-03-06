@@ -84,7 +84,6 @@ public class goToSetPositionPerTagCmd extends Command {
             swerveDrive.visionRotationVal(0, false);
 
             swerveDrive.setFieldRelative(true);
-            swerveDrive.visionSlowMode = false;
         }
 
     }
@@ -96,6 +95,7 @@ public class goToSetPositionPerTagCmd extends Command {
         double yaw = botPose[4] - cameraAngle;
 
         SmartDashboard.putNumber("Tag Yaw", yaw);
+        SmartDashboard.putNumber("getZ botPose", botPose3D.getZ());
 
         // Left/Right
         double zDiff = botPose3D.getZ() + desiredz;
@@ -107,14 +107,13 @@ public class goToSetPositionPerTagCmd extends Command {
         translateToTag(zDiff);
         strafeToTag(xDiff);
 
-        swerveDrive.visionSlowMode = true;
         setDrive();
     }
 
     public void rotateToTag(double rotationToTag) {
-        if (Math.abs(rotationToTag) > 1) { // Adjust tolerance as needed
+        if (Math.abs(rotationToTag) > 1.5) { // Adjust tolerance as needed
             rotationPidOutput = rotationPidController.calculate(rotationToTag, 0);
-            rotationPidOutput = rotationPidOutput * 2; // Speed multiplier
+            rotationPidOutput = rotationPidOutput * 2.2; // Speed multiplier
             rotationPos = false;
         } else {
             rotationPidOutput = 0;
@@ -126,10 +125,9 @@ public class goToSetPositionPerTagCmd extends Command {
     public void translateToTag(double zDiff) {
         if (Math.abs(zDiff) > 0.06) { // In meters
             translationPidOutput = translationPidController.calculate(zDiff, 0);
-            translationPidOutput = translationPidOutput * 3.5; // Speed multiplier (1.7)
-            if (translationPidOutput > 0.8)
-                translationPidOutput = 0.8;
-            // System.out.println(translationPidOutput);
+            translationPidOutput = translationPidOutput * 2.6; // Speed multiplier (1.2)
+            if (translationPidOutput > 0.3)
+                translationPidOutput = 0.3;
             zPos = false;
         } else {
             translationPidOutput = 0;
@@ -141,7 +139,12 @@ public class goToSetPositionPerTagCmd extends Command {
     public void strafeToTag(double xDiff) {
         if (Math.abs(xDiff) > 0.025) { // In meters
             strafePidOutput = strafePidController.calculate(xDiff, 0);
-            strafePidOutput = -strafePidOutput * 1.4; // Speed multiplier
+            strafePidOutput = -strafePidOutput * 2.3; // Speed multiplier
+            if (strafePidOutput > 0.2)
+                strafePidOutput = 0.2;
+            if (strafePidOutput < -0.2)
+                strafePidOutput = -0.2;
+
             xPos = false;
         } else {
             strafePidOutput = 0;
@@ -156,6 +159,9 @@ public class goToSetPositionPerTagCmd extends Command {
         SmartDashboard.putBoolean("rotationPos", rotationPos);
         SmartDashboard.putBoolean("xPos", xPos);
         SmartDashboard.putBoolean("zPos", zPos);
+
+        SmartDashboard.putNumber("StrafePID", strafePidOutput);
+        SmartDashboard.putNumber("TranslatPID", translationPidOutput);
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
         swerveDrive.visionTranslationalVal(translationPidOutput, true);
@@ -175,12 +181,7 @@ public class goToSetPositionPerTagCmd extends Command {
         swerveDrive.visionRotationVal(0, false);
 
         swerveDrive.setFieldRelative(true);
-        swerveDrive.visionSlowMode = false;
 
         // swerveDrive.setPose(swerveDrive.getPose());
-
-        if (xPos && zPos && rotationPos) {
-            System.out.println("amcoansocnasasdacs");
-        }
     }
 }

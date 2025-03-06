@@ -40,7 +40,6 @@ public class Swerve extends SubsystemBase {
     boolean fieldRelative = true;
 
     public boolean isSlowMode = false;
-    public boolean visionSlowMode = false;
 
     public final double scaleValue = 3600.0 / 3831.020004272461;
 
@@ -170,8 +169,6 @@ public class Swerve extends SubsystemBase {
 
         if (isSlowMode) {
             speedModifier = 0.3 * speedModifier;
-        } else if (visionSlowMode) {
-            speedModifier = 0.4 * speedModifier;
         }
     }
 

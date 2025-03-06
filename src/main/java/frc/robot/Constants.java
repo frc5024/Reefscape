@@ -56,7 +56,7 @@ public final class Constants {
 
     public static class elevatorConstants {
         // elevator values
-        public static final double elevatorSpeed = 0.6;
+        public static final double elevatorSpeed = 0.5;
         public static final double elevatorOff = 0;
         public static final double elevatorMaxSpeed = 75;
         public static final double elevatorMaxAccel = 75;

@@ -114,7 +114,6 @@ public class autoSetPositionTagID extends Command {
             swerveDrive.visionRotationVal(0, false);
 
             swerveDrive.setFieldRelative(true);
-            swerveDrive.visionSlowMode = false;
         }
 
     }
@@ -170,7 +169,7 @@ public class autoSetPositionTagID extends Command {
             zPos = true;
         }
         SmartDashboard.putNumber("zDiff", zDiff);
-        SmartDashboard.putNumber("TranslatPID", translationPidOutput);
+        // SmartDashboard.putNumber("TranslatPID", translationPidOutput);
     }
 
     public void strafeToTag(double xDiff) {
@@ -185,7 +184,7 @@ public class autoSetPositionTagID extends Command {
             xPos = true;
         }
         SmartDashboard.putNumber("xDiff", xDiff);
-        SmartDashboard.putNumber("StrafePID", strafePidOutput);
+        // SmartDashboard.putNumber("StrafePID", strafePidOutput);
     }
 
     public void setDrive() {
