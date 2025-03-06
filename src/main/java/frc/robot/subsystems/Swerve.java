@@ -1,10 +1,15 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.pathfinding.Pathfinding;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -21,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.SwerveModule;
+import frc.robot.utils.LocalADStarAK;
 
 public class Swerve extends SubsystemBase {
 
@@ -112,6 +118,18 @@ public class Swerve extends SubsystemBase {
                 },
                 this // Reference to this subsystem to set requirements
         );
+
+        // Log auto trajectories
+        Pathfinding.setPathfinder(new LocalADStarAK());
+        PathPlannerLogging.setLogActivePathCallback(
+                (activePath) -> {
+                    Logger.recordOutput(
+                            "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
+                });
+        PathPlannerLogging.setLogTargetPoseCallback(
+                (targetPose) -> {
+                    Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
+                });
     }
 
     // takes priority over controller input - call lockController to remove
@@ -181,27 +199,27 @@ public class Swerve extends SubsystemBase {
     public void drive(boolean isOpenLoop) {
         ChassisSpeeds chassisSpeeds = null;
 
-        System.out.println("Drive Called; " + fieldRelative);
-
         setSpeedModifier();
 
-        if (fieldRelative) {
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    translationVal * Constants.Swerve.maxSpeed * speedModifier,
-                    strafeVal * Constants.Swerve.maxSpeed * speedModifier,
-                    rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier, getGyroYaw());
-        } else {
-            chassisSpeeds = new ChassisSpeeds(translationVal * Constants.Swerve.maxSpeed * speedModifier,
-                    strafeVal * Constants.Swerve.maxSpeed * speedModifier,
-                    rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier);
+        double xVelocity = translationVal * Constants.Swerve.maxSpeed * speedModifier;
+        double yVelocity = strafeVal * Constants.Swerve.maxSpeed * speedModifier;
+        double rVelocity = rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier;
 
-            System.out.println("Translation " + translationVal);
-            System.out.println("Strafe " + strafeVal);
-            System.out.println("Rotation " + rotationVal);
-            System.out.println("SpeedMod " + speedModifier);
+        if (fieldRelative) {
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, rVelocity, getGyroYaw());
+        } else {
+            chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
         }
 
         drive(chassisSpeeds, isOpenLoop);
+
+        Logger.recordOutput("Subsystems/SwerveDrive/Velocites/angle", getGyroYaw().getDegrees());
+        Logger.recordOutput("Subsystems/SwerveDrive/Velocites/isFieldRelative", fieldRelative);
+        Logger.recordOutput("Subsystems/SwerveDrive/Velocites/isOpenLoop", isOpenLoop);
+        Logger.recordOutput("Subsystems/SwerveDrive/Velocites/xVelocity", xVelocity);
+        Logger.recordOutput("Subsystems/SwerveDrive/Velocites/yVelocity", yVelocity);
+        Logger.recordOutput("Subsystems/SwerveDrive/Velocites/rVelocity", rVelocity);
+        Logger.recordOutput("Subsystems/SwerveDrive/Velocites/speedModifier", speedModifier);
     }
 
     /**
@@ -214,6 +232,9 @@ public class Swerve extends SubsystemBase {
         for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
+
+        Logger.recordOutput("Subsystems/SwerveDrive/SwerveChassisSpeeds/Setpoints", chassisSpeeds);
+        Logger.recordOutput("Subsystems/SwerveDrive/SwerveStates/Setpoints", swerveModuleStates);
     }
 
     /* Used by SwerveControllerCommand in Auto */
@@ -226,6 +247,7 @@ public class Swerve extends SubsystemBase {
 
     }
 
+    @AutoLogOutput(key = "Subsystems/SwerveDrive/SwerveStates/Measured")
     public SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (SwerveModule mod : mSwerveMods) {
@@ -242,6 +264,7 @@ public class Swerve extends SubsystemBase {
         return positions;
     }
 
+    @AutoLogOutput(key = "Odometry/Robot")
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
     }
@@ -309,6 +332,7 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    @AutoLogOutput(key = "Subsystems/SwerveDrive/SwerveChassisSpeeds/Measured")
     public ChassisSpeeds getRobotRelativeSpeeds() {
         return Constants.Swerve.swerveKinematics.toChassisSpeeds(getModuleStates());
     }

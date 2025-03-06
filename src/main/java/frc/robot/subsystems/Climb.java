@@ -5,7 +5,6 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -84,10 +83,10 @@ public class Climb extends SubsystemBase {
     @Override
     public void periodic() {
 
-        Logger.recordOutput("Climb Motor Velocity", climbMotor.getVelocity().getValueAsDouble());
-        Logger.recordOutput("Climb Motor Voltage", climbMotor.getMotorVoltage().getValueAsDouble());
-        Logger.recordOutput("Climb Motor Position", climbMotor.getPosition().getValueAsDouble());
-        Logger.recordOutput("Is Climbed", isClimbed());
+        Logger.recordOutput("Subsystems/Climb/Is Climbed", isClimbed());
+        Logger.recordOutput("Subsystems/Climb/Motor Velocity", climbMotor.getVelocity().getValueAsDouble());
+        Logger.recordOutput("Subsystems/Climb/Motor Voltage", climbMotor.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Subsystems/Climb/Position", climbMotor.getPosition().getValueAsDouble());
         // Ultrasonic.setAutomaticMode(true);
         // m_ultrasonic.setEnabled(true);
 

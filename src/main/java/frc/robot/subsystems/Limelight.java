@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
@@ -43,5 +45,7 @@ public class Limelight extends SubsystemBase {
 
         SmartDashboard.putNumber("TargetPose3d_RobotSpace distance from", botPose3D.getZ());
 
+        Logger.recordOutput("Subsystems/Limelight/BestTargetId", LimelightHelpers.getFiducialID("limelight"));
+        Logger.recordOutput("Subsystems/Limelight/CurrentPose", LimelightHelpers.getBotPose3d("limelight"));
     }
 }

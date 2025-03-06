@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel;
@@ -177,6 +179,12 @@ public class Elevator extends SubsystemBase {
         } else if (!isBottomLimitSwitchBroken()) {
             zeroRumbled = false;
         }
+
+        Logger.recordOutput("Subsystems/Elevator/AtGoal", PID.atGoal());
+        Logger.recordOutput("Subsystems/Elevator/GoalPosition", PID.getGoal().position);
+        Logger.recordOutput("Subsystems/Elevator/GoalVelocity", PID.getGoal().velocity);
+        Logger.recordOutput("Subsystems/Elevator/SetpointPosition", PID.getSetpoint().position);
+        Logger.recordOutput("Subsystems/Elevator/SetpointVelocity", PID.getSetpoint().velocity);
     }
 
     // TODO: rewrite comment to be more accurate

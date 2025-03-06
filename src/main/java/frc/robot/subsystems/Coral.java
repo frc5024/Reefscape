@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.spark.SparkFlex;
 
 import edu.wpi.first.networktables.GenericEntry;
@@ -71,6 +73,11 @@ public class Coral extends SubsystemBase {
         intakeSpeed = intakeMotorSpeedEntry.getDouble(intakeSpeed);
         outtakeSpeed = outtakeMotorSpeedEntry.getDouble(outtakeSpeed);
         plopSpeed = plopSpeedEntry.getDouble(plopSpeed);
+
+        Logger.recordOutput("Subsystems/Coral/HasCoral", linebreak.get());
+        Logger.recordOutput("Subsystems/Coral/Motor Position", coralMotor.getEncoder().getPosition());
+        Logger.recordOutput("Subsystems/Coral/Motor Velocity", coralMotor.getEncoder().getVelocity());
+        Logger.recordOutput("Subsystems/Coral/Motor Voltage", coralMotor.getAppliedOutput());
     }
 
     // idle state, set motor to 0
