@@ -9,14 +9,11 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.ParentDevice;
@@ -53,11 +50,9 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     private final TalonFXConfiguration turnConfig;
 
     // Voltage control requests
-    private final VoltageOut voltageRequest = new VoltageOut(0);
-    private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
-    private final PositionVoltage positionVoltageRequest = new PositionVoltage(0.0);
-    private final VelocityVoltage velocityVoltageRequest = new VelocityVoltage(0.0);
-    private final MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0.0);
+    private final VoltageOut driveVoltage = new VoltageOut(0.0).withEnableFOC(true);
+    private final VoltageOut turnVoltage = new VoltageOut(0.0).withEnableFOC(true);
+    private final MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0.0).withEnableFOC(true);
     private final MotionMagicVelocityVoltage motionMagicVelocityVoltage = new MotionMagicVelocityVoltage(0.0);
 
     // Torque-current control requests
@@ -214,29 +209,6 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     }
 
     @Override
-    public void runDriveOpenLoop(double output) {
-        this.driveTalon.setControl(this.dutyCycleRequest.withOutput(output));
-        // this.driveTalon.setControl(voltageRequest.withOutput(output));
-    }
-
-    @Override
-    public void runTurnOpenLoop(double output) {
-        this.turnTalon.setControl(this.voltageRequest.withOutput(output));
-    }
-
-    @Override
-    public void runDriveVelocity(double velocityRadPerSec) {
-        double velocityRotPerSec = Units.radiansToRotations(velocityRadPerSec);
-        // this.driveTalon.setControl(velocityVoltageRequest.withVelocity(velocityRotPerSec));
-        this.driveTalon.setControl(this.motionMagicVelocityVoltage.withVelocity(velocityRotPerSec));
-    }
-
-    @Override
-    public void runTurnPosition(Rotation2d rotation) {
-        this.turnTalon.setControl(this.positionVoltageRequest.withPosition(rotation.getRotations()));
-    }
-
-    @Override
     public void resetDrivePID() {
         double[] drivePIDs = PIDConstants.getDrivePIDs();
         this.driveTalon.getConfigurator()
@@ -253,11 +225,32 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     }
 
     @Override
+    public void setDriveSetpoint(double velocityRadPerSec) {
+        double velocityRotPerSec = Units.radiansToRotations(velocityRadPerSec);
+        this.driveTalon.setControl(this.motionMagicVelocityVoltage.withVelocity(velocityRotPerSec));
+    }
+
+    @Override
+    public void setDriveVoltage(double volts) {
+        this.driveTalon.setControl(this.driveVoltage.withOutput(volts));
+    }
+
+    @Override
     public void setTurnPID(double kP, double kI, double kD) {
         Slot0Configs slot0Configs = new Slot0Configs();
         slot0Configs.kP = kP;
         slot0Configs.kI = kI;
         slot0Configs.kD = kD;
         this.turnTalon.getConfigurator().refresh(slot0Configs);
+    }
+
+    @Override
+    public void setTurnSetpoint(Rotation2d rotation) {
+        this.turnTalon.setControl(this.motionMagicVoltage.withPosition(rotation.getRotations()));
+    }
+
+    @Override
+    public void setTurnVoltage(double volts) {
+        this.turnTalon.setControl(this.turnVoltage.withOutput(volts));
     }
 }

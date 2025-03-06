@@ -46,7 +46,7 @@ public class FeedForwardCharacterizationCommand {
 
                 // Allow modules to orient
                 Commands.run(() -> {
-                    this.swerveDriveSubsystem.runCharacterization(0.0);
+                    this.swerveDriveSubsystem.runDriveCharacterizationVolts(0.0);
                 },
                         this.swerveDriveSubsystem)
                         .withTimeout(FF_START_DELAY),
@@ -58,7 +58,7 @@ public class FeedForwardCharacterizationCommand {
                 Commands.run(
                         () -> {
                             double voltage = timer.get() * FF_RAMP_RATE;
-                            this.swerveDriveSubsystem.runCharacterization(voltage);
+                            this.swerveDriveSubsystem.runDriveCharacterizationVolts(voltage);
                             velocitySamples.add(this.swerveDriveSubsystem.getFFCharacterizationVelocity());
                             voltageSamples.add(voltage);
                         },

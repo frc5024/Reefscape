@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -99,7 +100,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         sysId = new SysIdRoutine(
                 new SysIdRoutine.Config(null, null, null,
                         (state) -> Logger.recordOutput("SwerveDrive/SysIdState", state.toString())),
-                new SysIdRoutine.Mechanism((voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+                new SysIdRoutine.Mechanism((voltage) -> runDriveCharacterizationVolts(voltage.in(Volts)), null, this));
 
         this.isFieldRelative = true;
         this.isOpenLoop = false;
@@ -271,10 +272,15 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     /**
      * Runs the drive in a straight line with the specified drive output.
      */
-    public void runCharacterization(double output) {
-        for (int i = 0; i < 4; i++) {
-            this.swerveModules[i].runCharacterization(output);
-        }
+    public void runDriveCharacterizationVolts(double volts) {
+        Arrays.stream(this.swerveModules).forEach((module) -> module.runDriveCharacterization(volts));
+    }
+
+    /**
+     * Runs the drive in a straight line with the specified drive output.
+     */
+    public void runTurnCharacterizationVolts(double volts) {
+        Arrays.stream(this.swerveModules).forEach((module) -> module.runTurnCharacterization(volts));
     }
 
     /**
@@ -316,14 +322,14 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
     /** Returns a command to run a quasistatic test in the specified direction. */
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return run(() -> runCharacterization(0.0))
+        return run(() -> runDriveCharacterizationVolts(0.0))
                 .withTimeout(1.0)
                 .andThen(sysId.quasistatic(direction));
     }
 
     /** Returns a command to run a dynamic test in the specified direction. */
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return run(() -> runCharacterization(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
+        return run(() -> runDriveCharacterizationVolts(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
     }
 
     /**
