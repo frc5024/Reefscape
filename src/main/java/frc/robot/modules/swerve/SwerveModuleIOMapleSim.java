@@ -10,7 +10,6 @@ import java.util.Arrays;
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
 import org.ironmaple.simulation.motorsims.SimulatedMotorController;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants.MapleSimConstants;
@@ -93,19 +92,7 @@ public class SwerveModuleIOMapleSim implements SwerveModuleIO {
     }
 
     @Override
-    public void runDriveOpenLoop(double output) {
-        this.driveClosedLoop = false;
-        this.driveAppliedVolts = MathUtil.clamp(output * 12, -12.0, 12.0);
-    }
-
-    @Override
-    public void runTurnOpenLoop(double output) {
-        this.turnClosedLoop = false;
-        this.turnAppliedVolts = MathUtil.clamp(output * 12, -12.0, 12.0);
-    }
-
-    @Override
-    public void runDriveVelocity(double velocityRadPerSec) {
+    public void setDriveSetpoint(double velocityRadPerSec) {
         this.driveClosedLoop = true;
         this.driveFFVolts = MapleSimConstants.driveSimKs * Math.signum(velocityRadPerSec)
                 + MapleSimConstants.driveSimKv * velocityRadPerSec;
@@ -113,8 +100,20 @@ public class SwerveModuleIOMapleSim implements SwerveModuleIO {
     }
 
     @Override
-    public void runTurnPosition(Rotation2d rotation) {
+    public void setDriveVoltage(double volts) {
+        this.driveClosedLoop = false;
+        this.driveAppliedVolts = volts;
+    }
+
+    @Override
+    public void setTurnSetpoint(Rotation2d rotation) {
         this.turnClosedLoop = true;
         this.turnController.setSetpoint(rotation.getRadians());
+    }
+
+    @Override
+    public void setTurnVoltage(double volts) {
+        this.turnClosedLoop = false;
+        this.turnAppliedVolts = volts;
     }
 }

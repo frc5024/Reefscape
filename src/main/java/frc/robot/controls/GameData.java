@@ -105,6 +105,7 @@ public class GameData {
     }
 
     public void setCoralPole(CoralPole coralPole) {
+        System.out.println("**** CoralIndex: " + coralPole.toString());
         this.coralPole = coralPole;
     }
 
@@ -113,6 +114,7 @@ public class GameData {
     }
 
     public void setReefStationIndex(int reefStationIndex) {
+        System.out.println("**** ReefIndex: " + reefStationIndex);
         this.reefStationIndex += reefStationIndex;
 
         if (this.reefStationIndex > 6)

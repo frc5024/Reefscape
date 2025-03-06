@@ -43,30 +43,6 @@ public interface SwerveModuleIO {
     }
 
     /**
-     * Run the drive motor at the specified open loop value.
-     */
-    public default void runDriveOpenLoop(double output) {
-    }
-
-    /**
-     * Run the turn motor at the specified open loop value.
-     */
-    public default void runTurnOpenLoop(double output) {
-    }
-
-    /**
-     * Run the drive motor at the specified velocity.
-     */
-    public default void runDriveVelocity(double velocityRadPerSec) {
-    }
-
-    /**
-     * Run the turn motor to the specified rotation.
-     */
-    public default void runTurnPosition(Rotation2d rotation) {
-    }
-
-    /**
      * 
      */
     public default void resetDrivePID() {
@@ -82,6 +58,30 @@ public interface SwerveModuleIO {
      * 
      */
     public default void setDrivePID(double kP, double kI, double kD) {
+    }
+
+    /**
+     * Run the drive motor at the specified velocity.
+     */
+    public default void setDriveSetpoint(double velocityRadPerSec) {
+    }
+
+    /**
+     * Run the drive motor at the specified open loop value.
+     */
+    public default void setDriveVoltage(double output) {
+    }
+
+    /**
+     * Run the turn motor to the specified rotation.
+     */
+    public default void setTurnSetpoint(Rotation2d rotation) {
+    }
+
+    /**
+     * Run the turn motor at the specified open loop value.
+     */
+    public default void setTurnVoltage(double output) {
     }
 
     /**

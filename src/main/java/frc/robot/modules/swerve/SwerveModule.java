@@ -2,6 +2,7 @@ package frc.robot.modules.swerve;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -75,16 +76,25 @@ public class SwerveModule {
 
         // Apply setpoints
         double vRadPerSec = state.speedMetersPerSecond / (SwerveConstants.cotsTurnConstants.wheelDiameter / 2);
-        swerveModuleIO.runDriveVelocity(vRadPerSec);
-        swerveModuleIO.runTurnPosition(state.angle);
+        swerveModuleIO.setDriveSetpoint(vRadPerSec);
+        swerveModuleIO.setTurnSetpoint(state.angle);
     }
 
     /**
      * Runs the module with the specified output while controlling to zero degrees.
      */
-    public void runCharacterization(double output) {
-        swerveModuleIO.runDriveOpenLoop(output);
-        swerveModuleIO.runTurnPosition(new Rotation2d());
+    public void runDriveCharacterization(double output) {
+        swerveModuleIO.setTurnSetpoint(Rotation2d.fromRotations(0.0));
+        swerveModuleIO.setDriveVoltage(output);
+    }
+
+    /**
+     * Runs the module angle with the specified voltage while not moving the drive
+     * motor.
+     */
+    public void runTurnCharacterization(double volts) {
+        swerveModuleIO.setTurnVoltage(volts);
+        swerveModuleIO.setDriveVoltage(0.0);
     }
 
     /**
@@ -95,16 +105,18 @@ public class SwerveModule {
         state.cosineScale(this.inputs.data.turnPosition());
 
         // Apply setpoints
-        swerveModuleIO.runDriveOpenLoop(state.speedMetersPerSecond / SwerveConstants.maxLinearSpeed);
-        swerveModuleIO.runTurnPosition(state.angle);
+        double volts = MathUtil.clamp((state.speedMetersPerSecond / SwerveConstants.maxLinearSpeed) * 12, -12.0, 12.0);
+
+        swerveModuleIO.setDriveVoltage(volts);
+        swerveModuleIO.setTurnSetpoint(state.angle);
     }
 
     /**
      * Disables all outputs to motors.
      */
     public void stop() {
-        swerveModuleIO.runDriveOpenLoop(0.0);
-        swerveModuleIO.runTurnOpenLoop(0.0);
+        swerveModuleIO.setTurnVoltage(0.0);
+        swerveModuleIO.setDriveVoltage(0.0);
     }
 
     /**

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.tuning.CharacterizationCommands;
 import frc.robot.commands.tuning.ElevatorFeedForwardCharacterizationCommand;
 import frc.robot.commands.tuning.FeedForwardCharacterizationCommand;
 import frc.robot.commands.tuning.WheelRadiusCharacterizationCommand;
@@ -98,12 +99,18 @@ public class AutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
         this.autonomousChooser = new LoggedDashboardChooser<Command>("Auto Routine", AutoBuilder.buildAutoChooser());
 
         if (RobotConstants.TUNING_MODE) {
+            CharacterizationCommands characterizationCommands = new CharacterizationCommands(this.swerveDriveSubsystem);
+
             this.autonomousChooser.addOption("Drive Characterization",
                     new FeedForwardCharacterizationCommand(this.swerveDriveSubsystem).get());
             this.autonomousChooser.addOption("Wheel Radius Characterization",
                     new WheelRadiusCharacterizationCommand(this.swerveDriveSubsystem).get());
             this.autonomousChooser.addOption("Elevator Characterization",
                     new ElevatorFeedForwardCharacterizationCommand(this.elevatorSubsystem).get());
+            this.autonomousChooser.addOption("Swerve Drive Sysid",
+                    characterizationCommands.runDriveCharacterizationCmd());
+            this.autonomousChooser.addOption("Swerve Azimuth Sysid",
+                    characterizationCommands.runTurnCharacterizationCmd());
         }
 
         // Load Game Autos

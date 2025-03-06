@@ -107,26 +107,26 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     }
 
     @Override
-    public void runDriveOpenLoop(double output) {
+    public void setDriveVoltage(double output) {
         this.driveClosedLoop = false;
         this.driveAppliedVolts = output;
     }
 
     @Override
-    public void runTurnOpenLoop(double output) {
+    public void setTurnVoltage(double output) {
         this.turnClosedLoop = false;
         this.turnAppliedVolts = output;
     }
 
     @Override
-    public void runDriveVelocity(double velocityRadPerSec) {
+    public void setDriveSetpoint(double velocityRadPerSec) {
         this.driveClosedLoop = true;
         this.driveFFVolts = DRIVE_KS * Math.signum(velocityRadPerSec) + DRIVE_KV * velocityRadPerSec;
         this.driveController.setSetpoint(velocityRadPerSec);
     }
 
     @Override
-    public void runTurnPosition(Rotation2d rotation) {
+    public void setTurnSetpoint(Rotation2d rotation) {
         turnClosedLoop = true;
         turnController.setSetpoint(rotation.getRadians());
     }
