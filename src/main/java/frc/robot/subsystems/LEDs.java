@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDController;
 import frc.robot.Constants;
-import frc.robot.commands.LEDs.flashLEDs;
+import frc.robot.commands.LEDs.flashLEDS;
 import frc.robot.commands.LEDs.setLEDS;
 import frc.robot.commands.LEDs.setLEDSDefault;
 
@@ -44,12 +44,12 @@ public class LEDs extends SubsystemBase {
 
     // Flash LEDs Command with one colour
     public Command flashCommand(ILEDPreset colour, int flashSeconds) {
-        return new flashLEDs(this, colour, flashSeconds);
+        return new flashLEDS(this, colour, flashSeconds);
     }
 
     // Flash LEDs Command with two colours
     public Command flashCommand(ILEDPreset colour1, ILEDPreset colour2, int flashSeconds) {
-        return new flashLEDs(this, colour1, colour2, flashSeconds);
+        return new flashLEDS(this, colour1, colour2, flashSeconds);
     }
 
     // Set to colour Command
