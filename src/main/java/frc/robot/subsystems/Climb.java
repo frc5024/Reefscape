@@ -5,7 +5,6 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +27,8 @@ public class Climb extends SubsystemBase {
     GenericEntry encoder = tab.add("climbSpeed", .35).getEntry();
 
     // ULTRASONIC NOT CURRENTLY BEING USED
+
+    public boolean extended = false;
 
     // Ultrasonic
     // private final Ultrasonic m_ultrasonic = new

@@ -126,7 +126,10 @@ public class goToSetPositionPerTagCmd extends Command {
     public void translateToTag(double zDiff) {
         if (Math.abs(zDiff) > 0.06) { // In meters
             translationPidOutput = translationPidController.calculate(zDiff, 0);
-            translationPidOutput = translationPidOutput * 1.7; // Speed multiplier
+            translationPidOutput = translationPidOutput * 3.5; // Speed multiplier (1.7)
+            if (translationPidOutput > 0.8)
+                translationPidOutput = 0.8;
+            // System.out.println(translationPidOutput);
             zPos = false;
         } else {
             translationPidOutput = 0;

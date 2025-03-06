@@ -52,20 +52,33 @@ public class RobotContainer {
     public RobotContainer() {
 
         s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, () -> -driver.getRawAxis(translationAxis),
-                () -> -driver.getRawAxis(strafeAxis), () -> -driver.getRawAxis(rotationAxis), () -> false // true = robotcentric
+                () -> -driver.getRawAxis(strafeAxis), () -> -driver.getRawAxis(rotationAxis), () -> false // true =
+                                                                                                          // robotcentric
         ));
 
-        // s_LEDs.setDefaultCommand().schedule();
+        s_LEDs.setDefaultCommand().schedule();
 
         configureBindings();
 
         // Auto Commands
         // Vision
-        NamedCommands.registerCommand("DriveRightTag", new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset));
-        NamedCommands.registerCommand("DriveLeftTag", new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.leftOffset));
-        NamedCommands.registerCommand("DriveLeftTag11", new autoSetPositionTagID(limelightSubsystem, s_Swerve, Constants.Vision.leftOffset, 11));
-        NamedCommands.registerCommand("DriveRightTag11", new autoSetPositionTagID(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset, 11));
-        NamedCommands.registerCommand("DriveRightTag6", new autoSetPositionTagID(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset, 6));
+        NamedCommands.registerCommand("DriveRightTag",
+                new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset));
+
+        NamedCommands.registerCommand("DriveLeftTag",
+                new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.leftOffset));
+
+        NamedCommands.registerCommand("DriveLeftTag11",
+                new autoSetPositionTagID(limelightSubsystem, s_Swerve, Constants.Vision.leftOffset, 11));
+
+        NamedCommands.registerCommand("DriveRightTag11",
+                new autoSetPositionTagID(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset, 11));
+
+        NamedCommands.registerCommand("DriveRightTag6",
+                new autoSetPositionTagID(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset, 6));
+
+        NamedCommands.registerCommand("DriveLeftTag6",
+                new autoSetPositionTagID(limelightSubsystem, s_Swerve, Constants.Vision.leftOffset, 6));
 
         // Coral
         NamedCommands.registerCommand("ScoreCoral", coralSubsystem.outtakeCommand());
@@ -100,8 +113,10 @@ public class RobotContainer {
     private void configureBindings() {
         // Driver Controls
         // Drive
+
         driver.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.isSlowMode = true));
         driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.isSlowMode = false));
+
         driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         driver.rightTrigger()
                 .onTrue(new ConditionalCommand(new InstantCommand(), coralSubsystem.outtakeCommand(),
@@ -116,13 +131,18 @@ public class RobotContainer {
                 .whileTrue(new ConditionalCommand(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
                         Constants.Vision.leftOffset), new InstantCommand(), () -> visionMode));
 
-        // Climb
-        driver.y().whileTrue(m_climbSubsystem.climbCommand());
-        driver.rightTrigger().whileTrue(m_climbSubsystem.extendingCommand());
-        driver.leftTrigger().whileTrue(m_climbSubsystem.retractingCommand());
+        // driver.rightBumper()
+        // .whileTrue(new scoreCoralVisionCmd(limelightSubsystem, s_Swerve,
+        // Constants.Vision.rightOffset,
+        // elevatorSubsystem, coralSubsystem));
+        // driver.leftBumper()
+        // .whileTrue(new scoreCoralVisionCmd(limelightSubsystem, s_Swerve,
+        // Constants.Vision.leftOffset,
+        // elevatorSubsystem, coralSubsystem));
 
         // Elevator
-        driver.b().whileTrue(new ConditionalCommand(elevatorSubsystem.goToModePosition(), new InstantCommand(), () -> visionMode));
+        driver.b().onTrue(
+                new ConditionalCommand(coralSubsystem.outtakeCommand(), new InstantCommand(), () -> visionMode));
 
         // Coral
         driver.rightBumper().whileTrue(coralSubsystem.intakeCommand());
@@ -174,11 +194,14 @@ public class RobotContainer {
 
         operator.start().whileTrue(elevatorSubsystem.slowL2());
         // operator.start().whileTrue(new
+
+        operator.rightTrigger().whileTrue(m_climbSubsystem.climbCommand());
+        operator.leftTrigger().whileTrue(m_climbSubsystem.extendingCommand());
     }
 
     public Command getAutonomousCommand() {
-        return Commands.sequence(new PathPlannerAuto("Auto1"), new PathPlannerAuto("Auto2"));
-        // autoChooser.
+        return Commands.sequence(new PathPlannerAuto("11R"), new PathPlannerAuto("11R TS 6"), new PathPlannerAuto("6L"),
+                new PathPlannerAuto("6L TS"), new PathPlannerAuto("6R"));
         // return autoChooser.getSelected();
         // return new TwoPiece();
     }

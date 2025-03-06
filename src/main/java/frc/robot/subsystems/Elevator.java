@@ -69,7 +69,7 @@ public class Elevator extends SubsystemBase {
     private Rumble rumble;
     public boolean zeroRumbled = false;
 
-    public double elevatorMode;
+    public double elevatorMode = Constants.elevatorConstants.L4Position;
     public double elevatorPosition = 0;
 
     private static Elevator mInstance;

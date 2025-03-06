@@ -5,27 +5,28 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "DriveRightTag11"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveRightTag6"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "ScoreCoral"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.6
           }
         },
         {
@@ -38,6 +39,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Working",
+  "folder": "To Test",
   "choreoAuto": false
 }

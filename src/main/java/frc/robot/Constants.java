@@ -42,8 +42,8 @@ public final class Constants {
 
     public static final class Vision {
 
-        public static final double rightOffset = 0.18228740684869218; // in meters
-        public static final double leftOffset = -0.1745; // in meters
+        public static final double rightOffset = 0.18828740684869218; // in meters
+        public static final double leftOffset = -0.1345; // in meters
         public static final double noOffset = 0; // in meters
 
     }
@@ -56,7 +56,7 @@ public final class Constants {
 
     public static class elevatorConstants {
         // elevator values
-        public static final double elevatorSpeed = 0.5;
+        public static final double elevatorSpeed = 0.6;
         public static final double elevatorOff = 0;
         public static final double elevatorMaxSpeed = 75;
         public static final double elevatorMaxAccel = 75;
@@ -65,7 +65,7 @@ public final class Constants {
         public static final int motorID2 = 61;
 
         // values for PID
-        public static final double kP = 0.05;
+        public static final double kP = 0.051;
         public static final double kI = 0;
         public static final double kD = 0;
 
@@ -74,7 +74,8 @@ public final class Constants {
         public static final double kA = 0.05;
 
         public static final double G = 0.5;
-        public static final double minimumBottomValue = 2.5; // encoder value will not always be zero so we create a tolerance value
+        public static final double minimumBottomValue = 2.5; // encoder value will not always be zero so we create a
+                                                             // tolerance value
 
         // public static final double radianstoCM(double CM) {
         // double radians;
@@ -103,7 +104,7 @@ public final class Constants {
         public static final int servoChannel = 0;
 
         public static double intakeSpeed = -0.1;
-        public static double outtakeSpeed = -0.15;
+        public static double outtakeSpeed = -0.1;
         public static double L1Speed = -0.35;
         public static double plopSpeed = -0.05;
         public static double rampSpeed = -0.05;
@@ -122,7 +123,8 @@ public final class Constants {
                 COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L1);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(18.5); // TODO: This must be tuned tos pecific robot
+        public static final double trackWidth = Units.inchesToMeters(18.5); // TODO: This must be tuned tos pecific
+                                                                            // robot
         public static final double wheelBase = Units.inchesToMeters(18.5); // TODO: This must be tuned to specific robot
         public static final double wheelCircumference = chosenDriveModule.wheelCircumference;
 
@@ -210,7 +212,8 @@ public final class Constants {
             public static final int angleMotorID = 12;
             public static final int canCoderID = 1;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(92.9 + 180); //
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
+                    canCoderID, angleOffset);
         }
 
         /* Back Left Module - Module 2 */
@@ -219,7 +222,8 @@ public final class Constants {
             public static final int angleMotorID = 32;
             public static final int canCoderID = 3;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-60); //
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
+                    canCoderID, angleOffset);
         }
 
         /* Back Right Module - Module 3 */
@@ -228,7 +232,8 @@ public final class Constants {
             public static final int angleMotorID = 22;
             public static final int canCoderID = 2;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-35.7); //
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
+                    canCoderID, angleOffset);
         }
     }
 
@@ -243,15 +248,15 @@ public final class Constants {
         public static final int climbMotorID = 7;
 
         // Placeholder value
-        public static final double endPosition = -18;
+        public static final double endPosition = -18; // climb command end
         public static final double startPosition = -6.00;
 
         // ALSO Placeholder value
-        public static final double extendoPosition = 35;
+        public static final double extendoPosition = 35; // out encoder
         // public static final double liftoffPos = 180.0;
 
         // EVEN MORE Placeholder values
-        public static final double climbSpeed = -0.7;
+        public static final double climbSpeed = -0.5;
         // public static final double cancelSpeed = -0.4;
         public static final double extendoSpeed = 0.4;
 

@@ -181,8 +181,6 @@ public class Swerve extends SubsystemBase {
     public void drive(boolean isOpenLoop) {
         ChassisSpeeds chassisSpeeds = null;
 
-        System.out.println("Drive Called; " + fieldRelative);
-
         setSpeedModifier();
 
         if (fieldRelative) {
@@ -194,11 +192,6 @@ public class Swerve extends SubsystemBase {
             chassisSpeeds = new ChassisSpeeds(translationVal * Constants.Swerve.maxSpeed * speedModifier,
                     strafeVal * Constants.Swerve.maxSpeed * speedModifier,
                     rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier);
-
-            System.out.println("Translation " + translationVal);
-            System.out.println("Strafe " + strafeVal);
-            System.out.println("Rotation " + rotationVal);
-            System.out.println("SpeedMod " + speedModifier);
         }
 
         drive(chassisSpeeds, isOpenLoop);

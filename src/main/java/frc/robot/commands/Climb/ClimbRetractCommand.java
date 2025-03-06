@@ -18,7 +18,8 @@ public class ClimbRetractCommand extends Command {
     }
 
     public void execute() {
-        climbSubsystem.retracting();
+        if (climbSubsystem.extended)
+            climbSubsystem.retracting();
     }
 
     @Override
