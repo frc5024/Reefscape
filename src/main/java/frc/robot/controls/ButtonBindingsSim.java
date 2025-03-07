@@ -13,6 +13,7 @@ import frc.robot.commands.vision.DriveFromBestTagCommand;
 import frc.robot.commands.vision.DriveNearestCoralStationCommand;
 import frc.robot.commands.vision.DriveProcessorCommand;
 import frc.robot.commands.vision.DriveReefStationCommand;
+import frc.robot.commands.vision.DriveReefStationPathCommand;
 import frc.robot.controls.GameData.CoralPole;
 import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -135,11 +136,8 @@ public class ButtonBindingsSim {
 
         // Drive to selected reef station
         commandXboxController.rightBumper()
-                .whileTrue(new DriveReefStationCommand(this.swerveDriveSubsystem,
-                        this.swerveDriveSubsystem::getPose,
-                        GameData.getInstance()::getReefStationIndex,
-                        GameData.getInstance().getCoralPole(),
-                        GameData.getInstance().getGamePieceMode()));
+                .whileTrue(new DriveReefStationPathCommand(this.swerveDriveSubsystem,
+                        GameData.getInstance()::getReefStationIndex));
 
         // Drive to selected reef station
         commandXboxController.leftBumper()

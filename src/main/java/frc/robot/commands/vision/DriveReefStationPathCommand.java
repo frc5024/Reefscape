@@ -1,5 +1,7 @@
 package frc.robot.commands.vision;
 
+import java.util.function.Supplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -10,19 +12,21 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
- * Drives to processor station based on pathplanner plan
+ * Drives to reef station based on game piece mode settings
  */
-public class DriveProcessorCommand extends Command {
+public class DriveReefStationPathCommand extends Command {
     private final SwerveDriveSubsystem swerveDriveSubsystem;
+    private final Supplier<Integer> stationSupplier;
 
     private Command commandGroup;
     private Command followPathCommand;
 
     /**
-     * 
+     * Drives to reef station based on pose and pole selection from elastic input
      */
-    public DriveProcessorCommand(SwerveDriveSubsystem swerveDriveSubsystem) {
+    public DriveReefStationPathCommand(SwerveDriveSubsystem swerveDriveSubsystem, Supplier<Integer> stationSupplier) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
+        this.stationSupplier = stationSupplier;
 
         addRequirements(this.swerveDriveSubsystem);
     }
@@ -65,10 +69,11 @@ public class DriveProcessorCommand extends Command {
     /**
      * 
      */
-    private void schedulePathCommand() {
+    public void schedulePathCommand() {
         try {
 
-            PathPlannerPath pathPlannerPath = PathPlannerPath.fromPathFile("DriveProcessor - Path");
+            int reefStationIndex = this.stationSupplier.get();
+            PathPlannerPath pathPlannerPath = PathPlannerPath.fromPathFile("DriveReef" + reefStationIndex + " - Path");
 
             this.followPathCommand = AutoBuilder.pathfindThenFollowPath(pathPlannerPath,
                     frc.robot.autonomous.AutoBuilder.CONSTRAINTS);

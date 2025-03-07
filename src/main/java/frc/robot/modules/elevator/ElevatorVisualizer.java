@@ -92,7 +92,7 @@ public class ElevatorVisualizer {
         /* Coral Intake Subsystem */
         if (hasCoral) {
             Pose2d robotPose = MapleSimUtil.getSwerveDriveSimulation().getSimulatedDriveTrainPose();
-            Transform3d transform3d = new Transform3d(Units.inchesToMeters(11.5), 0.025,
+            Transform3d transform3d = new Transform3d(Units.inchesToMeters(11.5), -0.005,
                     heights[2] + Units.inchesToMeters(18),
                     new Rotation3d(0.0, Units.degreesToRadians(35), 0.0));
 

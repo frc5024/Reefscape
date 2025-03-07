@@ -26,6 +26,8 @@ public class DriveNearestCoralStationCommand extends Command {
      */
     public DriveNearestCoralStationCommand(SwerveDriveSubsystem swerveDriveSubsystem) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
+
+        addRequirements(this.swerveDriveSubsystem);
     }
 
     @Override
@@ -56,7 +58,7 @@ public class DriveNearestCoralStationCommand extends Command {
     public boolean isFinished() {
         try {
 
-            return followPathCommand.isFinished();
+            return this.followPathCommand.isFinished();
 
         } catch (Exception e) {
             return true;
