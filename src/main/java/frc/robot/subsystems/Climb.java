@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,7 +20,7 @@ public class Climb extends SubsystemBase {
     public static Climb mInstance = null;
 
     private TalonFX climbMotor;
-    // private DigitalInput limitSwitch = new DigitalInput(0);
+    private DigitalInput limitSwitch = new DigitalInput(0);
 
     // Shuffleboard
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
@@ -113,10 +114,13 @@ public class Climb extends SubsystemBase {
 
     // Booleans
 
+    public boolean isLimitReached() {
+        return limitSwitch.get();
+    }
+
     public boolean isClimbed() {
         // Returns true if the Encoder detects the motor is at climbed position
-        if (/* limitSwitch.get() */ climbMotor.getPosition()
-                .getValueAsDouble() <= Constants.ClimbConstants.endPosition) {
+        if (limitSwitch.get() == true) {
             // if (climbMotor.getPosition().getValueAsDouble() >=
             // Constants.ClimbConstants.liftoffPos
             // && !overThreshold()) {
