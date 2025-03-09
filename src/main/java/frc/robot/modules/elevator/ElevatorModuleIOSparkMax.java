@@ -144,9 +144,7 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
         this.pidController.setPID(kP, kI, kD);
     }
 
-    /**
-     * 
-     */
+    @Override
     public void zeroEncoder() {
         this.leftMotor.getEncoder().setPosition(ENCODER_ZERO_POSITION);
     }

@@ -96,6 +96,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     /**
      * 
      */
+    private boolean atBottom() {
+        return this.elevatorModule.isAtBottom();
+    }
+
+    /**
+     * 
+     */
     public boolean atGoal() {
         return this.atGoal;
     }
@@ -210,6 +217,12 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     private boolean isActionComplete() {
         switch (this.stateMachine.getCurrentState()) {
+            case MOVE_TO_BOTTOM:
+                if (atBottom()) {
+                    this.elevatorModule.zeroEncoder();
+                }
+                return this.atGoal || atBottom() || !this.stateTimer.isRunning();
+
             default:
                 return this.atGoal || !this.stateTimer.isRunning();
         }
@@ -248,13 +261,6 @@ public class ElevatorSubsystem extends SubsystemBase {
                 this.stateMachine.setState(nextAction);
             } catch (NoSuchElementException e) {
             }
-        }
-
-        /**
-         * Stop motors if elevator reaches top or bottom
-         */
-        if (this.elevatorModule.isAtBottom() || this.elevatorModule.isAtTop()) {
-
         }
 
         this.elevatorVisualizer.update(getPositionMeters(), this.elevatorLevel, this.hasAlgaSupplier.get(),

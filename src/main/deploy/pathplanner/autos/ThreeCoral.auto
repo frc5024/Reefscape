@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1.A3toR4L"
+            "pathName": "1.A2toR3R"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2.R4LtoCSL"
+            "pathName": "2.R3RtoCSL"
           }
         },
         {
@@ -146,6 +146,36 @@
           "type": "named",
           "data": {
             "name": "WaitForIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "7.CSLtoR3L"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EjectCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForEject"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorL0"
           }
         }
       ]

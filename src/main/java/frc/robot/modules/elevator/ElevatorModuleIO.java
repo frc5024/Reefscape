@@ -61,4 +61,7 @@ public interface ElevatorModuleIO {
 
     default void updatePID(double kP, double kI, double kD) {
     }
+
+    default void zeroEncoder() {
+    }
 }

@@ -111,7 +111,7 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
         this.inputTorqueCurrent = torqueCurrent;
         this.appliedVolts = ElevatorConstants.gearbox.getVoltage(
                 ElevatorConstants.gearbox.getTorque(this.inputTorqueCurrent),
-                simState.get(1, 0) / ElevatorConstants.drumRadiusMeters);
+                this.simState.get(1, 0) / ElevatorConstants.drumRadiusMeters);
         this.appliedVolts = MathUtil.clamp(this.appliedVolts, -12.0, 12.0);
     }
 
@@ -156,5 +156,9 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
     @Override
     public void updatePID(double kP, double kI, double kD) {
         this.pidController.setPID(kP, kI, kD);
+    }
+
+    @Override
+    public void zeroEncoder() {
     }
 }

@@ -366,11 +366,11 @@ public final class Constants {
         public static final double SIM_SWERVE_MODULE_TURN_KA = 0.0;
 
         // PID constants for autonomous/pathplanner mode
-        public static final double SWERVE_DRIVE_X_KP = 5.0;
+        public static final double SWERVE_DRIVE_X_KP = 6.0;
         public static final double SWERVE_DRIVE_X_KI = 0.0;
         public static final double SWERVE_DRIVE_X_KD = 0.0;
 
-        public static final double SWERVE_DRIVE_Y_KP = 5.0;
+        public static final double SWERVE_DRIVE_Y_KP = 6.0;
         public static final double SWERVE_DRIVE_Y_KI = 0.0;
         public static final double SWERVE_DRIVE_Y_KD = 0.0;
 
@@ -381,15 +381,15 @@ public final class Constants {
         // PID constants for simulated autonomous/pathplanner mode
         public static final double SIM_SWERVE_DRIVE_X_KP = 5.0;
         public static final double SIM_SWERVE_DRIVE_X_KI = 0.0;
-        public static final double SIM_SWERVE_DRIVE_X_KD = 0.0;
+        public static final double SIM_SWERVE_DRIVE_X_KD = 0.5;
 
         public static final double SIM_SWERVE_DRIVE_Y_KP = 5.0;
         public static final double SIM_SWERVE_DRIVE_Y_KI = 0.0;
-        public static final double SIM_SWERVE_DRIVE_Y_KD = 0.0;
+        public static final double SIM_SWERVE_DRIVE_Y_KD = 0.5;
 
         public static final double SIM_SWERVE_DRIVE_OMEGA_KP = 5.0;
         public static final double SIM_SWERVE_DRIVE_OMEGA_KI = 0.0;
-        public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 0.0;
+        public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 0.5;
 
         // PID constants for elevator
         public static final double ELEVATOR_KP = 0.05;
