@@ -168,7 +168,7 @@ public final class Constants {
 
             Processor(Units.inchesToMeters(1.0), 0.0),
 
-            CoralL1(Units.inchesToMeters(0), 0.0),
+            CoralL1(Units.inchesToMeters(4.0), 0.0),
             CoralL2(Units.inchesToMeters(10.0), -35.0),
             CoralL3(Units.inchesToMeters(18.0), -35.0),
             CoralL4(Units.inchesToMeters(31.0), -60.0);
