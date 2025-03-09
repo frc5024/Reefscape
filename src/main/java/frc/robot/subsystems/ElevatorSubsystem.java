@@ -121,6 +121,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.AlgaeL1;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -132,6 +133,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.AlgaeL2;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -143,6 +145,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.Bottom;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -154,6 +157,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.Processor;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -165,6 +169,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.CoralL1;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -176,6 +181,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.CoralL2;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -187,6 +193,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.CoralL3;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -198,6 +205,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.CoralL4;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -208,6 +216,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     protected void handleStop(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
             this.elevatorModule.stop();
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }

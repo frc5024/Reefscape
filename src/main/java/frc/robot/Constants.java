@@ -379,13 +379,13 @@ public final class Constants {
         public static final double SWERVE_DRIVE_OMEGA_KD = 0.0;
 
         // PID constants for simulated autonomous/pathplanner mode
-        public static final double SIM_SWERVE_DRIVE_X_KP = 5.0;
-        public static final double SIM_SWERVE_DRIVE_X_KI = 0.0;
-        public static final double SIM_SWERVE_DRIVE_X_KD = 0.5;
+        public static final double SIM_SWERVE_DRIVE_X_KP = 4.0;
+        public static final double SIM_SWERVE_DRIVE_X_KI = 0.0001;
+        public static final double SIM_SWERVE_DRIVE_X_KD = 0.4;
 
-        public static final double SIM_SWERVE_DRIVE_Y_KP = 5.0;
-        public static final double SIM_SWERVE_DRIVE_Y_KI = 0.0;
-        public static final double SIM_SWERVE_DRIVE_Y_KD = 0.5;
+        public static final double SIM_SWERVE_DRIVE_Y_KP = 4.0;
+        public static final double SIM_SWERVE_DRIVE_Y_KI = 0.0001;
+        public static final double SIM_SWERVE_DRIVE_Y_KD = 0.4;
 
         public static final double SIM_SWERVE_DRIVE_OMEGA_KP = 5.0;
         public static final double SIM_SWERVE_DRIVE_OMEGA_KI = 0.0;

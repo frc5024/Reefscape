@@ -31,11 +31,11 @@ public interface ElevatorModuleIO {
     }
 
     default boolean isAtBottom() {
-        return true;
+        return false;
     }
 
     default boolean isAtTop() {
-        return true;
+        return false;
     }
 
     default public void runCharacterization(double output) {
