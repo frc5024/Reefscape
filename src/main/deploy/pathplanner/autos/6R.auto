@@ -5,19 +5,32 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "parallel",
                 "data": {
-                  "name": "DriveRightTag6"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "L4"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "DriveRightTag6"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "L4"
+                  "waitTime": 4.0
                 }
               }
             ]
@@ -28,17 +41,11 @@
           "data": {
             "name": "ScoreCoral"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorRoot"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "To Test",
+  "folder": "Strictly Vision",
   "choreoAuto": false
 }

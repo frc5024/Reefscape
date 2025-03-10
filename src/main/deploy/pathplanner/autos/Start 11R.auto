@@ -45,6 +45,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "To Test",
+  "folder": "Non Processor",
   "choreoAuto": false
 }

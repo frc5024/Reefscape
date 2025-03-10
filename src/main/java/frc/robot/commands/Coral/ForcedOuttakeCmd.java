@@ -4,33 +4,35 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Coral;
 
-public class LowerRampCommand extends Command {
+public class ForcedOuttakeCmd extends Command {
 
     private final Coral coralSubsystem;
 
-    public LowerRampCommand(Coral coralSubsystem) {
-
+    // constructor for OuttakeCommand
+    public ForcedOuttakeCmd(Coral coralSubsystem) {
         this.coralSubsystem = coralSubsystem;
 
         addRequirements(coralSubsystem);
     }
 
-    // when start, rotate -plopspeed, lowers the ramp
+    // Called when the command is initially scheduled.
+    @Override
     public void initialize() {
-        coralSubsystem.set(Constants.coralConstants.rampSpeed);
     }
 
-    // when button pressed, rotate servo 90 degrees (lowers the ramp)
+    // execute, startOuttake() once button is pressed
+    @Override
     public void execute() {
+        coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
     }
 
-    // when command ends, set idle
+    // end, when command ends, set activeOuttake to false and set state to IDLE
     @Override
     public void end(boolean interrupted) {
         coralSubsystem.setIdle();
     }
 
-    // Returns true when the command should end.
+    // if line is not broken, return true, else return false
     @Override
     public boolean isFinished() {
         return false;

@@ -15,8 +15,6 @@ public class IntakeCommand extends Command {
     private final LEDs s_LEDs = LEDs.getInstance();
     Rumble rumble = new Rumble();
 
-    boolean bypass = false;
-
     // constructor for IntakeCommand
     public IntakeCommand(Coral coralSubsystem) {
         this.coralSubsystem = coralSubsystem;
@@ -28,7 +26,6 @@ public class IntakeCommand extends Command {
     @Override
     public void initialize() {
         if (!coralSubsystem.isLineBroken()) {
-            bypass = true;
             coralSubsystem.set(Constants.coralConstants.intakeSpeed);
             s_LEDs.setCommand(LEDPreset.Strobe.kGold).schedule();
         }
@@ -46,9 +43,11 @@ public class IntakeCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         coralSubsystem.setIdle();
-        s_LEDs.setCommand(LEDPreset.Solid.kRed).schedule();
         if (coralSubsystem.isLineBroken()) {
             rumble.staticRumble(true);
+            s_LEDs.setCommand(LEDPreset.Solid.kLawnGreen).schedule();
+        } else {
+            s_LEDs.setCommand(LEDPreset.Solid.kRed).schedule();
         }
     }
 

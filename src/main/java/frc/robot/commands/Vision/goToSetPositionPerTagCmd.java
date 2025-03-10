@@ -7,7 +7,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
@@ -22,6 +21,7 @@ public class goToSetPositionPerTagCmd extends Command {
     private final Limelight limelight;
     private final Swerve swerveDrive;
     private final double xOffset;
+    // private LEDs s_LEDs;
 
     double strafePidOutput = 0;
     double rotationPidOutput = 0;
@@ -37,9 +37,7 @@ public class goToSetPositionPerTagCmd extends Command {
     double tagAngle = 0;
     private final double cameraAngle = 29;
 
-    boolean xPos = false;
-    boolean rotationPos = false;
-    boolean zPos = false;
+    boolean isLEDset = false;
 
     public goToSetPositionPerTagCmd(Limelight limelight, Swerve swerveDrive, double xOffset) {
         this.limelight = limelight;
@@ -58,17 +56,14 @@ public class goToSetPositionPerTagCmd extends Command {
         translationPidController.reset();
         rotationPidController.reset();
 
-        xPos = false;
-        zPos = false;
-        rotationPos = false;
+        limelight.setRotationPos(false);
+        limelight.setXPos(false);
+        limelight.setZPos(false);
+        // isLEDset = false;
     }
 
     Set<Integer> validTagIDs = new HashSet<>(
-            Set.of(2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22));
-    // 3, 16 - processor
-    // 1, 2, 12, 13 - coral station
-    // 6, 7, 8, 9, 10, 11 - red reef
-    // 17, 18, 19, 20, 21, 22 - blue reef
+            Set.of(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22));
 
     @Override
     public void execute() {
@@ -76,6 +71,11 @@ public class goToSetPositionPerTagCmd extends Command {
 
         if (validTagIDs.contains(detectedTagID)) {
             swerveDrive.setFieldRelative(false);
+
+            // if (!isLEDset) {
+            // isLEDset = true;
+            // s_LEDs.setCommand(LEDPreset.Solid.kWhite).schedule();
+            // }
 
             mathToTag();
         } else {
@@ -94,8 +94,8 @@ public class goToSetPositionPerTagCmd extends Command {
 
         double yaw = botPose[4] - cameraAngle;
 
-        SmartDashboard.putNumber("Tag Yaw", yaw);
-        SmartDashboard.putNumber("getZ botPose", botPose3D.getZ());
+        // SmartDashboard.putNumber("Tag Yaw", yaw);
+        // SmartDashboard.putNumber("getZ botPose", botPose3D.getZ());
 
         // Left/Right
         double zDiff = botPose3D.getZ() + desiredz;
@@ -114,54 +114,50 @@ public class goToSetPositionPerTagCmd extends Command {
         if (Math.abs(rotationToTag) > 1.5) { // Adjust tolerance as needed
             rotationPidOutput = rotationPidController.calculate(rotationToTag, 0);
             rotationPidOutput = rotationPidOutput * 2.2; // Speed multiplier
-            rotationPos = false;
+            limelight.setRotationPos(false);
         } else {
             rotationPidOutput = 0;
-            rotationPos = true;
+            limelight.setRotationPos(true);
         }
-        SmartDashboard.putNumber("thetaDiff", rotationToTag);
+        // SmartDashboard.putNumber("thetaDiff", rotationToTag);
     }
 
     public void translateToTag(double zDiff) {
-        if (Math.abs(zDiff) > 0.06) { // In meters
+        if (Math.abs(zDiff) > 0.08) { // In meters
             translationPidOutput = translationPidController.calculate(zDiff, 0);
             translationPidOutput = translationPidOutput * 2.6; // Speed multiplier (1.2)
             if (translationPidOutput > 0.3)
                 translationPidOutput = 0.3;
-            zPos = false;
+            limelight.setZPos(false);
         } else {
             translationPidOutput = 0;
-            zPos = true;
+            limelight.setZPos(true);
         }
-        SmartDashboard.putNumber("zDiff", zDiff);
+        // SmartDashboard.putNumber("zDiff", zDiff);
     }
 
     public void strafeToTag(double xDiff) {
         if (Math.abs(xDiff) > 0.025) { // In meters
             strafePidOutput = strafePidController.calculate(xDiff, 0);
             strafePidOutput = -strafePidOutput * 2.3; // Speed multiplier
-            if (strafePidOutput > 0.2)
-                strafePidOutput = 0.2;
-            if (strafePidOutput < -0.2)
-                strafePidOutput = -0.2;
+            if (strafePidOutput > 0.15)
+                strafePidOutput = 0.15;
+            if (strafePidOutput < -0.15)
+                strafePidOutput = -0.15;
 
-            xPos = false;
+            limelight.setXPos(false);
         } else {
             strafePidOutput = 0;
-            xPos = true;
+            limelight.setXPos(true);
         }
-        SmartDashboard.putNumber("xDiff", xDiff);
+        // SmartDashboard.putNumber("xDiff", xDiff);
     }
 
     public void setDrive() {
         swerveDrive.setFieldRelative(false);
 
-        SmartDashboard.putBoolean("rotationPos", rotationPos);
-        SmartDashboard.putBoolean("xPos", xPos);
-        SmartDashboard.putBoolean("zPos", zPos);
-
-        SmartDashboard.putNumber("StrafePID", strafePidOutput);
-        SmartDashboard.putNumber("TranslatPID", translationPidOutput);
+        // SmartDashboard.putNumber("StrafePID", strafePidOutput);
+        // SmartDashboard.putNumber("TranslatPID", translationPidOutput);
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
         swerveDrive.visionTranslationalVal(translationPidOutput, true);
@@ -170,7 +166,7 @@ public class goToSetPositionPerTagCmd extends Command {
 
     @Override
     public boolean isFinished() {
-        return xPos && zPos && rotationPos; // Stop when aligned
+        return limelight.getXPos() && limelight.getZPos() && limelight.getRotationPos(); // Stop when aligned
     }
 
     @Override

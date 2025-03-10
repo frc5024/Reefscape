@@ -33,7 +33,7 @@ public class SetElevatorSetpointCmd extends Command {
     // "end" is called when the button is no longer being pressed
     @Override
     public void end(boolean interrupted) {
-        elevatorSubsystem.resetPID();
+        // elevatorSubsystem.resetPID();
         // elevatorSubsystem.togglePID(false);
     }
 

@@ -17,7 +17,7 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants {
     public static class LEDs {
         public final static int ledPort = 9; // Port for LED, Make sure it is PWM not DIO
-        public final static ILEDPreset defaultLED = LEDPreset.Solid.kGold;// Default Colour
+        public final static ILEDPreset defaultLED = LEDPreset.Solid.kRed;// Default Colour
     }
 
     public static class Servo {
@@ -42,8 +42,8 @@ public final class Constants {
 
     public static final class Vision {
 
-        public static final double rightOffset = 0.18828740684869218; // in meters
-        public static final double leftOffset = -0.1345; // in meters
+        public static final double rightOffset = 0.15428740684869218; // in meters
+        public static final double leftOffset = -0.1655; // in meters
         public static final double noOffset = 0; // in meters
 
     }
@@ -56,8 +56,6 @@ public final class Constants {
 
     public static class elevatorConstants {
         // elevator values
-        public static final double elevatorSpeed = 0.5;
-        public static final double elevatorOff = 0;
         public static final double elevatorMaxSpeed = 75;
         public static final double elevatorMaxAccel = 75;
         public static final double zeroPosition = 0;
@@ -86,7 +84,8 @@ public final class Constants {
         // one rotation equals 1.4765 cm
 
         // position constants for the different levels to score in rotations
-        public static final double rootPosition = 0;
+        public static final double rootPosition = -10;
+        public static final double rootAutoPosition = 0;
         public static final double L1Position = 15.212;
         public static final double L2Position = 18.0802 - 1;
         public static final double Algae1 = 5.97514;
@@ -104,10 +103,12 @@ public final class Constants {
         public static final int servoChannel = 0;
 
         public static double intakeSpeed = -0.1;
-        public static double outtakeSpeed = -0.1;
+        public static double outtakeSpeed = -0.15;
+        public static double outtakeAutoSpeed = -0.10;
+
         public static double L1Speed = -0.35;
-        public static double plopSpeed = -0.05;
-        public static double rampSpeed = -0.05;
+        public static double plopSpeed = -0.1;
+        public static double rampSpeed = 0.1;
 
         // public static double servoRotate = 0.5;
         // public static double servoReset = -0.5;
@@ -248,15 +249,15 @@ public final class Constants {
         public static final int climbMotorID = 7;
 
         // Placeholder value
-        public static final double endPosition = -18; // climb command end
+        public static final double endPosition = -45; // climb command end
         public static final double startPosition = -6.00;
 
         // ALSO Placeholder value
-        public static final double extendoPosition = 35; // out encoder
+        public static final double extendoPosition = 55; // out encoder
         // public static final double liftoffPos = 180.0;
 
         // EVEN MORE Placeholder values
-        public static final double climbSpeed = -0.5;
+        public static final double climbSpeed = -0.7;
         // public static final double cancelSpeed = -0.4;
         public static final double extendoSpeed = 0.4;
 

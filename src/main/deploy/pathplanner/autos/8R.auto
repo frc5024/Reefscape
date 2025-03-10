@@ -21,7 +21,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "DriveLeftTag6"
+                        "name": "DriveRightTag8"
                       }
                     }
                   ]
@@ -40,12 +40,6 @@
           "type": "named",
           "data": {
             "name": "ScoreCoral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorRoot"
           }
         }
       ]

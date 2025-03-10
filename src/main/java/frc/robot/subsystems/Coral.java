@@ -108,19 +108,27 @@ public class Coral extends SubsystemBase {
         return new PlopCommand(this);
     }
 
+    public Command forcedOuttakeCommand() {
+        return new PlopCommand(this);
+    }
+
     public Command intakeCommand() {
         return new IntakeCommand(this);
     }
 
     public Command outtakeCommand() {
-        return new OuttakeCommand(this);
+        return new OuttakeCommand(this, false);
+    }
+
+    public Command outtakeAutoCommand() {
+        return new OuttakeCommand(this, true);
     }
 
     public Command cancelIntakeCommand() {
         return new CancelIntakeCommand(this);
     }
 
-    public Command lowerRampCommand() {
+    public Command backwardsMotor() {
         return new LowerRampCommand(this);
     }
 

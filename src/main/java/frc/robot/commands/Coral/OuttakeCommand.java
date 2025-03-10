@@ -12,8 +12,10 @@ public class OuttakeCommand extends Command {
     private Elevator elevatorSubsystem;
     Rumble rumble = new Rumble();
 
+    boolean isAuto = false;
+
     // constructor for OuttakeCommand
-    public OuttakeCommand(Coral coralSubsystem) {
+    public OuttakeCommand(Coral coralSubsystem, boolean isAuto) {
         this.coralSubsystem = coralSubsystem;
 
         addRequirements(coralSubsystem);
@@ -35,7 +37,11 @@ public class OuttakeCommand extends Command {
             cancel();
         }
 
-        coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
+        if (!isAuto)
+            coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
+
+        if (!isAuto)
+            coralSubsystem.set(Constants.coralConstants.outtakeAutoSpeed);
 
         // if (elevatorSubsystem.getElevatorPosition() ==
         // Constants.elevatorConstants.L1position) {

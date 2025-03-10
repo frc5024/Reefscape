@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.leds.LEDPreset;
@@ -20,7 +21,7 @@ public class Climb extends SubsystemBase {
     public static Climb mInstance = null;
 
     private TalonFX climbMotor;
-    private DigitalInput limitSwitch = new DigitalInput(0);
+    private DigitalInput limitSwitch = new DigitalInput(8);
 
     // Shuffleboard
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
@@ -99,6 +100,8 @@ public class Climb extends SubsystemBase {
 
         // SmartDashboard.putBoolean("Over Threshold", overThreshold());
         // SmartDashboard.putNumber("Ultrasonic", measurement);
+
+        SmartDashboard.putBoolean("Climb LimitSwitch", isClimbed());
     }
 
     // public boolean overThreshold() {
@@ -114,24 +117,17 @@ public class Climb extends SubsystemBase {
 
     // Booleans
 
-    public boolean isLimitReached() {
-        return limitSwitch.get();
-    }
-
     public boolean isClimbed() {
         // Returns true if the Encoder detects the motor is at climbed position
-        if (limitSwitch.get() == true) {
-            // if (climbMotor.getPosition().getValueAsDouble() >=
-            // Constants.ClimbConstants.liftoffPos
-            // && !overThreshold()) {
-            // System.out.println("CLIMB FAILED");
-            // LEDs.getInstance().setCommand(LEDPreset.Strobe.kRed).schedule();
-            // } else {
-            // }
-            return true;
-        } else {
-            return false;
-        }
+        // if (climbMotor.getPosition().getValueAsDouble() >=
+        // Constants.ClimbConstants.liftoffPos
+        // && !overThreshold()) {
+        // System.out.println("CLIMB FAILED");
+        // LEDs.getInstance().setCommand(LEDPreset.Strobe.kRed).schedule();
+        // } else {
+        // }
+
+        return !limitSwitch.get();
     }
 
     public boolean isExtendoPosition() {

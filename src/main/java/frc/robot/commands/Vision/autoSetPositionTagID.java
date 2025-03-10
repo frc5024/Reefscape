@@ -38,11 +38,8 @@ public class autoSetPositionTagID extends Command {
     double tagAngle = 0;
     private final double cameraAngle = 29;
 
-    boolean xPos = false;
-    boolean rotationPos = false;
-    boolean zPos = false;
-
     double tag = 0;
+    double tag2 = 0;
     double validTagID;
 
     public autoSetPositionTagID(Limelight limelight, Swerve swerveDrive, double xOffset, double tag) {
@@ -63,37 +60,41 @@ public class autoSetPositionTagID extends Command {
         translationPidController.reset();
         rotationPidController.reset();
 
-        xPos = false;
-        zPos = false;
-        rotationPos = false;
+        limelight.setRotationPos(false);
+        limelight.setXPos(false);
+        limelight.setZPos(false);
+
+        if (tag == 11) {
+            tag2 = 20;
+        }
+        if (tag == 10) {
+            tag2 = 21;
+        }
+        if (tag == 9) {
+            tag2 = 22;
+        }
+        if (tag == 8) {
+            tag2 = 17;
+        }
+        if (tag == 7) {
+            tag2 = 18;
+        }
+        if (tag == 6) {
+            tag2 = 19;
+        }
 
         // lastSeenRotation = 0;
         // lastSeenStrafe = 0;
     }
 
-    // Set<Integer> tag6 = new HashSet<>(
-    // Set.of(6, 19));
-
-    // Set<Integer> tag7 = new HashSet<>(
-    // Set.of(7, 18));
-
-    // Set<Integer> tag8 = new HashSet<>(
-    // Set.of(8, 17));
-
-    // Set<Integer> tag9 = new HashSet<>(
-    // Set.of(9, 22));
-
-    // Set<Integer> tag10 = new HashSet<>(
-    // Set.of(10, 21));
-
-    // Set<Integer> tag11 = new HashSet<>(
-    // Set.of(11, 20));
-
     @Override
     public void execute() {
         int detectedTagID = (int) limelight.getAprilTagID();
 
-        if (tag == detectedTagID) {
+        SmartDashboard.putNumber("Goal Tag Red Side (auto)", tag);
+        SmartDashboard.putNumber("Goal Tag Blue Side (auto)", tag2);
+
+        if (detectedTagID == tag || detectedTagID == tag2) {
             swerveDrive.setFieldRelative(false);
 
             // if (strafePidOutput != 0) {
@@ -131,7 +132,7 @@ public class autoSetPositionTagID extends Command {
         // forward/back
         double xDiff = botPose3D.getX() - xOffset;
 
-        SmartDashboard.putNumber("Tag Yaw", yaw);
+        // SmartDashboard.putNumber("Tag Yaw", yaw);
 
         rotateToTag(yaw);
         translateToTag(zDiff);
@@ -141,58 +142,47 @@ public class autoSetPositionTagID extends Command {
     }
 
     public void rotateToTag(double rotationToTag) {
-        if (Math.abs(rotationToTag) > 2) { // Adjust tolerance as needed
+        if (Math.abs(rotationToTag) > 1.5) { // Adjust tolerance as needed
             rotationPidOutput = rotationPidController.calculate(rotationToTag, 0);
-            rotationPidOutput = rotationPidOutput * 2.2; // Speed multiplier
-            // if (rotationPidOutput > 2)
-            // rotationPidOutput = 2; // check values at certain distance to find good speed
-            // for all below
-            rotationPos = false;
+            rotationPidOutput = rotationPidOutput * 2; // Speed multiplier
+            limelight.setRotationPos(false);
         } else {
             rotationPidOutput = 0;
-            rotationPos = true;
+            limelight.setRotationPos(true);
         }
-        SmartDashboard.putNumber("thetaDiff", rotationToTag);
-        SmartDashboard.putNumber("RotationPid", rotationPidOutput);
     }
 
     public void translateToTag(double zDiff) {
-        if (Math.abs(zDiff) > 0.06) { // In meters
+        if (Math.abs(zDiff) > 0.08) { // In meters
             translationPidOutput = translationPidController.calculate(zDiff, 0);
-            translationPidOutput = translationPidOutput * 1.2; // Speed multiplier
-            // if (translationPidOutput > 2)
-            // translationPidOutput = 2;
-
-            zPos = false;
+            translationPidOutput = translationPidOutput * 2.6; // Speed multiplier (1.2)
+            if (translationPidOutput > 0.3)
+                translationPidOutput = 0.3;
+            limelight.setZPos(false);
         } else {
             translationPidOutput = 0;
-            zPos = true;
+            limelight.setZPos(true);
         }
-        SmartDashboard.putNumber("zDiff", zDiff);
-        // SmartDashboard.putNumber("TranslatPID", translationPidOutput);
     }
 
     public void strafeToTag(double xDiff) {
-        if (Math.abs(xDiff) > 0.035) { // In meters
+        if (Math.abs(xDiff) > 0.025) { // In meters
             strafePidOutput = strafePidController.calculate(xDiff, 0);
-            strafePidOutput = -strafePidOutput * 1.6; // Speed multiplier
-            // if (strafePidOutput > 2)
-            // strafePidOutput = 2;
-            xPos = false;
+            strafePidOutput = -strafePidOutput * 2.3; // Speed multiplier
+            if (strafePidOutput > 0.15)
+                strafePidOutput = 0.15;
+            if (strafePidOutput < -0.15)
+                strafePidOutput = -0.15;
+
+            limelight.setXPos(false);
         } else {
             strafePidOutput = 0;
-            xPos = true;
+            limelight.setXPos(true);
         }
-        SmartDashboard.putNumber("xDiff", xDiff);
-        // SmartDashboard.putNumber("StrafePID", strafePidOutput);
     }
 
     public void setDrive() {
         swerveDrive.setFieldRelative(false);
-
-        SmartDashboard.putBoolean("rotationPos", rotationPos);
-        SmartDashboard.putBoolean("xPos", xPos);
-        SmartDashboard.putBoolean("zPos", zPos);
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
         swerveDrive.visionTranslationalVal(translationPidOutput, true);
@@ -203,7 +193,7 @@ public class autoSetPositionTagID extends Command {
 
     @Override
     public boolean isFinished() {
-        return xPos && zPos && rotationPos; // Stop when aligned
+        return limelight.getXPos() && limelight.getZPos() && limelight.getRotationPos(); // Stop when aligned
     }
 
     @Override
@@ -213,9 +203,11 @@ public class autoSetPositionTagID extends Command {
         swerveDrive.visionStrafeVal(0, false);
         swerveDrive.visionRotationVal(0, false);
 
+        tag = 0;
+        tag2 = 0;
+
         swerveDrive.setFieldRelative(true);
 
         swerveDrive.resetSwerve();
-        // swerveDrive.setPose(Pose2d.kZero);
     }
 }

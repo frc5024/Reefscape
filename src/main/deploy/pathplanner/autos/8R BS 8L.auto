@@ -5,6 +5,37 @@
     "data": {
       "commands": [
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "8R BS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCoral"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorRoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BS 8"
+          }
+        },
+        {
           "type": "race",
           "data": {
             "commands": [
@@ -21,7 +52,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "DriveLeftTag6"
+                        "name": "DriveLeftTag8"
                       }
                     }
                   ]
@@ -52,6 +83,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Strictly Vision",
+  "folder": "Processer",
   "choreoAuto": false
 }

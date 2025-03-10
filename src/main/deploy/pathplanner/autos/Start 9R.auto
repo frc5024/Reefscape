@@ -5,40 +5,46 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "DriveTo9"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "6L TS"
+                  "name": "DriveRightTag9"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.2
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeCoral"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ElevatorRoot"
+                  "name": "L4"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "TS 6"
+            "name": "ScoreCoral"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "To Test",
+  "folder": "Processer",
   "choreoAuto": false
 }

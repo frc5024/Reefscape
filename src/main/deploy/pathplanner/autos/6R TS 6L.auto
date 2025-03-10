@@ -5,6 +5,37 @@
     "data": {
       "commands": [
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "6R TS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCoral"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorRoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TS 6"
+          }
+        },
+        {
           "type": "race",
           "data": {
             "commands": [
@@ -52,6 +83,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Strictly Vision",
+  "folder": "Non Processor",
   "choreoAuto": false
 }

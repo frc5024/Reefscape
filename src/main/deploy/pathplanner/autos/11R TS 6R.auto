@@ -5,6 +5,37 @@
     "data": {
       "commands": [
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "11R TS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCoral"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorRoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TS 6"
+          }
+        },
+        {
           "type": "race",
           "data": {
             "commands": [
@@ -15,13 +46,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "L4"
+                        "name": "DriveRightTag6"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "DriveLeftTag6"
+                        "name": "L4"
                       }
                     }
                   ]
@@ -41,17 +72,11 @@
           "data": {
             "name": "ScoreCoral"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorRoot"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Strictly Vision",
+  "folder": "Non Processor",
   "choreoAuto": false
 }
