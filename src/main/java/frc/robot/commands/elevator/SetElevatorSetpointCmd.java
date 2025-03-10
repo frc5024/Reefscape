@@ -21,6 +21,7 @@ public class SetElevatorSetpointCmd extends Command {
     // once controller button is pressed, "initialize" is called
     @Override
     public void initialize() {
+        elevatorSubsystem.resetPID();
         // sets the setpoint to the position that is assigned to the button
         elevatorSubsystem.setGoal(setpoint);
         elevatorSubsystem.togglePID(true);
@@ -32,7 +33,7 @@ public class SetElevatorSetpointCmd extends Command {
     // "end" is called when the button is no longer being pressed
     @Override
     public void end(boolean interrupted) {
-        elevatorSubsystem.resetPID();
+        // elevatorSubsystem.resetPID();
         // elevatorSubsystem.togglePID(false);
     }
 

@@ -69,7 +69,7 @@ abstract public class RobotContainer {
      */
     protected void configureBindings() {
         ButtonBindings buttonBindings = new ButtonBindings(this.swerveDriveSubsystem,
-                this.coral, this.elevator, this.limelightSubsystem);
+                this.coral, this.elevator, this.climb, this.limelightSubsystem);
 
         CommandXboxController commandXboxController = RobotConstants.TUNING_MODE
                 ? buttonBindings.getTestController()

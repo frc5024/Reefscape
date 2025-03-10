@@ -77,6 +77,8 @@ public class DriveFromBestTagCommand extends Command {
     public void execute() {
         Pose2d robotPose = this.poseProvider.get();
 
+        setGoal();
+
         double xSpeed = this.xController.calculate(robotPose.getX());
         double ySpeed = this.yController.calculate(robotPose.getY());
         double omegaSpeed = this.omegaController.calculate(robotPose.getRotation().getRadians());
@@ -133,20 +135,7 @@ public class DriveFromBestTagCommand extends Command {
     public void initialize() {
         resetPIDControllers();
 
-        Pose2d robotPose2d = this.poseProvider.get();
-        Pose3d robotPose = new Pose3d(robotPose2d.getX(), robotPose2d.getY(), 0.0,
-                new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
-
-        Pose2d goalPose = getBestTagPose(robotPose);
-        if (goalPose == null)
-            goalPose = robotPose2d;
-
-        this.xController.setGoal(goalPose.getX());
-        this.yController.setGoal(goalPose.getY());
-        this.omegaController.setGoal(goalPose.getRotation().getRadians());
-
-        Logger.recordOutput("Commands/Goal Pose", goalPose);
-        Logger.recordOutput("Commands/Active Command", this.getName());
+        setGoal();
     }
 
     /**
@@ -170,5 +159,25 @@ public class DriveFromBestTagCommand extends Command {
         this.xController.reset(robotPose.getX());
         this.yController.reset(robotPose.getY());
         this.omegaController.reset(robotPose.getRotation().getRadians());
+    }
+
+    /**
+     * 
+     */
+    private void setGoal() {
+        Pose2d robotPose2d = this.poseProvider.get();
+        Pose3d robotPose = new Pose3d(robotPose2d.getX(), robotPose2d.getY(), 0.0,
+                new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
+
+        Pose2d goalPose = getBestTagPose(robotPose);
+        if (goalPose == null)
+            goalPose = robotPose2d;
+
+        this.xController.setGoal(goalPose.getX());
+        this.yController.setGoal(goalPose.getY());
+        this.omegaController.setGoal(goalPose.getRotation().getRadians());
+
+        Logger.recordOutput("Commands/Goal Pose", goalPose);
+        Logger.recordOutput("Commands/Active Command", this.getName());
     }
 }

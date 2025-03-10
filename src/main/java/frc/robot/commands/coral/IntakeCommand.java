@@ -34,16 +34,20 @@ public class IntakeCommand extends Command {
     // execute, if button is pressed, startIntake()
     @Override
     public void execute() {
-
+        if (!coralSubsystem.isLineBroken()) {
+            coralSubsystem.set(CoralConstants.intakeSpeed);
+        }
     }
 
     // end, when command ends, set Idle
     @Override
     public void end(boolean interrupted) {
         coralSubsystem.setIdle();
-        s_LEDs.setCommand(LEDPreset.Solid.kRed).schedule();
         if (coralSubsystem.isLineBroken()) {
             rumble.staticRumble(true);
+            s_LEDs.setCommand(LEDPreset.Solid.kLawnGreen).schedule();
+        } else {
+            s_LEDs.setCommand(LEDPreset.Solid.kRed).schedule();
         }
     }
 

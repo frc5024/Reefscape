@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.elevator.SetElevatorSetpointCmd;
 
@@ -69,7 +68,7 @@ public class Elevator extends SubsystemBase {
     private Rumble rumble;
     public boolean zeroRumbled = false;
 
-    public double elevatorMode;
+    public double elevatorMode = ElevatorConstants.L4Position;
     public double elevatorPosition = 0;
 
     private static Elevator mInstance;
@@ -120,7 +119,7 @@ public class Elevator extends SubsystemBase {
         tab.addDouble("encoder value", () -> elevatorMotor.getEncoder().getPosition());
         tab.addDouble("appliedOutput", () -> speed);
         tab.addDouble("goal", () -> PID.getGoal().position);
-        tab.addBoolean("atTarget", () -> targetReached());
+        tab.addBoolean("Elevator AtTarget", () -> targetReached());
 
         // TODO: log voltage anything else you think you need
 
@@ -171,7 +170,6 @@ public class Elevator extends SubsystemBase {
         rumble = Rumble.getInstance();
 
         if (!zeroRumbled && isBottomLimitSwitchBroken()) {
-            rumble.staticRumble(true);
             rumble.staticRumble(false);
             zeroRumbled = true;
         } else if (!isBottomLimitSwitchBroken()) {
@@ -314,31 +312,35 @@ public class Elevator extends SubsystemBase {
     }
 
     public Command goToL1Position() {
-        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.L1Position);
+        return new SetElevatorSetpointCmd(this, ElevatorConstants.L1Position);
     }
 
     public Command goToL2Position() {
-        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.L2Position);
+        return new SetElevatorSetpointCmd(this, ElevatorConstants.L2Position);
     }
 
     public Command goToL3Position() {
-        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.L3Position);
+        return new SetElevatorSetpointCmd(this, ElevatorConstants.L3Position);
     }
 
     public Command goToL4Position() {
-        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.L4Position);
+        return new SetElevatorSetpointCmd(this, ElevatorConstants.L4Position);
     }
 
     public Command goToAlgae1Position() {
-        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.Algae1);
+        return new SetElevatorSetpointCmd(this, ElevatorConstants.Algae1);
     }
 
     public Command goToAlgae2Position() {
-        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.Algae2);
+        return new SetElevatorSetpointCmd(this, ElevatorConstants.Algae2);
     }
 
     public Command bottomElevator() {
-        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.rootPosition);
+        return new SetElevatorSetpointCmd(this, ElevatorConstants.rootPosition);
+    }
+
+    public Command bottomAutoElevator() {
+        return new SetElevatorSetpointCmd(this, ElevatorConstants.rootAutoPosition);
     }
 
     public Command goToModePosition() {

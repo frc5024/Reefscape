@@ -6,9 +6,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.vision.DriveFromBestTagCommand;
-import frc.robot.controls.GameData;
+import frc.robot.commands.vision.GoToSetPositionPerTagCmd;
+import frc.robot.commands.vision.autoSetPositionTagID;
 import frc.robot.modules.gyro.GyroModuleIONavX;
 import frc.robot.modules.swerve.SwerveModuleIOTalonFX;
 import frc.robot.subsystems.Climb;
@@ -66,19 +67,68 @@ public class MantaRaiderRobotContainer extends RobotContainer {
 
     @Override
     public void registerNamedCommands() {
-        NamedCommands.registerCommand("ScoreCoral", new InstantCommand(() -> {
-            this.coralSubsystem.addAction(CoralSubsystem.Action.EJECT);
-        }));
-        NamedCommands.registerCommand("IntakeCoral", new InstantCommand(() -> {
-            this.coralSubsystem.addAction(CoralSubsystem.Action.INTAKE);
-        }));
         NamedCommands.registerCommand("DriveRightTag",
-                new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
-                        this.swerveDriveSubsystem::getPose, false, GameData.getInstance().getGamePieceMode()));
-        NamedCommands.registerCommand("DriveLeftTag",
-                new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
-                        this.swerveDriveSubsystem::getPose, true, GameData.getInstance().getGamePieceMode()));
+                new GoToSetPositionPerTagCmd(limelightSubsystem, this.swerveDriveSubsystem,
+                        FieldConstants.REEF_POLE_RIGHT_OFFSET));
 
+        NamedCommands.registerCommand("DriveLeftTag",
+                new GoToSetPositionPerTagCmd(limelightSubsystem, this.swerveDriveSubsystem,
+                        FieldConstants.REEF_POLE_LEFT_OFFSET));
+
+        NamedCommands.registerCommand("DriveLeftTag11",
+                new autoSetPositionTagID(limelightSubsystem, this.swerveDriveSubsystem,
+                        FieldConstants.REEF_POLE_LEFT_OFFSET, 11));
+
+        NamedCommands.registerCommand("DriveRightTag11",
+                new autoSetPositionTagID(limelightSubsystem, this.swerveDriveSubsystem,
+                        FieldConstants.REEF_POLE_RIGHT_OFFSET, 11));
+
+        NamedCommands.registerCommand("DriveRightTag10",
+                new autoSetPositionTagID(limelightSubsystem, this.swerveDriveSubsystem,
+                        FieldConstants.REEF_POLE_RIGHT_OFFSET, 10));
+
+        NamedCommands.registerCommand("DriveLeftTag10",
+                new autoSetPositionTagID(limelightSubsystem, this.swerveDriveSubsystem,
+                        FieldConstants.REEF_POLE_LEFT_OFFSET, 10));
+
+        NamedCommands.registerCommand("DriveLeftTag9",
+                new autoSetPositionTagID(limelightSubsystem, this.swerveDriveSubsystem,
+                        FieldConstants.REEF_POLE_LEFT_OFFSET, 9));
+
+        NamedCommands.registerCommand("DriveRightTag9",
+                new autoSetPositionTagID(limelightSubsystem, this.swerveDriveSubsystem,
+                        FieldConstants.REEF_POLE_RIGHT_OFFSET, 9));
+
+        NamedCommands.registerCommand("DriveRightTag8",
+                new autoSetPositionTagID(limelightSubsystem, this.swerveDriveSubsystem,
+                        FieldConstants.REEF_POLE_RIGHT_OFFSET, 8));
+
+        NamedCommands.registerCommand("DriveLeftTag8",
+                new autoSetPositionTagID(limelightSubsystem, this.swerveDriveSubsystem,
+                        FieldConstants.REEF_POLE_LEFT_OFFSET, 8));
+
+        NamedCommands.registerCommand("DriveRightTag6",
+                new autoSetPositionTagID(limelightSubsystem, this.swerveDriveSubsystem,
+                        FieldConstants.REEF_POLE_RIGHT_OFFSET, 6));
+
+        NamedCommands.registerCommand("DriveLeftTag6",
+                new autoSetPositionTagID(limelightSubsystem, this.swerveDriveSubsystem,
+                        FieldConstants.REEF_POLE_LEFT_OFFSET, 6));
+
+        NamedCommands.registerCommand("elevatorMode", this.elevator.goToModePosition());
+
+        // Coral
+        NamedCommands.registerCommand("ScoreCoral", this.coral.outtakeAutoCommand());
+        NamedCommands.registerCommand("IntakeCoral", this.coral.intakeCommand());
+
+        // Elevator
+        NamedCommands.registerCommand("L4", this.elevator.goToL4Position());
+        NamedCommands.registerCommand("L3", this.elevator.goToL3Position());
+        NamedCommands.registerCommand("L2", this.elevator.goToL2Position());
+        NamedCommands.registerCommand("L1", this.elevator.goToL1Position());
+        NamedCommands.registerCommand("ElevatorRoot", this.elevator.bottomAutoElevator());
+
+        /* */
         NamedCommands.registerCommand("ElevatorL0", new InstantCommand(() -> {
             this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM);
         }));

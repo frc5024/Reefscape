@@ -61,7 +61,7 @@ public final class Constants {
 
         // Set to true to use FeedForwardCharacterization and
         // WheelRadiusCharacterization auto commands
-        public static final boolean TUNING_MODE = false;
+        public static final boolean TUNING_MODE = true;
 
         // AdvantageKit simulation
         public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
@@ -103,9 +103,11 @@ public final class Constants {
 
         public static double intakeSpeed = -0.1;
         public static double outtakeSpeed = -0.15;
+        public static double outtakeAutoSpeed = -0.10;
+
         public static double L1Speed = -0.35;
-        public static double plopSpeed = -0.05;
-        public static double rampSpeed = -0.05;
+        public static double plopSpeed = -0.1;
+        public static double rampSpeed = 0.1;
 
         // public static double servoRotate = 0.5;
         // public static double servoReset = -0.5;
@@ -143,11 +145,12 @@ public final class Constants {
         // one rotation equals 1.4765 cm
 
         // position constants for the different levels to score in rotations
-        public static final double rootPosition = 0;
+        public static final double rootPosition = -10;
+        public static final double rootAutoPosition = 0;
         public static final double L1Position = 15.212;
-        public static final double L2Position = 18.0802;
+        public static final double L2Position = 18.0802 - 1;
         public static final double Algae1 = 5.97514;
-        public static final double L3Position = 31.37261;
+        public static final double L3Position = 31.37261 - 1.5;
         public static final double Algae2 = 8.37068;
         public static final double L4Position = 49.57406;
 
@@ -207,8 +210,8 @@ public final class Constants {
         public static final double LENGTH_METERS = Units.inchesToMeters(693.0);
         public static final double WIDTH_METERS = Units.inchesToMeters(318.0);
         public static final double REEF_POLE_OFFSET = Units.inchesToMeters(12.94 / 2);
-        public static final double REEF_POLE_RIGHT_OFFSET = 0.142;
-        public static final double REEF_POLE_LEFT_OFFSET = 0.162;
+        public static final double REEF_POLE_RIGHT_OFFSET = 0.15428740684869218;
+        public static final double REEF_POLE_LEFT_OFFSET = 0.1655;
 
         // starting poses for game mode for blue/red alliance station 1, 2, 3
         public static final Pose2d[][] STATION_POSES = new Pose2d[][] {
@@ -535,12 +538,12 @@ public final class Constants {
         public static final Camera ARDUCAM2_CAMERA = new Camera("Arducam_OV9281-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
-                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-30.0));
+                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-10.0));
 
         public static final Camera ARDUCAM1_CAMERA = new Camera("Arducam_OV9281-1",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
-                0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-150.0));
+                0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-170.0));
 
         public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_UC626-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,

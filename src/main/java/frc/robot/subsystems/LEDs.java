@@ -5,10 +5,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDController;
-import frc.robot.Constants;
+import frc.robot.Constants.LEDsConstants;
 import frc.robot.commands.led.FlashLEDs;
-import frc.robot.commands.led.SetLEDS;
-import frc.robot.commands.led.SetLEDSDefault;
+import frc.robot.commands.led.SetLEDs;
+import frc.robot.commands.led.SetLEDsDefault;
 
 public class LEDs extends SubsystemBase {
     // Variables
@@ -25,7 +25,7 @@ public class LEDs extends SubsystemBase {
 
     // Constructor
     private LEDs() {
-        ledController = new LEDController(Constants.LEDsConstants.ledPort);// Sets which motor we are using, currently
+        ledController = new LEDController(LEDsConstants.ledPort);// Sets which motor we are using, currently port 9
     }
 
     // Direct Commands in order to set LEDs to a colour
@@ -37,7 +37,7 @@ public class LEDs extends SubsystemBase {
 
     // Set the LEDs to be Default colour
     public void setDefault() {
-        set(Constants.LEDsConstants.defaultLED);
+        set(LEDsConstants.defaultLED);
     }
 
     // Command Callers
@@ -54,12 +54,12 @@ public class LEDs extends SubsystemBase {
 
     // Set to colour Command
     public Command setCommand(ILEDPreset colour) {
-        return new SetLEDS(this, colour);
+        return new SetLEDs(this, colour);
     }
 
     // Set LEDs to Default Command
     public Command setDefaultCommand() {
-        return new SetLEDSDefault(this);
+        return new SetLEDsDefault(this);
     }
 
     public void setLEDSDefault() {

@@ -25,7 +25,11 @@ public class ClimbCommand extends Command {
          * Only starts climbing if the cage hits the limit switch -- no else in case the
          * cage bounces off the switch
          */
-        climbSubsystem.climbing();
+        if (climbSubsystem.extended && !climbSubsystem.isClimbed()) {
+            climbSubsystem.climbing();
+        } else {
+            climbSubsystem.stopMotor();
+        }
     }
 
     @Override

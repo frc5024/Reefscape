@@ -36,8 +36,8 @@ public class Coral extends SubsystemBase {
     double outtakeSpeed = CoralConstants.outtakeSpeed;
     double plopSpeed = CoralConstants.plopSpeed;
 
-    // double servoRotate = Constants.coralConstants.servoRotate;
-    // double servoReset = Constants.coralConstants.servoReset;
+    // double servoRotate = CoralConstants.servoRotate;
+    // double servoReset = CoralConstants.servoReset;
 
     // shuffleboard tab for coral
     ShuffleboardTab tab = Shuffleboard.getTab("CoralMotors");
@@ -108,19 +108,27 @@ public class Coral extends SubsystemBase {
         return new PlopCommand(this);
     }
 
+    public Command forcedOuttakeCommand() {
+        return new PlopCommand(this);
+    }
+
     public Command intakeCommand() {
         return new IntakeCommand(this);
     }
 
     public Command outtakeCommand() {
-        return new OuttakeCommand(this);
+        return new OuttakeCommand(this, false);
+    }
+
+    public Command outtakeAutoCommand() {
+        return new OuttakeCommand(this, true);
     }
 
     public Command cancelIntakeCommand() {
         return new CancelIntakeCommand(this);
     }
 
-    public Command lowerRampCommand() {
+    public Command backwardsMotor() {
         return new LowerRampCommand(this);
     }
 

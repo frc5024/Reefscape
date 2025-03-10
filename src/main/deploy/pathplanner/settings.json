@@ -3,10 +3,9 @@
   "robotLength": 0.8636,
   "holonomicMode": true,
   "pathFolders": [
-    "DrivePaths",
     "ThreeCoral",
-    "No Vision",
-    "Test Feature"
+    "Test Feature",
+    "DrivePaths"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

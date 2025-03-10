@@ -3,11 +3,11 @@ package frc.robot.commands.led;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDs;
 
-public class SetLEDSDefault extends Command {
+public class SetLEDsDefault extends Command {
     private LEDs leds;
 
     // Constructor, intakes LED Subsystem
-    public SetLEDSDefault(LEDs leds) {
+    public SetLEDsDefault(LEDs leds) {
         this.leds = leds;
     }
 

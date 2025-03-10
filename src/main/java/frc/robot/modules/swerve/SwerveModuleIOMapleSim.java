@@ -13,21 +13,24 @@ import org.ironmaple.simulation.motorsims.SimulatedMotorController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants.MapleSimConstants;
+import frc.robot.Constants.PIDConstants;
 
 /**
  * Physics sim implementation of module IO.
  */
 public class SwerveModuleIOMapleSim implements SwerveModuleIO {
+    private static final double[] DRIVE_PIDs = PIDConstants.getDrivePIDs();
+    private static final double[] TURN_PIDs = PIDConstants.getTurnPIDs();
+
     private final SwerveModuleSimulation moduleSimulation;
     private final SimulatedMotorController.GenericMotorController driveMotor;
     private final SimulatedMotorController.GenericMotorController turnMotor;
 
     private boolean driveClosedLoop = false;
     private boolean turnClosedLoop = false;
-    private final PIDController driveController = new PIDController(MapleSimConstants.driveSimP, 0,
-            MapleSimConstants.driveSimD);
-    private final PIDController turnController = new PIDController(MapleSimConstants.turnSimP, 0,
-            MapleSimConstants.turnSimD);
+    private final PIDController driveController = new PIDController(DRIVE_PIDs[0], DRIVE_PIDs[1], DRIVE_PIDs[2]);
+    private final PIDController turnController = new PIDController(TURN_PIDs[0], TURN_PIDs[1], TURN_PIDs[2]);
+
     private double driveFFVolts = 0.0;
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;
@@ -92,10 +95,19 @@ public class SwerveModuleIOMapleSim implements SwerveModuleIO {
     }
 
     @Override
+    public void resetDrivePID() {
+        this.driveController.setPID(DRIVE_PIDs[0], DRIVE_PIDs[1], DRIVE_PIDs[2]);
+    }
+
+    @Override
+    public void setDrivePID(double kP, double kI, double kD) {
+        this.driveController.setPID(kP, kI, kD);
+    }
+
+    @Override
     public void setDriveSetpoint(double velocityRadPerSec) {
         this.driveClosedLoop = true;
-        this.driveFFVolts = MapleSimConstants.driveSimKs * Math.signum(velocityRadPerSec)
-                + MapleSimConstants.driveSimKv * velocityRadPerSec;
+        this.driveFFVolts = DRIVE_PIDs[3] * Math.signum(velocityRadPerSec) + DRIVE_PIDs[4] * velocityRadPerSec;
         this.driveController.setSetpoint(velocityRadPerSec);
     }
 

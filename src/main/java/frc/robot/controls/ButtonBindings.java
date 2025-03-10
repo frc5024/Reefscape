@@ -7,10 +7,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.commands.elevator.SetElevatorSetpointCmd;
 import frc.robot.commands.vision.GoToSetPositionPerTagCmd;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Limelight;
@@ -31,6 +30,7 @@ public class ButtonBindings {
 
     /* Subsystems */
     Coral coralSubsystem;
+    Climb climbSubsystem;
     Elevator elevatorSubsystem;
     private final SwerveDriveSubsystem swerveDriveSubsystem;
     private final Limelight limelightSubsystem;
@@ -43,10 +43,11 @@ public class ButtonBindings {
      * 
      */
     public ButtonBindings(SwerveDriveSubsystem swerveDriveSubsystem, Coral coralSubsystem, Elevator elevatorSubsystem,
-            Limelight limelightSubsystem) {
+            Climb climbSubsystem, Limelight limelightSubsystem) {
         this.coralSubsystem = coralSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;
         this.swerveDriveSubsystem = swerveDriveSubsystem;
+        this.climbSubsystem = climbSubsystem;
         this.limelightSubsystem = limelightSubsystem;
 
         this.driverController = setDriverBindingsController();
@@ -113,21 +114,20 @@ public class ButtonBindings {
     private CommandXboxController setOperatorBindingsController() {
         CommandXboxController commandXboxController = new CommandXboxController(OPERATOR_PORT);
 
-        commandXboxController.a().whileTrue(this.elevatorSubsystem.bottomElevator());
-        commandXboxController.b().onTrue(coralSubsystem.lowerRampCommand());
-
-        commandXboxController.rightTrigger().onTrue(this.coralSubsystem.lowerRampCommand());
-
         commandXboxController.povLeft()
-                .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, ElevatorConstants.L1Position));
+                .onTrue(elevatorSubsystem.goToL1Position());
         commandXboxController.povDown()
-                .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, ElevatorConstants.L2Position));
+                .onTrue(elevatorSubsystem.goToL2Position());
         commandXboxController.povRight()
-                .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, ElevatorConstants.L3Position));
+                .onTrue(elevatorSubsystem.goToL3Position());
         commandXboxController.povUp()
-                .whileTrue(new SetElevatorSetpointCmd(this.elevatorSubsystem, ElevatorConstants.L4Position));
+                .onTrue(elevatorSubsystem.goToL4Position());
 
-        commandXboxController.start().whileTrue(this.elevatorSubsystem.slowL2());
+        commandXboxController.start().whileTrue(elevatorSubsystem.slowL2());
+        // operator.start().whileTrue(new
+
+        commandXboxController.rightTrigger().whileTrue(this.climbSubsystem.climbCommand());
+        commandXboxController.leftTrigger().whileTrue(this.climbSubsystem.extendingCommand());
 
         return commandXboxController;
     }
