@@ -33,6 +33,9 @@ import frc.robot.utils.LoggedTracer;
 public class VisionSubsystem extends SubsystemBase {
     private final String NAME = "Vision";
 
+    /* Alerts */
+    private final Alert disconnected = new Alert(NAME + " camera disconnected!", Alert.AlertType.kWarning);
+
     /* Modules */
     private List<VisionModuleIO> visionModules = new ArrayList<VisionModuleIO>();
 
@@ -95,6 +98,8 @@ public class VisionSubsystem extends SubsystemBase {
 
             visionModuleIO.updateInputs(inputs);
             Logger.processInputs("Vision/Camera " + name, inputs);
+
+            this.disconnected.set(!inputs.connected);
         }
 
         // Initialize logging values

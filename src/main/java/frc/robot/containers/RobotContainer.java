@@ -5,6 +5,9 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -42,9 +45,18 @@ abstract public class RobotContainer {
     protected SwerveDriveSubsystem swerveDriveSubsystem;
     protected VisionSubsystem visionSubsystem;
 
+    /* Alerts */
+    private final Alert driverDisconnected = new Alert("Driver controller disconnected (port 0).", AlertType.kWarning);
+    private final Alert operatorDisconnected = new Alert("Operator controller disconnected (port 1).",
+            AlertType.kWarning);
+
     /* Autonomous */
     private AutoBuilder autoBuilder;
     private LoggedDashboardChooser<Command> autonomousChooser;
+
+    /* Controllers */
+    CommandXboxController driverController;
+    CommandXboxController operatorController;
 
     boolean visionMode = false;
     String mode;
@@ -74,6 +86,9 @@ abstract public class RobotContainer {
         CommandXboxController commandXboxController = RobotConstants.TUNING_MODE
                 ? buttonBindings.getTestController()
                 : buttonBindings.getDriverController();
+
+        this.driverController = commandXboxController;
+        this.operatorController = buttonBindings.getOperatorController();
 
         // Drive suppliers
         DoubleSupplier controllerX = () -> -commandXboxController.getLeftY();
@@ -114,6 +129,15 @@ abstract public class RobotContainer {
      */
     public void resetDrivePID() {
         this.swerveDriveSubsystem.resetDrivePID();
+    }
+
+    /**
+     * 
+     */
+    public void updateAlerts() {
+        // Controller disconnected alerts
+        this.driverDisconnected.set(!DriverStation.isJoystickConnected(this.driverController.getHID().getPort()));
+        this.operatorDisconnected.set(!DriverStation.isJoystickConnected(this.operatorController.getHID().getPort()));
     }
 
     /**

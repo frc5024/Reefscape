@@ -84,6 +84,9 @@ public class MapleSimRobotContainer extends RobotContainer {
                 ? buttonBindings.getTestController()
                 : buttonBindings.getDriverController();
 
+        this.driverController = commandXboxController;
+        this.operatorController = buttonBindings.getOperatorController();
+
         // Drive suppliers
         DoubleSupplier controllerX = () -> -commandXboxController.getLeftY();
         DoubleSupplier controllerY = () -> -commandXboxController.getLeftX();

@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.statemachine.StateMachine;
@@ -18,6 +19,9 @@ import frc.robot.utils.LoggedTracer;
  */
 public class AlgaeSubsystem extends SubsystemBase {
     private final String NAME = "Algae";
+
+    /* Alerts */
+    private final Alert disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
     public static enum Action {
         STOP, EJECT, INTAKE
@@ -136,6 +140,8 @@ public class AlgaeSubsystem extends SubsystemBase {
 
         this.algaeModuleIO.updateInputs(this.inputs);
         Logger.processInputs(this.NAME, this.inputs);
+
+        this.disconnected.set(!this.inputs.data.connected());
 
         // actions run for no longer than 3 seconds
         if (this.stateTimer.isRunning() && this.stateTimer.hasElapsed(3)) {

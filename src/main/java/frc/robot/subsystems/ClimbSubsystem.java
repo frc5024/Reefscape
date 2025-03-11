@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,6 +17,9 @@ import frc.robot.utils.LoggedTracer;
  */
 public class ClimbSubsystem extends SubsystemBase {
     private final String NAME = "Climb";
+
+    /* Alerts */
+    private final Alert disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
     private final ClimbModuleIO climbModuleIO;
     protected final ClimbModuleIOInputsAutoLogged inputs;
@@ -35,6 +39,8 @@ public class ClimbSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         this.climbModuleIO.updateInputs(this.inputs);
+
+        this.disconnected.set(!this.inputs.data.connected());
 
         Logger.processInputs(this.NAME, this.inputs);
 

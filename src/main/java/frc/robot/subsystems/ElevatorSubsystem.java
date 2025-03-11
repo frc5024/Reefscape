@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.ExponentialProfile;
 import edu.wpi.first.math.trajectory.ExponentialProfile.Constraints;
 import edu.wpi.first.math.trajectory.ExponentialProfile.State;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.statemachine.StateMachine;
@@ -29,6 +30,9 @@ import frc.robot.utils.LoggedTracer;
  */
 public class ElevatorSubsystem extends SubsystemBase {
     private final String NAME = "Elevator";
+
+    /* Alerts */
+    private final Alert disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
     public static enum Action {
         STOP, MOVE_TO_BOTTOM, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1, MOVE_TO_CORAL_2,
@@ -243,6 +247,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         this.elevatorModule.updateInputs(this.inputs);
         Logger.processInputs(this.NAME, this.inputs);
+
+        this.disconnected.set(!this.inputs.data.connected());
 
         State goalState = new State(MathUtil.clamp(this.goal.get().position, 0.0, ElevatorConstants.HEIGHT_IN_METERS),
                 this.goal.get().velocity);
