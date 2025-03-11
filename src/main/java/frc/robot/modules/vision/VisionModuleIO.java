@@ -17,6 +17,7 @@ public interface VisionModuleIO {
         public PoseObservation[] poseObservations = new PoseObservation[0];
         public int[] tagIds = new int[0];
         public int bestTargetId = 0;
+        public boolean hasTarget = false;
         public Pose3d bestTargetPose = new Pose3d();
     }
 

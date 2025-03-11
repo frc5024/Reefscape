@@ -50,9 +50,9 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     private final TalonFXConfiguration turnConfig;
 
     // Voltage control requests
-    private final VoltageOut driveVoltage = new VoltageOut(0.0).withEnableFOC(true);
-    private final VoltageOut turnVoltage = new VoltageOut(0.0).withEnableFOC(true);
-    private final MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0.0).withEnableFOC(true);
+    private final VoltageOut driveVoltage = new VoltageOut(0.0).withEnableFOC(false);
+    private final VoltageOut turnVoltage = new VoltageOut(0.0).withEnableFOC(false);
+    private final MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0.0).withEnableFOC(false);
     private final MotionMagicVelocityVoltage motionMagicVelocityVoltage = new MotionMagicVelocityVoltage(0.0);
 
     // Torque-current control requests
@@ -211,17 +211,15 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     @Override
     public void resetDrivePID() {
         double[] drivePIDs = PIDConstants.getDrivePIDs();
-        this.driveTalon.getConfigurator()
-                .refresh(new Slot0Configs().withKP(drivePIDs[0]).withKI(drivePIDs[1]).withKD(drivePIDs[2]));
+        tryUntilOk(5, () -> this.driveTalon.getConfigurator()
+                .refresh(new Slot0Configs().withKP(drivePIDs[0]).withKI(drivePIDs[1]).withKD(drivePIDs[2])));
     }
 
     @Override
     public void setDrivePID(double kP, double kI, double kD) {
-        Slot0Configs slot0Configs = new Slot0Configs();
-        slot0Configs.kP = kP;
-        slot0Configs.kI = kI;
-        slot0Configs.kD = kD;
-        this.driveTalon.getConfigurator().refresh(slot0Configs);
+        System.out.println("****** REFRESHING PID SLOT 0 kP: " + kP);
+        tryUntilOk(5,
+                () -> this.driveTalon.getConfigurator().refresh(new Slot0Configs().withKP(kP).withKI(kI).withKD(kD)));
     }
 
     @Override
@@ -237,11 +235,9 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
 
     @Override
     public void setTurnPID(double kP, double kI, double kD) {
-        Slot0Configs slot0Configs = new Slot0Configs();
-        slot0Configs.kP = kP;
-        slot0Configs.kI = kI;
-        slot0Configs.kD = kD;
-        this.turnTalon.getConfigurator().refresh(slot0Configs);
+        tryUntilOk(5, () -> this.turnTalon.getConfigurator()
+                .refresh(new Slot0Configs().withKP(kP).withKI(kI).withKD(kD)));
+
     }
 
     @Override

@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -244,8 +245,9 @@ public class TuningCommand extends Command {
 
             handleAutonomousDriving();
         } else if (this.driveByVelocities.get()) {
-            this.swerveDriveSubsystem.drive(this.vxMPS.get(), this.vyMPS.get(), this.omRPS.get(),
-                    new Rotation2d(this.angle.get()), false);
+            ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(this.vxMPS.get(), this.vyMPS.get(),
+                    this.omRPS.get(), new Rotation2d(this.angle.get()));
+            this.swerveDriveSubsystem.drive(chassisSpeeds);
         } else if (this.driveBackAndForth.get() || this.driveSideToSide.get() || this.alternateRotation.get()) {
             if (this.firstCall) {
                 Pose2d pose2d = this.swerveDriveSubsystem.getPose();

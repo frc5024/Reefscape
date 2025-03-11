@@ -84,6 +84,7 @@ public class VisionModuleIOPhotonVision implements VisionModuleIO {
             // Update latest target observation
             if (result.hasTargets()) {
                 inputs.bestTargetId = result.getBestTarget().getFiducialId();
+                inputs.hasTarget = true;
                 inputs.bestTargetPose = VisionConstants.TAG_FIELD_LAYOUT
                         .getTagPose(result.getBestTarget().getFiducialId()).get();
 
@@ -91,6 +92,8 @@ public class VisionModuleIOPhotonVision implements VisionModuleIO {
                         Rotation2d.fromDegrees(result.getBestTarget().getYaw()),
                         Rotation2d.fromDegrees(result.getBestTarget().getPitch()));
             } else {
+                inputs.bestTargetId = -1;
+                inputs.hasTarget = false;
                 inputs.latestTargetObservation = new TargetObservation(new Rotation2d(), new Rotation2d());
             }
 

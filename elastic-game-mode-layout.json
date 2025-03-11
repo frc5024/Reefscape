@@ -72,9 +72,9 @@
         "containers": [
           {
             "title": "Alerts",
-            "x": 640.0,
+            "x": 1408.0,
             "y": 0.0,
-            "width": 384.0,
+            "width": 512.0,
             "height": 512.0,
             "type": "Alerts",
             "properties": {
@@ -84,10 +84,10 @@
           },
           {
             "title": "Reef Position",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 128.0,
+            "x": 768.0,
+            "y": 256.0,
+            "width": 384.0,
+            "height": 256.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/GameData/Reef Position",
@@ -97,7 +97,7 @@
           },
           {
             "title": "Match Time",
-            "x": 256.0,
+            "x": 768.0,
             "y": 0.0,
             "width": 384.0,
             "height": 256.0,
@@ -109,6 +109,66 @@
               "time_display_mode": "Minutes and Seconds",
               "red_start_time": 15,
               "yellow_start_time": 30
+            }
+          },
+          {
+            "title": "BestTargetId",
+            "x": 512.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/Camera Arducam_UC626-2/BestTargetId",
+              "period": 0.06,
+              "data_type": "int"
+            }
+          },
+          {
+            "title": "BestTargetId",
+            "x": 1152.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/Camera limelight-two/BestTargetId",
+              "period": 0.06,
+              "data_type": "int"
+            }
+          },
+          {
+            "title": "HasTarget",
+            "x": 1152.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/Camera limelight-two/HasTarget",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "HasTarget",
+            "x": 512.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/Camera Arducam_UC626-2/HasTarget",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           }
         ]
