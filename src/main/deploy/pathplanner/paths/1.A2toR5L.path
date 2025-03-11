@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.669,
-        "y": 7.402
+        "x": 7.126903553299492,
+        "y": 1.9047461928934013
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3037544328531605,
-        "y": 6.1999604809448154
+        "x": 6.617491819696393,
+        "y": 2.052044625876102
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.184786184210526,
-        "y": 4.2944078947368425
+        "x": 4.9621065989847715,
+        "y": 2.768883248730964
       },
       "prevControl": {
-        "x": 2.9880840405846194,
-        "y": 4.448707171121968
+        "x": 5.1428013024480865,
+        "y": 2.5961133898426016
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,13 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ElevatorL2",
-      "waypointRelativePos": 0.6590909090909125,
+      "name": "ElevatorL4",
+      "waypointRelativePos": 0.4221556886227563,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "ElevatorL2"
+          "name": "ElevatorL4"
         }
       }
     }
@@ -54,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "ThreeCoral",
+  "folder": "ThreeCoralRight",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -53.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

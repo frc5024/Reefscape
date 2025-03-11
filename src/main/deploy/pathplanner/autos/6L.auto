@@ -52,6 +52,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Strictly Vision",
+  "folder": null,
   "choreoAuto": false
 }

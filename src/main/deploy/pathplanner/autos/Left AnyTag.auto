@@ -52,6 +52,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Teleop",
+  "folder": null,
   "choreoAuto": false
 }

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.675,
-        "y": 5.088
+        "x": 1.669,
+        "y": 7.402
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.640260341322638,
-        "y": 6.255123803517853
+        "x": 2.3037544328531605,
+        "y": 6.1999604809448154
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.6693667763157893,
-        "y": 7.402
+        "x": 3.184786184210526,
+        "y": 4.2944078947368425
       },
       "prevControl": {
-        "x": 2.4028153704371906,
-        "y": 6.55067464543027
+        "x": 2.9880840405846194,
+        "y": 4.448707171121968
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,13 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ElevatorL0",
-      "waypointRelativePos": 0.0673652694610778,
+      "name": "ElevatorL2",
+      "waypointRelativePos": 0.6590909090909125,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "ElevatorL0"
+          "name": "ElevatorL2"
         }
       }
     }
@@ -54,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "ThreeCoralLeft",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -61.0
+    "rotation": -53.0
   },
   "useDefaultConstraints": true
 }

@@ -61,7 +61,7 @@ public final class Constants {
 
         // Set to true to use FeedForwardCharacterization and
         // WheelRadiusCharacterization auto commands
-        public static final boolean TUNING_MODE = true;
+        public static final boolean TUNING_MODE = false;
 
         // AdvantageKit simulation
         public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
@@ -219,7 +219,7 @@ public final class Constants {
                         // new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
                         new Pose2d(7.153, 7.272, Rotation2d.fromDegrees(180.0)),
                         new Pose2d(7.153, 6.169, Rotation2d.fromDegrees(180.0)),
-                        new Pose2d(7.153, 5.074, Rotation2d.fromDegrees(180.0))
+                        new Pose2d(7.127, 1.905, Rotation2d.fromDegrees(180.0))
                 },
                 {
                         // new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
@@ -340,7 +340,7 @@ public final class Constants {
         public static final double SWERVE_MODULE_DRIVE_KD = 0.0;
 
         public static final double SWERVE_MODULE_DRIVE_KS = 0.0;
-        public static final double SWERVE_MODULE_DRIVE_KV = 0.124;
+        public static final double SWERVE_MODULE_DRIVE_KV = 0.0;
         public static final double SWERVE_MODULE_DRIVE_KA = 0.0;
 
         public static final double SWERVE_MODULE_TURN_KP = 400.0;
@@ -507,7 +507,7 @@ public final class Constants {
      */
     public static final class TeleopConstants {
         public static final double JOYSTICK_AXIS_MODIFIER = 1.0;
-        public static final double DEADBAND = 0.1;
+        public static final double DEADBAND = 0.15;
 
         public static final double X_RATE_LIMIT = 6.0;
         public static final double Y_RATE_LIMIT = 6.0;
@@ -535,45 +535,37 @@ public final class Constants {
          * TODO: set camera names and positions - pitch is based on degress from
          * vertical
          */
-        public static final Camera ARDUCAM2_CAMERA = new Camera("Arducam_OV9281-2",
-                Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
-                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-10.0));
-
-        public static final Camera ARDUCAM1_CAMERA = new Camera("Arducam_OV9281-1",
-                Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
-                0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-170.0));
-
-        public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_UC626-2",
-                Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
-                0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-150.0));
-
-        public static final Camera GAME_PIECE_CAMERA = new Camera("WebCam",
-                Camera.Type.COLOURED_SHAPE, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(0.0), 0.0, Units.inchesToMeters(0.0),
-                0.0, Units.degreesToRadians(0), 0.0);
-
         public static final Camera LIMELIGHT3G_CAMERA = new Camera("limelight",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
                 Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
                 0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-30.0));
 
-        public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight-two",
-                Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
-                Units.inchesToMeters(10.0), Units.inchesToMeters(7.0), Units.inchesToMeters(9.5),
-                0.0, Units.degreesToRadians(18.0), Units.degreesToRadians(-30.0));
+        public static final Camera ARDUCAM1_CAMERA = new Camera("Arducam_OV9281-1",
+                Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
+                Units.inchesToMeters(11.0), Units.inchesToMeters(11.0), Units.inchesToMeters(9.25),
+                0.0, Units.degreesToRadians(20), Units.degreesToRadians(20.0));
+
+        public static final Camera ARDUCAM2_CAMERA = new Camera("Arducam_OV9281-2",
+                Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
+                Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
+                0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-170.0));
+
+        public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_OV9281-3",
+                Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
+                Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
+                0.0, Units.degreesToRadians(20), Units.degreesToRadians(-20.0));
 
         /**
          * TODO: set list of enabled camera
          */
-        public static final List<Camera> MANTARAIDER_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
-        public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM2_CAMERA, ARDUCAM1_CAMERA);
+        public static final List<Camera> MANTARAIDER_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM1_CAMERA);
+        public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM3_CAMERA, ARDUCAM1_CAMERA,
+                ARDUCAM2_CAMERA);
         public static final List<Camera> NO_CAMERAS = new ArrayList<>();
         public static final List<Camera> CAMERAS = SIMULATION_CAMERAS;
-        public static final Camera FRONT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
-        public static final Camera REAR_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
+        public static final Camera FRONT_RIGHT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
+        public static final Camera FRONT_LEFT_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
+        public static final Camera REAR_CAMERA = CAMERAS.size() > 2 ? CAMERAS.get(2) : null;
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;
