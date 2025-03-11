@@ -28,8 +28,14 @@ import frc.robot.modules.vision.VisionModuleIO.PoseObservationType;
 import frc.robot.modules.vision.VisionModuleIOLimelight;
 import frc.robot.modules.vision.VisionModuleIOPhotonVision;
 import frc.robot.modules.vision.VisionModuleIOPhotonVisionSim;
+import frc.robot.utils.LoggedTracer;
 
 public class VisionSubsystem extends SubsystemBase {
+    private final String NAME = "Vision";
+
+    /* Alerts */
+    private final Alert disconnected = new Alert(NAME + " camera disconnected!", Alert.AlertType.kWarning);
+
     /* Modules */
     private List<VisionModuleIO> visionModules = new ArrayList<VisionModuleIO>();
 
@@ -89,6 +95,8 @@ public class VisionSubsystem extends SubsystemBase {
         for (VisionModuleIO visionModuleIO : this.visionModules) {
             String name = visionModuleIO.getName();
             VisionIOInputsAutoLogged inputs = this.inputs.get(name);
+
+            this.disconnected.set(!inputs.connected);
 
             visionModuleIO.updateInputs(inputs);
             Logger.processInputs("Vision/Camera " + name, inputs);
@@ -187,6 +195,9 @@ public class VisionSubsystem extends SubsystemBase {
             this.allRobotPoses.addAll(robotPoses);
             this.allRobotPosesAccepted.addAll(robotPosesAccepted);
             this.allRobotPosesRejected.addAll(robotPosesRejected);
+
+            // Record cycle time
+            LoggedTracer.record(this.NAME);
 
             cameraIndex++;
         }

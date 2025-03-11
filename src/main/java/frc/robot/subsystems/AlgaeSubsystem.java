@@ -12,13 +12,16 @@ import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMetadata;
 import frc.robot.modules.algae.AlgaeIntakeIOInputsAutoLogged;
 import frc.robot.modules.algae.AlgaeModuleIO;
+import frc.robot.utils.LoggedTracer;
 
 /**
  * 
  */
 public class AlgaeSubsystem extends SubsystemBase {
-    private final String NAME = "AlgaeIntake";
-    private final Alert disconnected;
+    private final String NAME = "Algae";
+
+    /* Alerts */
+    private final Alert disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
     public static enum Action {
         STOP, EJECT, INTAKE
@@ -37,7 +40,6 @@ public class AlgaeSubsystem extends SubsystemBase {
     public AlgaeSubsystem(AlgaeModuleIO algaeModuleIO) {
         this.algaeModuleIO = algaeModuleIO;
         this.inputs = new AlgaeIntakeIOInputsAutoLogged();
-        this.disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
         // Sets states for the arm, and what methods.
         this.stateMachine = new StateMachine<>(NAME);
@@ -163,6 +165,9 @@ public class AlgaeSubsystem extends SubsystemBase {
 
         Logger.recordOutput("Subsystems/" + this.NAME + "/Current State", this.stateMachine.getCurrentState());
         Logger.recordOutput("Subsystems/" + this.NAME + "/Has Algae", hasAlgae());
+
+        // Record cycle time
+        LoggedTracer.record(this.NAME);
     }
 
     /**

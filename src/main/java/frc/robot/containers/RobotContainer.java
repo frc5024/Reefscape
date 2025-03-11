@@ -5,6 +5,9 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -35,9 +38,18 @@ abstract public class RobotContainer {
     protected SwerveDriveSubsystem swerveDriveSubsystem;
     protected VisionSubsystem visionSubsystem;
 
+    /* Alerts */
+    private final Alert driverDisconnected = new Alert("Driver controller disconnected (port 0).", AlertType.kWarning);
+    private final Alert operatorDisconnected = new Alert("Operator controller disconnected (port 1).",
+            AlertType.kWarning);
+
     /* Autonomous */
     AutoBuilder autoBuilder;
     LoggedDashboardChooser<Command> autonomousChooser;
+
+    /* Controllers */
+    CommandXboxController driverController;
+    CommandXboxController operatorController;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -71,6 +83,9 @@ abstract public class RobotContainer {
         CommandXboxController commandXboxController = RobotConstants.TUNING_MODE
                 ? buttonBindings.getTestController()
                 : buttonBindings.getDriverController();
+
+        this.driverController = commandXboxController;
+        this.operatorController = buttonBindings.getOperatorController();
 
         // Drive suppliers
         DoubleSupplier controllerX = () -> -commandXboxController.getLeftY();
@@ -119,6 +134,15 @@ abstract public class RobotContainer {
     }
 
     abstract public void registerNamedCommands();
+
+    /**
+     * 
+     */
+    public void updateAlerts() {
+        // Controller disconnected alerts
+        this.driverDisconnected.set(!DriverStation.isJoystickConnected(this.driverController.getHID().getPort()));
+        this.operatorDisconnected.set(!DriverStation.isJoystickConnected(this.operatorController.getHID().getPort()));
+    }
 
     /**
      * Maple Sim Routines

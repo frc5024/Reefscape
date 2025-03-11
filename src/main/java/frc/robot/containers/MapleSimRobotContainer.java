@@ -59,7 +59,6 @@ public class MapleSimRobotContainer extends RobotContainer {
 
         // Initiate the LEDSubsystem
         LEDSubsystem.getInstance();
-
     }
 
     /**

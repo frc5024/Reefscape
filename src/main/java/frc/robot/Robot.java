@@ -14,14 +14,16 @@ import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.MechanismConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.containers.BealtovenRobotContainer;
 import frc.robot.containers.MapleSimRobotContainer;
 import frc.robot.containers.RobotContainer;
 import frc.robot.controls.GameData;
+import frc.robot.utils.LoggedTracer;
+import frc.robot.utils.PhoenixUtil;
 
 /**
  * The methods in this class are called automatically corresponding to each
@@ -123,19 +125,19 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotPeriodic() {
-        if (gcTimer.advanceIfElapsed(5)) {
-            System.gc();
-        }
-        // Runs the Scheduler. This is responsible for polling buttons, adding
-        // newly-scheduled
-        // commands, running already-scheduled commands, removing finished or
-        // interrupted commands,
-        // and running subsystem periodic() methods. This must be called from the
-        // robot's periodic
-        // block in order for anything in the Command-based framework to work.
-        CommandScheduler.getInstance().run();
+        // Refresh all Phoenix signals
+        LoggedTracer.reset();
+        PhoenixUtil.refreshAll();
+        LoggedTracer.record("PhoenixRefresh");
 
-        Logger.recordOutput("Mechanisms/Pose2d", MechanismConstants.CANVAS);
+        CommandScheduler.getInstance().run();
+        LoggedTracer.record("Commands");
+
+        this.robotContainer.updateAlerts();
+        SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+
+        // Record cycle time
+        LoggedTracer.record("RobotPeriodic");
     }
 
     /** This function is called once each time the robot enters Disabled mode. */

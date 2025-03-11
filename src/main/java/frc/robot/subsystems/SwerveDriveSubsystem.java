@@ -46,6 +46,11 @@ import frc.robot.utils.PhoenixOdometryThread;
  */
 public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsystem.VisionConsumer {
     private final String NAME = "SwerveDrive";
+
+    /* Alerts */
+    private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.",
+            AlertType.kError);
+
     public static final Lock odometryLock = new ReentrantLock();
 
     private final GyroModuleIO gyroIO;
@@ -53,9 +58,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
     private final SwerveModule[] swerveModules = new SwerveModule[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
-
-    private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.",
-            AlertType.kError);
 
     private Rotation2d rawGyroRotation = new Rotation2d();
     private SwerveModulePosition[] lastModulePositions = // For delta tracking

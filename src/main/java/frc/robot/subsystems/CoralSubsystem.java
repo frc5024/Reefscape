@@ -12,13 +12,16 @@ import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMetadata;
 import frc.robot.modules.coral.CoralIntakeIOInputsAutoLogged;
 import frc.robot.modules.coral.CoralModuleIO;
+import frc.robot.utils.LoggedTracer;
 
 /**
  * 
  */
 public class CoralSubsystem extends SubsystemBase {
-    private final String NAME = "CoralIntake";
-    private final Alert disconnected;
+    private final String NAME = "Coral";
+
+    /* Alerts */
+    private final Alert disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
     public static enum Action {
         STOP, EJECT, INTAKE
@@ -37,7 +40,6 @@ public class CoralSubsystem extends SubsystemBase {
     public CoralSubsystem(CoralModuleIO coralModuleIO) {
         this.coralModuleIO = coralModuleIO;
         this.inputs = new CoralIntakeIOInputsAutoLogged();
-        this.disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
         // Sets states for the arm, and what methods.
         this.stateMachine = new StateMachine<>(NAME);
@@ -163,6 +165,9 @@ public class CoralSubsystem extends SubsystemBase {
 
         Logger.recordOutput("Subsystems/" + this.NAME + "/Current State", this.stateMachine.getCurrentState());
         Logger.recordOutput("Subsystems/" + this.NAME + "/Has Coral", this.hasCoral());
+
+        // Record cycle time
+        LoggedTracer.record(this.NAME);
     }
 
     /**

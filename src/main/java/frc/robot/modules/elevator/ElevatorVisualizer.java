@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ElevatorConstants.ElevatorLevel;
+import frc.robot.Constants.MechanismConstants;
 import frc.robot.utils.MapleSimUtil;
 
 /**
@@ -60,6 +61,7 @@ public class ElevatorVisualizer {
         double[] heights = this.elevatorMechanism.getShaftLengths();
         double elevatorAngleInRadians = ElevatorConstants.ANGLE.getRadians();
 
+        Logger.recordOutput("Mechanism2d", MechanismConstants.CANVAS);
         Logger.recordOutput("Mechanism3d/" + name,
                 new Pose3d[] {
                         new Pose3d(), // outer frame

@@ -22,13 +22,16 @@ import frc.robot.modules.elevator.ElevatorIOInputsAutoLogged;
 import frc.robot.modules.elevator.ElevatorModuleIO;
 import frc.robot.modules.elevator.ElevatorVisualizer;
 import frc.robot.utils.EqualsUtil;
+import frc.robot.utils.LoggedTracer;
 
 /**
  * 
  */
 public class ElevatorSubsystem extends SubsystemBase {
     private final String NAME = "Elevator";
-    private final Alert disconnected;
+
+    /* Alerts */
+    private final Alert disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
     public static enum Action {
         STOP, MOVE_TO_BOTTOM, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1, MOVE_TO_CORAL_2,
@@ -63,7 +66,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.hasCoralSupplier = hasCoralSupplier;
 
         this.inputs = new ElevatorIOInputsAutoLogged();
-        this.disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
         // Sets states for the arm, and what methods.
         this.stateMachine = new StateMachine<>(NAME);
@@ -273,6 +275,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         Logger.recordOutput("Subsystems/" + this.NAME + "/SetpointVelocityMetersPerSec", setpoint.velocity);
         Logger.recordOutput("Subsystems/" + this.NAME + "/GoalPositionMeters", goalState.position);
         Logger.recordOutput("Subsystems/" + this.NAME + "/GoalVelocityMetersPerSec", goalState.velocity);
+
+        // Record cycle time
+        LoggedTracer.record(this.NAME);
     }
 
     public double getPositionMeters() {
