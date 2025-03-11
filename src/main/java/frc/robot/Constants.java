@@ -449,7 +449,7 @@ public final class Constants {
         public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_UC626-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(10.0), Units.inchesToMeters(7.25), Units.inchesToMeters(8.5),
-                0.0, Units.degreesToRadians(20), Units.degreesToRadians(-150.0));
+                0.0, Units.degreesToRadians(20), Units.degreesToRadians(-30.0));
 
         public static final Camera GAME_PIECE_CAMERA = new Camera("WebCam",
                 Camera.Type.COLOURED_SHAPE, Camera.Processor.PHOTONVISION, 0,
@@ -473,7 +473,7 @@ public final class Constants {
         public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM3_CAMERA);
         public static final List<Camera> REEFSCAPE_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
         public static final List<Camera> NO_CAMERAS = new ArrayList<>();
-        public static final List<Camera> CAMERAS = NO_CAMERAS;
+        public static final List<Camera> CAMERAS = BEALTOVEN_CAMERAS;
 
         public static final Camera FRONT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
         public static final Camera REAR_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
