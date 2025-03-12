@@ -9,7 +9,7 @@
         "containers": [
           {
             "title": "Auto Routine",
-            "x": 0.0,
+            "x": 128.0,
             "y": 0.0,
             "width": 384.0,
             "height": 128.0,
@@ -21,34 +21,10 @@
             }
           },
           {
-            "title": "FMSInfo",
-            "x": 384.0,
-            "y": 0.0,
-            "width": 384.0,
-            "height": 128.0,
-            "type": "FMSInfo",
-            "properties": {
-              "topic": "/FMSInfo",
-              "period": 0.06
-            }
-          },
-          {
-            "title": "Alerts",
-            "x": 768.0,
-            "y": 0.0,
-            "width": 384.0,
-            "height": 512.0,
-            "type": "Alerts",
-            "properties": {
-              "topic": "/SmartDashboard/Alerts",
-              "period": 0.06
-            }
-          },
-          {
             "title": "BatteryVoltage (Volts)",
-            "x": 384.0,
+            "x": 512.0,
             "y": 128.0,
-            "width": 384.0,
+            "width": 512.0,
             "height": 128.0,
             "type": "Voltage View",
             "properties": {
@@ -61,6 +37,30 @@
               "inverted": false,
               "orientation": "horizontal"
             }
+          },
+          {
+            "title": "FMSInfo",
+            "x": 512.0,
+            "y": 0.0,
+            "width": 512.0,
+            "height": 128.0,
+            "type": "FMSInfo",
+            "properties": {
+              "topic": "/FMSInfo",
+              "period": 0.06
+            }
+          },
+          {
+            "title": "Alerts",
+            "x": 1152.0,
+            "y": 0.0,
+            "width": 384.0,
+            "height": 512.0,
+            "type": "Alerts",
+            "properties": {
+              "topic": "/SmartDashboard/Alerts",
+              "period": 0.06
+            }
           }
         ]
       }
@@ -71,33 +71,8 @@
         "layouts": [],
         "containers": [
           {
-            "title": "Alerts",
-            "x": 1408.0,
-            "y": 0.0,
-            "width": 512.0,
-            "height": 512.0,
-            "type": "Alerts",
-            "properties": {
-              "topic": "/SmartDashboard/Alerts",
-              "period": 0.06
-            }
-          },
-          {
-            "title": "Reef Position",
-            "x": 768.0,
-            "y": 256.0,
-            "width": 384.0,
-            "height": 256.0,
-            "type": "Large Text Display",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/GameData/Reef Position",
-              "period": 0.06,
-              "data_type": "string"
-            }
-          },
-          {
             "title": "Match Time",
-            "x": 768.0,
+            "x": 512.0,
             "y": 0.0,
             "width": 384.0,
             "height": 256.0,
@@ -112,40 +87,39 @@
             }
           },
           {
-            "title": "BestTargetId",
+            "title": "Alerts",
+            "x": 1152.0,
+            "y": 0.0,
+            "width": 384.0,
+            "height": 512.0,
+            "type": "Alerts",
+            "properties": {
+              "topic": "/SmartDashboard/Alerts",
+              "period": 0.06
+            }
+          },
+          {
+            "title": "Reef Position",
             "x": 512.0,
             "y": 256.0,
-            "width": 256.0,
+            "width": 384.0,
             "height": 256.0,
             "type": "Large Text Display",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_UC626-2/BestTargetId",
+              "topic": "/AdvantageKit/RealOutputs/GameData/Reef Position",
               "period": 0.06,
-              "data_type": "int"
+              "data_type": "string"
             }
           },
           {
-            "title": "BestTargetId",
-            "x": 1152.0,
-            "y": 256.0,
-            "width": 256.0,
-            "height": 256.0,
-            "type": "Large Text Display",
-            "properties": {
-              "topic": "/AdvantageKit/Vision/Camera limelight-two/BestTargetId",
-              "period": 0.06,
-              "data_type": "int"
-            }
-          },
-          {
-            "title": "HasTarget",
-            "x": 1152.0,
+            "title": "Left Camera Has Target",
+            "x": 256.0,
             "y": 0.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera limelight-two/HasTarget",
+              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-3/HasTarget",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -155,20 +129,84 @@
             }
           },
           {
-            "title": "HasTarget",
-            "x": 512.0,
+            "title": "Left Camera Best Target Id",
+            "x": 256.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-3/BestTargetId",
+              "period": 0.06,
+              "data_type": "int"
+            }
+          },
+          {
+            "title": "Right Camera Has Target",
+            "x": 896.0,
             "y": 0.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_UC626-2/HasTarget",
+              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-1/HasTarget",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
               "false_color": 4294198070,
               "true_icon": "None",
               "false_icon": "None"
+            }
+          },
+          {
+            "title": "Right Camera Best Target Id",
+            "x": 896.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-1/BestTargetId",
+              "period": 0.06,
+              "data_type": "int"
+            }
+          },
+          {
+            "title": "Elevator AtGoal",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Subsystems/Elevator/AtGoal",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Elevator Height",
+            "x": 0.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Radial Gauge",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Subsystems/Elevator/MeasuredHeight",
+              "period": 0.06,
+              "data_type": "double",
+              "start_angle": -140.0,
+              "end_angle": 140.0,
+              "min_value": 0.0,
+              "max_value": 1.0,
+              "number_of_labels": 8,
+              "wrap_value": false,
+              "show_pointer": true,
+              "show_ticks": true
             }
           }
         ]
