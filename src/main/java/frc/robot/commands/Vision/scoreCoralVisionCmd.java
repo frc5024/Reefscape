@@ -5,8 +5,6 @@ import java.util.Set;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -18,10 +16,6 @@ import frc.robot.subsystems.Rumble;
 import frc.robot.subsystems.Swerve;
 
 public class scoreCoralVisionCmd extends Command {
-    static ShuffleboardTab tab = Shuffleboard.getTab("Tags");
-    // GenericEntry pEntry = tab.add("SET P VISION", 0.7).getEntry();
-    // GenericEntry iEntry = tab.add("SET I VISION", 0).getEntry();
-    // GenericEntry dEntry = tab.add("SET D VISION", 0.05).getEntry();
 
     private final Limelight limelight;
     private final Swerve swerveDrive;
@@ -53,6 +47,8 @@ public class scoreCoralVisionCmd extends Command {
     boolean finished = false;
     boolean elevatorSet = false;
     boolean scored = false;
+
+    // dont look at this its not in use yet (maybe ever)
 
     public scoreCoralVisionCmd(Limelight limelight, Swerve swerveDrive, double xOffset, Elevator elevatorSubsystem,
             Coral coralSubsystem) {

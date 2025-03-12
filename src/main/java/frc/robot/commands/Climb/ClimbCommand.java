@@ -15,34 +15,29 @@ public class ClimbCommand extends Command {
         addRequirements(climbSubsystem);
     }
 
-    // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void initialize() {
     }
 
+    // moves motor only if the limit switch is false
     public void execute() {
-        /*
-         * Only starts climbing if the cage hits the limit switch -- no else in case the
-         * cage bounces off the switch
-         */
-        if (climbSubsystem.extended && !climbSubsystem.isClimbed()) {
-            climbSubsystem.climbing();
+        if (climbSubsystem.extended && !climbSubsystem.isLimitSwitchBroken()) {
+            climbSubsystem.retractArm();
         } else {
             climbSubsystem.stopMotor();
         }
     }
 
+    // Celebrates then stops
     @Override
     public void end(boolean interrupted) {
-        /* Celebrates then stops */
         LEDs.getInstance().setCommand(LEDPreset.Rainbow.kConfetti).schedule();
         climbSubsystem.stopMotor();
     }
 
-    // Returns true when the command should end.
+    // Stops when the motors are at climbed position
     @Override
     public boolean isFinished() {
-        // Stops when the motors are at climbed position
-        return climbSubsystem.isClimbed();
+        return climbSubsystem.isLimitSwitchBroken();
     }
 }

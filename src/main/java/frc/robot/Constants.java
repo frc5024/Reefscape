@@ -42,10 +42,27 @@ public final class Constants {
 
     public static final class Vision {
 
-        public static final double rightOffset = 0.15428740684869218; // in meters
-        public static final double leftOffset = -0.1655; // in meters
-        public static final double noOffset = 0; // in meters
+        // arbitrary scale
+        public static final double rightOffset = 0.15428740684869218;
+        public static final double leftOffset = -0.1655;
+        public static final double noOffset = 0;
 
+        // changes smaller adjustments and max speed
+        public static final double rotationPIDMultiplier = 2.1;
+        public static final double strafePIDMultiplier = 2.3;
+        public static final double distancePIDMultiplier = 2.6;
+
+        // arbitrary scale // limits the PID output creating a capped speed
+        public static final double strafePIDCap = 0.15;
+        public static final double distancePIDCap = 0.3;
+
+        public static final double rotationTolerance = 1.5; // degrees
+        public static final double strafeTolerance = centimetersToMeters(2.5);
+        public static final double distanceTolerance = centimetersToMeters(8); // to be adjusted
+
+        public static double centimetersToMeters(double Centimeters) {
+            return Centimeters / 100;
+        }
     }
 
     public static class LEDsConstants { // changed name to LEDsConstants
@@ -239,27 +256,15 @@ public final class Constants {
     }
 
     public final class ClimbConstants {
-        // Ultrasonic
-        public static final int pingID = 5;
-        public static final int echoID = 4;
-        public static final int filterValue = 5;
-        public static final int ultrasonicThreshold = 100;
 
-        // Motor
         public static final int climbMotorID = 7;
 
-        // Placeholder value
-        public static final double endPosition = -45; // climb command end
         public static final double startPosition = -6.00;
 
-        // ALSO Placeholder value
-        public static final double extendoPosition = 55; // out encoder
-        // public static final double liftoffPos = 180.0;
+        public static final double extendedPosition = 55; // out encoder
 
-        // EVEN MORE Placeholder values
-        public static final double climbSpeed = -0.7;
-        // public static final double cancelSpeed = -0.4;
-        public static final double extendoSpeed = 0.4;
+        public static final double climbSpeed = -0.7; // motor speeds
+        public static final double extendSpeed = 0.4;
 
     }
 }

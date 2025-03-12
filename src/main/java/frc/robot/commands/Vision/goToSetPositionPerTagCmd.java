@@ -5,18 +5,13 @@ import java.util.Set;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
 public class goToSetPositionPerTagCmd extends Command {
-    static ShuffleboardTab tab = Shuffleboard.getTab("Tags");
-    // GenericEntry pEntry = tab.add("SET P VISION", 0.7).getEntry();
-    // GenericEntry iEntry = tab.add("SET I VISION", 0).getEntry();
-    // GenericEntry dEntry = tab.add("SET D VISION", 0.05).getEntry();
 
     private final Limelight limelight;
     private final Swerve swerveDrive;
@@ -32,7 +27,6 @@ public class goToSetPositionPerTagCmd extends Command {
     private PIDController translationPidController;
 
     double desiredz = 0.430; // in meters
-    double desiredx = 0; // in meters? (+ right)?
 
     double tagAngle = 0;
     private final double cameraAngle = 29;
@@ -50,6 +44,7 @@ public class goToSetPositionPerTagCmd extends Command {
 
     }
 
+    // clarifies that the robot is NOT in position to avoid previous use conflicts
     @Override
     public void initialize() {
         strafePidController.reset();
@@ -62,6 +57,7 @@ public class goToSetPositionPerTagCmd extends Command {
         // isLEDset = false;
     }
 
+    // Hashset of reef/wanted AprilTag IDs
     Set<Integer> validTagIDs = new HashSet<>(
             Set.of(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22));
 
@@ -69,6 +65,7 @@ public class goToSetPositionPerTagCmd extends Command {
     public void execute() {
         int detectedTagID = (int) limelight.getAprilTagID();
 
+        // checks to see if detected tag is apart of the HashSet
         if (validTagIDs.contains(detectedTagID)) {
             swerveDrive.setFieldRelative(false);
 
@@ -94,9 +91,6 @@ public class goToSetPositionPerTagCmd extends Command {
 
         double yaw = botPose[4] - cameraAngle;
 
-        // SmartDashboard.putNumber("Tag Yaw", yaw);
-        // SmartDashboard.putNumber("getZ botPose", botPose3D.getZ());
-
         // Left/Right
         double zDiff = botPose3D.getZ() + desiredz;
 
@@ -110,54 +104,55 @@ public class goToSetPositionPerTagCmd extends Command {
         setDrive();
     }
 
+    // Calculates and outpits PID based on difference to goal state (rotations)
     public void rotateToTag(double rotationToTag) {
-        if (Math.abs(rotationToTag) > 1.5) { // Adjust tolerance as needed
+        if (Math.abs(rotationToTag) > Constants.Vision.rotationTolerance) {
             rotationPidOutput = rotationPidController.calculate(rotationToTag, 0);
-            rotationPidOutput = rotationPidOutput * 2.2; // Speed multiplier
+            rotationPidOutput = rotationPidOutput * Constants.Vision.rotationPIDMultiplier; // PID multiplier
             limelight.setRotationPos(false);
         } else {
             rotationPidOutput = 0;
             limelight.setRotationPos(true);
         }
-        // SmartDashboard.putNumber("thetaDiff", rotationToTag);
     }
 
+    // Calculates and outpits PID based on difference to goal state (Forward
+    // distance)
     public void translateToTag(double zDiff) {
-        if (Math.abs(zDiff) > 0.08) { // In meters
+        if (Math.abs(zDiff) > Constants.Vision.distanceTolerance) {
             translationPidOutput = translationPidController.calculate(zDiff, 0);
-            translationPidOutput = translationPidOutput * 2.6; // Speed multiplier (1.2)
-            if (translationPidOutput > 0.3)
-                translationPidOutput = 0.3;
+            translationPidOutput = translationPidOutput * Constants.Vision.distancePIDMultiplier; // PID multiplier
+            if (translationPidOutput > Constants.Vision.distancePIDCap) // PID/Speed cap
+                translationPidOutput = Constants.Vision.distancePIDCap;
             limelight.setZPos(false);
         } else {
             translationPidOutput = 0;
             limelight.setZPos(true);
         }
-        // SmartDashboard.putNumber("zDiff", zDiff);
     }
 
+    // Calculates and outpits PID based on difference to goal state (Left/Right)
     public void strafeToTag(double xDiff) {
-        if (Math.abs(xDiff) > 0.025) { // In meters
+        if (Math.abs(xDiff) > Constants.Vision.strafeTolerance) {
             strafePidOutput = strafePidController.calculate(xDiff, 0);
-            strafePidOutput = -strafePidOutput * 2.3; // Speed multiplier
-            if (strafePidOutput > 0.15)
-                strafePidOutput = 0.15;
-            if (strafePidOutput < -0.15)
-                strafePidOutput = -0.15;
+            strafePidOutput = -strafePidOutput * Constants.Vision.strafePIDMultiplier; // PID multiplier
+            if (strafePidOutput > Constants.Vision.strafePIDCap) // PID/Speed cap
+                strafePidOutput = Constants.Vision.strafePIDCap;
+            if (strafePidOutput < -Constants.Vision.strafePIDCap)
+                strafePidOutput = -Constants.Vision.strafePIDCap;
 
             limelight.setXPos(false);
         } else {
             strafePidOutput = 0;
             limelight.setXPos(true);
         }
-        // SmartDashboard.putNumber("xDiff", xDiff);
     }
+
+    // PID/Speed cap increase smaller adjustments within the PID but caps the max
+    // allowing for slower/controlled overall speed but larger smaller adjustments
 
     public void setDrive() {
         swerveDrive.setFieldRelative(false);
-
-        // SmartDashboard.putNumber("StrafePID", strafePidOutput);
-        // SmartDashboard.putNumber("TranslatPID", translationPidOutput);
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
         swerveDrive.visionTranslationalVal(translationPidOutput, true);

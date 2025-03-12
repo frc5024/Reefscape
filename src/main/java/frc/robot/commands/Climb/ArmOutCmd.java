@@ -3,11 +3,11 @@ package frc.robot.commands.Climb;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climb;
 
-public class ClimbRetractCommand extends Command {
+public class ArmOutCmd extends Command {
 
     private Climb climbSubsystem;
 
-    public ClimbRetractCommand(Climb climbSubsystem) {
+    public ArmOutCmd(Climb climbSubsystem) {
         this.climbSubsystem = climbSubsystem;
 
         addRequirements(climbSubsystem);
@@ -18,19 +18,18 @@ public class ClimbRetractCommand extends Command {
     }
 
     public void execute() {
-        if (climbSubsystem.extended)
-            climbSubsystem.retracting();
+        climbSubsystem.extendArm();
     }
 
     @Override
     public void end(boolean interrupted) {
         climbSubsystem.stopMotor();
+        climbSubsystem.extended = true;
     }
 
-    // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        /* Checks if climb arm is at retracted position */
-        return false;
+        // Checks if climb arm is at extended position
+        return climbSubsystem.isExtended();
     }
 }

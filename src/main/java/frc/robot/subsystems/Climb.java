@@ -4,7 +4,6 @@ import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -13,9 +12,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
+import frc.robot.commands.Climb.ArmOutCmd;
 import frc.robot.commands.Climb.ClimbCommand;
-import frc.robot.commands.Climb.ClimbExtendoCommand;
-import frc.robot.commands.Climb.ClimbRetractCommand;
 
 public class Climb extends SubsystemBase {
     public static Climb mInstance = null;
@@ -23,22 +21,9 @@ public class Climb extends SubsystemBase {
     private TalonFX climbMotor;
     private DigitalInput limitSwitch = new DigitalInput(8);
 
-    // Shuffleboard
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
-    // Not currently being used
-    GenericEntry encoder = tab.add("climbSpeed", .35).getEntry();
-
-    // ULTRASONIC NOT CURRENTLY BEING USED
 
     public boolean extended = false;
-
-    // Ultrasonic
-    // private final Ultrasonic m_ultrasonic = new
-    // Ultrasonic(Constants.ClimbConstants.pingID,
-    // Constants.ClimbConstants.echoID);
-    // double distanceMillimetres;
-    // double measurement;
-    // MedianFilter filter = new MedianFilter(Constants.ClimbConstants.filterValue);
 
     // Creating the Climb instance
     public static Climb getInstance() {
@@ -54,115 +39,54 @@ public class Climb extends SubsystemBase {
 
         // Shuffleboard tab displaying the encoder's position value as a double
         tab.addDouble("encoder value", () -> climbMotor.getPosition().getValueAsDouble());
-        tab.addBoolean("is climbed?", () -> isClimbed());
+        tab.addBoolean("is climbed?", () -> isLimitSwitchBroken());
         tab.addDouble("voltage", () -> climbMotor.getMotorVoltage().getValueAsDouble());
     }
 
-    public void climbing() {
-        // Sets motor to climbing speed
+    // arm retracts with blue LEDs
+    public void retractArm() {
         climbMotor.set(Constants.ClimbConstants.climbSpeed);
-        // Schedules the LED command
+
         LEDs.getInstance().setCommand(LEDPreset.LightChase.kBlue).schedule();
-        System.out.println(climbMotor.getMotorVoltage());
-        // }
     }
 
-    public void extending() {
+    public void extendArm() {
         // Sets motor to extending speed
-        climbMotor.set(Constants.ClimbConstants.extendoSpeed);
+        climbMotor.set(Constants.ClimbConstants.extendSpeed);
         LEDs.getInstance().setCommand(LEDPreset.Solid.kViolet).schedule();
     }
 
-    public void retracting() {
-        // Sets motor to reverse of extending speed
-        climbMotor.set(-Constants.ClimbConstants.extendoSpeed);
-        LEDs.getInstance().setCommand(LEDPreset.Solid.kBlue).schedule();
+    public void stopMotor() {
+        climbMotor.set(0);
     }
 
-    public void stopMotor() {
-        // Stops motor
-        climbMotor.set(0);
+    public boolean isLimitSwitchBroken() {
+        return !limitSwitch.get();
+    }
+
+    // checks if arm is extended
+    public boolean isExtended() {
+        return climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.extendedPosition;
+    }
+
+    // Commands
+
+    public Command climbCommand() {
+        return new ClimbCommand(this);
+    }
+
+    public Command extendingCommand() {
+        return new ArmOutCmd(this);
     }
 
     @Override
     public void periodic() {
 
-        Logger.recordOutput("Subsystems/Climb/Is Climbed", isClimbed());
+        Logger.recordOutput("Subsystems/Climb/Is Climbed", isLimitSwitchBroken());
         Logger.recordOutput("Subsystems/Climb/Motor Velocity", climbMotor.getVelocity().getValueAsDouble());
         Logger.recordOutput("Subsystems/Climb/Motor Voltage", climbMotor.getMotorVoltage().getValueAsDouble());
         Logger.recordOutput("Subsystems/Climb/Position", climbMotor.getPosition().getValueAsDouble());
-        // Ultrasonic.setAutomaticMode(true);
-        // m_ultrasonic.setEnabled(true);
 
-        // distanceMillimetres = m_ultrasonic.getRangeMM();
-        // // Calculates the average of the given values from the Ultrasonic sensor
-        // measurement = filter.calculate(distanceMillimetres);
-
-        // SmartDashboard.putBoolean("Over Threshold", overThreshold());
-        // SmartDashboard.putNumber("Ultrasonic", measurement);
-
-        SmartDashboard.putBoolean("Climb LimitSwitch", isClimbed());
-    }
-
-    // public boolean overThreshold() {
-    // // Returns true if the Ultrasonic sensor detects that it is a certain
-    // distance
-    // // above the ground
-    // if (measurement >= Constants.ClimbConstants.ultrasonicThreshold) {
-    // return true;
-    // } else {
-    // return false;
-    // }
-    // }
-
-    // Booleans
-
-    public boolean isClimbed() {
-        // Returns true if the Encoder detects the motor is at climbed position
-        // if (climbMotor.getPosition().getValueAsDouble() >=
-        // Constants.ClimbConstants.liftoffPos
-        // && !overThreshold()) {
-        // System.out.println("CLIMB FAILED");
-        // LEDs.getInstance().setCommand(LEDPreset.Strobe.kRed).schedule();
-        // } else {
-        // }
-
-        return !limitSwitch.get();
-    }
-
-    public boolean isExtendoPosition() {
-        // Returns true if the Encoder detects the motor is at extended position
-        if (climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.extendoPosition) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean isRetractPosition() {
-        // Returns true if the Encoder detects the motor is at extended position
-        if (climbMotor.getPosition().getValueAsDouble() <= Constants.ClimbConstants.endPosition) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // Commands
-
-    // Creates new climb command
-    public Command climbCommand() {
-        // Only climbing uses LEDs in the command itself
-        return new ClimbCommand(this);
-    }
-
-    // Creates new extending command
-    public Command extendingCommand() {
-        return new ClimbExtendoCommand(this);
-    }
-
-    // Creates new retracting command
-    public Command retractingCommand() {
-        return new ClimbRetractCommand(this);
+        SmartDashboard.putBoolean("Climb LimitSwitch", isLimitSwitchBroken());
     }
 }
