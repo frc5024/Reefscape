@@ -71,7 +71,7 @@ public class Elevator extends SubsystemBase {
     private Rumble rumble;
     public boolean zeroRumbled = false;
 
-    public double elevatorMode;
+    public double elevatorMode = Constants.elevatorConstants.L4Position;
     public double elevatorPosition = 0;
 
     private static Elevator mInstance;
@@ -122,7 +122,7 @@ public class Elevator extends SubsystemBase {
         tab.addDouble("encoder value", () -> elevatorMotor.getEncoder().getPosition());
         tab.addDouble("appliedOutput", () -> speed);
         tab.addDouble("goal", () -> PID.getGoal().position);
-        tab.addBoolean("atTarget", () -> targetReached());
+        tab.addBoolean("Elevator AtTarget", () -> targetReached());
 
         // TODO: log voltage anything else you think you need
 
@@ -173,7 +173,6 @@ public class Elevator extends SubsystemBase {
         rumble = Rumble.getInstance();
 
         if (!zeroRumbled && isBottomLimitSwitchBroken()) {
-            rumble.staticRumble(true);
             rumble.staticRumble(false);
             zeroRumbled = true;
         } else if (!isBottomLimitSwitchBroken()) {
@@ -347,6 +346,10 @@ public class Elevator extends SubsystemBase {
 
     public Command bottomElevator() {
         return new SetElevatorSetpointCmd(this, Constants.elevatorConstants.rootPosition);
+    }
+
+    public Command bottomAutoElevator() {
+        return new SetElevatorSetpointCmd(this, Constants.elevatorConstants.rootAutoPosition);
     }
 
     public Command goToModePosition() {

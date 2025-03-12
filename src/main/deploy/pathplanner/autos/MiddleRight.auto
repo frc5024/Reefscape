@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "DriveTo10"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "DriveRightTag11"
+            "name": "DriveRightTag10"
           }
         },
         {
@@ -23,12 +29,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.6
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "ElevatorRoot"
@@ -38,6 +38,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Working",
+  "folder": null,
   "choreoAuto": false
 }

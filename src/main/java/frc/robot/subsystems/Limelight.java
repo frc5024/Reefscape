@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,6 +10,12 @@ import frc.robot.LimelightHelpers;
 
 public class Limelight extends SubsystemBase {
     private final NetworkTable limelightTable;
+
+    boolean rotatePos = false;
+    boolean xPos = false;
+    boolean zPos = false;
+
+    boolean isTagSeen = false;
 
     public Limelight() {
         limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -30,21 +34,41 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getAprilTagID() {
-        return limelightTable.getEntry("tid").getDouble(-1.0); // -1 if no target
+        return limelightTable.getEntry("tid").getDouble(-100); // -100 if no target
+    }
+
+    public void setRotationPos(boolean rotationPos) {
+        rotatePos = rotationPos;
+    }
+
+    public boolean getRotationPos() {
+        return rotatePos;
+    }
+
+    public void setXPos(boolean xPos) {
+        this.xPos = xPos;
+    }
+
+    public boolean getXPos() {
+        return xPos;
+    }
+
+    public void setZPos(boolean zPos) {
+        this.zPos = zPos;
+    }
+
+    public boolean getZPos() {
+        return zPos;
     }
 
     @Override
     public void periodic() {
-        double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
-        Pose3d botPose3D = LimelightHelpers.getBotPose3d_TargetSpace("");
-        Pose3d teafaadw = LimelightHelpers.getTargetPose3d_RobotSpace("");
+        SmartDashboard.putBoolean("rotationPos", rotatePos);
+        SmartDashboard.putBoolean("xPos (Left Right)", xPos);
+        SmartDashboard.putBoolean("zPos (distance)", zPos);
 
-        SmartDashboard.putNumber("TargetPose_CameraSpace yaw", botPose[4]);
-        SmartDashboard.putNumber("BotPose3d_TargetSpace yaw", Units.radiansToDegrees(botPose3D.getRotation().getZ()));
-        SmartDashboard.putNumber("TargetPose3d_RobotSpace yaw", Units.radiansToDegrees(teafaadw.getRotation().getZ()));
-
-        SmartDashboard.putNumber("TargetPose3d_RobotSpace distance from", botPose3D.getZ());
-
+        SmartDashboard.putBoolean("is Tag Visable", isTargetVisible());
+        SmartDashboard.putNumber("Visable Tag", getAprilTagID());
         Logger.recordOutput("Subsystems/Limelight/BestTargetId", LimelightHelpers.getFiducialID("limelight"));
         Logger.recordOutput("Subsystems/Limelight/CurrentPose", LimelightHelpers.getBotPose3d("limelight"));
     }

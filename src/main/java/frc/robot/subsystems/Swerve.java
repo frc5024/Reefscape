@@ -46,7 +46,6 @@ public class Swerve extends SubsystemBase {
     boolean fieldRelative = true;
 
     public boolean isSlowMode = false;
-    public boolean visionSlowMode = false;
 
     public final double scaleValue = 3600.0 / 3831.020004272461;
 
@@ -188,8 +187,6 @@ public class Swerve extends SubsystemBase {
 
         if (isSlowMode) {
             speedModifier = 0.3 * speedModifier;
-        } else if (visionSlowMode) {
-            speedModifier = 0.4 * speedModifier;
         }
     }
 
@@ -208,7 +205,9 @@ public class Swerve extends SubsystemBase {
         if (fieldRelative) {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, rVelocity, getGyroYaw());
         } else {
-            chassisSpeeds = new ChassisSpeeds(xVelocity, yVelocity, rVelocity);
+            chassisSpeeds = new ChassisSpeeds(translationVal * Constants.Swerve.maxSpeed * speedModifier,
+                    strafeVal * Constants.Swerve.maxSpeed * speedModifier,
+                    rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier);
         }
 
         drive(chassisSpeeds, isOpenLoop);

@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DriveTo11"
+            "pathName": "DriveTo9"
           }
         },
         {
@@ -17,13 +17,19 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "L4"
+                  "name": "DriveRightTag9"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.2
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "DriveRightTag11"
+                  "name": "L4"
                 }
               }
             ]
@@ -34,35 +40,11 @@
           "data": {
             "name": "ScoreCoral"
           }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.6
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorRoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "New Path"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCoral"
-          }
         }
       ]
     }
   },
-  "resetOdom": false,
-  "folder": null,
+  "resetOdom": true,
+  "folder": "Processer",
   "choreoAuto": false
 }

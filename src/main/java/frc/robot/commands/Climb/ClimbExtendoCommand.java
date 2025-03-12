@@ -24,6 +24,7 @@ public class ClimbExtendoCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         climbSubsystem.stopMotor();
+        climbSubsystem.extended = true;
     }
 
     // Returns true when the command should end.
