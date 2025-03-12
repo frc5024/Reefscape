@@ -6,7 +6,6 @@ import java.util.Queue;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
@@ -104,8 +103,9 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         resetToAbsolute();
 
         // Configure CANCoder
-        CANcoderConfiguration cancoderConfig = swerveModuleBuilder.getCancoderConfig();
-        tryUntilOk(5, () -> this.cancoder.getConfigurator().apply(cancoderConfig));
+        // CANcoderConfiguration cancoderConfig =
+        // swerveModuleBuilder.getCancoderConfig();
+        // tryUntilOk(5, () -> this.cancoder.getConfigurator().apply(cancoderConfig));
 
         // Create drive status signals
         this.drivePosition = this.driveTalon.getPosition();

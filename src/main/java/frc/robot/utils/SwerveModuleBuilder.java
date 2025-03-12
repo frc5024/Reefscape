@@ -5,7 +5,6 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants.PIDConstants;
@@ -69,8 +68,10 @@ public class SwerveModuleBuilder {
     private void setCancoderConfig() {
         this.canCoderConfig = new CANcoderConfiguration();
 
-        this.canCoderConfig.MagnetSensor.MagnetOffset = 0.0; // this.encoderOffset.getRotations();
-        this.canCoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        // this.canCoderConfig.MagnetSensor.MagnetOffset = 0.0; //
+        // this.encoderOffset.getRotations();
+        // this.canCoderConfig.MagnetSensor.SensorDirection =
+        // SensorDirectionValue.CounterClockwise_Positive;
         // this.encoderInverted
         // ? SensorDirectionValue.Clockwise_Positive
         // : SensorDirectionValue.CounterClockwise_Positive;
