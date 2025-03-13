@@ -136,6 +136,9 @@ public class SwerveModuleBuilder {
 
         /* Gear Ratio and Wrapping Config */
         this.turnTalonFXConfig.Feedback.SensorToMechanismRatio = this.cotsTurnConstants.angleGearRatio;
+        // this.turnTalonFXConfig.Feedback.FeedbackRemoteSensorID = this.encoderChannel;
+        // this.turnTalonFXConfig.Feedback.FeedbackSensorSource =
+        // FeedbackSensorSourceValue.FusedCANcoder;
         this.turnTalonFXConfig.ClosedLoopGeneral.ContinuousWrap = true;
 
         /* Current Limiting */

@@ -105,7 +105,6 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         // Configure CANCoder
         CANcoderConfiguration cancoderConfig = swerveModuleBuilder.getCancoderConfig();
         tryUntilOk(5, () -> this.cancoder.getConfigurator().apply(cancoderConfig));
-        // resetToAbsolute();
 
         // Create drive status signals
         this.drivePosition = this.driveTalon.getPosition();
@@ -177,7 +176,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
                         this.turnSupplyCurrentAmps,
                         this.turnTorqueCurrentAmps)),
                 this.turnEncoderConnectedDebounce.calculate(BaseStatusSignal.isAllGood(this.turnAbsolutePosition)),
-                Rotation2d.fromRotations(this.turnAbsolutePosition.getValueAsDouble()).minus(this.encoderOffset),
+                Rotation2d.fromRotations(this.turnAbsolutePosition.getValueAsDouble()).plus(this.encoderOffset),
                 Rotation2d.fromRotations(this.turnPosition.getValueAsDouble()),
                 Units.rotationsToRadians(this.turnVelocity.getValueAsDouble()),
                 this.turnAppliedVolts.getValueAsDouble(),
@@ -191,21 +190,6 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
                 .map(Rotation2d::fromRotations).toArray(Rotation2d[]::new);
         this.drivePositionQueue.clear();
         this.turnPositionQueue.clear();
-    }
-
-    /**
-     * 
-     */
-    private Rotation2d getCANcoder() {
-        return Rotation2d.fromRotations(this.cancoder.getAbsolutePosition().getValueAsDouble());
-    }
-
-    /**
-     * 
-     */
-    public void resetToAbsolute() {
-        double absolutePosition = getCANcoder().getRotations() + this.encoderOffset.getRotations();
-        this.turnTalon.setPosition(absolutePosition);
     }
 
     @Override

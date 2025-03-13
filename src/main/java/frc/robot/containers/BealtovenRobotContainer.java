@@ -75,16 +75,16 @@ public class BealtovenRobotContainer extends RobotContainer {
      */
     private SwerveModuleBuilder[] getModuleConfigs() {
         SwerveModuleBuilder frontLeft = new SwerveModuleBuilder(41, 42, 4,
-                Rotation2d.fromRotations(-0.446777), false, false, SwerveConstants.cotsDriveConstants,
+                Rotation2d.fromRotations(-0.443359375), false, false, SwerveConstants.cotsDriveConstants,
                 SwerveConstants.cotsTurnConstants);
         SwerveModuleBuilder frontRight = new SwerveModuleBuilder(11, 12, 1,
-                Rotation2d.fromRotations(0.391357), true, false, SwerveConstants.cotsDriveConstants,
+                Rotation2d.fromRotations(0.38330078125), true, false, SwerveConstants.cotsDriveConstants,
                 SwerveConstants.cotsTurnConstants);
         SwerveModuleBuilder backLeft = new SwerveModuleBuilder(31, 32, 3,
-                Rotation2d.fromRotations(0.200439), false, false, SwerveConstants.cotsDriveConstants,
+                Rotation2d.fromRotations(0.203125), false, false, SwerveConstants.cotsDriveConstants,
                 SwerveConstants.cotsTurnConstants);
         SwerveModuleBuilder backRight = new SwerveModuleBuilder(21, 22, 2,
-                Rotation2d.fromRotations(-0.431641), true, false, SwerveConstants.cotsDriveConstants,
+                Rotation2d.fromRotations(-0.445556640625), true, false, SwerveConstants.cotsDriveConstants,
                 SwerveConstants.cotsTurnConstants);
 
         return new SwerveModuleBuilder[] { frontLeft, frontRight, backLeft, backRight };
