@@ -18,7 +18,7 @@ public class LEDModuleIOSim implements LEDModuleIO {
 
     // Constants
     private final int CHANNEL_ID = 3;
-    private final int STRIP_LENGTH = 250;
+    private final int STRIP_LENGTH = 84;
 
     // Hardware
     private final AddressableLED addressableLED;

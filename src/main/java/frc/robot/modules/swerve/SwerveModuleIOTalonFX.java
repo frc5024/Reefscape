@@ -6,6 +6,7 @@ import java.util.Queue;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
@@ -100,12 +101,11 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         // Configure turn motor
         this.turnConfig = swerveModuleBuilder.getTurnConfig();
         tryUntilOk(5, () -> this.turnTalon.getConfigurator().apply(this.turnConfig, 0.25));
-        resetToAbsolute();
 
         // Configure CANCoder
-        // CANcoderConfiguration cancoderConfig =
-        // swerveModuleBuilder.getCancoderConfig();
-        // tryUntilOk(5, () -> this.cancoder.getConfigurator().apply(cancoderConfig));
+        CANcoderConfiguration cancoderConfig = swerveModuleBuilder.getCancoderConfig();
+        tryUntilOk(5, () -> this.cancoder.getConfigurator().apply(cancoderConfig));
+        // resetToAbsolute();
 
         // Create drive status signals
         this.drivePosition = this.driveTalon.getPosition();
@@ -204,7 +204,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
      * 
      */
     public void resetToAbsolute() {
-        double absolutePosition = getCANcoder().getRotations() - this.encoderOffset.getRotations();
+        double absolutePosition = getCANcoder().getRotations() + this.encoderOffset.getRotations();
         this.turnTalon.setPosition(absolutePosition);
     }
 
@@ -217,7 +217,6 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
 
     @Override
     public void setDrivePID(double kP, double kI, double kD) {
-        System.out.println("****** REFRESHING PID SLOT 0 kP: " + kP);
         tryUntilOk(5,
                 () -> this.driveTalon.getConfigurator().refresh(new Slot0Configs().withKP(kP).withKI(kI).withKD(kD)));
     }

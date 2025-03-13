@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.TeleopConstants;
 import frc.robot.Robot;
 import frc.robot.modules.gyro.GyroIOInputsAutoLogged;
 import frc.robot.modules.gyro.GyroModuleIO;
@@ -289,7 +290,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      * 
      */
     private void setSpeedModifier() {
-        this.speedModifier = 1;
+        this.speedModifier = TeleopConstants.SPEED_MODIFIER_THIRTY;
         // this.speedModifier = this.speedModifier -
         // Elevator.getInstance().getElevatorPercent();
 

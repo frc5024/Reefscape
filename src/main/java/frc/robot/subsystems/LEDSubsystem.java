@@ -22,7 +22,7 @@ public class LEDSubsystem {
      */
     public static LEDSubsystem getInstance() {
         if (mInstance == null) {
-            if (Robot.isReal()) {
+            if (!Robot.isReal()) {
                 mInstance = new LEDSubsystem(new LEDModuleIOBlinkin());
             } else {
                 mInstance = new LEDSubsystem(new LEDModuleIOSim());

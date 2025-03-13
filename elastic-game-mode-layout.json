@@ -11,7 +11,7 @@
             "title": "Auto Routine",
             "x": 128.0,
             "y": 0.0,
-            "width": 384.0,
+            "width": 512.0,
             "height": 128.0,
             "type": "ComboBox Chooser",
             "properties": {
@@ -22,9 +22,9 @@
           },
           {
             "title": "BatteryVoltage (Volts)",
-            "x": 512.0,
+            "x": 640.0,
             "y": 128.0,
-            "width": 512.0,
+            "width": 640.0,
             "height": 128.0,
             "type": "Voltage View",
             "properties": {
@@ -40,9 +40,9 @@
           },
           {
             "title": "FMSInfo",
-            "x": 512.0,
+            "x": 640.0,
             "y": 0.0,
-            "width": 512.0,
+            "width": 640.0,
             "height": 128.0,
             "type": "FMSInfo",
             "properties": {
@@ -52,14 +52,50 @@
           },
           {
             "title": "Alerts",
-            "x": 1152.0,
+            "x": 1280.0,
             "y": 0.0,
-            "width": 384.0,
+            "width": 512.0,
             "height": 512.0,
             "type": "Alerts",
             "properties": {
               "topic": "/SmartDashboard/Alerts",
               "period": 0.06
+            }
+          },
+          {
+            "title": "3v3 Rail Voltage",
+            "x": 640.0,
+            "y": 256.0,
+            "width": 640.0,
+            "height": 128.0,
+            "type": "Voltage View",
+            "properties": {
+              "topic": "/AdvantageKit/SystemStats/3v3Rail/Voltage",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": 0.0,
+              "max_value": 6.0,
+              "divisions": 5,
+              "inverted": false,
+              "orientation": "horizontal"
+            }
+          },
+          {
+            "title": "CANBus Battery Voltage",
+            "x": 640.0,
+            "y": 384.0,
+            "width": 640.0,
+            "height": 128.0,
+            "type": "Voltage View",
+            "properties": {
+              "topic": "/AdvantageKit/SystemStats/BatteryVoltage",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": 4.0,
+              "max_value": 13.0,
+              "divisions": 5,
+              "inverted": false,
+              "orientation": "horizontal"
             }
           }
         ]
@@ -72,9 +108,9 @@
         "containers": [
           {
             "title": "Match Time",
-            "x": 512.0,
+            "x": 640.0,
             "y": 0.0,
-            "width": 384.0,
+            "width": 512.0,
             "height": 256.0,
             "type": "Match Time",
             "properties": {
@@ -88,7 +124,7 @@
           },
           {
             "title": "Alerts",
-            "x": 1152.0,
+            "x": 1408.0,
             "y": 0.0,
             "width": 384.0,
             "height": 512.0,
@@ -100,9 +136,9 @@
           },
           {
             "title": "Reef Position",
-            "x": 512.0,
+            "x": 640.0,
             "y": 256.0,
-            "width": 384.0,
+            "width": 512.0,
             "height": 256.0,
             "type": "Large Text Display",
             "properties": {
@@ -112,68 +148,34 @@
             }
           },
           {
-            "title": "Left Camera Has Target",
-            "x": 256.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 256.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-3/HasTarget",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
-            }
-          },
-          {
             "title": "Left Camera Best Target Id",
-            "x": 256.0,
+            "x": 384.0,
             "y": 256.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Large Text Display",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-3/BestTargetId",
+              "topic": "/AdvantageKit/Vision/Camera Arducam_UC626-2/BestTargetId",
               "period": 0.06,
               "data_type": "int"
             }
           },
           {
-            "title": "Right Camera Has Target",
-            "x": 896.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 256.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-1/HasTarget",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
-            }
-          },
-          {
             "title": "Right Camera Best Target Id",
-            "x": 896.0,
+            "x": 1152.0,
             "y": 256.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Large Text Display",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-1/BestTargetId",
+              "topic": "/AdvantageKit/Vision/Camera limelight-two/BestTargetId",
               "period": 0.06,
               "data_type": "int"
             }
           },
           {
             "title": "Elevator AtGoal",
-            "x": 0.0,
+            "x": 128.0,
             "y": 0.0,
             "width": 256.0,
             "height": 256.0,
@@ -190,7 +192,7 @@
           },
           {
             "title": "Elevator Height",
-            "x": 0.0,
+            "x": 128.0,
             "y": 256.0,
             "width": 256.0,
             "height": 256.0,
@@ -207,6 +209,40 @@
               "wrap_value": false,
               "show_pointer": true,
               "show_ticks": true
+            }
+          },
+          {
+            "title": "Left Camera Has Target",
+            "x": 384.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/Camera Arducam_UC626-2/HasTarget",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Right Camera Has Target",
+            "x": 1152.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/Camera limelight-two/HasTarget",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           }
         ]

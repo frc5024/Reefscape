@@ -22,6 +22,7 @@ import frc.robot.containers.BealtovenRobotContainer;
 import frc.robot.containers.MapleSimRobotContainer;
 import frc.robot.containers.RobotContainer;
 import frc.robot.controls.GameData;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.utils.LoggedTracer;
 import frc.robot.utils.PhoenixUtil;
 
@@ -143,10 +144,12 @@ public class Robot extends LoggedRobot {
     /** This function is called once each time the robot enters Disabled mode. */
     @Override
     public void disabledInit() {
+        LEDSubsystem.getInstance().solidRed();
     }
 
     @Override
     public void disabledPeriodic() {
+        LEDSubsystem.getInstance().solidRed();
         checkDriverStationUpdate();
     }
 

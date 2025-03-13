@@ -59,7 +59,7 @@ public final class Constants {
 
         // Set to true to use FeedForwardCharacterization and
         // WheelRadiusCharacterization auto commands
-        public static final boolean TUNING_MODE = true;
+        public static final boolean TUNING_MODE = false;
 
         // AdvantageKit simulation
         public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
@@ -243,17 +243,17 @@ public final class Constants {
     public static final class PIDConstants {
         // PID constants for swerve modules for drive motor. Turn pid is set in cots
         // constants
-        public static final double SWERVE_MODULE_DRIVE_KP = 2.5;
+        public static final double SWERVE_MODULE_DRIVE_KP = 0.112;
         public static final double SWERVE_MODULE_DRIVE_KI = 0.0;
-        public static final double SWERVE_MODULE_DRIVE_KD = 0.1;
+        public static final double SWERVE_MODULE_DRIVE_KD = 0.0;
 
         public static final double SWERVE_MODULE_DRIVE_KS = 0.0;
         public static final double SWERVE_MODULE_DRIVE_KV = 0.0; // 0.124;
         public static final double SWERVE_MODULE_DRIVE_KA = 0.0;
 
-        public static final double SWERVE_MODULE_TURN_KP = 400.0;
+        public static final double SWERVE_MODULE_TURN_KP = 100.0;
         public static final double SWERVE_MODULE_TURN_KI = 0.0;
-        public static final double SWERVE_MODULE_TURN_KD = 0.68275;
+        public static final double SWERVE_MODULE_TURN_KD = 0.0;
 
         public static final double SWERVE_MODULE_TURN_KS = 0.28;
         public static final double SWERVE_MODULE_TURN_KV = 2.7935;
@@ -408,7 +408,7 @@ public final class Constants {
      */
     public static final class TeleopConstants {
         public static final double JOYSTICK_AXIS_MODIFIER = 1.0;
-        public static final double DEADBAND = 0.1;
+        public static final double DEADBAND = 0.5;
 
         public static final double X_RATE_LIMIT = 6.0;
         public static final double Y_RATE_LIMIT = 6.0;
@@ -448,8 +448,8 @@ public final class Constants {
 
         public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_UC626-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(10.0), Units.inchesToMeters(7.25), Units.inchesToMeters(8.5),
-                0.0, Units.degreesToRadians(20), Units.degreesToRadians(-30.0));
+                Units.inchesToMeters(9.75), Units.inchesToMeters(7.5), Units.inchesToMeters(8.5),
+                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-30.0));
 
         public static final Camera GAME_PIECE_CAMERA = new Camera("WebCam",
                 Camera.Type.COLOURED_SHAPE, Camera.Processor.PHOTONVISION, 0,
@@ -463,8 +463,8 @@ public final class Constants {
 
         public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight-two",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
-                Units.inchesToMeters(10.0), Units.inchesToMeters(7.0), Units.inchesToMeters(9.5),
-                0.0, Units.degreesToRadians(18.0), Units.degreesToRadians(30.0));
+                Units.inchesToMeters(10.0), Units.inchesToMeters(7.25), Units.inchesToMeters(9.5),
+                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(30.0));
 
         /**
          * TODO: set list of enabled camera
