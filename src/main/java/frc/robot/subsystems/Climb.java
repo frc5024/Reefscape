@@ -56,6 +56,10 @@ public class Climb extends SubsystemBase {
         LEDs.getInstance().setCommand(LEDPreset.Solid.kViolet).schedule();
     }
 
+    public void moveMotor(double Speed) {
+        climbMotor.set(Speed);
+    }
+
     public void stopMotor() {
         climbMotor.set(0);
     }
@@ -65,8 +69,12 @@ public class Climb extends SubsystemBase {
     }
 
     // checks if arm is extended
-    public boolean isExtended() {
+    public boolean isEncoderExtended() {
         return climbMotor.getPosition().getValueAsDouble() >= Constants.ClimbConstants.extendedPosition;
+    }
+
+    public double getEncoder() {
+        return climbMotor.getPosition().getValueAsDouble();
     }
 
     // Commands

@@ -22,14 +22,17 @@ public class goToSetPositionPerTagCmd extends Command {
     double rotationPidOutput = 0;
     double translationPidOutput = 0;
 
+    boolean shouldBeSlowDis = false;
+    boolean shouldBeSlowStrafe = false;
+
     private PIDController strafePidController;
     private PIDController rotationPidController;
     private PIDController translationPidController;
 
-    double desiredz = 0.430; // in meters
+    double desiredz = 0.40; // in meters
 
     double tagAngle = 0;
-    private final double cameraAngle = 29;
+    private final double cameraAngle = 27.5;
 
     boolean isLEDset = false;
 
@@ -50,6 +53,9 @@ public class goToSetPositionPerTagCmd extends Command {
         strafePidController.reset();
         translationPidController.reset();
         rotationPidController.reset();
+
+        shouldBeSlowDis = false;
+        shouldBeSlowStrafe = false;
 
         limelight.setRotationPos(false);
         limelight.setXPos(false);
@@ -129,6 +135,12 @@ public class goToSetPositionPerTagCmd extends Command {
             translationPidOutput = 0;
             limelight.setZPos(true);
         }
+
+        if (Math.abs(zDiff) < 0.4) {
+            shouldBeSlowDis = true;
+        } else {
+            shouldBeSlowDis = false;
+        }
     }
 
     // Calculates and outpits PID based on difference to goal state (Left/Right)
@@ -146,6 +158,12 @@ public class goToSetPositionPerTagCmd extends Command {
             strafePidOutput = 0;
             limelight.setXPos(true);
         }
+
+        if (Math.abs(xDiff) < 0.3) {
+            shouldBeSlowStrafe = true;
+        } else {
+            shouldBeSlowStrafe = false;
+        }
     }
 
     // PID/Speed cap increase smaller adjustments within the PID but caps the max
@@ -153,6 +171,12 @@ public class goToSetPositionPerTagCmd extends Command {
 
     public void setDrive() {
         swerveDrive.setFieldRelative(false);
+
+        if (shouldBeSlowDis && shouldBeSlowStrafe) {
+            swerveDrive.isSlowMode = true;
+        } else {
+            swerveDrive.isSlowMode = false;
+        }
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
         swerveDrive.visionTranslationalVal(translationPidOutput, true);
@@ -167,6 +191,11 @@ public class goToSetPositionPerTagCmd extends Command {
     @Override
     public void end(boolean interrupted) {
         // Stop all motion
+        swerveDrive.isSlowMode = false;
+
+        shouldBeSlowDis = false;
+        shouldBeSlowStrafe = false;
+
         swerveDrive.visionTranslationalVal(0, false);
         swerveDrive.visionStrafeVal(0, false);
         swerveDrive.visionRotationVal(0, false);

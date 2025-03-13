@@ -16,12 +16,12 @@ import frc.lib.leds.LEDPreset;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Vision.autoSetPositionTagID;
 import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
+import frc.robot.commands.Vision.isPathRun;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Rumble;
 import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
@@ -32,9 +32,8 @@ public class RobotContainer {
     // Subsystems
     private final Climb m_climbSubsystem = Climb.getInstance();
     private final Swerve s_Swerve = Swerve.getInstance();
-    private final Rumble rumble = Rumble.getInstance();
     private final Limelight limelightSubsystem = new Limelight();
-    private final Coral coralSubsystem = new Coral();
+    private final Coral coralSubsystem = Coral.getInstance();
     private final Elevator elevatorSubsystem = Elevator.getInstance();
     private final LEDs s_LEDs = LEDs.getInstance();
 
@@ -45,7 +44,7 @@ public class RobotContainer {
 
     // Vision Variables
     boolean visionMode = true;
-    String mode;
+    public String mode;
 
     // Auto
     private final SendableChooser<Command> autoChooser;
@@ -105,6 +104,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("ScoreCoral", coralSubsystem.outtakeAutoCommand());
         NamedCommands.registerCommand("IntakeCoral", coralSubsystem.intakeCommand());
 
+        NamedCommands.registerCommand("Confirm Vision", new InstantCommand(() -> Limelight.done = true));
+        NamedCommands.registerCommand("Wait For Vision", new isPathRun(limelightSubsystem));
+
         // Elevator
         NamedCommands.registerCommand("L4", elevatorSubsystem.goToL4Position());
         NamedCommands.registerCommand("L3", elevatorSubsystem.goToL3Position());
@@ -125,6 +127,8 @@ public class RobotContainer {
 
         autoChooser.addOption("Middle 1 piece right (COMPLETE)", new PathPlannerAuto("MiddleRight"));
         autoChooser.addOption("Middle 1 piece left (COMPLETE)", new PathPlannerAuto("MiddleLeft"));
+
+        autoChooser.addOption("Testing Elevatoring", new PathPlannerAuto("Start 11R"));
 
         SmartDashboard.putData("Auto/Chooser", autoChooser);
 
@@ -153,7 +157,7 @@ public class RobotContainer {
         // Driver Controls
         // Drive
 
-        driver.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.isSlowMode = true));
+        driver.leftBumper().whileTrue(new InstantCommand(() -> s_Swerve.isSlowMode = true));
         driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.isSlowMode = false));
 
         driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
@@ -170,6 +174,8 @@ public class RobotContainer {
         driver.leftTrigger()
                 .whileTrue(new ConditionalCommand(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
                         Constants.Vision.leftOffset), new InstantCommand(), () -> visionMode));
+
+        driver.b().onTrue(coralSubsystem.outtakeAutoCommand());
 
         // driver.rightBumper()
         // .whileTrue(new scoreCoralVisionCmd(limelightSubsystem, s_Swerve,

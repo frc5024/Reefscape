@@ -41,16 +41,15 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
 
     public static final class Vision {
-
         // arbitrary scale
         public static final double rightOffset = 0.15428740684869218;
         public static final double leftOffset = -0.1655;
         public static final double noOffset = 0;
 
         // changes smaller adjustments and max speed
-        public static final double rotationPIDMultiplier = 2.1;
+        public static final double rotationPIDMultiplier = 1;
         public static final double strafePIDMultiplier = 2.3;
-        public static final double distancePIDMultiplier = 2.6;
+        public static final double distancePIDMultiplier = 2;
 
         // arbitrary scale // limits the PID output creating a capped speed
         public static final double strafePIDCap = 0.15;
@@ -261,7 +260,7 @@ public final class Constants {
 
         public static final double startPosition = -6.00;
 
-        public static final double extendedPosition = 55; // out encoder
+        public static final double extendedPosition = 65; // out encoder
 
         public static final double climbSpeed = -0.7; // motor speeds
         public static final double extendSpeed = 0.4;

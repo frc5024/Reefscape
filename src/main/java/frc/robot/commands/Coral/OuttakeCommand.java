@@ -3,20 +3,18 @@ package frc.robot.commands.Coral;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Coral;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Rumble;
 
 public class OuttakeCommand extends Command {
 
     private final Coral coralSubsystem;
-    private Elevator elevatorSubsystem;
-    Rumble rumble = new Rumble();
 
     boolean isAuto = false;
+    double speed;
 
     // constructor for OuttakeCommand
     public OuttakeCommand(Coral coralSubsystem, boolean isAuto) {
         this.coralSubsystem = coralSubsystem;
+        this.isAuto = isAuto;
 
         addRequirements(coralSubsystem);
     }
@@ -27,35 +25,32 @@ public class OuttakeCommand extends Command {
         if (!coralSubsystem.isLineBroken()) {
             cancel();
         }
+
+        if (!isAuto)
+            speed = Constants.coralConstants.outtakeSpeed;
+        else
+            speed = Constants.coralConstants.outtakeAutoSpeed;
+
+        coralSubsystem.set(speed);
     }
 
     // execute, startOuttake() once button is pressed
     @Override
     public void execute() {
         if (!coralSubsystem.isLineBroken()) {
-            rumble.doubleRumble(true);
             cancel();
+            System.out.println("STUPID STUPID STUPID");
         }
 
-        if (!isAuto)
-            coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
-
-        if (!isAuto)
-            coralSubsystem.set(Constants.coralConstants.outtakeAutoSpeed);
-
-        // if (elevatorSubsystem.getElevatorPosition() ==
-        // Constants.elevatorConstants.L1position) {
-        // coralSubsystem.set(Constants.coralConstants.L1Speed);
-        // } else {
-        // coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
-        // }
-
+        System.out.println(coralSubsystem.isLineBroken());
     }
 
     // end, when command ends, set activeOuttake to false and set state to IDLE
     @Override
     public void end(boolean interrupted) {
         coralSubsystem.setIdle();
+
+        System.out.println("HNDANSIJD AIJ DI JC A");
     }
 
     // if line is not broken, return true, else return false

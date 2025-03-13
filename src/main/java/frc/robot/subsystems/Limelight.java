@@ -14,6 +14,7 @@ public class Limelight extends SubsystemBase {
     boolean rotatePos = false;
     boolean xPos = false;
     boolean zPos = false;
+    public static boolean done = false;
 
     boolean isTagSeen = false;
 
@@ -59,6 +60,14 @@ public class Limelight extends SubsystemBase {
 
     public boolean getZPos() {
         return zPos;
+    }
+
+    public void pathIsDone(boolean done) {
+        this.done = done;
+    }
+
+    public boolean getPathIsDone() {
+        return done;
     }
 
     @Override

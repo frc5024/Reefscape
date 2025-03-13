@@ -13,7 +13,7 @@ public class IntakeCommand extends Command {
     private final Coral coralSubsystem;
 
     private final LEDs s_LEDs = LEDs.getInstance();
-    Rumble rumble = new Rumble();
+    Rumble rumble = Rumble.getInstance();
 
     // constructor for IntakeCommand
     public IntakeCommand(Coral coralSubsystem) {

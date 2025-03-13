@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDController;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.commands.LEDs.flashLEDS;
 import frc.robot.commands.LEDs.setLEDS;
 import frc.robot.commands.LEDs.setLEDSDefault;
@@ -14,6 +15,9 @@ public class LEDs extends SubsystemBase {
     // Variables
     private static LEDs mInstance = null;
     private LEDController ledController;
+    RobotContainer robotContainer;
+
+    boolean visionMode = true;
 
     // Instance
     public static LEDs getInstance() {
@@ -65,5 +69,10 @@ public class LEDs extends SubsystemBase {
     public void setLEDSDefault() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setLEDSDefault'");
+    }
+
+    @Override
+    public void periodic() {
+
     }
 }

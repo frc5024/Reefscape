@@ -41,9 +41,9 @@ public class autoSetPositionTagID extends Command {
         this.xOffset = xOffset;
         this.tag = tag;
 
-        this.strafePidController = new PIDController(0.7, 0, 0.05);
-        this.translationPidController = new PIDController(0.5, 0, 0.05);
-        this.rotationPidController = new PIDController(0.008, 0, 0.0005);
+        strafePidController = new PIDController(0.7, 0, 0.05);
+        translationPidController = new PIDController(0.5, 0, 0.05);
+        rotationPidController = new PIDController(0.008, 0, 0.0005);
 
     }
 

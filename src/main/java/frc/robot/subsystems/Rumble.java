@@ -25,7 +25,7 @@ public class Rumble extends SubsystemBase {
         DOUBLE
     }
 
-    public Rumble() {
+    private Rumble() {
         driver = new XboxController(0);
         operator = new XboxController(1);
     }
