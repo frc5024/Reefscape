@@ -7,8 +7,8 @@ import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDController;
 import frc.robot.Constants.LEDsConstants;
 import frc.robot.commands.led.FlashLEDs;
-import frc.robot.commands.led.SetLEDs;
-import frc.robot.commands.led.SetLEDsDefault;
+import frc.robot.commands.led.SetLEDS;
+import frc.robot.commands.led.SetLEDSDefault;
 
 public class LEDs extends SubsystemBase {
     // Variables
@@ -54,12 +54,12 @@ public class LEDs extends SubsystemBase {
 
     // Set to colour Command
     public Command setCommand(ILEDPreset colour) {
-        return new SetLEDs(this, colour);
+        return new SetLEDS(this, colour);
     }
 
     // Set LEDs to Default Command
     public Command setDefaultCommand() {
-        return new SetLEDsDefault(this);
+        return new SetLEDSDefault(this);
     }
 
     public void setLEDSDefault() {
