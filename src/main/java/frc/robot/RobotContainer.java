@@ -32,7 +32,7 @@ public class RobotContainer {
     // Subsystems
     private final Climb m_climbSubsystem = Climb.getInstance();
     private final Swerve s_Swerve = Swerve.getInstance();
-    private final Limelight limelightSubsystem = new Limelight();
+    private final Limelight limelightSubsystem = Limelight.getInstance();
     private final Coral coralSubsystem = Coral.getInstance();
     private final Elevator elevatorSubsystem = Elevator.getInstance();
     private final LEDs s_LEDs = LEDs.getInstance();
@@ -55,8 +55,6 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(strafeAxis), () -> -driver.getRawAxis(rotationAxis), () -> false // true =
                                                                                                           // robotcentric
         ));
-
-        s_LEDs.setDefaultCommand().schedule();
 
         configureBindings();
 
@@ -166,7 +164,7 @@ public class RobotContainer {
                         () -> visionMode));
 
         // Vision
-        driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
+        // driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
 
         driver.rightTrigger()
                 .whileTrue(new ConditionalCommand(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,

@@ -16,9 +16,18 @@ public class Limelight extends SubsystemBase {
     boolean zPos = false;
     public static boolean done = false;
 
+    private static Limelight mInstance = null;
+
     boolean isTagSeen = false;
 
-    public Limelight() {
+    public static Limelight getInstance() {
+        if (mInstance == null) {
+            mInstance = new Limelight();
+        }
+        return mInstance;
+    }
+
+    private Limelight() {
         limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     }
 
@@ -60,6 +69,10 @@ public class Limelight extends SubsystemBase {
 
     public boolean getZPos() {
         return zPos;
+    }
+
+    public boolean inPosition() {
+        return getXPos() && getZPos() && getRotationPos();
     }
 
     public void pathIsDone(boolean done) {

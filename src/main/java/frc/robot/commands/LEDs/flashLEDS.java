@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDPreset;
-import frc.robot.Constants;
 import frc.robot.subsystems.LEDs;
 
 public class flashLEDS extends Command {
@@ -43,6 +42,8 @@ public class flashLEDS extends Command {
         flashCount = 0;// Resets count just to be safe
         timer.reset();// Resets timer
         timer.restart();// Starts timer
+        totalTime.reset();
+        totalTime.restart();
     }
 
     @Override
@@ -69,7 +70,6 @@ public class flashLEDS extends Command {
     public boolean isFinished() {
         // After certain time has elapsed stop command and reset to default
         if (totalTime.hasElapsed(flashSeconds)) {
-            leds.set(Constants.LEDs.defaultLED);
             return true;
         }
         return false;

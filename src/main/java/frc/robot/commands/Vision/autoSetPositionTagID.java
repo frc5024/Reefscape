@@ -191,7 +191,7 @@ public class autoSetPositionTagID extends Command {
     // only finishes when command canceled or when fully in position
     @Override
     public boolean isFinished() {
-        return limelight.getXPos() && limelight.getZPos() && limelight.getRotationPos(); // Stop when aligned
+        return limelight.inPosition(); // Stop when aligned
     }
 
     // unlocks controls for driver and sets back to field releative

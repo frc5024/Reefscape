@@ -47,7 +47,7 @@ public final class Constants {
         public static final double noOffset = 0;
 
         // changes smaller adjustments and max speed
-        public static final double rotationPIDMultiplier = 1;
+        public static final double rotationPIDMultiplier = 1.4;
         public static final double strafePIDMultiplier = 2.3;
         public static final double distancePIDMultiplier = 2;
 
@@ -55,7 +55,7 @@ public final class Constants {
         public static final double strafePIDCap = 0.15;
         public static final double distancePIDCap = 0.3;
 
-        public static final double rotationTolerance = 1.5; // degrees
+        public static final double rotationTolerance = 1.6; // degrees
         public static final double strafeTolerance = centimetersToMeters(2.5);
         public static final double distanceTolerance = centimetersToMeters(8); // to be adjusted
 

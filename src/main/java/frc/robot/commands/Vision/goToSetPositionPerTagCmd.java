@@ -6,9 +6,12 @@ import java.util.Set;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Rumble;
 import frc.robot.subsystems.Swerve;
 
 public class goToSetPositionPerTagCmd extends Command {
@@ -16,6 +19,7 @@ public class goToSetPositionPerTagCmd extends Command {
     private final Limelight limelight;
     private final Swerve swerveDrive;
     private final double xOffset;
+    Rumble rumble = Rumble.getInstance();
     // private LEDs s_LEDs;
 
     double strafePidOutput = 0;
@@ -36,15 +40,20 @@ public class goToSetPositionPerTagCmd extends Command {
 
     boolean isLEDset = false;
 
+    private Command ledCmd;
+    private Command ledOffCmd;
+
     public goToSetPositionPerTagCmd(Limelight limelight, Swerve swerveDrive, double xOffset) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
         this.xOffset = xOffset;
 
-        this.strafePidController = new PIDController(0.7, 0, 0.05);
-        this.translationPidController = new PIDController(0.5, 0, 0.05);
-        this.rotationPidController = new PIDController(0.008, 0, 0.0005);
+        strafePidController = new PIDController(0.7, 0, 0.05);
+        translationPidController = new PIDController(0.5, 0, 0.05);
+        rotationPidController = new PIDController(0.008, 0, 0.0005);
 
+        ledCmd = LEDs.getInstance().persistCommand(LEDPreset.Solid.kHotPink);
+        ledOffCmd = LEDs.getInstance().persistCommand(LEDPreset.Solid.kBlue);
     }
 
     // clarifies that the robot is NOT in position to avoid previous use conflicts
@@ -60,7 +69,7 @@ public class goToSetPositionPerTagCmd extends Command {
         limelight.setRotationPos(false);
         limelight.setXPos(false);
         limelight.setZPos(false);
-        // isLEDset = false;
+
     }
 
     // Hashset of reef/wanted AprilTag IDs
@@ -75,6 +84,9 @@ public class goToSetPositionPerTagCmd extends Command {
         if (validTagIDs.contains(detectedTagID)) {
             swerveDrive.setFieldRelative(false);
 
+            ledCmd.schedule();
+            ledOffCmd.cancel();
+
             // if (!isLEDset) {
             // isLEDset = true;
             // s_LEDs.setCommand(LEDPreset.Solid.kWhite).schedule();
@@ -87,6 +99,9 @@ public class goToSetPositionPerTagCmd extends Command {
             swerveDrive.visionRotationVal(0, false);
 
             swerveDrive.setFieldRelative(true);
+
+            ledCmd.cancel();
+            ledOffCmd.schedule();
         }
 
     }
@@ -185,7 +200,7 @@ public class goToSetPositionPerTagCmd extends Command {
 
     @Override
     public boolean isFinished() {
-        return limelight.getXPos() && limelight.getZPos() && limelight.getRotationPos(); // Stop when aligned
+        return limelight.inPosition(); // Stop when aligned
     }
 
     @Override
@@ -201,6 +216,14 @@ public class goToSetPositionPerTagCmd extends Command {
         swerveDrive.visionRotationVal(0, false);
 
         swerveDrive.setFieldRelative(true);
+
+        ledCmd.cancel();
+        ledOffCmd.cancel();
+
+        if (!interrupted) {
+            LEDs.getInstance().flashCommand(LEDPreset.Solid.kHotPink, 2).schedule();
+            rumble.staticRumble(true);
+        }
 
         // swerveDrive.setPose(swerveDrive.getPose());
     }

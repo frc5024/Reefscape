@@ -7,9 +7,10 @@ import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDController;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.commands.LEDs.LEDDefaultCmd;
 import frc.robot.commands.LEDs.flashLEDS;
+import frc.robot.commands.LEDs.persistLEDSCmd;
 import frc.robot.commands.LEDs.setLEDS;
-import frc.robot.commands.LEDs.setLEDSDefault;
 
 public class LEDs extends SubsystemBase {
     // Variables
@@ -30,18 +31,13 @@ public class LEDs extends SubsystemBase {
     // Constructor
     private LEDs() {
         ledController = new LEDController(Constants.LEDs.ledPort);// Sets which motor we are using, currently port 9
-    }
 
-    // Direct Commands in order to set LEDs to a colour
+        setDefaultCommand(new LEDDefaultCmd(this));
+    }
 
     // Set the LEDs to be a colour
     public void set(ILEDPreset colour) {
         ledController.set(colour);
-    }
-
-    // Set the LEDs to be Default colour
-    public void setDefault() {
-        set(Constants.LEDs.defaultLED);
     }
 
     // Command Callers
@@ -61,9 +57,8 @@ public class LEDs extends SubsystemBase {
         return new setLEDS(this, colour);
     }
 
-    // Set LEDs to Default Command
-    public Command setDefaultCommand() {
-        return new setLEDSDefault(this);
+    public Command persistCommand(ILEDPreset colour) {
+        return new persistLEDSCmd(this, colour);
     }
 
     public void setLEDSDefault() {
