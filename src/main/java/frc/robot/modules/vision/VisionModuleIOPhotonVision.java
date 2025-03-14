@@ -75,6 +75,8 @@ public class VisionModuleIOPhotonVision implements VisionModuleIO {
 
     @Override
     public void updateInputs(VisionIOInputs inputs) {
+        this.poseObservations.clear();
+
         inputs.connected = this.photonCamera.isConnected();
 
         // Read new camera observations

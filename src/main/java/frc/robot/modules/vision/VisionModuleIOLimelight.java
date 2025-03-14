@@ -1,7 +1,7 @@
 package frc.robot.modules.vision;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -26,6 +26,8 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
     protected final Camera camera;
     private final Supplier<Rotation2d> rotationSupplier;
     private final DoubleArrayPublisher orientationPublisher;
+
+    private final List<VisionModuleIO.PoseObservation> poseObservations = new ArrayList<>();
 
     private final DoubleSubscriber latencySubscriber;
     private final DoubleSubscriber txSubscriber;
@@ -80,6 +82,8 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
 
     @Override
     public void updateInputs(VisionIOInputs inputs) {
+        this.poseObservations.clear();
+
         // Update connection status based on whether an update has been seen in the last
         // 250ms
         inputs.connected = ((RobotController.getFPGATime() - this.latencySubscriber.getLastChange()) / 1000) < 250;
@@ -101,14 +105,13 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
 
         // Read new pose observations from NetworkTables
         Set<Integer> tagIds = new HashSet<>();
-        List<PoseObservation> poseObservations = new LinkedList<>();
         for (var rawSample : this.megatag1Subscriber.readQueue()) {
             if (rawSample.value.length == 0)
                 continue;
             for (int i = 11; i < rawSample.value.length; i += 7) {
                 tagIds.add((int) rawSample.value[i]);
             }
-            poseObservations.add(
+            this.poseObservations.add(
                     new PoseObservation(
                             // Timestamp, based on server timestamp of publish and latency
                             rawSample.timestamp * 1.0e-6 - rawSample.value[6] * 1.0e-3,
@@ -133,7 +136,7 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
             for (int i = 11; i < rawSample.value.length; i += 7) {
                 tagIds.add((int) rawSample.value[i]);
             }
-            poseObservations.add(
+            this.poseObservations.add(
                     new PoseObservation(
                             // Timestamp, based on server timestamp of publish and latency
                             rawSample.timestamp * 1.0e-6 - rawSample.value[6] * 1.0e-3,
@@ -152,11 +155,7 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
                             PoseObservationType.SINGLE_TAG));
         }
 
-        // Save pose observations to inputs object
-        inputs.poseObservations = new PoseObservation[poseObservations.size()];
-        for (int i = 0; i < poseObservations.size(); i++) {
-            inputs.poseObservations[i] = poseObservations.get(i);
-        }
+        inputs.poseObservations = this.poseObservations.toArray(new PoseObservation[0]);
 
         // Save tag IDs to inputs objects
         inputs.tagIds = new int[tagIds.size()];
