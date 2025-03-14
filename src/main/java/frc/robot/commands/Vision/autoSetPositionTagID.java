@@ -96,6 +96,7 @@ public class autoSetPositionTagID extends Command {
             // if (rotationPidOutput != 0) {
             // lastSeenRotation = rotationPidOutput;
             // }
+            System.out.println("I SEE THE TAG");
 
             mathToTag();
         } else {
@@ -127,6 +128,8 @@ public class autoSetPositionTagID extends Command {
         rotateToTag(yaw);
         translateToTag(zDiff);
         strafeToTag(xDiff);
+
+        System.out.println("I SHOULD CALLING DRIVE");
 
         setDrive();
     }
@@ -180,6 +183,8 @@ public class autoSetPositionTagID extends Command {
 
     public void setDrive() {
         swerveDrive.setFieldRelative(false);
+
+        System.out.println("I SHOULD BE DRIVING RIGHT NOW");
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
         swerveDrive.visionTranslationalVal(translationPidOutput, true);

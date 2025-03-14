@@ -102,8 +102,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("ScoreCoral", coralSubsystem.outtakeAutoCommand());
         NamedCommands.registerCommand("IntakeCoral", coralSubsystem.intakeCommand());
 
-        NamedCommands.registerCommand("Confirm Vision", new InstantCommand(() -> limelightSubsystem.done = true)); // fix
-                                                                                                                   // better
+        NamedCommands.registerCommand("Confirm Vision", new InstantCommand(() -> limelightSubsystem.pathIsDone(true))); // fix
+        // better
         NamedCommands.registerCommand("Wait For Vision", new isPathRun(limelightSubsystem));
 
         // Elevator
@@ -121,7 +121,7 @@ public class RobotContainer {
                         new PathPlannerAuto("6R TS 6L")));
 
         autoChooser.addOption("Processor side 2/3 piece (COMPLETE)",
-                Commands.sequence(new PathPlannerAuto("Start 9R"), new PathPlannerAuto("9R BS 8R"),
+                Commands.sequence(new PathPlannerAuto("Start 9R"), new PathPlannerAuto("9R BS 8"),
                         new PathPlannerAuto("8R BS 8L")));
 
         autoChooser.addOption("Middle 1 piece right (COMPLETE)", new PathPlannerAuto("MiddleRight"));
@@ -167,12 +167,14 @@ public class RobotContainer {
         // Vision
         // driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
 
-        driver.rightTrigger()
-                .whileTrue(new ConditionalCommand(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-                        Constants.Vision.rightOffset), new InstantCommand(), () -> visionMode));
-        driver.leftTrigger()
-                .whileTrue(new ConditionalCommand(new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-                        Constants.Vision.leftOffset), new InstantCommand(), () -> visionMode));
+        // driver.rightTrigger()
+        // .whileTrue(new ConditionalCommand(new
+        // goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+        // Constants.Vision.rightOffset), new InstantCommand(), () -> visionMode));
+        // driver.leftTrigger()
+        // .whileTrue(new ConditionalCommand(new
+        // goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+        // Constants.Vision.leftOffset), new InstantCommand(), () -> visionMode));
 
         driver.b().onTrue(coralSubsystem.outtakeAutoCommand());
 
@@ -191,7 +193,7 @@ public class RobotContainer {
         // Coral
         driver.rightBumper().whileTrue(coralSubsystem.intakeCommand());
         driver.rightBumper().onTrue(elevatorSubsystem.bottomElevator());
-        driver.start().whileTrue(coralSubsystem.backwardsMotor());
+        // driver.start().whileTrue(coralSubsystem.backwardsMotor());
 
         // driver.back().whileTrue(new PathPlannerAuto("Left AnyTag"));
 
@@ -244,6 +246,31 @@ public class RobotContainer {
 
         operator.rightTrigger().whileTrue(m_climbSubsystem.climbCommand());
         operator.leftTrigger().whileTrue(m_climbSubsystem.extendingCommand());
+
+        driver.start().onTrue(new InstantCommand(() -> elevatorSubsystem.increaseMode()));
+        driver.back().onTrue(new InstantCommand(() -> elevatorSubsystem.decreaseMode()));
+
+        driver.rightTrigger().whileTrue(
+                Commands.sequence(
+                        Commands.parallel(
+                                new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+                                        Constants.Vision.rightOffset),
+                                elevatorSubsystem.goToL2Position()),
+                        elevatorSubsystem.goToModePosition(),
+                        coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
+                            elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the button is released
+                        }));
+
+        driver.leftTrigger().whileTrue(
+                Commands.sequence(
+                        Commands.parallel(
+                                new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+                                        Constants.Vision.leftOffset),
+                                elevatorSubsystem.goToL2Position()),
+                        elevatorSubsystem.goToModePosition(),
+                        coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
+                            elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the button is released
+                        }));
     }
 
     public Command getAutonomousCommand() {

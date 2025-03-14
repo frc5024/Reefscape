@@ -174,7 +174,7 @@ public class goToSetPositionPerTagCmd extends Command {
             limelight.setXPos(true);
         }
 
-        if (Math.abs(xDiff) < 0.3) {
+        if (Math.abs(xDiff) < 0.2) {
             shouldBeSlowStrafe = true;
         } else {
             shouldBeSlowStrafe = false;

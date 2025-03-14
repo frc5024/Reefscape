@@ -22,6 +22,7 @@ public class isPathRun extends Command {
     @Override
     public void end(boolean interrupted) {
         limelight.pathIsDone(false);
+        System.out.println("Path Is DONE");
     }
 
     @Override

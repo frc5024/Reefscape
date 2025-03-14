@@ -17,11 +17,13 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.elevatorConstants;
+import frc.robot.commands.Elevator.SetElevatorModeCmd;
 import frc.robot.commands.Elevator.SetElevatorSetpointCmd;
 
 public class Elevator extends SubsystemBase {
@@ -71,7 +73,8 @@ public class Elevator extends SubsystemBase {
     private Rumble rumble;
     public boolean zeroRumbled = false;
 
-    public double elevatorMode = Constants.elevatorConstants.L4Position;
+    public double elevatorNumeredMode = 4;
+    double elevatorMode;
     public double elevatorPosition = 0;
 
     private static Elevator mInstance;
@@ -91,7 +94,7 @@ public class Elevator extends SubsystemBase {
         elevatorMotor.configure(elevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         elevatorMotor2.configure(elevatorMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        zeroingLimitSwitch = new DigitalInput(7);
+        zeroingLimitSwitch = new DigitalInput(3);
         stoppingLimitSwitch = new DigitalInput(1);
 
         // assigning values to the P, I and D
@@ -130,6 +133,9 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        SmartDashboard.putNumber("Elevator Mode", elevatorNumeredMode);
+        updateSetpoint(elevatorNumeredMode);
 
         // getting the PID values and showing them on the shuffle board ("getDouble"
         // constantly checks the value)
@@ -292,14 +298,6 @@ public class Elevator extends SubsystemBase {
         this.enabled = enabled;
     }
 
-    public void setElevatorMode(double reefLevel) {
-        elevatorMode = reefLevel;
-    }
-
-    public double getElevatorMode() {
-        return elevatorMode;
-    }
-
     public void setElevatorPosition(double elevatorLevel) {
         elevatorPosition = elevatorLevel;
     }
@@ -314,6 +312,38 @@ public class Elevator extends SubsystemBase {
         double percent = encoder / 60; // divide by amount of rotations
 
         return percent;
+    }
+
+    public void increaseMode() {
+        elevatorNumeredMode++;
+
+        if (elevatorNumeredMode > 4)
+            elevatorNumeredMode = 4;
+    }
+
+    public void decreaseMode() {
+        elevatorNumeredMode--;
+
+        if (elevatorNumeredMode < 2)
+            elevatorNumeredMode = 2;
+    }
+
+    public void updateSetpoint(double Mode) {
+        if (Mode == 4) {
+            elevatorMode = Constants.elevatorConstants.L4Position;
+        } else if (Mode == 3) {
+            elevatorMode = Constants.elevatorConstants.L3Position;
+        } else if (Mode == 2) {
+            elevatorMode = Constants.elevatorConstants.L2Position;
+        } else {
+            elevatorMode = Constants.elevatorConstants.L4Position;
+        }
+
+        SmartDashboard.putNumber("Elevator Setpoint VIOSINSAIN", elevatorMode);
+    }
+
+    public double getSetpoint() {
+        return elevatorMode;
     }
 
     public double elevatorHeight() {
@@ -353,7 +383,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public Command goToModePosition() {
-        return new SetElevatorSetpointCmd(this, elevatorMode);
+        return new SetElevatorModeCmd(this);
     }
 
     public Command slowL2() {

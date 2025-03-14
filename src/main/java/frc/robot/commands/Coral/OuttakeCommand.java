@@ -39,10 +39,7 @@ public class OuttakeCommand extends Command {
     public void execute() {
         if (!coralSubsystem.isLineBroken()) {
             cancel();
-            System.out.println("STUPID STUPID STUPID");
         }
-
-        System.out.println(coralSubsystem.isLineBroken());
     }
 
     // end, when command ends, set activeOuttake to false and set state to IDLE
@@ -50,7 +47,6 @@ public class OuttakeCommand extends Command {
     public void end(boolean interrupted) {
         coralSubsystem.setIdle();
 
-        System.out.println("HNDANSIJD AIJ DI JC A");
     }
 
     // if line is not broken, return true, else return false
