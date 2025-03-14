@@ -53,13 +53,13 @@ public class VisionSubsystem extends SubsystemBase {
     /**
      * 
      */
-    public VisionSubsystem(VisionConsumer visionConsumer, Supplier<Pose2d> poseSupplier,
+    public VisionSubsystem(List<Camera> cameras, VisionConsumer visionConsumer, Supplier<Pose2d> poseSupplier,
             Supplier<Rotation2d> rotationSupplier) {
         this.visionConsumer = visionConsumer;
         this.poseSupplier = poseSupplier;
 
         // Setup the vision modules
-        for (Camera camera : VisionConstants.CAMERAS) {
+        for (Camera camera : cameras) {
             if (Robot.isReal()) {
                 if (camera.getProcessor() == Camera.Processor.LIMELIGHT) {
                     this.visionModules.add(new VisionModuleIOLimelight(camera, rotationSupplier));
@@ -70,7 +70,6 @@ public class VisionSubsystem extends SubsystemBase {
                 if (camera.getProcessor() == Camera.Processor.LIMELIGHT) {
                     this.visionModules.add(new VisionModuleIOLimelight(camera, rotationSupplier));
                 } else if (camera.getProcessor() == Camera.Processor.PHOTONVISION) {
-                    // this.visionModules.add(new VisionModuleIOPhotonVision(camera));
                     this.visionModules.add(new VisionModuleIOPhotonVisionSim(camera, this.poseSupplier));
                 }
             }

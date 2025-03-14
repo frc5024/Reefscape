@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.RobotConstants;
@@ -94,7 +95,9 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
                 true,
                 true,
                 new Rotation2d(this.turnMotorSim.getAngularPositionRad()),
+                Units.radiansToDegrees(this.turnMotorSim.getAngularPositionRad()),
                 new Rotation2d(this.turnMotorSim.getAngularPositionRad()),
+                Units.radiansToDegrees(this.turnMotorSim.getAngularPositionRad()),
                 this.turnMotorSim.getAngularVelocityRadPerSec(),
                 this.turnAppliedVolts,
                 Math.abs(this.turnMotorSim.getCurrentDrawAmps()),

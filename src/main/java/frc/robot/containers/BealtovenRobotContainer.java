@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.modules.algae.AlgaeModuleIOSim;
 import frc.robot.modules.coral.CoralModuleIOSim;
 import frc.robot.modules.elevator.ElevatorModuleIOSim;
@@ -38,7 +39,7 @@ public class BealtovenRobotContainer extends RobotContainer {
                 new SwerveModuleIOTalonFX(swerveModuleConfigs[2]),
                 new SwerveModuleIOTalonFX(swerveModuleConfigs[3]));
 
-        this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
+        this.visionSubsystem = new VisionSubsystem(VisionConstants.BEALTOVEN_CAMERAS, this.swerveDriveSubsystem,
                 this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
 
         this.algaeSubsystem = new AlgaeSubsystem(new AlgaeModuleIOSim());
