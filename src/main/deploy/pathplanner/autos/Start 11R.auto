@@ -62,15 +62,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "ScoreCoral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorRoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ScoreCoral"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
           }
         }
       ]

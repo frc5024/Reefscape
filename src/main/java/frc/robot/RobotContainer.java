@@ -102,7 +102,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("ScoreCoral", coralSubsystem.outtakeAutoCommand());
         NamedCommands.registerCommand("IntakeCoral", coralSubsystem.intakeCommand());
 
-        NamedCommands.registerCommand("Confirm Vision", new InstantCommand(() -> Limelight.done = true));
+        NamedCommands.registerCommand("Confirm Vision", new InstantCommand(() -> limelightSubsystem.done = true)); // fix
+                                                                                                                   // better
         NamedCommands.registerCommand("Wait For Vision", new isPathRun(limelightSubsystem));
 
         // Elevator

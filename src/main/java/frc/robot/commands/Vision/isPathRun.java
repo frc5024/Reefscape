@@ -7,8 +7,6 @@ public class isPathRun extends Command {
 
     private final Limelight limelight;
 
-    public boolean done = false;
-
     public isPathRun(Limelight limelight) {
 
         this.limelight = limelight;

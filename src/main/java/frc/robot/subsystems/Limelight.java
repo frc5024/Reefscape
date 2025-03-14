@@ -14,7 +14,7 @@ public class Limelight extends SubsystemBase {
     boolean rotatePos = false;
     boolean xPos = false;
     boolean zPos = false;
-    public static boolean done = false;
+    public boolean done = false;
 
     private static Limelight mInstance = null;
 

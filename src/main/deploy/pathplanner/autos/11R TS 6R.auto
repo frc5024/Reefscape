@@ -17,12 +17,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeCoral"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "ElevatorRoot"
                 }
               }
@@ -30,19 +24,89 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "IntakeCoral"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "TS 6"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "TS 6"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Confirm Vision"
+                      }
+                    },
+                    {
+                      "type": "race",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "DriveRightTag6"
+                            }
+                          },
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 3.0
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "L2"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "L2"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Wait For Vision"
+                      }
+                    },
+                    {
+                      "type": "race",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "L4"
+                            }
+                          },
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 3.0
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -53,37 +117,18 @@
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "DriveRightTag6"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "L4"
-                      }
-                    }
-                  ]
+                  "name": "ScoreCoral"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 4.0
+                  "waitTime": 0.5
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ScoreCoral"
           }
         }
       ]
