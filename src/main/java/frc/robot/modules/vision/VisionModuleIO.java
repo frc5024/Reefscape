@@ -10,6 +10,11 @@ import edu.wpi.first.math.geometry.Transform3d;
  * 
  */
 public interface VisionModuleIO {
+    public enum PoseObservationType {
+        SINGLE_TAG,
+        MULTI_TAG
+    }
+
     @AutoLog
     public static class VisionIOInputs {
         public boolean connected = false;
@@ -32,9 +37,12 @@ public interface VisionModuleIO {
      */
     public static record PoseObservation(
             double timestamp,
-            Pose3d pose,
-            double ambiguity,
-            int tagCount,
+            Pose3d cameraPose,
+            double latencySecs,
+            double averageAmbiguity,
+            double reprojectionError,
+            long tagsSeenBitMap,
+            int numTags,
             double averageTagDistance,
             PoseObservationType type) {
     }
@@ -50,15 +58,6 @@ public interface VisionModuleIO {
      */
     public static record BestTargetPose(Pose3d bestTargetPose) {
 
-    }
-
-    /**
-     * 
-     */
-    public static enum PoseObservationType {
-        MEGATAG_1,
-        MEGATAG_2,
-        PHOTONVISION
     }
 
     /**

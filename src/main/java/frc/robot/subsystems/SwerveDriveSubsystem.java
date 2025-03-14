@@ -421,9 +421,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     /**
      * Adds a new timestamped vision measurement.
      */
-    public void addVisionMeasurement(
-            Pose2d visionRobotPoseMeters,
-            double timestampSeconds,
+    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds,
             Matrix<N3, N1> visionMeasurementStdDevs) {
         this.poseEstimator.addVisionMeasurement(
                 visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);

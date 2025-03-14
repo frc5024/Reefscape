@@ -473,14 +473,19 @@ public final class Constants {
         public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM3_CAMERA);
         public static final List<Camera> REEFSCAPE_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
         public static final List<Camera> NO_CAMERAS = new ArrayList<>();
-        public static final List<Camera> CAMERAS = BEALTOVEN_CAMERAS;
+        public static final List<Camera> CAMERAS = SIMULATION_CAMERAS;
 
         public static final Camera FRONT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
         public static final Camera REAR_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
-        public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;
+        public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.5;
         public static final double APRILTAG_MAX_Z_ERROR = 0.75;
+        public static final double APRITAG_REPROJECTION_ERROR_THRESHOLD = 5.0;
+
+        public static final double BEST_POSE_TIME_THRESHOLD_SECS = 0.5;
+        public static final boolean ENABLE_DETAILED_LOGGING = false;
+        public static final boolean CALIBRATE_CAMERA_TRANSFORMS = false;
 
         // Standard deviation baselines, for 1 meter distance and 1 tag
         // (Adjusted automatically based on distance and # of tags)
