@@ -72,7 +72,7 @@
         "containers": [
           {
             "title": "Match Time",
-            "x": 512.0,
+            "x": 1152.0,
             "y": 0.0,
             "width": 384.0,
             "height": 256.0,
@@ -89,9 +89,9 @@
           {
             "title": "Alerts",
             "x": 1152.0,
-            "y": 0.0,
+            "y": 256.0,
             "width": 384.0,
-            "height": 512.0,
+            "height": 256.0,
             "type": "Alerts",
             "properties": {
               "topic": "/SmartDashboard/Alerts",
@@ -207,6 +207,19 @@
               "wrap_value": false,
               "show_pointer": true,
               "show_ticks": true
+            }
+          },
+          {
+            "title": "Game Piece Mode",
+            "x": 512.0,
+            "y": 0.0,
+            "width": 384.0,
+            "height": 256.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/Game Piece Mode",
+              "period": 0.06,
+              "data_type": "string"
             }
           }
         ]
