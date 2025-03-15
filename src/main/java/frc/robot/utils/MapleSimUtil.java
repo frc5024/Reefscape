@@ -9,6 +9,7 @@ import java.util.Arrays;
 import org.ironmaple.simulation.IntakeSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+import org.ironmaple.simulation.gamepieces.GamePieceProjectile;
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeAlgaeOnFly;
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly;
 
@@ -74,16 +75,27 @@ public class MapleSimUtil {
         Transform3d algaeTransform = new Transform3d(
                 new Pose3d(getSwerveDriveSimulation().getSimulatedDriveTrainPose()), algaePose);
 
+        GamePieceProjectile processAlgae = new ReefscapeAlgaeOnFly(
+                getSwerveDriveSimulation().getSimulatedDriveTrainPose().getTranslation(),
+                new Translation2d(algaeTransform.getX(), algaeTransform.getY()),
+                getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),
+                getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation(),
+                Meters.of(algaeTransform.getZ()),
+                MetersPerSecond.of(2.0),
+                Degrees.of(0.0))
+                .disableBecomesGamePieceOnFieldAfterTouchGround();
+
+        GamePieceProjectile shootAlgae = new ReefscapeAlgaeOnFly(
+                getSwerveDriveSimulation().getSimulatedDriveTrainPose().getTranslation(),
+                new Translation2d(algaeTransform.getX(), algaeTransform.getY()),
+                getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),
+                getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation(),
+                Meters.of(algaeTransform.getZ()),
+                MetersPerSecond.of(6.0),
+                Degrees.of(120));
+
         SimulatedArena.getInstance()
-                .addGamePieceProjectile(new ReefscapeAlgaeOnFly(
-                        getSwerveDriveSimulation().getSimulatedDriveTrainPose().getTranslation(),
-                        new Translation2d(algaeTransform.getX(), algaeTransform.getY()),
-                        getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),
-                        getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation(),
-                        Meters.of(algaeTransform.getZ()),
-                        MetersPerSecond.of(4),
-                        Degrees.of(0.0))
-                        .disableBecomesGamePieceOnFieldAfterTouchGround());
+                .addGamePieceProjectile(algaePose.getZ() < 1.0 ? processAlgae : shootAlgae);
     }
 
     /**
