@@ -91,8 +91,8 @@ public class VisionSubsystem extends SubsystemBase {
         this.tagPoses = new ArrayList<List<Pose3d>>(cameras.size());
 
         // Setup the vision modules
-        int cameraIndex = 0;
-        for (Camera camera : cameras) {
+        for (int cameraIndex = 0; cameraIndex < cameras.size(); cameraIndex++) {
+            Camera camera = cameras.get(cameraIndex);
             if (Robot.isReal()) {
                 if (camera.getProcessor() == Camera.Processor.LIMELIGHT) {
                     this.visionModules[cameraIndex] = new VisionModuleIOLimelight(camera, rotationSupplier);
@@ -105,18 +105,10 @@ public class VisionSubsystem extends SubsystemBase {
                 } else if (camera.getProcessor() == Camera.Processor.PHOTONVISION) {
                     this.visionModules[cameraIndex] = new VisionModuleIOPhotonVisionSim(camera, this.poseSupplier);
                 }
-
-                cameraIndex++;
             }
         }
 
         this.lastTimestamps = new double[cameras.size()];
-
-        this.cameraPoses.add(new ArrayList<>());
-        this.robotPoses.add(new ArrayList<>());
-        this.robotPosesAccepted.add(new ArrayList<>());
-        this.robotPosesRejected.add(new ArrayList<>());
-        this.tagPoses.add(new ArrayList<>());
 
         // Initialize inputs
         this.inputs = new VisionIOInputsAutoLogged[this.visionModules.length];
@@ -124,6 +116,12 @@ public class VisionSubsystem extends SubsystemBase {
         for (int i = 0; i < this.visionModules.length; i++) {
             this.inputs[i] = new VisionIOInputsAutoLogged();
             this.disconnectedAlerts[i] = new Alert("Vision camera " + i + " is disconnected.", AlertType.kError);
+
+            this.cameraPoses.add(new ArrayList<>());
+            this.robotPoses.add(new ArrayList<>());
+            this.robotPosesAccepted.add(new ArrayList<>());
+            this.robotPosesRejected.add(new ArrayList<>());
+            this.tagPoses.add(new ArrayList<>());
         }
 
         // robot to camera transformation calibration
@@ -269,8 +267,6 @@ public class VisionSubsystem extends SubsystemBase {
 
             // Record cycle time
             LoggedTracer.record(this.NAME);
-
-            cameraIndex++;
         }
 
         // Log summary data

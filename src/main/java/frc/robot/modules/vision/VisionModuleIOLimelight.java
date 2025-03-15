@@ -93,10 +93,6 @@ public class VisionModuleIOLimelight implements VisionModuleIO {
                 ? VisionConstants.TAG_FIELD_LAYOUT.getTagPose(inputs.bestTargetId).get()
                 : null;
 
-        // Update target observation
-        inputs.latestTargetObservation = new TargetObservation(Rotation2d.fromDegrees(this.txSubscriber.get()),
-                Rotation2d.fromDegrees(this.tySubscriber.get()));
-
         // Update orientation for MegaTag 2
         this.orientationPublisher.accept(
                 new double[] { this.rotationSupplier.get().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0 });

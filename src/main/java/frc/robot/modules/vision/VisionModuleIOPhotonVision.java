@@ -1,8 +1,10 @@
 package frc.robot.modules.vision;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -80,24 +82,19 @@ public class VisionModuleIOPhotonVision implements VisionModuleIO {
         inputs.connected = this.photonCamera.isConnected();
 
         // Read new camera observations
+        Set<Integer> tagIds = new HashSet<>();
         for (PhotonPipelineResult result : this.photonCamera.getAllUnreadResults()) {
             Optional<EstimatedRobotPose> visionEstimate = this.photonPoseEstimator.update(result);
 
-            if (result.hasTargets()) {
+            visionEstimate.ifPresentOrElse(estimate -> {
+                long tagsSeenBitMap = 0;
+                double averageAmbiguity = 0.0;
+                double averageTagDistance = 0.0;
+
                 inputs.bestTargetId = result.getBestTarget().getFiducialId();
                 inputs.hasTarget = true;
                 inputs.bestTargetPose = VisionConstants.TAG_FIELD_LAYOUT
                         .getTagPose(result.getBestTarget().getFiducialId()).get();
-            } else {
-                inputs.bestTargetId = -1;
-                inputs.hasTarget = false;
-                inputs.bestTargetPose = null;
-            }
-
-            visionEstimate.ifPresent(estimate -> {
-                long tagsSeenBitMap = 0;
-                double averageAmbiguity = 0.0;
-                double averageTagDistance = 0.0;
 
                 for (int i = 0; i < estimate.targetsUsed.size(); i++) {
                     tagsSeenBitMap |= 1L << estimate.targetsUsed.get(i).getFiducialId();
@@ -123,9 +120,21 @@ public class VisionModuleIOPhotonVision implements VisionModuleIO {
                                 estimate.strategy == PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR
                                         ? PoseObservationType.MULTI_TAG
                                         : PoseObservationType.SINGLE_TAG));
+                estimate.targetsUsed.forEach(photonTargetTracked -> {
+                    tagIds.add(photonTargetTracked.fiducialId);
+                });
+            }, () -> {
+                inputs.bestTargetId = -1;
+                inputs.hasTarget = false;
+                inputs.bestTargetPose = null;
             });
         }
 
-        inputs.poseObservations = poseObservations.toArray(new PoseObservation[0]);
+        inputs.poseObservations = this.poseObservations.toArray(new PoseObservation[0]);
+        inputs.tagIds = new int[tagIds.size()];
+        int i = 0;
+        for (int id : tagIds) {
+            inputs.tagIds[i++] = id;
+        }
     }
 }

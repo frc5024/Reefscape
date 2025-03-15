@@ -18,7 +18,6 @@ public interface VisionModuleIO {
     @AutoLog
     public static class VisionIOInputs {
         public boolean connected = false;
-        public TargetObservation latestTargetObservation = new TargetObservation(new Rotation2d(), new Rotation2d());
         public PoseObservation[] poseObservations = new PoseObservation[0];
         public int[] tagIds = new int[0];
         public int bestTargetId = 0;
@@ -45,19 +44,6 @@ public interface VisionModuleIO {
             int numTags,
             double averageTagDistance,
             PoseObservationType type) {
-    }
-
-    /**
-     * 
-     */
-    public static record BestTargetId(int bestTargetId) {
-    }
-
-    /**
-     * 
-     */
-    public static record BestTargetPose(Pose3d bestTargetPose) {
-
     }
 
     /**
