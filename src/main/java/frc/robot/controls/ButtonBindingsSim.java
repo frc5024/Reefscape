@@ -137,7 +137,7 @@ public class ButtonBindingsSim {
         // Drive to selected reef station
         commandXboxController.rightBumper()
                 .whileTrue(new DriveReefStationPathCommand(this.swerveDriveSubsystem,
-                        GameData.getInstance()::getReefStationIndex));
+                        GameData.getInstance()::getReefStationIndex, GameData.getInstance()::getGamePieceModeAsString));
 
         // Drive to selected reef station
         commandXboxController.leftBumper()

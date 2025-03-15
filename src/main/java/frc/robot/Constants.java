@@ -570,6 +570,11 @@ public final class Constants {
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;
         public static final double APRILTAG_MAX_Z_ERROR = 0.75;
+        public static final double APRILTAG_REPROJECTION_ERROR_THRESHOLD = 5.0;
+
+        public static final double BEST_POSE_TIME_THRESHOLD_SECS = 0.5;
+        public static final boolean ENABLE_DETAILED_LOGGING = false;
+        public static final boolean CALIBRATE_CAMERA_TRANSFORMS = false;
 
         // Standard deviation baselines, for 1 meter distance and 1 tag
         // (Adjusted automatically based on distance and # of tags)
@@ -584,8 +589,10 @@ public final class Constants {
         // Standard deviation multipliers for each camera
         // (Adjust to trust some cameras more than others)
         public static double[] CAMERA_STD_DEV_FACTORS = new double[] {
-                1.0, // Camera 0
-                1.0 // Camera 1
+                1.0, // Camera 1
+                1.0, // Camera 2
+                1.0, // Camera 3
+                1.0 // Camera 4
         };
 
         // for simulation only

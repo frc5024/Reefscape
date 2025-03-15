@@ -17,6 +17,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 public class DriveReefStationPathCommand extends Command {
     private final SwerveDriveSubsystem swerveDriveSubsystem;
     private final Supplier<Integer> stationSupplier;
+    private final Supplier<String> gamePieceName;
 
     private Command commandGroup;
     private Command followPathCommand;
@@ -24,9 +25,11 @@ public class DriveReefStationPathCommand extends Command {
     /**
      * Drives to reef station based on pose and pole selection from elastic input
      */
-    public DriveReefStationPathCommand(SwerveDriveSubsystem swerveDriveSubsystem, Supplier<Integer> stationSupplier) {
+    public DriveReefStationPathCommand(SwerveDriveSubsystem swerveDriveSubsystem, Supplier<Integer> stationSupplier,
+            Supplier<String> gamePieceName) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.stationSupplier = stationSupplier;
+        this.gamePieceName = gamePieceName;
 
         addRequirements(this.swerveDriveSubsystem);
     }
@@ -73,7 +76,9 @@ public class DriveReefStationPathCommand extends Command {
         try {
 
             int reefStationIndex = this.stationSupplier.get();
-            PathPlannerPath pathPlannerPath = PathPlannerPath.fromPathFile("DriveReef" + reefStationIndex + " - Path");
+            String gamePieceName = this.gamePieceName.get();
+            PathPlannerPath pathPlannerPath = PathPlannerPath
+                    .fromPathFile("DriveReef" + reefStationIndex + " - " + gamePieceName);
 
             this.followPathCommand = AutoBuilder.pathfindThenFollowPath(pathPlannerPath,
                     frc.robot.autonomous.AutoBuilder.CONSTRAINTS);

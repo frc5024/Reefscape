@@ -31,7 +31,7 @@ public class DriveReefStationCommand extends Command {
     private final Supplier<Pose2d> poseProvider;
     private final Supplier<Integer> stationSupplier;
     private final Supplier<CoralPole> poleSupplier;
-    private final Supplier<GamePieceMode> driveModeSupplier;
+    private final Supplier<GamePieceMode> gamePieceModeSupplier;
     private Pose3d goalPose;
 
     private final ProfiledPIDController xController;
@@ -43,12 +43,12 @@ public class DriveReefStationCommand extends Command {
      */
     public DriveReefStationCommand(SwerveDriveSubsystem swerveDriveSubsystem, Supplier<Pose2d> poseProvider,
             Supplier<Integer> stationSupplier, Supplier<CoralPole> poleSupplier,
-            Supplier<GamePieceMode> driveModeSupplier) {
+            Supplier<GamePieceMode> gamePieceModeSupplier) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.poseProvider = poseProvider;
         this.stationSupplier = stationSupplier;
         this.poleSupplier = poleSupplier;
-        this.driveModeSupplier = driveModeSupplier;
+        this.gamePieceModeSupplier = gamePieceModeSupplier;
 
         double[] driveXPIDs = PIDConstants.getDriveXPIDs();
         double[] driveYPIDs = PIDConstants.getDriveXPIDs();
@@ -102,7 +102,7 @@ public class DriveReefStationCommand extends Command {
 
         int stationId = this.stationSupplier.get().intValue();
         CoralPole poleId = this.poleSupplier.get();
-        GamePieceMode driveMode = this.driveModeSupplier.get();
+        GamePieceMode gamePieceMode = this.gamePieceModeSupplier.get();
 
         // Determine if we want to drive to left or right coral pole
         Pose3d reefPose3d = new Pose3d(FieldConstants.REEF_POSES[stationId - 1]);
@@ -110,7 +110,7 @@ public class DriveReefStationCommand extends Command {
         this.goalPose = new Pose3d(reefPose2d);
 
         double offset = poleId == CoralPole.LEFT ? FieldConstants.REEF_POLE_OFFSET : -FieldConstants.REEF_POLE_OFFSET;
-        double robotYaw = driveMode == GamePieceMode.CORAL ? 0.0 : 180.0;
+        double robotYaw = gamePieceMode == GamePieceMode.CORAL ? 0.0 : 180.0;
 
         Transform3d polePose = new Transform3d(new Translation3d(RobotConstants.LENGTH_METERS / 2, offset, 0.0),
                 new Rotation3d(0.0, 0.0, 0.0));

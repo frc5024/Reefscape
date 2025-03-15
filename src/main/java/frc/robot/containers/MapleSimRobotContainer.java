@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveDriveCommands;
 import frc.robot.commands.tuning.TuningCommand;
 import frc.robot.controls.ButtonBindingsSim;
@@ -54,7 +55,7 @@ public class MapleSimRobotContainer extends RobotContainer {
                 new SwerveModuleIOMapleSim(swerveDriveSimulation.getModules()[2]),
                 new SwerveModuleIOMapleSim(swerveDriveSimulation.getModules()[3]));
 
-        this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
+        this.visionSubsystem = new VisionSubsystem(VisionConstants.SIMULATION_CAMERAS, this.swerveDriveSubsystem,
                 swerveDriveSimulation::getSimulatedDriveTrainPose, this.swerveDriveSubsystem::getRotation);
 
         this.algaeSubsystem = new AlgaeSubsystemSim(new AlgaeModuleIOSim());

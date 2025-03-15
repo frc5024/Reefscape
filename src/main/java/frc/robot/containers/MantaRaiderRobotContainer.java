@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.vision.GoToSetPositionPerTagCmd;
 import frc.robot.commands.vision.autoSetPositionTagID;
 import frc.robot.modules.gyro.GyroModuleIONavX;
@@ -43,7 +44,7 @@ public class MantaRaiderRobotContainer extends RobotContainer {
                 new SwerveModuleIOTalonFX(swerveModuleConfigs[2]),
                 new SwerveModuleIOTalonFX(swerveModuleConfigs[3]));
 
-        this.visionSubsystem = new VisionSubsystem(this.swerveDriveSubsystem,
+        this.visionSubsystem = new VisionSubsystem(VisionConstants.MANTARAIDER_CAMERAS, this.swerveDriveSubsystem,
                 this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
 
         // this.algaeSubsystem = new AlgaeSubsystem(new AlgaeModuleIOSim());

@@ -82,7 +82,8 @@ public class MapleSimUtil {
                         getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation(),
                         Meters.of(algaeTransform.getZ()),
                         MetersPerSecond.of(4),
-                        Degrees.of(0.0)));
+                        Degrees.of(0.0))
+                        .disableBecomesGamePieceOnFieldAfterTouchGround());
     }
 
     /**
