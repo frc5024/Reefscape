@@ -264,9 +264,6 @@ public class VisionSubsystem extends SubsystemBase {
             this.allRobotPosesAccepted.addAll(robotPosesAccepted.get(cameraIndex));
             this.allRobotPosesRejected.addAll(robotPosesRejected.get(cameraIndex));
             this.allTagPoses.addAll(tagPoses.get(cameraIndex));
-
-            // Record cycle time
-            LoggedTracer.record(this.NAME);
         }
 
         // Log summary data
@@ -280,6 +277,9 @@ public class VisionSubsystem extends SubsystemBase {
         Logger.recordOutput(
                 "Subsystems/Vision/Summary/RobotPosesRejected",
                 this.allRobotPosesRejected.toArray(new Pose3d[this.allRobotPosesRejected.size()]));
+
+        // Record cycle time
+        LoggedTracer.record(this.NAME);
     }
 
     /**
