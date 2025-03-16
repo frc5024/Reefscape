@@ -108,8 +108,8 @@ public class GameData {
         this.coralPole = coralPole;
     }
 
-    public void setGamePieceMode(GamePieceMode driveMode) {
-        this.gamePieceMode = driveMode;
+    public void setGamePieceMode(GamePieceMode gamePieceMode) {
+        this.gamePieceMode = gamePieceMode;
     }
 
     public void setReefStationIndex(int reefStationIndex) {

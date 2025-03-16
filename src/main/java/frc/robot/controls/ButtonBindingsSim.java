@@ -14,7 +14,6 @@ import frc.robot.commands.vision.DriveNearestCoralStationCommand;
 import frc.robot.commands.vision.DriveProcessorCommand;
 import frc.robot.commands.vision.DriveReefStationCommand;
 import frc.robot.commands.vision.DriveReefStationPathCommand;
-import frc.robot.controls.GameData.CoralPole;
 import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
@@ -150,8 +149,10 @@ public class ButtonBindingsSim {
         // Set reef position
         commandXboxController.povUp().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(1)));
         commandXboxController.povDown().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(-1)));
-        commandXboxController.povLeft().onTrue(runOnce(() -> GameData.getInstance().setCoralPole(CoralPole.LEFT)));
-        commandXboxController.povRight().onTrue(runOnce(() -> GameData.getInstance().setCoralPole(CoralPole.RIGHT)));
+        commandXboxController.povLeft()
+                .onTrue(runOnce(() -> GameData.getInstance().setGamePieceMode(GamePieceMode.ALGAE)));
+        commandXboxController.povRight()
+                .onTrue(runOnce(() -> GameData.getInstance().setGamePieceMode(GamePieceMode.CORAL)));
 
         return commandXboxController;
     }
