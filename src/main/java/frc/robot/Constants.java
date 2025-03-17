@@ -168,6 +168,7 @@ public final class Constants {
             Bottom(0.0, 0.0),
             AlgaeL1(Units.inchesToMeters(10.5), 0.0),
             AlgaeL2(Units.inchesToMeters(18.0), 0.0),
+            AlgaeL3(Units.inchesToMeters(31.0), 70.0),
 
             Processor(Units.inchesToMeters(1.0), 0.0),
 

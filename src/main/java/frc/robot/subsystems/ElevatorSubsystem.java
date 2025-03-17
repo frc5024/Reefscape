@@ -35,7 +35,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final Alert disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
     public static enum Action {
-        STOP, MOVE_TO_BOTTOM, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1, MOVE_TO_CORAL_2,
+        STOP, MOVE_TO_BOTTOM, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_ALGAE_3, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1,
+        MOVE_TO_CORAL_2,
         MOVE_TO_CORAL_3, MOVE_TO_CORAL_4
     }
 
@@ -74,6 +75,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.stateMachine.addState(Action.STOP, this::handleStop);
         this.stateMachine.addState(Action.MOVE_TO_ALGAE_1, this::handleMoveToAlgae1);
         this.stateMachine.addState(Action.MOVE_TO_ALGAE_2, this::handleMoveToAlgae2);
+        this.stateMachine.addState(Action.MOVE_TO_ALGAE_3, this::handleMoveToAlgae3);
         this.stateMachine.addState(Action.MOVE_TO_PROCESSOR, this::handleMoveToProcessor);
         this.stateMachine.addState(Action.MOVE_TO_CORAL_1, this::handleMoveToCoral1);
         this.stateMachine.addState(Action.MOVE_TO_CORAL_2, this::handleMoveToCoral2);
@@ -136,6 +138,18 @@ public class ElevatorSubsystem extends SubsystemBase {
     protected void handleMoveToAlgae2(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.AlgaeL2;
+            setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
+            this.stateTimer.start();
+        }
+    }
+
+    /**
+     * 
+     */
+    protected void handleMoveToAlgae3(StateMetadata<Action> stateMetadata) {
+        if (stateMetadata.isFirstRun()) {
+            this.elevatorLevel = ElevatorLevel.AlgaeL3;
             setGoal(this.elevatorLevel.heightInMeters);
             this.stateTimer.reset();
             this.stateTimer.start();

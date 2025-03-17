@@ -59,6 +59,7 @@ public class ElevatorVisualizer {
 
         double[] heights = this.elevatorMechanism.getShaftLengths();
         double elevatorAngleInRadians = ElevatorConstants.ANGLE.getRadians();
+        double algaeIntakeAngleInRadians = Units.degreesToRadians(heights[2] > 1.0 ? 20 : 0);
 
         Logger.recordOutput("Mechanism3d/" + name,
                 new Pose3d[] {
@@ -70,7 +71,7 @@ public class ElevatorVisualizer {
                         new Pose3d(new Translation3d(heights[2], new Rotation3d(0.0, -elevatorAngleInRadians, 0.0)),
                                 new Rotation3d()), // box
                         new Pose3d(new Translation3d(heights[2], new Rotation3d(0.0, -elevatorAngleInRadians, 0.0)),
-                                new Rotation3d()), // algae intake
+                                new Rotation3d(0.0, algaeIntakeAngleInRadians, 0.0)), // algae intake
                         new Pose3d(new Translation3d(heights[2], new Rotation3d(0.0, -elevatorAngleInRadians, 0.0)),
                                 new Rotation3d()) // coral intake
                 });

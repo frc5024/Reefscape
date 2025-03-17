@@ -91,8 +91,8 @@ public class MapleSimUtil {
                 getSwerveDriveSimulation().getDriveTrainSimulatedChassisSpeedsFieldRelative(),
                 getSwerveDriveSimulation().getSimulatedDriveTrainPose().getRotation(),
                 Meters.of(algaeTransform.getZ()),
-                MetersPerSecond.of(6.0),
-                Degrees.of(120));
+                MetersPerSecond.of(5.0),
+                Degrees.of(100));
 
         SimulatedArena.getInstance()
                 .addGamePieceProjectile(algaePose.getZ() < 1.0 ? processAlgae : shootAlgae);

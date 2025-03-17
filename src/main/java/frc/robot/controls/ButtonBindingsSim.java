@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.vision.DriveBargeCommand;
 import frc.robot.commands.vision.DriveFromBestTagCommand;
 import frc.robot.commands.vision.DriveNearestCoralStationCommand;
 import frc.robot.commands.vision.DriveProcessorCommand;
@@ -106,10 +107,7 @@ public class ButtonBindingsSim {
 
         // Reset gyro to 0° when B button is pressed
         commandXboxController.b()
-                .onTrue(runOnce(() -> this.swerveDriveSubsystem.setPose(
-                        new Pose2d(this.swerveDriveSubsystem.getPose().getTranslation(), new Rotation2d())),
-                        this.swerveDriveSubsystem)
-                        .ignoringDisable(true));
+                .whileTrue(new DriveBargeCommand(this.swerveDriveSubsystem));
 
         // Drive to nearest coral station
         commandXboxController.x()
@@ -173,17 +171,17 @@ public class ButtonBindingsSim {
         commandXboxController.x()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
                         .addAction(GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE
-                                ? ElevatorSubsystem.Action.MOVE_TO_PROCESSOR
+                                ? ElevatorSubsystem.Action.MOVE_TO_ALGAE_1
                                 : ElevatorSubsystem.Action.MOVE_TO_CORAL_2)));
         commandXboxController.b()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
                         .addAction(GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE
-                                ? ElevatorSubsystem.Action.MOVE_TO_ALGAE_1
+                                ? ElevatorSubsystem.Action.MOVE_TO_ALGAE_2
                                 : ElevatorSubsystem.Action.MOVE_TO_CORAL_3)));
         commandXboxController.y()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
                         .addAction(GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE
-                                ? ElevatorSubsystem.Action.MOVE_TO_ALGAE_2
+                                ? ElevatorSubsystem.Action.MOVE_TO_ALGAE_3
                                 : ElevatorSubsystem.Action.MOVE_TO_CORAL_4)));
 
         commandXboxController.leftTrigger()
