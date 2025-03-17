@@ -1,6 +1,6 @@
 {
   "version": 1.0,
-  "grid_size": 128,
+  "grid_size": 64,
   "tabs": [
     {
       "name": "Autonomous",
@@ -9,10 +9,10 @@
         "containers": [
           {
             "title": "Auto Routine",
-            "x": 128.0,
+            "x": 320.0,
             "y": 0.0,
-            "width": 384.0,
-            "height": 128.0,
+            "width": 320.0,
+            "height": 256.0,
             "type": "ComboBox Chooser",
             "properties": {
               "topic": "/SmartDashboard/Auto Routine",
@@ -22,10 +22,10 @@
           },
           {
             "title": "BatteryVoltage (Volts)",
-            "x": 512.0,
-            "y": 128.0,
+            "x": 640.0,
+            "y": 256.0,
             "width": 512.0,
-            "height": 128.0,
+            "height": 192.0,
             "type": "Voltage View",
             "properties": {
               "topic": "/SmartDashboard/BatterySim/BatteryVoltage (Volts)",
@@ -40,10 +40,10 @@
           },
           {
             "title": "FMSInfo",
-            "x": 512.0,
+            "x": 640.0,
             "y": 0.0,
             "width": 512.0,
-            "height": 128.0,
+            "height": 256.0,
             "type": "FMSInfo",
             "properties": {
               "topic": "/FMSInfo",
@@ -54,8 +54,8 @@
             "title": "Alerts",
             "x": 1152.0,
             "y": 0.0,
-            "width": 384.0,
-            "height": 512.0,
+            "width": 448.0,
+            "height": 448.0,
             "type": "Alerts",
             "properties": {
               "topic": "/SmartDashboard/Alerts",
@@ -72,9 +72,9 @@
         "containers": [
           {
             "title": "Match Time",
-            "x": 1152.0,
+            "x": 1280.0,
             "y": 0.0,
-            "width": 384.0,
+            "width": 512.0,
             "height": 256.0,
             "type": "Match Time",
             "properties": {
@@ -88,27 +88,14 @@
           },
           {
             "title": "Alerts",
-            "x": 1152.0,
+            "x": 1280.0,
             "y": 256.0,
-            "width": 384.0,
+            "width": 512.0,
             "height": 256.0,
             "type": "Alerts",
             "properties": {
               "topic": "/SmartDashboard/Alerts",
               "period": 0.06
-            }
-          },
-          {
-            "title": "Reef Position",
-            "x": 512.0,
-            "y": 256.0,
-            "width": 384.0,
-            "height": 256.0,
-            "type": "Large Text Display",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/GameData/Reef Position",
-              "period": 0.06,
-              "data_type": "string"
             }
           },
           {
@@ -143,7 +130,7 @@
           },
           {
             "title": "Right Camera Has Target",
-            "x": 896.0,
+            "x": 1024.0,
             "y": 0.0,
             "width": 256.0,
             "height": 256.0,
@@ -160,7 +147,7 @@
           },
           {
             "title": "Right Camera Best Target Id",
-            "x": 896.0,
+            "x": 1024.0,
             "y": 256.0,
             "width": 256.0,
             "height": 256.0,
@@ -213,13 +200,115 @@
             "title": "Game Piece Mode",
             "x": 512.0,
             "y": 0.0,
-            "width": 384.0,
-            "height": 256.0,
+            "width": 512.0,
+            "height": 192.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/GameData/Game Piece Mode",
               "period": 0.06,
               "data_type": "string"
+            }
+          },
+          {
+            "title": "Reef Station 1",
+            "x": 704.0,
+            "y": 448.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation1",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Reef Station 2",
+            "x": 576.0,
+            "y": 384.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation2",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Reef Station 3",
+            "x": 576.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation3",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Reef Station 4",
+            "x": 704.0,
+            "y": 192.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation4",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Reef Station 5",
+            "x": 832.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation5",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Reef Station 6",
+            "x": 832.0,
+            "y": 384.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation6",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           }
         ]
