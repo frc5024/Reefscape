@@ -50,7 +50,7 @@ public class Climb extends SubsystemBase {
     public void retractArm() {
         climbMotor.set(Constants.ClimbConstants.climbSpeed);
 
-        LEDs.getInstance().setCommand(LEDPreset.LightChase.kBlue).schedule();
+        LEDs.getInstance().setCommand(LEDPreset.Rainbow.kConfetti).schedule();
     }
 
     public void extendArm() {

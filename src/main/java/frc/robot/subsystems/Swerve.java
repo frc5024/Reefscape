@@ -186,7 +186,7 @@ public class Swerve extends SubsystemBase {
         speedModifier = speedModifier - elevatorSubsystem.getElevatorPercent();
 
         if (isSlowMode) {
-            speedModifier = 0.4 * speedModifier;
+            speedModifier = 0.5 * speedModifier;
         }
     }
 

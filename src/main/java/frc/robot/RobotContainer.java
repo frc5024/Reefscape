@@ -160,32 +160,9 @@ public class RobotContainer {
         driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.isSlowMode = false));
 
         driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        driver.rightTrigger()
-                .onTrue(new ConditionalCommand(new InstantCommand(), coralSubsystem.outtakeCommand(),
-                        () -> visionMode));
 
         // Vision
-        // driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
-
-        // driver.rightTrigger()
-        // .whileTrue(new ConditionalCommand(new
-        // goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.rightOffset), new InstantCommand(), () -> visionMode));
-        // driver.leftTrigger()
-        // .whileTrue(new ConditionalCommand(new
-        // goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.leftOffset), new InstantCommand(), () -> visionMode));
-
-        driver.b().onTrue(coralSubsystem.outtakeAutoCommand());
-
-        // driver.rightBumper()
-        // .whileTrue(new scoreCoralVisionCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.rightOffset,
-        // elevatorSubsystem, coralSubsystem));
-        // driver.leftBumper()
-        // .whileTrue(new scoreCoralVisionCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.leftOffset,
-        // elevatorSubsystem, coralSubsystem));
+        driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
 
         // Elevator
         driver.y().whileTrue(coralSubsystem.forcedOuttakeCommand());
@@ -193,45 +170,70 @@ public class RobotContainer {
         // Coral
         driver.rightBumper().whileTrue(coralSubsystem.intakeCommand());
         driver.rightBumper().onTrue(elevatorSubsystem.bottomElevator());
-        // driver.start().whileTrue(coralSubsystem.backwardsMotor());
+        driver.b().whileTrue(coralSubsystem.backwardsMotor());
 
-        // driver.back().whileTrue(new PathPlannerAuto("Left AnyTag"));
+        driver.start().onTrue(new InstantCommand(() -> elevatorSubsystem.increaseMode()));
+        driver.back().onTrue(new InstantCommand(() -> elevatorSubsystem.decreaseMode()));
+
+        // scoring
+        driver.rightTrigger()
+                .whileTrue(new ConditionalCommand(Commands.sequence(
+                        Commands.parallel(
+                                new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+                                        Constants.Vision.rightOffset),
+                                elevatorSubsystem.goToL2Position()),
+                        elevatorSubsystem.goToModePosition(),
+                        coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
+                            elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the button is released
+                        }), new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+                                Constants.Vision.rightOffset),
+                        () -> visionMode));
+
+        driver.leftTrigger()
+                .whileTrue(new ConditionalCommand(Commands.sequence(
+                        Commands.parallel(
+                                new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+                                        Constants.Vision.leftOffset),
+                                elevatorSubsystem.goToL2Position()),
+                        elevatorSubsystem.goToModePosition(),
+                        coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
+                            elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the button is released
+                        }), new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+                                Constants.Vision.leftOffset),
+                        () -> visionMode));
+
+        // driver.rightTrigger().whileTrue(
+        // Commands.sequence(
+        // Commands.parallel(
+        // new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+        // Constants.Vision.rightOffset),
+        // elevatorSubsystem.goToL2Position()),
+        // elevatorSubsystem.goToModePosition(),
+        // coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
+        // elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the
+        // button is released
+        // }));
+
+        // driver.leftTrigger().whileTrue(
+        // Commands.sequence(
+        // Commands.parallel(
+        // new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
+        // Constants.Vision.leftOffset),
+        // elevatorSubsystem.goToL2Position()),
+        // elevatorSubsystem.goToModePosition(),
+        // coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
+        // elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the
+        // button is released
+        // }));
+
+        driver.povUp().whileTrue(m_climbSubsystem.climbCommand());
+        driver.povDown().whileTrue(m_climbSubsystem.extendingCommand());
 
         // Operator Controls
 
         // Elevator
         operator.a().onTrue(elevatorSubsystem.bottomElevator());
 
-        // Coral
-        // operator.b().onTrue(coralSubsystem.lowerRampCommand());
-        // operator.rightTrigger().onTrue(coralSubsystem.lowerRampCommand());
-        // operator.rightTrigger().onTrue(extendClimb());
-
-        // CHANGING BINDINGS
-
-        // Vision = set mode | Manual = go to position
-        // operator.povLeft().onTrue(
-        // new ConditionalCommand(
-        // new SetElevatorModeCmd(elevatorSubsystem,
-        // Constants.elevatorConstants.L1Position),
-        // elevatorSubsystem.goToL1Position(), () -> visionMode));
-        // operator.povDown().onTrue(
-        // new ConditionalCommand(
-        // new SetElevatorModeCmd(elevatorSubsystem,
-        // Constants.elevatorConstants.L2Position),
-        // elevatorSubsystem.goToL2Position(), () -> visionMode));
-        // operator.povRight().onTrue(
-        // new ConditionalCommand(
-        // new SetElevatorModeCmd(elevatorSubsystem,
-        // Constants.elevatorConstants.L3Position),
-        // elevatorSubsystem.goToL3Position(), () -> visionMode));
-        // operator.povUp().onTrue(
-        // new ConditionalCommand(
-        // new SetElevatorModeCmd(elevatorSubsystem,
-        // Constants.elevatorConstants.L4Position),
-        // elevatorSubsystem.goToL4Position(), () -> visionMode));
-
-        // delete once onTrue works
         operator.povLeft()
                 .onTrue(elevatorSubsystem.goToL1Position());
         operator.povDown()
@@ -242,44 +244,12 @@ public class RobotContainer {
                 .onTrue(elevatorSubsystem.goToL4Position());
 
         operator.start().whileTrue(elevatorSubsystem.slowL2());
-        // operator.start().whileTrue(new
 
         operator.rightTrigger().whileTrue(m_climbSubsystem.climbCommand());
         operator.leftTrigger().whileTrue(m_climbSubsystem.extendingCommand());
-
-        driver.start().onTrue(new InstantCommand(() -> elevatorSubsystem.increaseMode()));
-        driver.back().onTrue(new InstantCommand(() -> elevatorSubsystem.decreaseMode()));
-
-        driver.rightTrigger().whileTrue(
-                Commands.sequence(
-                        Commands.parallel(
-                                new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-                                        Constants.Vision.rightOffset),
-                                elevatorSubsystem.goToL2Position()),
-                        elevatorSubsystem.goToModePosition(),
-                        coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
-                            elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the button is released
-                        }));
-
-        driver.leftTrigger().whileTrue(
-                Commands.sequence(
-                        Commands.parallel(
-                                new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-                                        Constants.Vision.leftOffset),
-                                elevatorSubsystem.goToL2Position()),
-                        elevatorSubsystem.goToModePosition(),
-                        coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
-                            elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the button is released
-                        }));
     }
 
     public Command getAutonomousCommand() {
-
-        // return Commands.sequence(new PathPlannerAuto("Copy of Start 11"));
-        // return Commands.sequence(new PathPlannerAuto("11R"), new PathPlannerAuto("11R
-        // TS 6"), new PathPlannerAuto("6L"),
-        // new PathPlannerAuto("6L TS"), new PathPlannerAuto("6R"));
         return autoChooser.getSelected();
-        // return new TwoPiece();
     }
 }

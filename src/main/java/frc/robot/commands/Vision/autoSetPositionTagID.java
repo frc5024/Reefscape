@@ -3,8 +3,10 @@ package frc.robot.commands.Vision;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
@@ -35,6 +37,9 @@ public class autoSetPositionTagID extends Command {
     double tag2 = 0;
     double validTagID;
 
+    private Command ledCmd;
+    private Command ledOffCmd;
+
     public autoSetPositionTagID(Limelight limelight, Swerve swerveDrive, double xOffset, double tag) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
@@ -45,6 +50,8 @@ public class autoSetPositionTagID extends Command {
         translationPidController = new PIDController(0.5, 0, 0.05);
         rotationPidController = new PIDController(0.008, 0, 0.0005);
 
+        ledCmd = LEDs.getInstance().persistCommand(LEDPreset.Solid.kHotPink);
+        ledOffCmd = LEDs.getInstance().persistCommand(LEDPreset.Solid.kBlue);
     }
 
     @Override
@@ -98,6 +105,9 @@ public class autoSetPositionTagID extends Command {
             // }
             System.out.println("I SEE THE TAG");
 
+            ledCmd.schedule();
+            ledOffCmd.cancel();
+
             mathToTag();
         } else {
             // swerveDrive.visionRotationVal(lastSeenRotation, true);
@@ -108,6 +118,9 @@ public class autoSetPositionTagID extends Command {
             swerveDrive.visionRotationVal(0, false);
 
             swerveDrive.setFieldRelative(true);
+
+            ledCmd.cancel();
+            ledOffCmd.schedule();
         }
 
     }
@@ -213,5 +226,8 @@ public class autoSetPositionTagID extends Command {
         swerveDrive.setFieldRelative(true);
 
         swerveDrive.resetSwerve();
+
+        ledCmd.cancel();
+        ledOffCmd.cancel();
     }
 }

@@ -94,8 +94,8 @@ public class Elevator extends SubsystemBase {
         elevatorMotor.configure(elevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         elevatorMotor2.configure(elevatorMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        zeroingLimitSwitch = new DigitalInput(3);
-        stoppingLimitSwitch = new DigitalInput(1);
+        zeroingLimitSwitch = new DigitalInput(7);
+        stoppingLimitSwitch = new DigitalInput(3);
 
         // assigning values to the P, I and D
         feedForwardConstraints = new TrapezoidProfile.Constraints(elevatorConstants.elevatorMaxSpeed,

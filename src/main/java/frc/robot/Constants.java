@@ -42,7 +42,7 @@ public final class Constants {
 
     public static final class Vision {
         // arbitrary scale
-        public static final double rightOffset = 0.15428740684869218;
+        public static final double rightOffset = 0.16428740684869218;
         public static final double leftOffset = -0.1655;
         public static final double noOffset = 0;
 
@@ -56,8 +56,8 @@ public final class Constants {
         public static final double distancePIDCap = 0.3;
 
         public static final double rotationTolerance = 1.6; // degrees
-        public static final double strafeTolerance = centimetersToMeters(2.5);
-        public static final double distanceTolerance = centimetersToMeters(8); // to be adjusted
+        public static final double strafeTolerance = centimetersToMeters(2);
+        public static final double distanceTolerance = centimetersToMeters(6.5); // to be adjusted
 
         public static double centimetersToMeters(double Centimeters) {
             return Centimeters / 100;
