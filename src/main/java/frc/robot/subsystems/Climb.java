@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -36,6 +37,8 @@ public class Climb extends SubsystemBase {
     private Climb() {
         // Creating motor
         climbMotor = new TalonFX(Constants.ClimbConstants.climbMotorID);
+        // Set to brake
+        climbMotor.setNeutralMode(NeutralModeValue.Brake);
 
         // Shuffleboard tab displaying the encoder's position value as a double
         tab.addDouble("encoder value", () -> climbMotor.getPosition().getValueAsDouble());
