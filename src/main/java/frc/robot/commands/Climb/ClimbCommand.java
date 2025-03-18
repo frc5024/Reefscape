@@ -1,5 +1,6 @@
 package frc.robot.commands.Climb;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.leds.LEDPreset;
 import frc.robot.subsystems.Climb;
@@ -8,6 +9,7 @@ import frc.robot.subsystems.LEDs;
 public class ClimbCommand extends Command {
 
     private Climb climbSubsystem;
+    public Timer climbTimer = new Timer();
 
     public ClimbCommand(Climb climbSubsystem) {
         this.climbSubsystem = climbSubsystem;
@@ -28,11 +30,17 @@ public class ClimbCommand extends Command {
         }
     }
 
-    // Celebrates then stops
+    // slows climb to 30% for 1 second before stopping
     @Override
     public void end(boolean interrupted) {
+        climbTimer.reset();
         LEDs.getInstance().setCommand(LEDPreset.Rainbow.kConfetti).schedule();
-        climbSubsystem.stopMotor();
+
+        if (climbTimer.get() <= 1) {
+            climbSubsystem.stopMotor();
+        } else {
+            climbSubsystem.slowClimb();
+        }
     }
 
     // Stops when the motors are at climbed position

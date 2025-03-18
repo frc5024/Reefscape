@@ -67,6 +67,10 @@ public class Climb extends SubsystemBase {
         climbMotor.set(0);
     }
 
+    public void slowClimb() {
+        climbMotor.set(0.3);
+    }
+
     public boolean isLimitSwitchBroken() {
         return !limitSwitch.get();
     }
