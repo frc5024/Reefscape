@@ -194,7 +194,7 @@ public class VisionSubsystem extends SubsystemBase {
                             || observation.averageAmbiguity() < VisionConstants.APRILTAG_AMBIGUITY_THRESHOLD)
                             && (observation.type() == PoseObservationType.SINGLE_TAG
                                     || Math.abs(observation
-                                            .reprojectionError()) < VisionConstants.APRITAG_REPROJECTION_ERROR_THRESHOLD)
+                                            .reprojectionError()) < VisionConstants.APRILTAG_REPROJECTION_ERROR_THRESHOLD)
                             && poseIsOnField(estimatedRobotPose3d)
                             && arePoseRotationsReasonable(estimatedRobotPose3d);
 

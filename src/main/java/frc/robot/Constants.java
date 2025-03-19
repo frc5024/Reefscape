@@ -481,7 +481,7 @@ public final class Constants {
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.5;
         public static final double APRILTAG_MAX_Z_ERROR = 0.75;
-        public static final double APRITAG_REPROJECTION_ERROR_THRESHOLD = 5.0;
+        public static final double APRILTAG_REPROJECTION_ERROR_THRESHOLD = 5.0;
 
         public static final double BEST_POSE_TIME_THRESHOLD_SECS = 0.5;
         public static final boolean ENABLE_DETAILED_LOGGING = false;
