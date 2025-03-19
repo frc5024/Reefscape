@@ -1,10 +1,7 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.revrobotics.spark.SparkFlex;
 
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -53,14 +50,17 @@ public class Coral extends SubsystemBase {
 
     // shuffleboard tab for coral
     ShuffleboardTab tab = Shuffleboard.getTab("CoralMotors");
-    GenericEntry intakeMotorSpeedEntry = tab.add("SET intake speed", intakeSpeed).getEntry();
-    GenericEntry outtakeMotorSpeedEntry = tab.add("SET outtake speed", outtakeSpeed).getEntry();
-    GenericEntry plopSpeedEntry = tab.add("SET plop speed", plopSpeed).getEntry();
+    // GenericEntry intakeMotorSpeedEntry = tab.add("SET intake speed",
+    // intakeSpeed).getEntry();
+    // GenericEntry outtakeMotorSpeedEntry = tab.add("SET outtake speed",
+    // outtakeSpeed).getEntry();
+    // GenericEntry plopSpeedEntry = tab.add("SET plop speed",
+    // plopSpeed).getEntry();
 
     // constructor for coralMotor
     private Coral() {
         linebreak = new DigitalInput(Constants.coralConstants.linebreakChannel);
-        tab.addBoolean("linebreak", () -> linebreak.get());
+        tab.addBoolean("linebreak (Has Coral)", () -> linebreak.get());
 
         coralMotor = new SparkFlex(coralMotorChannel, SparkFlex.MotorType.kBrushless);
         tab.addDouble("motor speed", () -> coralMotor.get());
@@ -80,14 +80,17 @@ public class Coral extends SubsystemBase {
 
     @Override
     public void periodic() {
-        intakeSpeed = intakeMotorSpeedEntry.getDouble(intakeSpeed);
-        outtakeSpeed = outtakeMotorSpeedEntry.getDouble(outtakeSpeed);
-        plopSpeed = plopSpeedEntry.getDouble(plopSpeed);
+        // intakeSpeed = intakeMotorSpeedEntry.getDouble(intakeSpeed);
+        // outtakeSpeed = outtakeMotorSpeedEntry.getDouble(outtakeSpeed);
+        // plopSpeed = plopSpeedEntry.getDouble(plopSpeed);
 
-        Logger.recordOutput("Subsystems/Coral/HasCoral", linebreak.get());
-        Logger.recordOutput("Subsystems/Coral/Motor Position", coralMotor.getEncoder().getPosition());
-        Logger.recordOutput("Subsystems/Coral/Motor Velocity", coralMotor.getEncoder().getVelocity());
-        Logger.recordOutput("Subsystems/Coral/Motor Voltage", coralMotor.getAppliedOutput());
+        // Logger.recordOutput("Subsystems/Coral/HasCoral", linebreak.get());
+        // Logger.recordOutput("Subsystems/Coral/Motor Position",
+        // coralMotor.getEncoder().getPosition());
+        // Logger.recordOutput("Subsystems/Coral/Motor Velocity",
+        // coralMotor.getEncoder().getVelocity());
+        // Logger.recordOutput("Subsystems/Coral/Motor Voltage",
+        // coralMotor.getAppliedOutput());
     }
 
     // idle state, set motor to 0
