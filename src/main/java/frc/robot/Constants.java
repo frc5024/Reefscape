@@ -89,9 +89,9 @@ public final class Constants {
 
         public static final double endPosition = -18;
         public static final double startPosition = -6.00;
-        public static final double extendoPosition = 35;
+        public static final double extendedPosition = 65;
         public static final double climbSpeed = -0.7;
-        public static final double extendoSpeed = 0.4;
+        public static final double extendSpeed = 0.4;
     }
 
     // constants for intake and channels
@@ -284,8 +284,8 @@ public final class Constants {
     }
 
     public static class LEDsConstants { // changed name to LEDsConstants
-        public final static int ledPort = 0; // Port for LED, Make sure it is PWM not DIO
-        public final static ILEDPreset defaultLED = LEDPreset.Solid.kGold;// Default Colour
+        public final static int ledPort = 9; // Port for LED, Make sure it is PWM not DIO
+        public final static ILEDPreset defaultLED = LEDPreset.Solid.kRed;// Default Colour
 
     }
 

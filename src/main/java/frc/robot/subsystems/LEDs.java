@@ -6,14 +6,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDController;
 import frc.robot.Constants.LEDsConstants;
-import frc.robot.commands.led.FlashLEDs;
-import frc.robot.commands.led.SetLEDS;
-import frc.robot.commands.led.SetLEDSDefault;
+import frc.robot.commands.led.LEDDefaultCmd;
+import frc.robot.commands.led.flashLEDS;
+import frc.robot.commands.led.persistLEDSCmd;
+import frc.robot.commands.led.setLEDS;
+import frc.robot.containers.RobotContainer;
 
 public class LEDs extends SubsystemBase {
     // Variables
     private static LEDs mInstance = null;
     private LEDController ledController;
+    RobotContainer robotContainer;
+
+    boolean visionMode = true;
 
     // Instance
     public static LEDs getInstance() {
@@ -26,44 +31,43 @@ public class LEDs extends SubsystemBase {
     // Constructor
     private LEDs() {
         ledController = new LEDController(LEDsConstants.ledPort);// Sets which motor we are using, currently port 9
-    }
 
-    // Direct Commands in order to set LEDs to a colour
+        setDefaultCommand(new LEDDefaultCmd(this));
+    }
 
     // Set the LEDs to be a colour
     public void set(ILEDPreset colour) {
         ledController.set(colour);
     }
 
-    // Set the LEDs to be Default colour
-    public void setDefault() {
-        set(LEDsConstants.defaultLED);
-    }
-
     // Command Callers
 
     // Flash LEDs Command with one colour
     public Command flashCommand(ILEDPreset colour, int flashSeconds) {
-        return new FlashLEDs(this, colour, flashSeconds);
+        return new flashLEDS(this, colour, flashSeconds);
     }
 
     // Flash LEDs Command with two colours
     public Command flashCommand(ILEDPreset colour1, ILEDPreset colour2, int flashSeconds) {
-        return new FlashLEDs(this, colour1, colour2, flashSeconds);
+        return new flashLEDS(this, colour1, colour2, flashSeconds);
     }
 
     // Set to colour Command
     public Command setCommand(ILEDPreset colour) {
-        return new SetLEDS(this, colour);
+        return new setLEDS(this, colour);
     }
 
-    // Set LEDs to Default Command
-    public Command setDefaultCommand() {
-        return new SetLEDSDefault(this);
+    public Command persistCommand(ILEDPreset colour) {
+        return new persistLEDSCmd(this, colour);
     }
 
     public void setLEDSDefault() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setLEDSDefault'");
+    }
+
+    @Override
+    public void periodic() {
+
     }
 }

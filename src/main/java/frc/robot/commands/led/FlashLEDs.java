@@ -5,10 +5,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.leds.ILEDPreset;
 import frc.lib.leds.LEDPreset;
-import frc.robot.Constants;
 import frc.robot.subsystems.LEDs;
 
-public class FlashLEDs extends Command {
+public class flashLEDS extends Command {
     // Variables
     private LEDs leds; // LED Subsystem for calling
     private ILEDPreset colour1; // Colour #1 we wish to set colour to (See constructor)
@@ -24,13 +23,13 @@ public class FlashLEDs extends Command {
     private int flashCount = 0; // A counter to ensure amount of flashes
 
     // Constructor for one colour
-    public FlashLEDs(LEDs leds, ILEDPreset colour, int flashSeconds) {
+    public flashLEDS(LEDs leds, ILEDPreset colour, int flashSeconds) {
         this(leds, colour, LEDPreset.Solid.kBlack, flashSeconds);// does the command again with the second colour set to
                                                                  // black
     }
 
     // Constructor for two colours
-    public FlashLEDs(LEDs leds, ILEDPreset colour1, ILEDPreset colour2, int flashSeconds) {
+    public flashLEDS(LEDs leds, ILEDPreset colour1, ILEDPreset colour2, int flashSeconds) {
         this.leds = leds; // Subsystem set
         this.colour1 = colour1; // Colour 1 set
         this.colour2 = colour2; // Colour 2 set
@@ -43,6 +42,8 @@ public class FlashLEDs extends Command {
         flashCount = 0;// Resets count just to be safe
         timer.reset();// Resets timer
         timer.restart();// Starts timer
+        totalTime.reset();
+        totalTime.restart();
     }
 
     @Override
@@ -69,7 +70,6 @@ public class FlashLEDs extends Command {
     public boolean isFinished() {
         // After certain time has elapsed stop command and reset to default
         if (totalTime.hasElapsed(flashSeconds)) {
-            leds.set(Constants.LEDsConstants.defaultLED);
             return true;
         }
         return false;

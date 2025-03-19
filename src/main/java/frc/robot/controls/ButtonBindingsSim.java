@@ -202,13 +202,13 @@ public class ButtonBindingsSim {
                     }
                 }));
 
-        // commandXboxController.leftBumper()
-        // .whileTrue(runOnce(() -> this.coralSubsystem
-        // .addAction(CoralSubsystem.Action.EJECT)));
-
-        // commandXboxController.rightBumper()
-        // .whileTrue(runOnce(() -> this.coralSubsystem
-        // .addAction(CoralSubsystem.Action.INTAKE)));
+        // Set reef position
+        commandXboxController.povUp().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(1)));
+        commandXboxController.povDown().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(-1)));
+        commandXboxController.povLeft()
+                .onTrue(runOnce(() -> GameData.getInstance().setGamePieceMode(GamePieceMode.ALGAE)));
+        commandXboxController.povRight()
+                .onTrue(runOnce(() -> GameData.getInstance().setGamePieceMode(GamePieceMode.CORAL)));
 
         return commandXboxController;
     }

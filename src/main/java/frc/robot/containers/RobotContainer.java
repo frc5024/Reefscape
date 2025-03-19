@@ -52,7 +52,7 @@ abstract public class RobotContainer {
 
     /* Autonomous */
     private AutoBuilder autoBuilder;
-    private LoggedDashboardChooser<Command> autonomousChooser;
+    protected LoggedDashboardChooser<Command> autonomousChooser;
 
     /* Controllers */
     CommandXboxController driverController;

@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.leds.ILEDPreset;
 import frc.robot.subsystems.LEDs;
 
-public class setLEDS extends Command {
+public class persistLEDSCmd extends Command {
     private LEDs leds;
     private ILEDPreset colour;
 
     // Constructor, intakes LED subsystem and LED Preset colour
-    public setLEDS(LEDs leds, ILEDPreset colour) {
+    public persistLEDSCmd(LEDs leds, ILEDPreset colour) {
         this.leds = leds;
         this.colour = colour;
     }
@@ -27,6 +27,6 @@ public class setLEDS extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

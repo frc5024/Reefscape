@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.spark.SparkFlex;
 
 import edu.wpi.first.networktables.GenericEntry;
@@ -10,12 +12,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralConstants;
 import frc.robot.commands.coral.CancelIntakeCommand;
+import frc.robot.commands.coral.ForcedOuttakeCmd;
 import frc.robot.commands.coral.IntakeCommand;
 import frc.robot.commands.coral.LowerRampCommand;
 import frc.robot.commands.coral.OuttakeCommand;
 import frc.robot.commands.coral.PlopCommand;
 
 public class Coral extends SubsystemBase {
+    private static Coral mInstance;
+
+    public static Coral getInstance() {
+        if (mInstance == null) {
+            mInstance = new Coral();
+        }
+        return mInstance;
+    }
+
     // motor controller for coral
     private SparkFlex coralMotor;
     private SparkFlex coralMotorReversed;
@@ -25,7 +37,7 @@ public class Coral extends SubsystemBase {
     // .inverted(true)
     // .follow(coralConstants.coralMotorChannel);
 
-    private static DigitalInput linebreak;
+    private DigitalInput linebreak;
 
     // all constants for coral
     int coralMotorChannel = CoralConstants.coralMotorChannel;
@@ -36,8 +48,8 @@ public class Coral extends SubsystemBase {
     double outtakeSpeed = CoralConstants.outtakeSpeed;
     double plopSpeed = CoralConstants.plopSpeed;
 
-    // double servoRotate = CoralConstants.servoRotate;
-    // double servoReset = CoralConstants.servoReset;
+    // double servoRotate = Constants.coralConstants.servoRotate;
+    // double servoReset = Constants.coralConstants.servoReset;
 
     // shuffleboard tab for coral
     ShuffleboardTab tab = Shuffleboard.getTab("CoralMotors");
@@ -46,7 +58,7 @@ public class Coral extends SubsystemBase {
     GenericEntry plopSpeedEntry = tab.add("SET plop speed", plopSpeed).getEntry();
 
     // constructor for coralMotor
-    public Coral() {
+    private Coral() {
         linebreak = new DigitalInput(CoralConstants.linebreakChannel);
         tab.addBoolean("linebreak", () -> linebreak.get());
 
@@ -71,6 +83,11 @@ public class Coral extends SubsystemBase {
         intakeSpeed = intakeMotorSpeedEntry.getDouble(intakeSpeed);
         outtakeSpeed = outtakeMotorSpeedEntry.getDouble(outtakeSpeed);
         plopSpeed = plopSpeedEntry.getDouble(plopSpeed);
+
+        Logger.recordOutput("Subsystems/Coral/HasCoral", linebreak.get());
+        Logger.recordOutput("Subsystems/Coral/Motor Position", coralMotor.getEncoder().getPosition());
+        Logger.recordOutput("Subsystems/Coral/Motor Velocity", coralMotor.getEncoder().getVelocity());
+        Logger.recordOutput("Subsystems/Coral/Motor Voltage", coralMotor.getAppliedOutput());
     }
 
     // idle state, set motor to 0
@@ -109,7 +126,7 @@ public class Coral extends SubsystemBase {
     }
 
     public Command forcedOuttakeCommand() {
-        return new PlopCommand(this);
+        return new ForcedOuttakeCmd(this);
     }
 
     public Command intakeCommand() {

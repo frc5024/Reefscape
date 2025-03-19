@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel;
@@ -15,10 +17,13 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.commands.elevator.SetElevatorModeCmd;
 import frc.robot.commands.elevator.SetElevatorSetpointCmd;
 
 public class Elevator extends SubsystemBase {
@@ -68,7 +73,8 @@ public class Elevator extends SubsystemBase {
     private Rumble rumble;
     public boolean zeroRumbled = false;
 
-    public double elevatorMode = ElevatorConstants.L4Position;
+    public double elevatorNumeredMode = 4;
+    double elevatorMode;
     public double elevatorPosition = 0;
 
     private static Elevator mInstance;
@@ -88,7 +94,7 @@ public class Elevator extends SubsystemBase {
         elevatorMotor.configure(elevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         elevatorMotor2.configure(elevatorMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        zeroingLimitSwitch = new DigitalInput(7);
+        zeroingLimitSwitch = new DigitalInput(3);
         stoppingLimitSwitch = new DigitalInput(1);
 
         // assigning values to the P, I and D
@@ -127,6 +133,9 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        SmartDashboard.putNumber("Elevator Mode", elevatorNumeredMode);
+        updateSetpoint(elevatorNumeredMode);
 
         // getting the PID values and showing them on the shuffle board ("getDouble"
         // constantly checks the value)
@@ -175,6 +184,12 @@ public class Elevator extends SubsystemBase {
         } else if (!isBottomLimitSwitchBroken()) {
             zeroRumbled = false;
         }
+
+        Logger.recordOutput("Subsystems/Elevator/AtGoal", PID.atGoal());
+        Logger.recordOutput("Subsystems/Elevator/GoalPosition", PID.getGoal().position);
+        Logger.recordOutput("Subsystems/Elevator/GoalVelocity", PID.getGoal().velocity);
+        Logger.recordOutput("Subsystems/Elevator/SetpointPosition", PID.getSetpoint().position);
+        Logger.recordOutput("Subsystems/Elevator/SetpointVelocity", PID.getSetpoint().velocity);
     }
 
     // TODO: rewrite comment to be more accurate
@@ -283,14 +298,6 @@ public class Elevator extends SubsystemBase {
         this.enabled = enabled;
     }
 
-    public void setElevatorMode(double reefLevel) {
-        elevatorMode = reefLevel;
-    }
-
-    public double getElevatorMode() {
-        return elevatorMode;
-    }
-
     public void setElevatorPosition(double elevatorLevel) {
         elevatorPosition = elevatorLevel;
     }
@@ -307,44 +314,76 @@ public class Elevator extends SubsystemBase {
         return percent;
     }
 
+    public void increaseMode() {
+        elevatorNumeredMode++;
+
+        if (elevatorNumeredMode > 4)
+            elevatorNumeredMode = 4;
+    }
+
+    public void decreaseMode() {
+        elevatorNumeredMode--;
+
+        if (elevatorNumeredMode < 2)
+            elevatorNumeredMode = 2;
+    }
+
+    public void updateSetpoint(double Mode) {
+        if (Mode == 4) {
+            elevatorMode = Constants.ElevatorConstants.L4Position;
+        } else if (Mode == 3) {
+            elevatorMode = Constants.ElevatorConstants.L3Position;
+        } else if (Mode == 2) {
+            elevatorMode = Constants.ElevatorConstants.L2Position;
+        } else {
+            elevatorMode = Constants.ElevatorConstants.L4Position;
+        }
+
+        SmartDashboard.putNumber("Elevator Setpoint VIOSINSAIN", elevatorMode);
+    }
+
+    public double getSetpoint() {
+        return elevatorMode;
+    }
+
     public double elevatorHeight() {
         return rotationsToInches(elevatorMotor.getEncoder().getPosition());
     }
 
     public Command goToL1Position() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.L1Position);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.L1Position);
     }
 
     public Command goToL2Position() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.L2Position);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.L2Position);
     }
 
     public Command goToL3Position() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.L3Position);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.L3Position);
     }
 
     public Command goToL4Position() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.L4Position);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.L4Position);
     }
 
     public Command goToAlgae1Position() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.Algae1);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.Algae1);
     }
 
     public Command goToAlgae2Position() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.Algae2);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.Algae2);
     }
 
     public Command bottomElevator() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.rootPosition);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.rootPosition);
     }
 
     public Command bottomAutoElevator() {
-        return new SetElevatorSetpointCmd(this, ElevatorConstants.rootAutoPosition);
+        return new SetElevatorSetpointCmd(this, Constants.ElevatorConstants.rootAutoPosition);
     }
 
     public Command goToModePosition() {
-        return new SetElevatorSetpointCmd(this, elevatorMode);
+        return new SetElevatorModeCmd(this);
     }
 
     public Command slowL2() {

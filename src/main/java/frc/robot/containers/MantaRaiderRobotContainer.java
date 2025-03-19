@@ -1,9 +1,11 @@
 package frc.robot.containers;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.FieldConstants;
@@ -11,6 +13,7 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.vision.GoToSetPositionPerTagCmd;
 import frc.robot.commands.vision.autoSetPositionTagID;
+import frc.robot.commands.vision.isPathRun;
 import frc.robot.modules.gyro.GyroModuleIONavX;
 import frc.robot.modules.swerve.SwerveModuleIOTalonFX;
 import frc.robot.subsystems.Climb;
@@ -55,15 +58,31 @@ public class MantaRaiderRobotContainer extends RobotContainer {
         // this.coralSubsystem::hasCoral);
 
         this.climb = Climb.getInstance();
-        this.coral = new Coral();
+        this.coral = Coral.getInstance();
         this.elevator = Elevator.getInstance();
         this.rumble = Rumble.getInstance();
-        this.limelightSubsystem = new Limelight();
+        this.limelightSubsystem = Limelight.getInstance();
         this.lEDs = LEDs.getInstance();
 
         registerNamedCommands();
         configureAutoBuilder();
         configureBindings();
+    }
+
+    @Override
+    protected void configureAutoBuilder() {
+        this.autonomousChooser.addOption("Non-Processor side 2/3 piece (COMPLETE)",
+                Commands.sequence(new PathPlannerAuto("Start 11R"), new PathPlannerAuto("11R TS 6R"),
+                        new PathPlannerAuto("6R TS 6L")));
+
+        this.autonomousChooser.addOption("Processor side 2/3 piece (COMPLETE)",
+                Commands.sequence(new PathPlannerAuto("Start 9R"), new PathPlannerAuto("9R BS 8"),
+                        new PathPlannerAuto("8R BS 8L")));
+
+        this.autonomousChooser.addOption("Middle 1 piece right (COMPLETE)", new PathPlannerAuto("MiddleRight"));
+        this.autonomousChooser.addOption("Middle 1 piece left (COMPLETE)", new PathPlannerAuto("MiddleLeft"));
+
+        this.autonomousChooser.addOption("Testing Elevatoring", new PathPlannerAuto("Start 11R"));
     }
 
     @Override
@@ -121,6 +140,10 @@ public class MantaRaiderRobotContainer extends RobotContainer {
         // Coral
         NamedCommands.registerCommand("ScoreCoral", this.coral.outtakeAutoCommand());
         NamedCommands.registerCommand("IntakeCoral", this.coral.intakeCommand());
+
+        NamedCommands.registerCommand("Confirm Vision", new InstantCommand(() -> limelightSubsystem.pathIsDone(true))); // fix
+        // better
+        NamedCommands.registerCommand("Wait For Vision", new isPathRun(limelightSubsystem));
 
         // Elevator
         NamedCommands.registerCommand("L4", this.elevator.goToL4Position());

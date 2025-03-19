@@ -11,13 +11,16 @@ import frc.robot.subsystems.Rumble;
 public class IntakeCommand extends Command {
 
     private final Coral coralSubsystem;
+    private final Command ledCmd;
 
     private final LEDs s_LEDs = LEDs.getInstance();
-    Rumble rumble = new Rumble();
+    Rumble rumble = Rumble.getInstance();
 
     // constructor for IntakeCommand
     public IntakeCommand(Coral coralSubsystem) {
         this.coralSubsystem = coralSubsystem;
+
+        ledCmd = s_LEDs.persistCommand(LEDPreset.Strobe.kRed);
 
         addRequirements(coralSubsystem);
     }
@@ -27,28 +30,25 @@ public class IntakeCommand extends Command {
     public void initialize() {
         if (!coralSubsystem.isLineBroken()) {
             coralSubsystem.set(CoralConstants.intakeSpeed);
-            s_LEDs.setCommand(LEDPreset.Strobe.kGold).schedule();
         }
+
+        ledCmd.schedule();
     }
 
     // execute, if button is pressed, startIntake()
     @Override
     public void execute() {
-        if (!coralSubsystem.isLineBroken()) {
-            coralSubsystem.set(CoralConstants.intakeSpeed);
-        }
     }
 
     // end, when command ends, set Idle
     @Override
     public void end(boolean interrupted) {
         coralSubsystem.setIdle();
-        if (coralSubsystem.isLineBroken()) {
+
+        if (!interrupted)
             rumble.staticRumble(true);
-            s_LEDs.setCommand(LEDPreset.Solid.kLawnGreen).schedule();
-        } else {
-            s_LEDs.setCommand(LEDPreset.Solid.kRed).schedule();
-        }
+
+        ledCmd.cancel();
     }
 
     // if line is broken, return true, else return false
