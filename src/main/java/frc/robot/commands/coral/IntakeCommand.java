@@ -2,25 +2,19 @@
 package frc.robot.commands.coral;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.lib.leds.LEDPreset;
 import frc.robot.Constants.CoralConstants;
 import frc.robot.subsystems.Coral;
-import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Rumble;
 
 public class IntakeCommand extends Command {
 
     private final Coral coralSubsystem;
-    private final Command ledCmd;
 
-    private final LEDs s_LEDs = LEDs.getInstance();
     Rumble rumble = Rumble.getInstance();
 
     // constructor for IntakeCommand
     public IntakeCommand(Coral coralSubsystem) {
         this.coralSubsystem = coralSubsystem;
-
-        ledCmd = s_LEDs.persistCommand(LEDPreset.Strobe.kRed);
 
         addRequirements(coralSubsystem);
     }
@@ -31,8 +25,6 @@ public class IntakeCommand extends Command {
         if (!coralSubsystem.isLineBroken()) {
             coralSubsystem.set(CoralConstants.intakeSpeed);
         }
-
-        ledCmd.schedule();
     }
 
     // execute, if button is pressed, startIntake()
@@ -47,8 +39,6 @@ public class IntakeCommand extends Command {
 
         if (!interrupted)
             rumble.staticRumble(true);
-
-        ledCmd.cancel();
     }
 
     // if line is broken, return true, else return false
@@ -56,5 +46,4 @@ public class IntakeCommand extends Command {
     public boolean isFinished() {
         return coralSubsystem.isLineBroken();
     }
-
 }

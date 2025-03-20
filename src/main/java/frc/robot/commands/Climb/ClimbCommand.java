@@ -1,9 +1,7 @@
 package frc.robot.commands.Climb;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.lib.leds.LEDPreset;
 import frc.robot.subsystems.Climb;
-import frc.robot.subsystems.LEDs;
 
 public class ClimbCommand extends Command {
 
@@ -35,7 +33,6 @@ public class ClimbCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         /* Celebrates then stops */
-        LEDs.getInstance().setCommand(LEDPreset.Rainbow.kConfetti).schedule();
         climbSubsystem.stopMotor();
     }
 

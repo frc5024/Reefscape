@@ -23,7 +23,6 @@ import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Rumble;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -36,7 +35,6 @@ abstract public class RobotContainer {
     protected Elevator elevator;
     protected Rumble rumble;
     protected Limelight limelightSubsystem;
-    protected LEDs lEDs;
 
     protected AlgaeSubsystem algaeSubsystem;
     protected ClimbSubsystem climbSubsystem;

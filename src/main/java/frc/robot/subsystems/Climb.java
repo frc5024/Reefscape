@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.leds.LEDPreset;
 import frc.robot.Constants;
 import frc.robot.commands.Climb.ArmOutCmd;
 import frc.robot.commands.Climb.ClimbCommand;
@@ -49,14 +48,11 @@ public class Climb extends SubsystemBase {
     // arm retracts with blue LEDs
     public void retractArm() {
         climbMotor.set(Constants.ClimbConstants.climbSpeed);
-
-        LEDs.getInstance().setCommand(LEDPreset.LightChase.kBlue).schedule();
     }
 
     public void extendArm() {
         // Sets motor to extending speed
         climbMotor.set(Constants.ClimbConstants.extendSpeed);
-        LEDs.getInstance().setCommand(LEDPreset.Solid.kViolet).schedule();
     }
 
     public void moveMotor(double Speed) {

@@ -21,7 +21,6 @@ import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Rumble;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -62,7 +61,6 @@ public class MantaRaiderRobotContainer extends RobotContainer {
         this.elevator = Elevator.getInstance();
         this.rumble = Rumble.getInstance();
         this.limelightSubsystem = Limelight.getInstance();
-        this.lEDs = LEDs.getInstance();
 
         registerNamedCommands();
         configureAutoBuilder();
