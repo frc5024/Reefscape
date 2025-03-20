@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.TeleopConstants;
 import frc.robot.Robot;
 import frc.robot.modules.gyro.GyroIOInputsAutoLogged;
 import frc.robot.modules.gyro.GyroModuleIO;
@@ -46,6 +47,11 @@ import frc.robot.utils.PhoenixOdometryThread;
  */
 public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsystem.VisionConsumer {
     private final String NAME = "SwerveDrive";
+
+    /* Alerts */
+    private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.",
+            AlertType.kError);
+
     public static final Lock odometryLock = new ReentrantLock();
 
     private final GyroModuleIO gyroIO;
@@ -53,9 +59,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
     private final SwerveModule[] swerveModules = new SwerveModule[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
-
-    private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.",
-            AlertType.kError);
 
     private Rotation2d rawGyroRotation = new Rotation2d();
     private SwerveModulePosition[] lastModulePositions = // For delta tracking
@@ -287,7 +290,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      * 
      */
     private void setSpeedModifier() {
-        this.speedModifier = 1;
+        this.speedModifier = TeleopConstants.SPEED_MODIFIER_THIRTY;
         // this.speedModifier = this.speedModifier -
         // Elevator.getInstance().getElevatorPercent();
 
@@ -418,9 +421,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
     /**
      * Adds a new timestamped vision measurement.
      */
-    public void addVisionMeasurement(
-            Pose2d visionRobotPoseMeters,
-            double timestampSeconds,
+    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds,
             Matrix<N3, N1> visionMeasurementStdDevs) {
         this.poseEstimator.addVisionMeasurement(
                 visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);

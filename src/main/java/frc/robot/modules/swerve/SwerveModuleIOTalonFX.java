@@ -1,5 +1,6 @@
 package frc.robot.modules.swerve;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static frc.robot.utils.PhoenixUtil.tryUntilOk;
 
 import java.util.Queue;
@@ -101,7 +102,6 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         // Configure turn motor
         this.turnConfig = swerveModuleBuilder.getTurnConfig();
         tryUntilOk(5, () -> this.turnTalon.getConfigurator().apply(this.turnConfig, 0.25));
-        resetToAbsolute();
 
         // Configure CANCoder
         CANcoderConfiguration cancoderConfig = swerveModuleBuilder.getCancoderConfig();
@@ -177,8 +177,10 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
                         this.turnSupplyCurrentAmps,
                         this.turnTorqueCurrentAmps)),
                 this.turnEncoderConnectedDebounce.calculate(BaseStatusSignal.isAllGood(this.turnAbsolutePosition)),
-                Rotation2d.fromRotations(this.turnAbsolutePosition.getValueAsDouble()).minus(this.encoderOffset),
+                Rotation2d.fromRotations(this.turnAbsolutePosition.getValueAsDouble()).plus(this.encoderOffset),
+                this.turnAbsolutePosition.getValue().in(Degrees),
                 Rotation2d.fromRotations(this.turnPosition.getValueAsDouble()),
+                this.turnPosition.getValue().in(Degrees),
                 Units.rotationsToRadians(this.turnVelocity.getValueAsDouble()),
                 this.turnAppliedVolts.getValueAsDouble(),
                 this.turnSupplyCurrentAmps.getValueAsDouble(),
@@ -191,21 +193,6 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
                 .map(Rotation2d::fromRotations).toArray(Rotation2d[]::new);
         this.drivePositionQueue.clear();
         this.turnPositionQueue.clear();
-    }
-
-    /**
-     * 
-     */
-    private Rotation2d getCANcoder() {
-        return Rotation2d.fromRotations(this.cancoder.getAbsolutePosition().getValueAsDouble());
-    }
-
-    /**
-     * 
-     */
-    public void resetToAbsolute() {
-        double absolutePosition = getCANcoder().getRotations() - this.encoderOffset.getRotations();
-        this.turnTalon.setPosition(absolutePosition);
     }
 
     @Override

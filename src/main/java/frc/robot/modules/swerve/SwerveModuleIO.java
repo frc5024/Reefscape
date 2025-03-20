@@ -11,7 +11,7 @@ public interface SwerveModuleIO {
     @AutoLog
     public class SwerveModuleIOInputs {
         public SwerveModuleIOData data = new SwerveModuleIOData(false, 0.0, 0.0, 0.0, 0.0, 0.0, false, false,
-                Rotation2d.kZero, Rotation2d.kZero, 0.0, 0.0, 0.0, 0.0);
+                Rotation2d.kZero, 0.0, Rotation2d.kZero, 0.0, 0.0, 0.0, 0.0, 0.0);
 
         public double[] odometryTimestamps = new double[] {};
         public double[] odometryDrivePositionsRad = new double[] {};
@@ -29,7 +29,9 @@ public interface SwerveModuleIO {
             boolean turnConnected,
             boolean turnEncoderConnected,
             Rotation2d turnAbsolutePosition,
+            double turnAbsolutePositionDeg,
             Rotation2d turnPosition,
+            double turnPositionDeg,
             double turnVelocityRadPerSec,
             double turnAppliedVolts,
             double turnSupplyCurrentAmps,

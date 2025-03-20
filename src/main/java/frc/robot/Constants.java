@@ -551,10 +551,10 @@ public final class Constants {
                 Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
                 0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-170.0));
 
-        public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_OV9281-3",
+        public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_UC626-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
-                0.0, Units.degreesToRadians(20), Units.degreesToRadians(-20.0));
+                Units.inchesToMeters(9.75), Units.inchesToMeters(7.5), Units.inchesToMeters(8.5),
+                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-30.0));
 
         /**
          * TODO: set list of enabled camera
