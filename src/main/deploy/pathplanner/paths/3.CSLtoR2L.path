@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.669,
-        "y": 7.402
+        "x": 1.627,
+        "y": 7.489
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.960727153758737,
-        "y": 6.245724328618616
+        "x": 3.0407976063009063,
+        "y": 6.0841188484341675
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.964144736842105,
-        "y": 5.242146381578948
+        "x": 4.060361842105263,
+        "y": 5.169983552631579
       },
       "prevControl": {
-        "x": 3.4992527243951184,
-        "y": 5.662275774569076
+        "x": 3.694272979994796,
+        "y": 5.527055943406232
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "ElevatorL4",
-      "waypointRelativePos": 0.5089820359281458,
+      "waypointRelativePos": 0.5975935828877009,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

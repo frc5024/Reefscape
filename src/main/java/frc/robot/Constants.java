@@ -77,8 +77,9 @@ public final class Constants {
     public static class ElevatorConstants {
         public static final double HEIGHT_IN_METERS = 2.0;
         public static final double MAX_TORQUE = 20.0;
-        public static final double MAX_UP_SPEED = 0.2;
-        public static final double MAX_DOWN_SPEED = 0.1;
+        public static final double MAX_UP_SPEED = 3.0;
+        public static final double MAX_UP_ACCELERATION = 1.0;
+        public static final double MAX_DOWN_SPEED = 0.5;
         public static final Rotation2d ANGLE = Rotation2d.fromDegrees(90.0);
         public static final double kS = 5.0;
         public static final double kG = 0.5;
@@ -316,12 +317,12 @@ public final class Constants {
         public static final double ELEVATOR_KV = 0.1;
         public static final double ELEVATOR_KA = 0.05;
 
-        public static final double SIM_ELEVATOR_KP = 5000.0;
-        public static final double SIM_ELEVATOR_KI = 0.0;
+        public static final double SIM_ELEVATOR_KP = 200.0;
+        public static final double SIM_ELEVATOR_KI = 2.0;
         public static final double SIM_ELEVATOR_KD = 2000.0;
-        public static final double SIM_ELEVATOR_KS = 0.86822;
-        public static final double SIM_ELEVATOR_KV = 3.10238;
-        public static final double SIM_ELEVATOR_KA = 0.05;
+        public static final double SIM_ELEVATOR_KS = 5.0;
+        public static final double SIM_ELEVATOR_KV = 3.0;
+        public static final double SIM_ELEVATOR_KA = 0.0;
 
         /**
          * Should only be call by simulation as TunerContants has real values
@@ -456,25 +457,25 @@ public final class Constants {
 
         public static final Camera ARDUCAM1_CAMERA = new Camera("Arducam_OV9281-1",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
-                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-30.0));
+                Units.inchesToMeters(11.0), Units.inchesToMeters(11.0), Units.inchesToMeters(9.25),
+                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(30.0));
 
-        public static final Camera ARDUCAM2_CAMERA = new Camera("Arducam_OV9281-2",
-                Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
-                0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-150.0));
-
-        public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_UC626-2",
+        public static final Camera ARDUCAM2_CAMERA = new Camera("Arducam_UC626-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(9.75), Units.inchesToMeters(7.5), Units.inchesToMeters(8.5),
                 0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-30.0));
 
+        public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_OV9281-2",
+                Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
+                Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
+                0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-150.0));
+
         /**
          * TODO: set list of enabled camera
          */
-        public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM3_CAMERA);
-        public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM3_CAMERA, ARDUCAM1_CAMERA,
-                ARDUCAM2_CAMERA);
+        public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM2_CAMERA);
+        public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM1_CAMERA, ARDUCAM2_CAMERA,
+                ARDUCAM3_CAMERA);
         public static final List<Camera> NO_CAMERAS = new ArrayList<>();
         public static final List<Camera> CAMERAS = SIMULATION_CAMERAS;
         public static final Camera FRONT_RIGHT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;

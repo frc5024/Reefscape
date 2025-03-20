@@ -39,8 +39,8 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
         double[] elevatorPIDs = PIDConstants.getElevatorPIDs();
         this.pidController = new ProfiledPIDController(elevatorPIDs[0], elevatorPIDs[1], elevatorPIDs[2],
                 new TrapezoidProfile.Constraints(ElevatorConstants.MAX_UP_SPEED,
-                        ElevatorConstants.MAX_UP_SPEED));
-        this.pidController.setTolerance(0.25, 0.25);
+                        ElevatorConstants.MAX_UP_ACCELERATION));
+        this.pidController.setTolerance(0.025, 0.025);
         this.elevatorFeedforward = new ElevatorFeedforward(elevatorPIDs[3], ElevatorConstants.kG, elevatorPIDs[4],
                 elevatorPIDs[5]);
     }
@@ -101,7 +101,7 @@ public class ElevatorModuleIOSim implements ElevatorModuleIO {
 
     @Override
     public void stop() {
-        runOpenLoop(0.0);
+        // runOpenLoop(0.0);
     }
 
     /**

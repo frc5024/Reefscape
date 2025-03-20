@@ -9,11 +9,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.vision.DriveBargeCommand;
 import frc.robot.commands.vision.DriveFromBestTagCommand;
 import frc.robot.commands.vision.DriveNearestCoralStationCommand;
 import frc.robot.commands.vision.DriveProcessorCommand;
 import frc.robot.commands.vision.DriveReefStationCommand;
-import frc.robot.controls.GameData.CoralPole;
+import frc.robot.commands.vision.DriveReefStationPathCommand;
 import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
@@ -106,10 +107,7 @@ public class ButtonBindings {
 
         // Reset gyro to 0° when B button is pressed
         commandXboxController.b()
-                .onTrue(runOnce(() -> this.swerveDriveSubsystem.setPose(
-                        new Pose2d(this.swerveDriveSubsystem.getPose().getTranslation(), new Rotation2d())),
-                        this.swerveDriveSubsystem)
-                        .ignoringDisable(true));
+                .whileTrue(new DriveBargeCommand(this.swerveDriveSubsystem));
 
         // Drive to nearest coral station
         commandXboxController.x()
@@ -135,11 +133,8 @@ public class ButtonBindings {
 
         // Drive to selected reef station
         commandXboxController.rightBumper()
-                .whileTrue(new DriveReefStationCommand(this.swerveDriveSubsystem,
-                        this.swerveDriveSubsystem::getPose,
-                        GameData.getInstance()::getReefStationIndex,
-                        GameData.getInstance().getCoralPole(),
-                        GameData.getInstance().getGamePieceMode()));
+                .whileTrue(new DriveReefStationPathCommand(this.swerveDriveSubsystem,
+                        GameData.getInstance()::getReefStationIndex, GameData.getInstance()::getGamePieceModeAsString));
 
         // Drive to selected reef station
         commandXboxController.leftBumper()
@@ -152,8 +147,10 @@ public class ButtonBindings {
         // Set reef position
         commandXboxController.povUp().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(1)));
         commandXboxController.povDown().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(-1)));
-        commandXboxController.povLeft().onTrue(runOnce(() -> GameData.getInstance().setCoralPole(CoralPole.LEFT)));
-        commandXboxController.povRight().onTrue(runOnce(() -> GameData.getInstance().setCoralPole(CoralPole.RIGHT)));
+        commandXboxController.povLeft()
+                .onTrue(runOnce(() -> GameData.getInstance().setGamePieceMode(GamePieceMode.ALGAE)));
+        commandXboxController.povRight()
+                .onTrue(runOnce(() -> GameData.getInstance().setGamePieceMode(GamePieceMode.CORAL)));
 
         return commandXboxController;
     }
@@ -183,7 +180,9 @@ public class ButtonBindings {
                                 : ElevatorSubsystem.Action.MOVE_TO_CORAL_3)));
         commandXboxController.y()
                 .whileTrue(runOnce(() -> this.elevatorSubsystem
-                        .addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_4)));
+                        .addAction(GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE
+                                ? ElevatorSubsystem.Action.MOVE_TO_ALGAE_3
+                                : ElevatorSubsystem.Action.MOVE_TO_CORAL_4)));
 
         commandXboxController.leftTrigger()
                 .whileTrue(runOnce(() -> {
@@ -203,13 +202,13 @@ public class ButtonBindings {
                     }
                 }));
 
-        // commandXboxController.leftBumper()
-        // .whileTrue(runOnce(() -> this.coralSubsystem
-        // .addAction(CoralSubsystem.Action.EJECT)));
-
-        // commandXboxController.rightBumper()
-        // .whileTrue(runOnce(() -> this.coralSubsystem
-        // .addAction(CoralSubsystem.Action.INTAKE)));
+        // Set reef position
+        commandXboxController.povUp().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(1)));
+        commandXboxController.povDown().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(-1)));
+        commandXboxController.povLeft()
+                .onTrue(runOnce(() -> GameData.getInstance().setGamePieceMode(GamePieceMode.ALGAE)));
+        commandXboxController.povRight()
+                .onTrue(runOnce(() -> GameData.getInstance().setGamePieceMode(GamePieceMode.CORAL)));
 
         return commandXboxController;
     }
