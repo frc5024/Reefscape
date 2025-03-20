@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMetadata;
-import frc.robot.modules.coral.CoralIntakeIOInputsAutoLogged;
 import frc.robot.modules.coral.CoralModuleIO;
+import frc.robot.modules.coral.CoralModuleIOInputsAutoLogged;
 import frc.robot.utils.LoggedTracer;
 
 /**
@@ -28,7 +28,7 @@ public class CoralSubsystem extends SubsystemBase {
     }
 
     private final CoralModuleIO coralModuleIO;
-    protected final CoralIntakeIOInputsAutoLogged inputs;
+    protected final CoralModuleIOInputsAutoLogged inputs;
     protected final Timer stateTimer;
 
     private final StateMachine<Action> stateMachine;
@@ -39,7 +39,7 @@ public class CoralSubsystem extends SubsystemBase {
      */
     public CoralSubsystem(CoralModuleIO coralModuleIO) {
         this.coralModuleIO = coralModuleIO;
-        this.inputs = new CoralIntakeIOInputsAutoLogged();
+        this.inputs = new CoralModuleIOInputsAutoLogged();
 
         // Sets states for the arm, and what methods.
         this.stateMachine = new StateMachine<>(NAME);
@@ -143,7 +143,7 @@ public class CoralSubsystem extends SubsystemBase {
         this.coralModuleIO.updateInputs(this.inputs);
         Logger.processInputs(this.NAME, this.inputs);
 
-        this.disconnected.set(!this.inputs.connected);
+        this.disconnected.set(!this.inputs.data.connected());
 
         // actions run for no longer than 3 seconds
         if (this.stateTimer.isRunning() && this.stateTimer.hasElapsed(3)) {

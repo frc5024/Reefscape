@@ -1,5 +1,7 @@
 package frc.robot.containers;
 
+import java.util.function.DoubleSupplier;
+
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
@@ -7,10 +9,15 @@ import org.littletonrobotics.junction.Logger;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.commands.SwerveDriveCommands;
+import frc.robot.commands.tuning.TuningCommand;
+import frc.robot.controls.ButtonBindings;
 import frc.robot.modules.algae.AlgaeModuleIOSim;
 import frc.robot.modules.coral.CoralModuleIOSim;
 import frc.robot.modules.elevator.ElevatorModuleIOSim;
@@ -54,12 +61,43 @@ public class MapleSimRobotContainer extends RobotContainer {
         this.elevatorSubsystem = new ElevatorSubsystem(new ElevatorModuleIOSim(), this.algaeSubsystem::hasAlgae,
                 this.coralSubsystem::hasCoral);
 
+        // If simulation set coral in
+        this.coralSubsystem.setHasCoral(true);
+        this.algaeSubsystem.setHasAlgae(false);
+
         registerNamedCommands();
         configureAutoBuilder();
         configureButtonBindings();
 
         // Initiate the LEDSubsystem
         LEDSubsystem.getInstance();
+    }
+
+    @Override
+    public void configureButtonBindings() {
+        ButtonBindings buttonBindings = new ButtonBindings(this.swerveDriveSubsystem, this.algaeSubsystem,
+                this.coralSubsystem, this.elevatorSubsystem, this.visionSubsystem);
+
+        CommandXboxController commandXboxController = RobotConstants.TUNING_MODE
+                ? buttonBindings.getTestController()
+                : buttonBindings.getDriverController();
+
+        this.driverController = commandXboxController;
+        this.operatorController = buttonBindings.getOperatorController();
+
+        // Drive suppliers
+        DoubleSupplier controllerX = () -> -commandXboxController.getLeftY();
+        DoubleSupplier controllerY = () -> -commandXboxController.getLeftX();
+        DoubleSupplier controllerOmega = () -> -commandXboxController.getRightX();
+
+        Command closedLoopDrive = SwerveDriveCommands.drive(this.swerveDriveSubsystem, controllerX, controllerY,
+                controllerOmega, false);
+
+        Command tuningCommand = new TuningCommand(this.swerveDriveSubsystem, this.algaeSubsystem, this.coralSubsystem,
+                this.elevatorSubsystem, controllerX, controllerY, controllerOmega, commandXboxController);
+
+        // Default command, normal field-relative drive
+        this.swerveDriveSubsystem.setDefaultCommand(RobotConstants.TUNING_MODE ? tuningCommand : closedLoopDrive);
     }
 
     /**
@@ -79,6 +117,9 @@ public class MapleSimRobotContainer extends RobotContainer {
     public void registerNamedCommands() {
         NamedCommands.registerCommand("ElevatorL0", new InstantCommand(() -> {
             this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM);
+        }));
+        NamedCommands.registerCommand("ElevatorL2", new InstantCommand(() -> {
+            this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_2);
         }));
         NamedCommands.registerCommand("ElevatorL4", new InstantCommand(() -> {
             this.elevatorSubsystem.addAction(ElevatorSubsystem.Action.MOVE_TO_CORAL_4);

@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 6.0,
-        "y": 1.037765957446809
+        "y": 1.27391891891892
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.989392337817857,
-        "y": 0.634892045877953
+        "x": 5.998653809416463,
+        "y": 0.9013091984361556
       },
       "isLocked": false,
       "linkedName": null
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 6.0,
-        "y": 0.41870100783874703
+        "y": 0.553
       },
       "prevControl": {
-        "x": 6.003555011881665,
-        "y": 0.7531229692978769
+        "x": 6.000424886240769,
+        "y": 0.8029996389431041
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -45,7 +45,7 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "StationPaths",
+  "folder": "DrivePaths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

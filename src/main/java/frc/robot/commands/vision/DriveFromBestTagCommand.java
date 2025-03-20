@@ -77,6 +77,8 @@ public class DriveFromBestTagCommand extends Command {
     public void execute() {
         Pose2d robotPose = this.poseProvider.get();
 
+        setGoal();
+
         double xSpeed = this.xController.calculate(robotPose.getX());
         double ySpeed = this.yController.calculate(robotPose.getY());
         double omegaSpeed = this.omegaController.calculate(robotPose.getRotation().getRadians());
@@ -99,8 +101,14 @@ public class DriveFromBestTagCommand extends Command {
     private Pose2d getBestTagPose(Pose3d currentPose) {
         boolean isCoralMode = this.gamePieceModeSupplier.get() == GamePieceMode.CORAL;
 
+        if (VisionConstants.FRONT_RIGHT_CAMERA == null || VisionConstants.REAR_CAMERA == null) {
+            return null;
+        }
+
         String cameraName = isCoralMode
-                ? VisionConstants.FRONT_CAMERA.getName()
+                ? this.isLeftPole
+                        ? VisionConstants.FRONT_LEFT_CAMERA.getName()
+                        : VisionConstants.FRONT_RIGHT_CAMERA.getName()
                 : VisionConstants.REAR_CAMERA.getName();
         Pose3d targetPose = this.visionSubsystem.getBestTargetPose(cameraName);
 
@@ -114,12 +122,12 @@ public class DriveFromBestTagCommand extends Command {
         double yOffset = 0.0;
         double yawOffset = 0.0;
         if (isCoralMode) {
-            yOffset = isLeftPole ? -FieldConstants.REEF_POLE_OFFSET : FieldConstants.REEF_POLE_OFFSET;
+            yOffset = this.isLeftPole ? -FieldConstants.REEF_POLE_LEFT_OFFSET : FieldConstants.REEF_POLE_RIGHT_OFFSET;
             yawOffset = Units.degreesToRadians(180.0);
         }
 
         Transform3d transformation = new Transform3d(
-                new Translation3d(RobotConstants.LENGTH_METERS / 1.4, yOffset, 0.0),
+                new Translation3d(RobotConstants.LENGTH_METERS / 2.0, yOffset, 0.0),
                 new Rotation3d(0.0, 0.0, yawOffset));
 
         return targetPose.transformBy(transformation).toPose2d();
@@ -129,20 +137,7 @@ public class DriveFromBestTagCommand extends Command {
     public void initialize() {
         resetPIDControllers();
 
-        Pose2d robotPose2d = this.poseProvider.get();
-        Pose3d robotPose = new Pose3d(robotPose2d.getX(), robotPose2d.getY(), 0.0,
-                new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
-
-        Pose2d goalPose = getBestTagPose(robotPose);
-        if (goalPose == null)
-            goalPose = robotPose2d;
-
-        this.xController.setGoal(goalPose.getX());
-        this.yController.setGoal(goalPose.getY());
-        this.omegaController.setGoal(goalPose.getRotation().getRadians());
-
-        Logger.recordOutput("Commands/Goal Pose", goalPose);
-        Logger.recordOutput("Commands/Active Command", this.getName());
+        setGoal();
     }
 
     /**
@@ -166,5 +161,25 @@ public class DriveFromBestTagCommand extends Command {
         this.xController.reset(robotPose.getX());
         this.yController.reset(robotPose.getY());
         this.omegaController.reset(robotPose.getRotation().getRadians());
+    }
+
+    /**
+     * 
+     */
+    private void setGoal() {
+        Pose2d robotPose2d = this.poseProvider.get();
+        Pose3d robotPose = new Pose3d(robotPose2d.getX(), robotPose2d.getY(), 0.0,
+                new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
+
+        Pose2d goalPose = getBestTagPose(robotPose);
+        if (goalPose == null)
+            goalPose = robotPose2d;
+
+        this.xController.setGoal(goalPose.getX());
+        this.yController.setGoal(goalPose.getY());
+        this.omegaController.setGoal(goalPose.getRotation().getRadians());
+
+        Logger.recordOutput("Commands/Goal Pose", goalPose);
+        Logger.recordOutput("Commands/Active Command", this.getName());
     }
 }

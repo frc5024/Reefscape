@@ -54,15 +54,19 @@ public class AlgaeModuleIOSparkMax implements AlgaeModuleIO {
     }
 
     @Override
-    public void updateInputs(AlgaeIntakeIOInputs inputs) {
+    public void updateInputs(AlgaeModuleIOInputs inputs) {
         if (DriverStation.isDisabled()) {
             stop();
         }
 
-        inputs.connected = true;
-        inputs.appliedVoltage = this.appliedVoltage;
-        inputs.supplyCurrentAmps = this.topMotor.getAppliedOutput();
-        inputs.tempCelsius = this.topMotor.getMotorTemperature();
+        inputs.data = new AlgaeModuleIOData(
+                true,
+                this.topMotor.getEncoder().getPosition(),
+                this.topMotor.getEncoder().getVelocity(),
+                this.appliedVoltage,
+                0.0,
+                this.topMotor.getAppliedOutput(),
+                this.topMotor.getMotorTemperature());
     }
 
     @Override

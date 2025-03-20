@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ElevatorConstants.ElevatorLevel;
-import frc.robot.Constants.MechanismConstants;
 import frc.robot.utils.MapleSimUtil;
 
 /**
@@ -60,8 +59,8 @@ public class ElevatorVisualizer {
 
         double[] heights = this.elevatorMechanism.getShaftLengths();
         double elevatorAngleInRadians = ElevatorConstants.ANGLE.getRadians();
+        double algaeIntakeAngleInRadians = Units.degreesToRadians(heights[2] > 1.0 ? 20 : 0);
 
-        Logger.recordOutput("Mechanism2d", MechanismConstants.CANVAS);
         Logger.recordOutput("Mechanism3d/" + name,
                 new Pose3d[] {
                         new Pose3d(), // outer frame
@@ -72,7 +71,7 @@ public class ElevatorVisualizer {
                         new Pose3d(new Translation3d(heights[2], new Rotation3d(0.0, -elevatorAngleInRadians, 0.0)),
                                 new Rotation3d()), // box
                         new Pose3d(new Translation3d(heights[2], new Rotation3d(0.0, -elevatorAngleInRadians, 0.0)),
-                                new Rotation3d()), // algae intake
+                                new Rotation3d(0.0, algaeIntakeAngleInRadians, 0.0)), // algae intake
                         new Pose3d(new Translation3d(heights[2], new Rotation3d(0.0, -elevatorAngleInRadians, 0.0)),
                                 new Rotation3d()) // coral intake
                 });
@@ -94,7 +93,7 @@ public class ElevatorVisualizer {
         /* Coral Intake Subsystem */
         if (hasCoral) {
             Pose2d robotPose = MapleSimUtil.getSwerveDriveSimulation().getSimulatedDriveTrainPose();
-            Transform3d transform3d = new Transform3d(Units.inchesToMeters(11.5), 0.025,
+            Transform3d transform3d = new Transform3d(Units.inchesToMeters(11.5), -0.005,
                     heights[2] + Units.inchesToMeters(18),
                     new Rotation3d(0.0, Units.degreesToRadians(35), 0.0));
 

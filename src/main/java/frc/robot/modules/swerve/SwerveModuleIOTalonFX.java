@@ -204,8 +204,8 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
 
     @Override
     public void setDrivePID(double kP, double kI, double kD) {
-        tryUntilOk(5,
-                () -> this.driveTalon.getConfigurator().refresh(new Slot0Configs().withKP(kP).withKI(kI).withKD(kD)));
+        tryUntilOk(5, () -> this.driveTalon.getConfigurator()
+                .refresh(new Slot0Configs().withKP(kP).withKI(kI).withKD(kD)));
     }
 
     @Override
@@ -223,7 +223,6 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
     public void setTurnPID(double kP, double kI, double kD) {
         tryUntilOk(5, () -> this.turnTalon.getConfigurator()
                 .refresh(new Slot0Configs().withKP(kP).withKI(kI).withKD(kD)));
-
     }
 
     @Override

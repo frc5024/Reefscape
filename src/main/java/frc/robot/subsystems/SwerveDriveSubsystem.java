@@ -201,7 +201,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
         }
 
         // Update gyro alert
-        gyroDisconnectedAlert
+        this.gyroDisconnectedAlert
                 .set(!gyroInputs.data.connected() && RobotConstants.currentMode != RobotConstants.Mode.SIM);
 
         Logger.recordOutput("Subsystems/SwerveDrive/IsFieldOriented", this.isFieldRelative);

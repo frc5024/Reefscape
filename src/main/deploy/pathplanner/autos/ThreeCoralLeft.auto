@@ -1,0 +1,187 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1.A2toR3R"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EjectCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForEject"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2.R3RtoCSL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3.CSLtoR2L"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EjectCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForEject"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4.R2LtoCSL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5.CSLtoR2R"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EjectCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForEject"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6.R2RtoCSL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "7.CSLtoR1L"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EjectCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForEject"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorL0"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

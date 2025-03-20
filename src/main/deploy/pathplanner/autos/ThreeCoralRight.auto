@@ -1,0 +1,187 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1.A2toR5L"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EjectCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForEject"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2.R5LtoCSR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3.CSRtoR6R"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EjectCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForEject"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4.R6RtoCSR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5.CSRtoR6L"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EjectCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForEject"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6.R6LtoCSR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "7.CSRtoR1R"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForElevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EjectCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForEject"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorL0"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

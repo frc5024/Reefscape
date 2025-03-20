@@ -1,6 +1,6 @@
 {
   "version": 1.0,
-  "grid_size": 128,
+  "grid_size": 64,
   "tabs": [
     {
       "name": "Autonomous",
@@ -9,10 +9,10 @@
         "containers": [
           {
             "title": "Auto Routine",
-            "x": 128.0,
+            "x": 320.0,
             "y": 0.0,
-            "width": 512.0,
-            "height": 128.0,
+            "width": 320.0,
+            "height": 256.0,
             "type": "ComboBox Chooser",
             "properties": {
               "topic": "/SmartDashboard/Auto Routine",
@@ -23,9 +23,9 @@
           {
             "title": "BatteryVoltage (Volts)",
             "x": 640.0,
-            "y": 128.0,
-            "width": 640.0,
-            "height": 128.0,
+            "y": 256.0,
+            "width": 512.0,
+            "height": 192.0,
             "type": "Voltage View",
             "properties": {
               "topic": "/SmartDashboard/BatterySim/BatteryVoltage (Volts)",
@@ -42,8 +42,8 @@
             "title": "FMSInfo",
             "x": 640.0,
             "y": 0.0,
-            "width": 640.0,
-            "height": 128.0,
+            "width": 512.0,
+            "height": 256.0,
             "type": "FMSInfo",
             "properties": {
               "topic": "/FMSInfo",
@@ -52,50 +52,14 @@
           },
           {
             "title": "Alerts",
-            "x": 1280.0,
+            "x": 1152.0,
             "y": 0.0,
-            "width": 512.0,
-            "height": 512.0,
+            "width": 448.0,
+            "height": 448.0,
             "type": "Alerts",
             "properties": {
               "topic": "/SmartDashboard/Alerts",
               "period": 0.06
-            }
-          },
-          {
-            "title": "3v3 Rail Voltage",
-            "x": 640.0,
-            "y": 256.0,
-            "width": 640.0,
-            "height": 128.0,
-            "type": "Voltage View",
-            "properties": {
-              "topic": "/AdvantageKit/SystemStats/3v3Rail/Voltage",
-              "period": 0.06,
-              "data_type": "double",
-              "min_value": 0.0,
-              "max_value": 6.0,
-              "divisions": 5,
-              "inverted": false,
-              "orientation": "horizontal"
-            }
-          },
-          {
-            "title": "CANBus Battery Voltage",
-            "x": 640.0,
-            "y": 384.0,
-            "width": 640.0,
-            "height": 128.0,
-            "type": "Voltage View",
-            "properties": {
-              "topic": "/AdvantageKit/SystemStats/BatteryVoltage",
-              "period": 0.06,
-              "data_type": "double",
-              "min_value": 4.0,
-              "max_value": 13.0,
-              "divisions": 5,
-              "inverted": false,
-              "orientation": "horizontal"
             }
           }
         ]
@@ -108,7 +72,7 @@
         "containers": [
           {
             "title": "Match Time",
-            "x": 640.0,
+            "x": 1280.0,
             "y": 0.0,
             "width": 512.0,
             "height": 256.0,
@@ -124,10 +88,10 @@
           },
           {
             "title": "Alerts",
-            "x": 1408.0,
-            "y": 0.0,
-            "width": 384.0,
-            "height": 512.0,
+            "x": 1280.0,
+            "y": 256.0,
+            "width": 512.0,
+            "height": 256.0,
             "type": "Alerts",
             "properties": {
               "topic": "/SmartDashboard/Alerts",
@@ -135,47 +99,68 @@
             }
           },
           {
-            "title": "Reef Position",
-            "x": 640.0,
-            "y": 256.0,
-            "width": 512.0,
+            "title": "Left Camera Has Target",
+            "x": 256.0,
+            "y": 0.0,
+            "width": 256.0,
             "height": 256.0,
-            "type": "Large Text Display",
+            "type": "Boolean Box",
             "properties": {
-              "topic": "/AdvantageKit/RealOutputs/GameData/Reef Position",
+              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-3/HasTarget",
               "period": 0.06,
-              "data_type": "string"
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           },
           {
             "title": "Left Camera Best Target Id",
-            "x": 384.0,
+            "x": 256.0,
             "y": 256.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Large Text Display",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_UC626-2/BestTargetId",
+              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-3/BestTargetId",
               "period": 0.06,
               "data_type": "int"
             }
           },
           {
+            "title": "Right Camera Has Target",
+            "x": 1024.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-1/HasTarget",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
             "title": "Right Camera Best Target Id",
-            "x": 1152.0,
+            "x": 1024.0,
             "y": 256.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Large Text Display",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera limelight-two/BestTargetId",
+              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-1/BestTargetId",
               "period": 0.06,
               "data_type": "int"
             }
           },
           {
             "title": "Elevator AtGoal",
-            "x": 128.0,
+            "x": 0.0,
             "y": 0.0,
             "width": 256.0,
             "height": 256.0,
@@ -192,7 +177,7 @@
           },
           {
             "title": "Elevator Height",
-            "x": 128.0,
+            "x": 0.0,
             "y": 256.0,
             "width": 256.0,
             "height": 256.0,
@@ -212,14 +197,27 @@
             }
           },
           {
-            "title": "Left Camera Has Target",
-            "x": 384.0,
+            "title": "Game Piece Mode",
+            "x": 512.0,
             "y": 0.0,
-            "width": 256.0,
-            "height": 256.0,
+            "width": 512.0,
+            "height": 192.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/Game Piece Mode",
+              "period": 0.06,
+              "data_type": "string"
+            }
+          },
+          {
+            "title": "Reef Station 1",
+            "x": 704.0,
+            "y": 448.0,
+            "width": 128.0,
+            "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_UC626-2/HasTarget",
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation1",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -229,14 +227,82 @@
             }
           },
           {
-            "title": "Right Camera Has Target",
-            "x": 1152.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 256.0,
+            "title": "Reef Station 2",
+            "x": 576.0,
+            "y": 384.0,
+            "width": 128.0,
+            "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera limelight-two/HasTarget",
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation2",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Reef Station 3",
+            "x": 576.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation3",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Reef Station 4",
+            "x": 704.0,
+            "y": 192.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation4",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Reef Station 5",
+            "x": 832.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation5",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Reef Station 6",
+            "x": 832.0,
+            "y": 384.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation6",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,

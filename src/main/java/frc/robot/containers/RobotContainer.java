@@ -44,8 +44,8 @@ abstract public class RobotContainer {
             AlertType.kWarning);
 
     /* Autonomous */
-    AutoBuilder autoBuilder;
-    LoggedDashboardChooser<Command> autonomousChooser;
+    private AutoBuilder autoBuilder;
+    protected LoggedDashboardChooser<Command> autonomousChooser;
 
     /* Controllers */
     CommandXboxController driverController;
@@ -117,6 +117,8 @@ abstract public class RobotContainer {
         return this.autonomousChooser.get();
     }
 
+    abstract public void registerNamedCommands();
+
     /**
      * Called when the alliance reported by the driverstation/FMS changes -
      * Simulation Only
@@ -133,7 +135,12 @@ abstract public class RobotContainer {
         resetSimulationField(pose2d);
     }
 
-    abstract public void registerNamedCommands();
+    /**
+     * 
+     */
+    public void resetDrivePID() {
+        this.swerveDriveSubsystem.resetDrivePID();
+    }
 
     /**
      * 
@@ -142,6 +149,13 @@ abstract public class RobotContainer {
         // Controller disconnected alerts
         this.driverDisconnected.set(!DriverStation.isJoystickConnected(this.driverController.getHID().getPort()));
         this.operatorDisconnected.set(!DriverStation.isJoystickConnected(this.operatorController.getHID().getPort()));
+    }
+
+    /**
+     * 
+     */
+    public void zeroDrivePID() {
+        this.swerveDriveSubsystem.zeroDrivePID();
     }
 
     /**

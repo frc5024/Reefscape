@@ -20,14 +20,14 @@ import frc.robot.Constants.RobotConstants;
  * constants from Phoenix. Simulation is always based on voltage control.
  */
 public class SwerveModuleIOSim implements SwerveModuleIO {
-    // TunerConstants doesn't support separate sim constants, so they are declared
-    // locally
     private static final double[] DRIVE_PIDs = PIDConstants.getDrivePIDs();
     private static final double[] TURN_PIDs = PIDConstants.getTurnPIDs();
 
-    private static final double DRIVE_KS = DRIVE_PIDs[3]; // 0.00865;
-    private static final double DRIVE_KV_ROT = 0.91035; // Same units as TunerConstants: (volt * secs) / rotation
-    private static final double DRIVE_KV = DRIVE_PIDs[4]; // 1.0 / Units.rotationsToRadians(1.0 / DRIVE_KV_ROT);
+    // private static final double DRIVE_KS = DRIVE_PIDs[3]; // 0.00865;
+    // private static final double DRIVE_KV_ROT = 0.91035; // Same units as
+    // TunerConstants: (volt * secs) / rotation
+    // private static final double DRIVE_KV = DRIVE_PIDs[4]; // 1.0 /
+    // Units.rotationsToRadians(1.0 / DRIVE_KV_ROT);
 
     private static final DCMotor DRIVE_GEARBOX = DCMotor.getKrakenX60Foc(1);
     private static final DCMotor TURN_GEARBOX = DCMotor.getKrakenX60Foc(1);
@@ -124,7 +124,7 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     @Override
     public void setDriveSetpoint(double velocityRadPerSec) {
         this.driveClosedLoop = true;
-        this.driveFFVolts = DRIVE_KS * Math.signum(velocityRadPerSec) + DRIVE_KV * velocityRadPerSec;
+        this.driveFFVolts = DRIVE_PIDs[3] * Math.signum(velocityRadPerSec) + DRIVE_PIDs[4] * velocityRadPerSec;
         this.driveController.setSetpoint(velocityRadPerSec);
     }
 

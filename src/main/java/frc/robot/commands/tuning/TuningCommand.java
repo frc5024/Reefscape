@@ -49,10 +49,16 @@ public class TuningCommand extends Command {
     private LoggedTunableNumber driveKp;
     private LoggedTunableNumber driveKi;
     private LoggedTunableNumber driveKd;
+    private LoggedTunableNumber driveKs;
+    private LoggedTunableNumber driveKv;
+    private LoggedTunableNumber driveKa;
 
     private LoggedTunableNumber turnKp;
     private LoggedTunableNumber turnKi;
     private LoggedTunableNumber turnKd;
+    private LoggedTunableNumber turnKs;
+    private LoggedTunableNumber turnKv;
+    private LoggedTunableNumber turnKa;
 
     /* Tunable PID used for Path Planner autonomous mode in the DrivePathCommand */
     private LoggedTunableNumber xKp;
@@ -178,6 +184,12 @@ public class TuningCommand extends Command {
             this.swerveDriveSubsystem.updateDrivePID(this.driveKp.get(), this.driveKi.get(), this.driveKd.get());
         }
 
+        if (this.driveKs.hasChanged(hashCode()) || this.driveKv.hasChanged(hashCode())
+                || this.driveKa.hasChanged(hashCode())) {
+            // this.swerveDriveSubsystem.updateDriveSVA(this.driveKp.get(),
+            // this.driveKi.get(), this.driveKd.get());
+        }
+
         if (this.turnKp.hasChanged(hashCode()) || this.turnKi.hasChanged(hashCode())
                 || this.turnKd.hasChanged(hashCode())) {
             this.swerveDriveSubsystem.updateTurnPID(this.turnKp.get(), this.turnKi.get(), this.turnKd.get());
@@ -211,7 +223,7 @@ public class TuningCommand extends Command {
         }
 
         if (this.desiredHeight.hasChanged(hashCode())) {
-            this.elevatorSubsystem.setGoal(this.desiredHeight.get());
+            this.elevatorSubsystem.setGoal(Units.inchesToMeters(this.desiredHeight.get()));
         }
 
         // if (this.desiredRPM.hasChanged(hashCode())) {
@@ -429,6 +441,10 @@ public class TuningCommand extends Command {
         this.driveKp = new LoggedTunableNumber("SwerveDriveModule/Drive/kp", drivePIDs[0]);
         this.driveKi = new LoggedTunableNumber("SwerveDriveModule/Drive/ki", drivePIDs[1]);
         this.driveKd = new LoggedTunableNumber("SwerveDriveModule/Drive/kd", drivePIDs[2]);
+
+        this.driveKs = new LoggedTunableNumber("SwerveDriveModule/Drive/ks", drivePIDs[3]);
+        this.driveKv = new LoggedTunableNumber("SwerveDriveModule/Drive/kv", drivePIDs[4]);
+        this.driveKa = new LoggedTunableNumber("SwerveDriveModule/Drive/ka", drivePIDs[5]);
 
         this.turnKp = new LoggedTunableNumber("SwerveDriveModule/Turn/kp", turnPIDs[0]);
         this.turnKi = new LoggedTunableNumber("SwerveDriveModule/Turn/ki", turnPIDs[1]);

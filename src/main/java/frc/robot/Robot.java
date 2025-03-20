@@ -22,7 +22,6 @@ import frc.robot.containers.BealtovenRobotContainer;
 import frc.robot.containers.MapleSimRobotContainer;
 import frc.robot.containers.RobotContainer;
 import frc.robot.controls.GameData;
-import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.utils.LoggedTracer;
 import frc.robot.utils.PhoenixUtil;
 
@@ -144,12 +143,10 @@ public class Robot extends LoggedRobot {
     /** This function is called once each time the robot enters Disabled mode. */
     @Override
     public void disabledInit() {
-        LEDSubsystem.getInstance().solidRed();
     }
 
     @Override
     public void disabledPeriodic() {
-        LEDSubsystem.getInstance().solidRed();
         checkDriverStationUpdate();
     }
 
@@ -161,6 +158,7 @@ public class Robot extends LoggedRobot {
     public void autonomousInit() {
         checkDriverStationUpdate();
 
+        this.robotContainer.zeroDrivePID();
         this.autonomousCommand = this.robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)
@@ -184,15 +182,24 @@ public class Robot extends LoggedRobot {
             this.autonomousCommand.cancel();
         }
 
+        this.robotContainer.resetDrivePID();
         checkDriverStationUpdate();
     }
 
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
-        Logger.recordOutput("GameData/Game Piece Mode", GameData.getInstance().getGamePieceModeAsString());
-        Logger.recordOutput("GameData/Pole Position", GameData.getInstance().getCoralPoleAsString());
-        Logger.recordOutput("GameData/Reef Position", GameData.getInstance().getReefStationIndexAsString());
+        GameData gameData = GameData.getInstance();
+        Logger.recordOutput("GameData/Game Piece Mode", gameData.getGamePieceModeAsString());
+        // Logger.recordOutput("GameData/Pole Position",
+        // gameData.getCoralPoleAsString());
+        Logger.recordOutput("GameData/Reef Station", gameData.getReefStationIndexAsString());
+        Logger.recordOutput("GameData/IsReefStation1", gameData.getReefStationIndex() == 1);
+        Logger.recordOutput("GameData/IsReefStation2", gameData.getReefStationIndex() == 2);
+        Logger.recordOutput("GameData/IsReefStation3", gameData.getReefStationIndex() == 3);
+        Logger.recordOutput("GameData/IsReefStation4", gameData.getReefStationIndex() == 4);
+        Logger.recordOutput("GameData/IsReefStation5", gameData.getReefStationIndex() == 5);
+        Logger.recordOutput("GameData/IsReefStation6", gameData.getReefStationIndex() == 6);
     }
 
     @Override

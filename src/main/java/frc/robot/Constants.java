@@ -81,19 +81,21 @@ public final class Constants {
         public static final double MAX_DOWN_SPEED = 0.1;
         public static final Rotation2d ANGLE = Rotation2d.fromDegrees(90.0);
         public static final double kS = 5.0;
-        public static final double kG = 50.0;
+        public static final double kG = 0.5;
 
         // Distance elevator must travel to align with outtake
         public enum ElevatorLevel {
             Bottom(0.0, 0.0),
             AlgaeL1(Units.inchesToMeters(10.5), 0.0),
             AlgaeL2(Units.inchesToMeters(18.0), 0.0),
-            Processor(Units.inchesToMeters(0.0), 0.0),
+            AlgaeL3(Units.inchesToMeters(31.0), 70.0),
 
-            CoralL1(Units.inchesToMeters(0), 0.0),
+            Processor(Units.inchesToMeters(1.0), 0.0),
+
+            CoralL1(Units.inchesToMeters(4.0), 0.0),
             CoralL2(Units.inchesToMeters(10.0), -35.0),
             CoralL3(Units.inchesToMeters(18.0), -35.0),
-            CoralL4(Units.inchesToMeters(30.0), -60.0);
+            CoralL4(Units.inchesToMeters(31.0), -60.0);
 
             ElevatorLevel(double heightInMeters, double angleInDegrees) {
                 this.heightInMeters = heightInMeters;
@@ -128,18 +130,22 @@ public final class Constants {
         public static final double LENGTH_METERS = Units.inchesToMeters(693.0);
         public static final double WIDTH_METERS = Units.inchesToMeters(318.0);
         public static final double REEF_POLE_OFFSET = Units.inchesToMeters(12.94 / 2);
+        public static final double REEF_POLE_RIGHT_OFFSET = 0.15428740684869218;
+        public static final double REEF_POLE_LEFT_OFFSET = 0.1655;
 
         // starting poses for game mode for blue/red alliance station 1, 2, 3
         public static final Pose2d[][] STATION_POSES = new Pose2d[][] {
                 {
-                        new Pose2d(7.272, 7.272, Rotation2d.fromDegrees(180.0)),
-                        new Pose2d(7.272, 6.166, Rotation2d.fromDegrees(180.0)),
-                        new Pose2d(7.272, 5.074, Rotation2d.fromDegrees(180.0))
+                        // new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(7.153, 7.272, Rotation2d.fromDegrees(180.0)),
+                        new Pose2d(7.153, 6.169, Rotation2d.fromDegrees(180.0)),
+                        new Pose2d(7.127, 1.905, Rotation2d.fromDegrees(180.0))
                 },
                 {
-                        new Pose2d(10.340, 0.805, Rotation2d.fromDegrees(0.0)),
-                        new Pose2d(10.340, 1.991, Rotation2d.fromDegrees(0.0)),
-                        new Pose2d(10.340, 3.003, Rotation2d.fromDegrees(0.0))
+                        // new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(10.447, 0.805, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(10.447, 1.991, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(10.447, 3.003, Rotation2d.fromDegrees(0.0))
                 }
         };
 
@@ -174,9 +180,9 @@ public final class Constants {
 
         // starts with one closest to driver station and rotates clockwise
         public static final Pose2d[] REEF_POSES = new Pose2d[] {
-                new Pose2d(Units.inchesToMeters(107.87), Units.inchesToMeters(158.50),
+                new Pose2d(Units.inchesToMeters(96.46), Units.inchesToMeters(158.50),
                         Rotation2d.fromDegrees(0.0)), // Tag-18
-                new Pose2d(Units.inchesToMeters(140.55), Units.inchesToMeters(225.98),
+                new Pose2d(Units.inchesToMeters(134.25), Units.inchesToMeters(223.23),
                         Rotation2d.fromDegrees(-60.0)), // Tag-19
                 new Pose2d(Units.inchesToMeters(217.72), Units.inchesToMeters(227.56),
                         Rotation2d.fromDegrees(-120.0)), // Tag-20
@@ -203,11 +209,11 @@ public final class Constants {
         public static final int driveMotorCurrentLimit = 60;
         public static final int turnMotorCurrentLimit = 20;
 
-        public static final double driveSimP = 1.0;
+        public static final double driveSimP = 0.05;
         public static final double driveSimD = 0.0;
-        public static final double driveSimKs = 0.25; // 0.00865;
+        public static final double driveSimKs = 0.00865;
         private static final double DRIVE_KV_ROT = 0.91035; // Same units as TunerConstants: (volt * secs) / rotation
-        public static final double driveSimKv = 0.12; // 1.0 / Units.rotationsToRadians(1.0 / DRIVE_KV_ROT); // 0.0789;
+        public static final double driveSimKv = 1.0 / Units.rotationsToRadians(1.0 / DRIVE_KV_ROT); // 0.0789;
 
         public static final double turnSimP = 8.0;
         public static final double turnSimD = 0.0;
@@ -243,17 +249,17 @@ public final class Constants {
     public static final class PIDConstants {
         // PID constants for swerve modules for drive motor. Turn pid is set in cots
         // constants
-        public static final double SWERVE_MODULE_DRIVE_KP = 0.112;
+        public static final double SWERVE_MODULE_DRIVE_KP = 0.1;
         public static final double SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SWERVE_MODULE_DRIVE_KD = 0.0;
 
         public static final double SWERVE_MODULE_DRIVE_KS = 0.0;
-        public static final double SWERVE_MODULE_DRIVE_KV = 0.0; // 0.124;
+        public static final double SWERVE_MODULE_DRIVE_KV = 0.0;
         public static final double SWERVE_MODULE_DRIVE_KA = 0.0;
 
-        public static final double SWERVE_MODULE_TURN_KP = 100.0;
+        public static final double SWERVE_MODULE_TURN_KP = 400.0;
         public static final double SWERVE_MODULE_TURN_KI = 0.0;
-        public static final double SWERVE_MODULE_TURN_KD = 0.0;
+        public static final double SWERVE_MODULE_TURN_KD = 0.68275;
 
         public static final double SWERVE_MODULE_TURN_KS = 0.28;
         public static final double SWERVE_MODULE_TURN_KV = 2.7935;
@@ -277,11 +283,11 @@ public final class Constants {
         public static final double SIM_SWERVE_MODULE_TURN_KA = 0.0;
 
         // PID constants for autonomous/pathplanner mode
-        public static final double SWERVE_DRIVE_X_KP = 5.0;
+        public static final double SWERVE_DRIVE_X_KP = 6.0;
         public static final double SWERVE_DRIVE_X_KI = 0.0;
         public static final double SWERVE_DRIVE_X_KD = 0.0;
 
-        public static final double SWERVE_DRIVE_Y_KP = 5.0;
+        public static final double SWERVE_DRIVE_Y_KP = 6.0;
         public static final double SWERVE_DRIVE_Y_KI = 0.0;
         public static final double SWERVE_DRIVE_Y_KD = 0.0;
 
@@ -290,26 +296,32 @@ public final class Constants {
         public static final double SWERVE_DRIVE_OMEGA_KD = 0.0;
 
         // PID constants for simulated autonomous/pathplanner mode
-        public static final double SIM_SWERVE_DRIVE_X_KP = 5.0;
-        public static final double SIM_SWERVE_DRIVE_X_KI = 0.0;
-        public static final double SIM_SWERVE_DRIVE_X_KD = 0.0;
+        public static final double SIM_SWERVE_DRIVE_X_KP = 4.0;
+        public static final double SIM_SWERVE_DRIVE_X_KI = 0.0001;
+        public static final double SIM_SWERVE_DRIVE_X_KD = 0.4;
 
-        public static final double SIM_SWERVE_DRIVE_Y_KP = 5.0;
-        public static final double SIM_SWERVE_DRIVE_Y_KI = 0.0;
-        public static final double SIM_SWERVE_DRIVE_Y_KD = 0.0;
+        public static final double SIM_SWERVE_DRIVE_Y_KP = 4.0;
+        public static final double SIM_SWERVE_DRIVE_Y_KI = 0.0001;
+        public static final double SIM_SWERVE_DRIVE_Y_KD = 0.4;
 
         public static final double SIM_SWERVE_DRIVE_OMEGA_KP = 5.0;
         public static final double SIM_SWERVE_DRIVE_OMEGA_KI = 0.0;
-        public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 0.0;
+        public static final double SIM_SWERVE_DRIVE_OMEGA_KD = 0.5;
 
         // PID constants for elevator
-        public static final double ELEVATOR_KP = 0.033;
+        public static final double ELEVATOR_KP = 0.05;
         public static final double ELEVATOR_KI = 0.0;
         public static final double ELEVATOR_KD = 0.0;
+        public static final double ELEVATOR_KS = 0.0;
+        public static final double ELEVATOR_KV = 0.1;
+        public static final double ELEVATOR_KA = 0.05;
 
         public static final double SIM_ELEVATOR_KP = 5000.0;
         public static final double SIM_ELEVATOR_KI = 0.0;
         public static final double SIM_ELEVATOR_KD = 2000.0;
+        public static final double SIM_ELEVATOR_KS = 0.86822;
+        public static final double SIM_ELEVATOR_KV = 3.10238;
+        public static final double SIM_ELEVATOR_KA = 0.05;
 
         /**
          * Should only be call by simulation as TunerContants has real values
@@ -318,8 +330,8 @@ public final class Constants {
             return Robot.isReal()
                     ? new double[] { SWERVE_MODULE_DRIVE_KP, SWERVE_MODULE_DRIVE_KI, SWERVE_MODULE_DRIVE_KD,
                             SWERVE_MODULE_DRIVE_KS, SWERVE_MODULE_DRIVE_KV, SWERVE_MODULE_DRIVE_KA }
-                    : new double[] { SIM_SWERVE_MODULE_DRIVE_KP, SIM_SWERVE_MODULE_DRIVE_KI,
-                            SIM_SWERVE_MODULE_DRIVE_KD };
+                    : new double[] { SIM_SWERVE_MODULE_DRIVE_KP, SIM_SWERVE_MODULE_DRIVE_KI, SIM_SWERVE_MODULE_DRIVE_KD,
+                            SIM_SWERVE_MODULE_DRIVE_KS, SIM_SWERVE_MODULE_DRIVE_KV, SIM_SWERVE_MODULE_DRIVE_KA };
         }
 
         /**
@@ -366,8 +378,9 @@ public final class Constants {
          */
         public static final double[] getElevatorPIDs() {
             return Robot.isReal()
-                    ? new double[] { ELEVATOR_KP, ELEVATOR_KI, ELEVATOR_KD }
-                    : new double[] { SIM_ELEVATOR_KP, SIM_ELEVATOR_KI, SIM_ELEVATOR_KD };
+                    ? new double[] { ELEVATOR_KP, ELEVATOR_KI, ELEVATOR_KD, ELEVATOR_KS, ELEVATOR_KV, ELEVATOR_KA }
+                    : new double[] { SIM_ELEVATOR_KP, SIM_ELEVATOR_KI, SIM_ELEVATOR_KD, SIM_ELEVATOR_KS,
+                            SIM_ELEVATOR_KV, SIM_ELEVATOR_KA };
         }
     }
 
@@ -408,7 +421,7 @@ public final class Constants {
      */
     public static final class TeleopConstants {
         public static final double JOYSTICK_AXIS_MODIFIER = 1.0;
-        public static final double DEADBAND = 0.5;
+        public static final double DEADBAND = 0.15;
 
         public static final double X_RATE_LIMIT = 6.0;
         public static final double Y_RATE_LIMIT = 6.0;
@@ -436,12 +449,17 @@ public final class Constants {
          * TODO: set camera names and positions - pitch is based on degress from
          * vertical
          */
-        public static final Camera ARDUCAM2_CAMERA = new Camera("Arducam_OV9281-2",
+        public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight-two",
+                Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
+                Units.inchesToMeters(10.0), Units.inchesToMeters(7.25), Units.inchesToMeters(9.5),
+                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(30.0));
+
+        public static final Camera ARDUCAM1_CAMERA = new Camera("Arducam_OV9281-1",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
                 0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-30.0));
 
-        public static final Camera ARDUCAM1_CAMERA = new Camera("Arducam_OV9281-1",
+        public static final Camera ARDUCAM2_CAMERA = new Camera("Arducam_OV9281-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
                 0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-150.0));
@@ -451,35 +469,20 @@ public final class Constants {
                 Units.inchesToMeters(9.75), Units.inchesToMeters(7.5), Units.inchesToMeters(8.5),
                 0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-30.0));
 
-        public static final Camera GAME_PIECE_CAMERA = new Camera("WebCam",
-                Camera.Type.COLOURED_SHAPE, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(0.0), 0.0, Units.inchesToMeters(0.0),
-                0.0, Units.degreesToRadians(0), 0.0);
-
-        public static final Camera LIMELIGHT3G_CAMERA = new Camera("limelight",
-                Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
-                Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
-                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-30.0));
-
-        public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight-two",
-                Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
-                Units.inchesToMeters(10.0), Units.inchesToMeters(7.25), Units.inchesToMeters(9.5),
-                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(30.0));
-
         /**
          * TODO: set list of enabled camera
          */
-        public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM2_CAMERA, ARDUCAM1_CAMERA);
         public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM3_CAMERA);
-        public static final List<Camera> REEFSCAPE_CAMERAS = Arrays.asList(LIMELIGHT3G_CAMERA, ARDUCAM2_CAMERA);
+        public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM3_CAMERA, ARDUCAM1_CAMERA,
+                ARDUCAM2_CAMERA);
         public static final List<Camera> NO_CAMERAS = new ArrayList<>();
         public static final List<Camera> CAMERAS = SIMULATION_CAMERAS;
-
-        public static final Camera FRONT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
-        public static final Camera REAR_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
+        public static final Camera FRONT_RIGHT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
+        public static final Camera FRONT_LEFT_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
+        public static final Camera REAR_CAMERA = CAMERAS.size() > 2 ? CAMERAS.get(2) : null;
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
-        public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.5;
+        public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;
         public static final double APRILTAG_MAX_Z_ERROR = 0.75;
         public static final double APRILTAG_REPROJECTION_ERROR_THRESHOLD = 5.0;
 
@@ -500,8 +503,10 @@ public final class Constants {
         // Standard deviation multipliers for each camera
         // (Adjust to trust some cameras more than others)
         public static double[] CAMERA_STD_DEV_FACTORS = new double[] {
-                1.0, // Camera 0
-                1.0 // Camera 1
+                1.0, // Camera 1
+                1.0, // Camera 2
+                1.0, // Camera 3
+                1.0 // Camera 4
         };
 
         // for simulation only

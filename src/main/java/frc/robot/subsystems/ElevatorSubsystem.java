@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.ExponentialProfile;
 import edu.wpi.first.math.trajectory.ExponentialProfile.Constraints;
 import edu.wpi.first.math.trajectory.ExponentialProfile.State;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,7 +35,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final Alert disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
     public static enum Action {
-        STOP, MOVE_TO_BOTTOM, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1, MOVE_TO_CORAL_2,
+        STOP, MOVE_TO_BOTTOM, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_ALGAE_3, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1,
+        MOVE_TO_CORAL_2,
         MOVE_TO_CORAL_3, MOVE_TO_CORAL_4
     }
 
@@ -73,6 +75,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.stateMachine.addState(Action.STOP, this::handleStop);
         this.stateMachine.addState(Action.MOVE_TO_ALGAE_1, this::handleMoveToAlgae1);
         this.stateMachine.addState(Action.MOVE_TO_ALGAE_2, this::handleMoveToAlgae2);
+        this.stateMachine.addState(Action.MOVE_TO_ALGAE_3, this::handleMoveToAlgae3);
         this.stateMachine.addState(Action.MOVE_TO_PROCESSOR, this::handleMoveToProcessor);
         this.stateMachine.addState(Action.MOVE_TO_CORAL_1, this::handleMoveToCoral1);
         this.stateMachine.addState(Action.MOVE_TO_CORAL_2, this::handleMoveToCoral2);
@@ -99,6 +102,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     /**
      * 
      */
+    private boolean atBottom() {
+        return this.elevatorModule.isAtBottom();
+    }
+
+    /**
+     * 
+     */
     public boolean atGoal() {
         return this.atGoal;
     }
@@ -117,6 +127,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.AlgaeL1;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -128,6 +139,19 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.AlgaeL2;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
+            this.stateTimer.start();
+        }
+    }
+
+    /**
+     * 
+     */
+    protected void handleMoveToAlgae3(StateMetadata<Action> stateMetadata) {
+        if (stateMetadata.isFirstRun()) {
+            this.elevatorLevel = ElevatorLevel.AlgaeL3;
+            setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -139,6 +163,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.Bottom;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -150,6 +175,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.Processor;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -161,6 +187,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.CoralL1;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -172,6 +199,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.CoralL2;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -183,6 +211,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.CoralL3;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -194,6 +223,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.CoralL4;
             setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -204,6 +234,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     protected void handleStop(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
             this.elevatorModule.stop();
+            this.stateTimer.reset();
             this.stateTimer.start();
         }
     }
@@ -213,6 +244,12 @@ public class ElevatorSubsystem extends SubsystemBase {
      */
     private boolean isActionComplete() {
         switch (this.stateMachine.getCurrentState()) {
+            case MOVE_TO_BOTTOM:
+                if (atBottom()) {
+                    this.elevatorModule.zeroEncoder();
+                }
+                return this.atGoal || atBottom() || !this.stateTimer.isRunning();
+
             default:
                 return this.atGoal || !this.stateTimer.isRunning();
         }
@@ -225,16 +262,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.elevatorModule.updateInputs(this.inputs);
         Logger.processInputs(this.NAME, this.inputs);
 
-        this.disconnected.set(!this.inputs.connected);
+        this.disconnected.set(!this.inputs.data.connected());
 
         State goalState = new State(MathUtil.clamp(this.goal.get().position, 0.0, ElevatorConstants.HEIGHT_IN_METERS),
                 this.goal.get().velocity);
         this.setpoint = profile.calculate(RobotConstants.LOOP_PERIOD_SECS, setpoint, goalState);
 
-        this.elevatorModule.runPosition(
-                setpoint.position / ElevatorConstants.drumRadiusMeters,
-                ElevatorConstants.kS * Math.signum(setpoint.velocity) // Magnitude irrelevant
-                        + ElevatorConstants.kG * ElevatorConstants.ANGLE.getSin());
+        this.elevatorModule.runPosition(setpoint.position / ElevatorConstants.drumRadiusMeters);
 
         // Check at goal
         this.atGoal = EqualsUtil.epsilonEquals(setpoint.position, goalState.position)
@@ -258,13 +292,6 @@ public class ElevatorSubsystem extends SubsystemBase {
             }
         }
 
-        /**
-         * Stop motors if elevator reaches top or bottom
-         */
-        if (this.elevatorModule.isAtBottom() || this.elevatorModule.isAtTop()) {
-
-        }
-
         this.elevatorVisualizer.update(getPositionMeters(), this.elevatorLevel, this.hasAlgaSupplier.get(),
                 this.hasCoralSupplier.get());
 
@@ -280,8 +307,23 @@ public class ElevatorSubsystem extends SubsystemBase {
         LoggedTracer.record(this.NAME);
     }
 
+    /**
+     * Returns the average velocity of the modules in rotations/sec (Phoenix native
+     * units).
+     */
+    public double getFFCharacterizationVelocity() {
+        return Units.radiansToRotations(this.inputs.data.velocityRadsPerSec());
+    }
+
     public double getPositionMeters() {
-        return (inputs.positionRads - 0.0) * ElevatorConstants.drumRadiusMeters;
+        return (this.inputs.data.positionRads() - 0.0) * ElevatorConstants.drumRadiusMeters;
+    }
+
+    /**
+     * Runs the elevator in a straight line with the specified output.
+     */
+    public void runCharacterization(double output) {
+        this.elevatorModule.runCharacterization(output);
     }
 
     public void setGoal(double goal) {

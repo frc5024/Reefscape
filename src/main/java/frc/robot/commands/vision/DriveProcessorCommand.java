@@ -55,7 +55,7 @@ public class DriveProcessorCommand extends Command {
     public boolean isFinished() {
         try {
 
-            return followPathCommand.isFinished();
+            return this.followPathCommand.isFinished();
 
         } catch (Exception e) {
             return true;
