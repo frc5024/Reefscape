@@ -324,17 +324,19 @@ public class Elevator extends SubsystemBase {
     public void decreaseMode() {
         elevatorNumeredMode--;
 
-        if (elevatorNumeredMode < 2)
-            elevatorNumeredMode = 2;
+        if (elevatorNumeredMode < 1)
+            elevatorNumeredMode = 1;
     }
 
-    public void updateSetpoint(double Mode) {
-        if (Mode == 4) {
+    public void updateSetpoint(double mode) {
+        if (mode == 4) {
             elevatorMode = Constants.elevatorConstants.L4Position;
-        } else if (Mode == 3) {
+        } else if (mode == 3) {
             elevatorMode = Constants.elevatorConstants.L3Position;
-        } else if (Mode == 2) {
+        } else if (mode == 2) {
             elevatorMode = Constants.elevatorConstants.L2Position;
+        } else if (mode == 1) {
+            elevatorMode = Constants.elevatorConstants.L1Position;
         } else {
             elevatorMode = Constants.elevatorConstants.L4Position;
         }
@@ -384,6 +386,22 @@ public class Elevator extends SubsystemBase {
 
     public Command goToModePosition() {
         return new SetElevatorModeCmd(this);
+    }
+
+    public void setModeL1() {
+        elevatorNumeredMode = 1;
+    }
+
+    public void setModeL2() {
+        elevatorNumeredMode = 2;
+    }
+
+    public void setModeL3() {
+        elevatorNumeredMode = 3;
+    }
+
+    public void setModeL4() {
+        elevatorNumeredMode = 4;
     }
 
     public Command slowL2() {

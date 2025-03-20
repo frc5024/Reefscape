@@ -172,8 +172,10 @@ public class RobotContainer {
         driver.rightBumper().onTrue(elevatorSubsystem.bottomElevator());
         driver.b().whileTrue(coralSubsystem.backwardsMotor());
 
-        driver.start().onTrue(new InstantCommand(() -> elevatorSubsystem.increaseMode()));
-        driver.back().onTrue(new InstantCommand(() -> elevatorSubsystem.decreaseMode()));
+        // driver.start().onTrue(new InstantCommand(() ->
+        // elevatorSubsystem.increaseMode()));
+        // driver.back().onTrue(new InstantCommand(() ->
+        // elevatorSubsystem.decreaseMode()));
 
         // scoring
         driver.rightTrigger()
@@ -226,8 +228,8 @@ public class RobotContainer {
         // button is released
         // }));
 
-        driver.povUp().whileTrue(m_climbSubsystem.climbCommand());
-        driver.povDown().whileTrue(m_climbSubsystem.extendingCommand());
+        // driver.povUp().whileTrue(m_climbSubsystem.climbCommand());
+        // driver.povDown().whileTrue(m_climbSubsystem.extendingCommand());
 
         // Operator Controls
 
@@ -235,13 +237,17 @@ public class RobotContainer {
         operator.a().onTrue(elevatorSubsystem.bottomElevator());
 
         operator.povLeft()
-                .onTrue(elevatorSubsystem.goToL1Position());
+                .onTrue(new ConditionalCommand(new InstantCommand(() -> elevatorSubsystem.setModeL1()),
+                        elevatorSubsystem.goToL1Position(), () -> visionMode));
         operator.povDown()
-                .onTrue(elevatorSubsystem.goToL2Position());
+                .onTrue(new ConditionalCommand(new InstantCommand(() -> elevatorSubsystem.setModeL2()),
+                        elevatorSubsystem.goToL2Position(), () -> visionMode));
         operator.povRight()
-                .onTrue(elevatorSubsystem.goToL3Position());
+                .onTrue(new ConditionalCommand(new InstantCommand(() -> elevatorSubsystem.setModeL3()),
+                        elevatorSubsystem.goToL3Position(), () -> visionMode));
         operator.povUp()
-                .onTrue(elevatorSubsystem.goToL4Position());
+                .onTrue(new ConditionalCommand(new InstantCommand(() -> elevatorSubsystem.setModeL4()),
+                        elevatorSubsystem.goToL4Position(), () -> visionMode));
 
         operator.start().whileTrue(elevatorSubsystem.slowL2());
 
