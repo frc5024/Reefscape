@@ -19,6 +19,9 @@ import frc.lib.statemachine.StateMetadata;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ElevatorConstants.ElevatorLevel;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.controls.GameData;
+import frc.robot.controls.GameData.CoralLevel;
+import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.modules.elevator.ElevatorIOInputsAutoLogged;
 import frc.robot.modules.elevator.ElevatorModuleIO;
 import frc.robot.modules.elevator.ElevatorVisualizer;
@@ -36,8 +39,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public static enum Action {
         STOP, MOVE_TO_BOTTOM, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_ALGAE_3, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1,
-        MOVE_TO_CORAL_2,
-        MOVE_TO_CORAL_3, MOVE_TO_CORAL_4
+        MOVE_TO_CORAL_2, MOVE_TO_CORAL_3, MOVE_TO_CORAL_4, MOVE_TO_PRESET
     }
 
     private final ElevatorModuleIO elevatorModule;
@@ -81,6 +83,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.stateMachine.addState(Action.MOVE_TO_CORAL_2, this::handleMoveToCoral2);
         this.stateMachine.addState(Action.MOVE_TO_CORAL_3, this::handleMoveToCoral3);
         this.stateMachine.addState(Action.MOVE_TO_CORAL_4, this::handleMoveToCoral4);
+        this.stateMachine.addState(Action.MOVE_TO_PRESET, this::handleMoveToPreset);
 
         this.actionQueue = new LinkedList<Action>();
 
@@ -222,6 +225,38 @@ public class ElevatorSubsystem extends SubsystemBase {
     protected void handleMoveToCoral4(StateMetadata<Action> stateMetadata) {
         if (stateMetadata.isFirstRun()) {
             this.elevatorLevel = ElevatorLevel.CoralL4;
+            setGoal(this.elevatorLevel.heightInMeters);
+            this.stateTimer.reset();
+            this.stateTimer.start();
+        }
+    }
+
+    /**
+     * 
+     */
+    protected void handleMoveToPreset(StateMetadata<Action> stateMetadata) {
+        if (stateMetadata.isFirstRun()) {
+            boolean isAlgae = GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE;
+            CoralLevel coralLevel = GameData.getInstance().getCoralLevel();
+
+            switch (coralLevel) {
+                case L1:
+                    this.elevatorLevel = isAlgae ? ElevatorLevel.Processor : ElevatorLevel.CoralL1;
+                    break;
+                case L2:
+                    this.elevatorLevel = isAlgae ? ElevatorLevel.AlgaeL1 : ElevatorLevel.CoralL2;
+                    break;
+                case L3:
+                    this.elevatorLevel = isAlgae ? ElevatorLevel.AlgaeL2 : ElevatorLevel.CoralL3;
+                    break;
+                case L4:
+                    this.elevatorLevel = isAlgae ? ElevatorLevel.AlgaeL3 : ElevatorLevel.CoralL4;
+                    break;
+
+                default:
+                    break;
+            }
+
             setGoal(this.elevatorLevel.heightInMeters);
             this.stateTimer.reset();
             this.stateTimer.start();

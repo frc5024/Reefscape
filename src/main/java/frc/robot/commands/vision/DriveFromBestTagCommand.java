@@ -77,7 +77,7 @@ public class DriveFromBestTagCommand extends Command {
     public void execute() {
         Pose2d robotPose = this.poseProvider.get();
 
-        setGoal();
+        // setGoal();
 
         double xSpeed = this.xController.calculate(robotPose.getX());
         double ySpeed = this.yController.calculate(robotPose.getY());
@@ -93,6 +93,8 @@ public class DriveFromBestTagCommand extends Command {
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed,
                 robotPose.getRotation());
         this.swerveDriveSubsystem.drive(chassisSpeeds);
+
+        Logger.recordOutput("Commands/AtGoal", isAtGoal());
     }
 
     /**

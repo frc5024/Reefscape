@@ -8,7 +8,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -19,7 +18,6 @@ public class DriveReefStationPathCommand extends Command {
     private final Supplier<Integer> stationSupplier;
     private final Supplier<String> gamePieceName;
 
-    private Command commandGroup;
     private Command followPathCommand;
 
     /**
@@ -36,16 +34,19 @@ public class DriveReefStationPathCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        super.end(interrupted);
-        if (this.commandGroup != null)
-            this.commandGroup.cancel();
-        this.swerveDriveSubsystem.resetDrivePID();
+        if (this.followPathCommand != null) {
+            Logger.recordOutput("Commands/Active Command", "");
+            this.followPathCommand.end(interrupted);
+        }
 
-        Logger.recordOutput("Commands/Active Command", "");
+        this.swerveDriveSubsystem.resetDrivePID();
     }
 
     @Override
     public void execute() {
+        if (this.followPathCommand != null) {
+            this.followPathCommand.execute();
+        }
     }
 
     @Override
@@ -53,39 +54,34 @@ public class DriveReefStationPathCommand extends Command {
         // zero drive pid since we are driving closed loop
         this.swerveDriveSubsystem.zeroDrivePID();
 
-        schedulePathCommand();
+        this.followPathCommand = getfollowPathCommand();
+        if (this.followPathCommand != null) {
 
-        Logger.recordOutput("Commands/Active Command", this.getName());
+            this.followPathCommand.initialize();
+            Logger.recordOutput("Commands/Active Command", this.getName());
+        }
     }
 
     @Override
     public boolean isFinished() {
-        try {
-
-            return this.followPathCommand.isFinished();
-
-        } catch (Exception e) {
-            return true;
-        }
+        return this.followPathCommand != null ? this.followPathCommand.isFinished() : true;
     }
 
     /**
      * 
      */
-    public void schedulePathCommand() {
-        try {
+    private Command getfollowPathCommand() {
+        int reefStationIndex = this.stationSupplier.get();
+        String gamePieceName = this.gamePieceName.get();
 
-            int reefStationIndex = this.stationSupplier.get();
-            String gamePieceName = this.gamePieceName.get();
+        try {
             PathPlannerPath pathPlannerPath = PathPlannerPath
                     .fromPathFile("DriveReef" + reefStationIndex + " - " + gamePieceName);
 
-            this.followPathCommand = AutoBuilder.pathfindThenFollowPath(pathPlannerPath,
+            return AutoBuilder.pathfindThenFollowPath(pathPlannerPath,
                     frc.robot.autonomous.AutoBuilder.CONSTRAINTS);
-            this.commandGroup = Commands.sequence(this.followPathCommand);
-            this.commandGroup.schedule();
-
         } catch (Exception e) {
+            return null;
         }
     }
 }

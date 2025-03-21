@@ -7,7 +7,6 @@ import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.utils.AllianceFlipUtil;
@@ -18,7 +17,6 @@ import frc.robot.utils.AllianceFlipUtil;
 public class DriveNearestCoralStationCommand extends Command {
     private final SwerveDriveSubsystem swerveDriveSubsystem;
 
-    private Command commandGroup;
     private Command followPathCommand;
 
     /**
@@ -32,16 +30,20 @@ public class DriveNearestCoralStationCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        super.end(interrupted);
-        if (this.commandGroup != null)
-            this.commandGroup.cancel();
+        if (this.followPathCommand != null) {
+            this.followPathCommand.end(interrupted);
+            Logger.recordOutput("Commands/Active Command", "");
+        }
+
         this.swerveDriveSubsystem.resetDrivePID();
 
-        Logger.recordOutput("Commands/Active Command", "");
     }
 
     @Override
     public void execute() {
+        if (this.followPathCommand != null) {
+            this.followPathCommand.execute();
+        }
     }
 
     @Override
@@ -49,36 +51,30 @@ public class DriveNearestCoralStationCommand extends Command {
         // zero drive pid since we are driving closed loop
         this.swerveDriveSubsystem.zeroDrivePID();
 
-        schedulePathCommand();
+        this.followPathCommand = getFollowPathCommand();
 
-        Logger.recordOutput("Commands/Active Command", this.getName());
+        if (this.followPathCommand != null) {
+            this.followPathCommand.initialize();
+            Logger.recordOutput("Commands/Active Command", this.getName());
+        }
     }
 
     @Override
     public boolean isFinished() {
-        try {
-
-            return this.followPathCommand.isFinished();
-
-        } catch (Exception e) {
-            return true;
-        }
+        return this.followPathCommand != null ? this.followPathCommand.isFinished() : true;
     }
 
     /**
      * 
      */
-    public void schedulePathCommand() {
+    private Command getFollowPathCommand() {
         try {
-
             PathPlannerPath pathPlannerPath = PathPlannerPath.fromPathFile(getNearestCoralStation());
 
-            this.followPathCommand = AutoBuilder.pathfindThenFollowPath(pathPlannerPath,
+            return AutoBuilder.pathfindThenFollowPath(pathPlannerPath,
                     frc.robot.autonomous.AutoBuilder.CONSTRAINTS);
-            this.commandGroup = Commands.sequence(this.followPathCommand);
-            this.commandGroup.schedule();
-
         } catch (Exception e) {
+            return null;
         }
     }
 

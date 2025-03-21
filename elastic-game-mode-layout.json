@@ -72,9 +72,9 @@
         "containers": [
           {
             "title": "Match Time",
-            "x": 1280.0,
+            "x": 1216.0,
             "y": 0.0,
-            "width": 512.0,
+            "width": 640.0,
             "height": 256.0,
             "type": "Match Time",
             "properties": {
@@ -88,9 +88,9 @@
           },
           {
             "title": "Alerts",
-            "x": 1280.0,
+            "x": 1216.0,
             "y": 256.0,
-            "width": 512.0,
+            "width": 640.0,
             "height": 256.0,
             "type": "Alerts",
             "properties": {
@@ -102,8 +102,8 @@
             "title": "Left Camera Has Target",
             "x": 256.0,
             "y": 0.0,
-            "width": 256.0,
-            "height": 256.0,
+            "width": 192.0,
+            "height": 192.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-3/HasTarget",
@@ -118,9 +118,9 @@
           {
             "title": "Left Camera Best Target Id",
             "x": 256.0,
-            "y": 256.0,
-            "width": 256.0,
-            "height": 256.0,
+            "y": 192.0,
+            "width": 192.0,
+            "height": 192.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-3/BestTargetId",
@@ -130,10 +130,10 @@
           },
           {
             "title": "Right Camera Has Target",
-            "x": 1024.0,
+            "x": 448.0,
             "y": 0.0,
-            "width": 256.0,
-            "height": 256.0,
+            "width": 192.0,
+            "height": 192.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-1/HasTarget",
@@ -147,10 +147,10 @@
           },
           {
             "title": "Right Camera Best Target Id",
-            "x": 1024.0,
-            "y": 256.0,
-            "width": 256.0,
-            "height": 256.0,
+            "x": 448.0,
+            "y": 192.0,
+            "width": 192.0,
+            "height": 192.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-1/BestTargetId",
@@ -163,7 +163,7 @@
             "x": 0.0,
             "y": 0.0,
             "width": 256.0,
-            "height": 256.0,
+            "height": 192.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/Subsystems/Elevator/AtGoal",
@@ -178,7 +178,7 @@
           {
             "title": "Elevator Height",
             "x": 0.0,
-            "y": 256.0,
+            "y": 192.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Radial Gauge",
@@ -198,9 +198,9 @@
           },
           {
             "title": "Game Piece Mode",
-            "x": 512.0,
+            "x": 640.0,
             "y": 0.0,
-            "width": 512.0,
+            "width": 576.0,
             "height": 192.0,
             "type": "Large Text Display",
             "properties": {
@@ -211,7 +211,7 @@
           },
           {
             "title": "Reef Station 1",
-            "x": 704.0,
+            "x": 768.0,
             "y": 448.0,
             "width": 128.0,
             "height": 128.0,
@@ -228,7 +228,7 @@
           },
           {
             "title": "Reef Station 2",
-            "x": 576.0,
+            "x": 640.0,
             "y": 384.0,
             "width": 128.0,
             "height": 128.0,
@@ -245,7 +245,7 @@
           },
           {
             "title": "Reef Station 3",
-            "x": 576.0,
+            "x": 640.0,
             "y": 256.0,
             "width": 128.0,
             "height": 128.0,
@@ -262,7 +262,7 @@
           },
           {
             "title": "Reef Station 4",
-            "x": 704.0,
+            "x": 768.0,
             "y": 192.0,
             "width": 128.0,
             "height": 128.0,
@@ -279,7 +279,7 @@
           },
           {
             "title": "Reef Station 5",
-            "x": 832.0,
+            "x": 896.0,
             "y": 256.0,
             "width": 128.0,
             "height": 128.0,
@@ -296,13 +296,81 @@
           },
           {
             "title": "Reef Station 6",
-            "x": 832.0,
+            "x": 896.0,
             "y": 384.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/GameData/IsReefStation6",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "L1",
+            "x": 1088.0,
+            "y": 576.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsCorlLevel1",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "L2",
+            "x": 1088.0,
+            "y": 448.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsCorlLevel2",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "L3",
+            "x": 1088.0,
+            "y": 320.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsCorlLevel3",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "L4",
+            "x": 1088.0,
+            "y": 192.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/IsCorlLevel4",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
