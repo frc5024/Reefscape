@@ -106,7 +106,7 @@
             "height": 192.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-3/HasTarget",
+              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-1/HasTarget",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -123,7 +123,7 @@
             "height": 192.0,
             "type": "Large Text Display",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-3/BestTargetId",
+              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-1/BestTargetId",
               "period": 0.06,
               "data_type": "int"
             }
@@ -136,7 +136,7 @@
             "height": 192.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-1/HasTarget",
+              "topic": "/AdvantageKit/Vision/Camera Arducam_UC626-2/HasTarget",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -153,7 +153,7 @@
             "height": 192.0,
             "type": "Large Text Display",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_OV9281-1/BestTargetId",
+              "topic": "/AdvantageKit/Vision/Camera Arducam_UC626-2/BestTargetId",
               "period": 0.06,
               "data_type": "int"
             }
