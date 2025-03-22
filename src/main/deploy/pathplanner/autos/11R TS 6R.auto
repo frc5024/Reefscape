@@ -19,14 +19,14 @@
                 "data": {
                   "name": "ElevatorRoot"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCoral"
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCoral"
           }
         },
         {

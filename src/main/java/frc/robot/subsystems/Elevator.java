@@ -262,7 +262,7 @@ public class Elevator extends SubsystemBase {
     }
 
     // gets the encoder value for safety precautions in the periodic
-    private double encoderValue() {
+    public double encoderValue() {
         return elevatorMotor.getEncoder().getPosition();
     }
 

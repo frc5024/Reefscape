@@ -118,11 +118,11 @@ public class RobotContainer {
 
         autoChooser.addOption("Non-Processor side 2/3 piece (COMPLETE)",
                 Commands.sequence(new PathPlannerAuto("Start 11R"), new PathPlannerAuto("11R TS 6R"),
-                        new PathPlannerAuto("6R TS 6L")));
+                        new PathPlannerAuto("6R TS 6L"), new PathPlannerAuto("6L TS")));
 
         autoChooser.addOption("Processor side 2/3 piece (COMPLETE)",
                 Commands.sequence(new PathPlannerAuto("Start 9R"), new PathPlannerAuto("9R BS 8"),
-                        new PathPlannerAuto("8R BS 8L")));
+                        new PathPlannerAuto("8R BS 8L"), new PathPlannerAuto("8L BS")));
 
         autoChooser.addOption("Middle 1 piece right (COMPLETE)", new PathPlannerAuto("MiddleRight"));
         autoChooser.addOption("Middle 1 piece left (COMPLETE)", new PathPlannerAuto("MiddleLeft"));

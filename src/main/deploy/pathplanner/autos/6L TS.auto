@@ -19,14 +19,14 @@
                 "data": {
                   "pathName": "6L TS"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCoral"
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCoral"
           }
         }
       ]

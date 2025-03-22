@@ -3,10 +3,12 @@ package frc.robot.commands.Coral;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Coral;
+import frc.robot.subsystems.Elevator;
 
 public class ForcedOuttakeCmd extends Command {
 
     private final Coral coralSubsystem;
+    Elevator elevatorSubsystem;
 
     // constructor for OuttakeCommand
     public ForcedOuttakeCmd(Coral coralSubsystem) {
@@ -24,6 +26,7 @@ public class ForcedOuttakeCmd extends Command {
     @Override
     public void execute() {
         coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
+
     }
 
     // end, when command ends, set activeOuttake to false and set state to IDLE
