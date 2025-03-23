@@ -7,6 +7,8 @@ import static edu.wpi.first.wpilibj2.command.Commands.startEnd;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.vision.DriveBargeCommand;
@@ -118,39 +120,83 @@ public class ButtonBindings {
                 .whileTrue(new DriveProcessorCommand(this.swerveDriveSubsystem));
 
         // Drive to right pole of best apriltag
+        // commandXboxController.rightTrigger()
+        // .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem,
+        // this.visionSubsystem,
+        // this.swerveDriveSubsystem::getPose,
+        // false,
+        // GameData.getInstance().getGamePieceMode()));
+
         commandXboxController.rightTrigger()
-                .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
-                        this.swerveDriveSubsystem::getPose,
-                        false,
-                        GameData.getInstance().getGamePieceMode()));
+                .whileTrue(new SequentialCommandGroup(
+                        new DriveReefStationPathCommand(this.swerveDriveSubsystem,
+                                GameData.getInstance()::getReefStationAsInt,
+                                GameData.getInstance()::getGamePieceModeAsString),
+                        new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                                this.swerveDriveSubsystem::getPose, false,
+                                GameData.getInstance().getGamePieceMode()),
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_PRESET)),
+                        new WaitUntilCommand(this.elevatorSubsystem::atGoal),
+                        runOnce(() -> {
+                            if (GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE) {
+                                this.algaeSubsystem.addAction(AlgaeSubsystem.Action.INTAKE);
+                            } else {
+                                this.coralSubsystem.addAction(CoralSubsystem.Action.EJECT);
+                            }
+                        }),
+                        new WaitUntilCommand(this.coralSubsystem::hasEjected),
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM))));
 
         // Drive to left pole of best apriltag
         commandXboxController.leftTrigger()
-                .whileTrue(new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
-                        this.swerveDriveSubsystem::getPose,
-                        true,
-                        GameData.getInstance().getGamePieceMode()));
+                .whileTrue(new SequentialCommandGroup(
+                        new DriveReefStationPathCommand(this.swerveDriveSubsystem,
+                                GameData.getInstance()::getReefStationAsInt,
+                                GameData.getInstance()::getGamePieceModeAsString),
+                        new DriveFromBestTagCommand(this.swerveDriveSubsystem, this.visionSubsystem,
+                                this.swerveDriveSubsystem::getPose, true,
+                                GameData.getInstance().getGamePieceMode()),
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_PRESET)),
+                        new WaitUntilCommand(this.elevatorSubsystem::atGoal),
+                        runOnce(() -> {
+                            if (GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE) {
+                                this.algaeSubsystem.addAction(AlgaeSubsystem.Action.INTAKE);
+                            } else {
+                                this.coralSubsystem.addAction(CoralSubsystem.Action.EJECT);
+                            }
+                        }),
+                        new WaitUntilCommand(this.coralSubsystem::hasEjected),
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM))));
 
         // Drive to selected reef station
         commandXboxController.rightBumper()
-                .whileTrue(new DriveReefStationPathCommand(this.swerveDriveSubsystem,
-                        GameData.getInstance()::getReefStationIndex, GameData.getInstance()::getGamePieceModeAsString));
+                .whileTrue(runOnce(() -> {
+                    if (GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE) {
+                        this.algaeSubsystem.addAction(AlgaeSubsystem.Action.INTAKE);
+                    } else {
+                        this.coralSubsystem.addAction(CoralSubsystem.Action.INTAKE);
+                    }
+                }));
 
         // Drive to selected reef station
         commandXboxController.leftBumper()
-                .whileTrue(new DriveReefStationCommand(this.swerveDriveSubsystem,
-                        this.swerveDriveSubsystem::getPose,
-                        GameData.getInstance()::getReefStationIndex,
-                        GameData.getInstance().getCoralPole(),
-                        GameData.getInstance().getGamePieceMode()));
+                .whileTrue(runOnce(() -> {
+                    if (GameData.getInstance().getGamePieceMode().get() == GamePieceMode.ALGAE) {
+                        this.algaeSubsystem.addAction(AlgaeSubsystem.Action.EJECT);
+                    } else {
+                        this.coralSubsystem.addAction(CoralSubsystem.Action.EJECT);
+                    }
+                }));
 
         // Set reef position
-        commandXboxController.povUp().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(1)));
-        commandXboxController.povDown().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(-1)));
-        commandXboxController.povLeft()
-                .onTrue(runOnce(() -> GameData.getInstance().setGamePieceMode(GamePieceMode.ALGAE)));
-        commandXboxController.povRight()
-                .onTrue(runOnce(() -> GameData.getInstance().setGamePieceMode(GamePieceMode.CORAL)));
+        commandXboxController.povUp().onTrue(runOnce(() -> GameData.getInstance().nextCoralLevel()));
+        commandXboxController.povDown().onTrue(runOnce(() -> GameData.getInstance().previousCoralLevel()));
+        commandXboxController.povLeft().onTrue(runOnce(() -> GameData.getInstance().previousReefStation()));
+        commandXboxController.povRight().onTrue(runOnce(() -> GameData.getInstance().nextReefStation()));
 
         return commandXboxController;
     }
@@ -201,14 +247,6 @@ public class ButtonBindings {
                         this.coralSubsystem.addAction(CoralSubsystem.Action.INTAKE);
                     }
                 }));
-
-        // Set reef position
-        commandXboxController.povUp().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(1)));
-        commandXboxController.povDown().onTrue(runOnce(() -> GameData.getInstance().setReefStationIndex(-1)));
-        commandXboxController.povLeft()
-                .onTrue(runOnce(() -> GameData.getInstance().setGamePieceMode(GamePieceMode.ALGAE)));
-        commandXboxController.povRight()
-                .onTrue(runOnce(() -> GameData.getInstance().setGamePieceMode(GamePieceMode.CORAL)));
 
         return commandXboxController;
     }
