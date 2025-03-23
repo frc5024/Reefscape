@@ -10,6 +10,8 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.pathplanner.lib.commands.PathfindingCommand;
+
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -22,6 +24,8 @@ import frc.robot.containers.BealtovenRobotContainer;
 import frc.robot.containers.MapleSimRobotContainer;
 import frc.robot.containers.RobotContainer;
 import frc.robot.controls.GameData;
+import frc.robot.controls.GameData.CoralLevel;
+import frc.robot.controls.GameData.ReefStation;
 import frc.robot.utils.LoggedTracer;
 import frc.robot.utils.PhoenixUtil;
 
@@ -110,6 +114,10 @@ public class Robot extends LoggedRobot {
         }
 
         DriverStation.silenceJoystickConnectionWarning(true);
+
+        // Warmup path finding
+        PathfindingCommand.warmupCommand().schedule();
+
         checkDriverStationUpdate();
     }
 
@@ -183,7 +191,6 @@ public class Robot extends LoggedRobot {
         }
 
         this.robotContainer.resetDrivePID();
-        checkDriverStationUpdate();
     }
 
     /** This function is called periodically during operator control. */
@@ -193,13 +200,17 @@ public class Robot extends LoggedRobot {
         Logger.recordOutput("GameData/Game Piece Mode", gameData.getGamePieceModeAsString());
         // Logger.recordOutput("GameData/Pole Position",
         // gameData.getCoralPoleAsString());
-        Logger.recordOutput("GameData/Reef Station", gameData.getReefStationIndexAsString());
-        Logger.recordOutput("GameData/IsReefStation1", gameData.getReefStationIndex() == 1);
-        Logger.recordOutput("GameData/IsReefStation2", gameData.getReefStationIndex() == 2);
-        Logger.recordOutput("GameData/IsReefStation3", gameData.getReefStationIndex() == 3);
-        Logger.recordOutput("GameData/IsReefStation4", gameData.getReefStationIndex() == 4);
-        Logger.recordOutput("GameData/IsReefStation5", gameData.getReefStationIndex() == 5);
-        Logger.recordOutput("GameData/IsReefStation6", gameData.getReefStationIndex() == 6);
+        Logger.recordOutput("GameData/Reef Station", gameData.getReefStationAsString());
+        Logger.recordOutput("GameData/IsReefStation1", gameData.getReefStation() == ReefStation.S1);
+        Logger.recordOutput("GameData/IsReefStation2", gameData.getReefStation() == ReefStation.S2);
+        Logger.recordOutput("GameData/IsReefStation3", gameData.getReefStation() == ReefStation.S3);
+        Logger.recordOutput("GameData/IsReefStation4", gameData.getReefStation() == ReefStation.S4);
+        Logger.recordOutput("GameData/IsReefStation5", gameData.getReefStation() == ReefStation.S5);
+        Logger.recordOutput("GameData/IsReefStation6", gameData.getReefStation() == ReefStation.S6);
+        Logger.recordOutput("GameData/IsCorlLevel1", gameData.getCoralLevel() == CoralLevel.L1);
+        Logger.recordOutput("GameData/IsCorlLevel2", gameData.getCoralLevel() == CoralLevel.L2);
+        Logger.recordOutput("GameData/IsCorlLevel3", gameData.getCoralLevel() == CoralLevel.L3);
+        Logger.recordOutput("GameData/IsCorlLevel4", gameData.getCoralLevel() == CoralLevel.L4);
     }
 
     @Override

@@ -477,7 +477,7 @@ public final class Constants {
         public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM1_CAMERA, ARDUCAM2_CAMERA,
                 ARDUCAM3_CAMERA);
         public static final List<Camera> NO_CAMERAS = new ArrayList<>();
-        public static final List<Camera> CAMERAS = SIMULATION_CAMERAS;
+        public static final List<Camera> CAMERAS = BEALTOVEN_CAMERAS;
         public static final Camera FRONT_RIGHT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
         public static final Camera FRONT_LEFT_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
         public static final Camera REAR_CAMERA = CAMERAS.size() > 2 ? CAMERAS.get(2) : null;
