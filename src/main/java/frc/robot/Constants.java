@@ -59,7 +59,7 @@ public final class Constants {
 
         // Set to true to use FeedForwardCharacterization and
         // WheelRadiusCharacterization auto commands
-        public static final boolean TUNING_MODE = false;
+        public static final boolean TUNING_MODE = true;
 
         // AdvantageKit simulation
         public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
@@ -250,12 +250,12 @@ public final class Constants {
     public static final class PIDConstants {
         // PID constants for swerve modules for drive motor. Turn pid is set in cots
         // constants
-        public static final double SWERVE_MODULE_DRIVE_KP = 0.1;
+        public static final double SWERVE_MODULE_DRIVE_KP = 2.0;
         public static final double SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SWERVE_MODULE_DRIVE_KD = 0.0;
 
-        public static final double SWERVE_MODULE_DRIVE_KS = 0.0;
-        public static final double SWERVE_MODULE_DRIVE_KV = 0.0;
+        public static final double SWERVE_MODULE_DRIVE_KS = 0.03626;
+        public static final double SWERVE_MODULE_DRIVE_KV = 0.69922;
         public static final double SWERVE_MODULE_DRIVE_KA = 0.0;
 
         public static final double SWERVE_MODULE_TURN_KP = 400.0;

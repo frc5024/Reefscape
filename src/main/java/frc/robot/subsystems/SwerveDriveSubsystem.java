@@ -290,7 +290,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
      * 
      */
     private void setSpeedModifier() {
-        this.speedModifier = TeleopConstants.SPEED_MODIFIER_THIRTY;
+        this.speedModifier = TeleopConstants.SPEED_MODIFIER_ONE_HUNDRED;
         // this.speedModifier = this.speedModifier -
         // Elevator.getInstance().getElevatorPercent();
 
