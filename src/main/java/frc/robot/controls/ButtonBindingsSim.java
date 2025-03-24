@@ -130,6 +130,7 @@ public class ButtonBindingsSim {
                 .whileTrue(new SequentialCommandGroup(
                         runOnce(() -> this.elevatorSubsystem
                                 .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM)),
+                        new WaitUntilCommand(this.elevatorSubsystem::atGoal),
                         new DriveReefStationPathCommand(this.swerveDriveSubsystem,
                                 GameData.getInstance()::getReefStationAsInt,
                                 GameData.getInstance()::getGamePieceModeAsString),
@@ -155,6 +156,7 @@ public class ButtonBindingsSim {
                 .whileTrue(new SequentialCommandGroup(
                         runOnce(() -> this.elevatorSubsystem
                                 .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM)),
+                        new WaitUntilCommand(this.elevatorSubsystem::atGoal),
                         new DriveReefStationPathCommand(this.swerveDriveSubsystem,
                                 GameData.getInstance()::getReefStationAsInt,
                                 GameData.getInstance()::getGamePieceModeAsString),
