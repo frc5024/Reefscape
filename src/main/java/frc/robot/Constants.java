@@ -42,7 +42,7 @@ public final class Constants {
 
     public static final class Vision {
         // arbitrary scale
-        public static final double rightOffset = 0.1472;
+        public static final double rightOffset = 0.1352;
         public static final double leftOffset = -0.1825;
         public static final double noOffset = 0;
 

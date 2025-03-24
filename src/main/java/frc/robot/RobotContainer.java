@@ -42,6 +42,8 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
+    private final int elevatorAxis = XboxController.Axis.kLeftX.value;
+
     // Vision Variables
     boolean visionMode = true;
     public String mode;
@@ -118,6 +120,10 @@ public class RobotContainer {
 
         autoChooser.addOption("Non-Processor side 2/3 piece (COMPLETE)",
                 Commands.sequence(new PathPlannerAuto("Start 11R"), new PathPlannerAuto("11R TS 6R"),
+                        new PathPlannerAuto("6R TS 6L"), new PathPlannerAuto("6L TS")));
+
+        autoChooser.addOption("testing second half auto",
+                Commands.sequence(new PathPlannerAuto("11R TS 6R"),
                         new PathPlannerAuto("6R TS 6L"), new PathPlannerAuto("6L TS")));
 
         autoChooser.addOption("Processor side 2/3 piece (COMPLETE)",
@@ -235,6 +241,9 @@ public class RobotContainer {
 
         // Elevator
         operator.a().onTrue(elevatorSubsystem.bottomElevator());
+
+        // operator.y().whileTrue(elevatorSubsystem.forcedUp());
+        // operator.b().whileTrue(elevatorSubsystem.forcedDown());
 
         operator.povLeft()
                 .onTrue(new ConditionalCommand(new InstantCommand(() -> elevatorSubsystem.setModeL1()),
