@@ -123,11 +123,7 @@ public class SwerveModule {
      * Returns the current turn angle of the module.
      */
     public Rotation2d getAngle() {
-        SwerveModuleState swerveModuleState = new SwerveModuleState(
-                this.inputs.data.driveVelocityRadPerSec() * SwerveConstants.cotsDriveConstants.wheelCircumference,
-                this.inputs.data.turnPosition());
-        return swerveModuleState.angle;
-        // return this.inputs.turnPosition;
+        return this.inputs.data.turnPosition();
     }
 
     /**
@@ -148,7 +144,7 @@ public class SwerveModule {
      * Returns the current drive velocity of the module in meters per second.
      */
     public double getVelocityMetersPerSec() {
-        return inputs.data.driveVelocityRadPerSec() * (SwerveConstants.cotsTurnConstants.wheelDiameter / 2);
+        return this.inputs.data.driveVelocityRadPerSec() * (SwerveConstants.cotsTurnConstants.wheelDiameter / 2);
     }
 
     /**
