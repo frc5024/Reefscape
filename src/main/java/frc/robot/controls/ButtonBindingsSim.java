@@ -128,6 +128,8 @@ public class ButtonBindingsSim {
 
         commandXboxController.rightTrigger()
                 .whileTrue(new SequentialCommandGroup(
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM)),
                         new DriveReefStationPathCommand(this.swerveDriveSubsystem,
                                 GameData.getInstance()::getReefStationAsInt,
                                 GameData.getInstance()::getGamePieceModeAsString),
@@ -151,6 +153,8 @@ public class ButtonBindingsSim {
         // Drive to left pole of best apriltag
         commandXboxController.leftTrigger()
                 .whileTrue(new SequentialCommandGroup(
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM)),
                         new DriveReefStationPathCommand(this.swerveDriveSubsystem,
                                 GameData.getInstance()::getReefStationAsInt,
                                 GameData.getInstance()::getGamePieceModeAsString),
