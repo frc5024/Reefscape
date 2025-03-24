@@ -15,15 +15,28 @@
                 }
               },
               {
-                "type": "path",
-                "data": {
-                  "pathName": "6L TS"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "IntakeCoral"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.3
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "6L TS"
+                      }
+                    }
+                  ]
                 }
               }
             ]

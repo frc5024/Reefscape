@@ -9,12 +9,6 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "6R TS"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "ElevatorRoot"
@@ -24,6 +18,25 @@
                 "type": "named",
                 "data": {
                   "name": "IntakeCoral"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.3
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "6R TS"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -62,7 +75,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 3.0
+                              "waitTime": 1.0
                             }
                           }
                         ]
@@ -100,7 +113,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 3.0
+                              "waitTime": 1.0
                             }
                           }
                         ]

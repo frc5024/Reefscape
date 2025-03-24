@@ -9,12 +9,6 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "9R BS"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "ElevatorRoot"
@@ -24,6 +18,25 @@
                 "type": "named",
                 "data": {
                   "name": "IntakeCoral"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.3
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "9R BS"
+                      }
+                    }
+                  ]
                 }
               }
             ]
