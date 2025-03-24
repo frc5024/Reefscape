@@ -103,7 +103,11 @@ public class DriveFromBestTagCommand extends Command {
     private Pose2d getBestTagPose(Pose3d currentPose) {
         boolean isCoralMode = this.gamePieceModeSupplier.get() == GamePieceMode.CORAL;
 
-        if (VisionConstants.FRONT_RIGHT_CAMERA == null || VisionConstants.REAR_CAMERA == null) {
+        if (isCoralMode && (VisionConstants.FRONT_LEFT_CAMERA == null || VisionConstants.FRONT_RIGHT_CAMERA == null)) {
+            return null;
+        }
+
+        if (!isCoralMode && VisionConstants.REAR_CAMERA == null) {
             return null;
         }
 

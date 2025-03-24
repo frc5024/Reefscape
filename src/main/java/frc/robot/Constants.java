@@ -51,7 +51,7 @@ public final class Constants {
          * Manta Raider - 38
          * Bealtoven - 24
          */
-        public static final double LENGTH_INCHES = 24;
+        public static final double LENGTH_INCHES = Robot.isReal() ? 24 : 36;
         public static final double LENGTH_METERS = Units.inchesToMeters(LENGTH_INCHES);
         public static final double LOOP_PERIOD_SECS = 0.02;
         public static final double MASS_KG = 74.088;
@@ -317,8 +317,8 @@ public final class Constants {
         public static final double ELEVATOR_KV = 0.1;
         public static final double ELEVATOR_KA = 0.05;
 
-        public static final double SIM_ELEVATOR_KP = 200.0;
-        public static final double SIM_ELEVATOR_KI = 2.0;
+        public static final double SIM_ELEVATOR_KP = 5000.0;
+        public static final double SIM_ELEVATOR_KI = 0.0;
         public static final double SIM_ELEVATOR_KD = 2000.0;
         public static final double SIM_ELEVATOR_KS = 5.0;
         public static final double SIM_ELEVATOR_KV = 3.0;
@@ -477,7 +477,9 @@ public final class Constants {
         public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM1_CAMERA, ARDUCAM2_CAMERA,
                 ARDUCAM3_CAMERA);
         public static final List<Camera> NO_CAMERAS = new ArrayList<>();
-        public static final List<Camera> CAMERAS = BEALTOVEN_CAMERAS;
+
+        public static final List<Camera> CAMERAS = Robot.isReal() ? BEALTOVEN_CAMERAS : SIMULATION_CAMERAS;
+
         public static final Camera FRONT_RIGHT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
         public static final Camera FRONT_LEFT_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
         public static final Camera REAR_CAMERA = CAMERAS.size() > 2 ? CAMERAS.get(2) : null;

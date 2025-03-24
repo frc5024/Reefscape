@@ -15,7 +15,6 @@ import frc.robot.commands.vision.DriveBargeCommand;
 import frc.robot.commands.vision.DriveFromBestTagCommand;
 import frc.robot.commands.vision.DriveNearestCoralStationCommand;
 import frc.robot.commands.vision.DriveProcessorCommand;
-import frc.robot.commands.vision.DriveReefStationCommand;
 import frc.robot.commands.vision.DriveReefStationPathCommand;
 import frc.robot.controls.GameData.GamePieceMode;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -129,6 +128,9 @@ public class ButtonBindings {
 
         commandXboxController.rightTrigger()
                 .whileTrue(new SequentialCommandGroup(
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM)),
+                        new WaitUntilCommand(this.elevatorSubsystem::atGoal),
                         new DriveReefStationPathCommand(this.swerveDriveSubsystem,
                                 GameData.getInstance()::getReefStationAsInt,
                                 GameData.getInstance()::getGamePieceModeAsString),
@@ -152,6 +154,9 @@ public class ButtonBindings {
         // Drive to left pole of best apriltag
         commandXboxController.leftTrigger()
                 .whileTrue(new SequentialCommandGroup(
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM)),
+                        new WaitUntilCommand(this.elevatorSubsystem::atGoal),
                         new DriveReefStationPathCommand(this.swerveDriveSubsystem,
                                 GameData.getInstance()::getReefStationAsInt,
                                 GameData.getInstance()::getGamePieceModeAsString),
