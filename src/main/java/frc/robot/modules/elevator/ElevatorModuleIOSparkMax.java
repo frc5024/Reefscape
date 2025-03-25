@@ -11,11 +11,13 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PIDConstants;
+import frc.robot.utils.SparkUtil;
 
 /**
  * 
@@ -26,6 +28,7 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
     private final int RIGHT_MOTOR_ID = 61;
     private final int ZERO_LIMIT_CHANNEL_ID = 8;
     private final int STOPPING_LIMIT_CHANNEL_ID = 1;
+    private final double ENCODER_ZERO_POSITION = 0.0;
 
     private final SparkBaseConfig LEFT_MOTOR_CONFIG = new SparkMaxConfig()
             .idleMode(IdleMode.kBrake)
@@ -38,7 +41,8 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
             .secondaryCurrentLimit(40)
             .follow(LEFT_MOTOR_ID, false);
 
-    private final double ENCODER_ZERO_POSITION = 0.0;
+    private final Debouncer leaderConnectedDebouncer = new Debouncer(0.5);
+    private final Debouncer followerConnectedDebouncer = new Debouncer(0.5);
 
     /* Hardware */
     private final SparkMax leftMotor;
@@ -80,6 +84,7 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
 
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
+        SparkUtil.sparkStickyFault = false;
         if (DriverStation.isDisabled()) {
             stop();
         }
@@ -91,8 +96,8 @@ public class ElevatorModuleIOSparkMax implements ElevatorModuleIO {
         }
 
         inputs.data = new ElevatorModuleIOData(
-                true,
-                true,
+                this.leaderConnectedDebouncer.calculate(!SparkUtil.sparkStickyFault),
+                this.followerConnectedDebouncer.calculate(!SparkUtil.sparkStickyFault),
                 this.leftMotor.getEncoder().getPosition(),
                 this.leftMotor.getEncoder().getVelocity(),
                 this.leftMotor.getAppliedOutput(),

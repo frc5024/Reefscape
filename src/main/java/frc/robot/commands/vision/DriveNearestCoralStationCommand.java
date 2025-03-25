@@ -36,7 +36,6 @@ public class DriveNearestCoralStationCommand extends Command {
         }
 
         this.swerveDriveSubsystem.resetDrivePID();
-
     }
 
     @Override

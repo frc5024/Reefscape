@@ -21,7 +21,9 @@ public class CoralSubsystem extends SubsystemBase {
     private final String NAME = "Coral";
 
     /* Alerts */
-    private final Alert disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
+    private final Alert topDisconnectedAlert = new Alert(NAME + " top motor disconnected!", Alert.AlertType.kWarning);
+    private final Alert bottomDisconnectedAlert = new Alert(NAME + " bottom motor disconnected!",
+            Alert.AlertType.kWarning);
 
     public static enum Action {
         STOP, EJECT, INTAKE
@@ -143,7 +145,8 @@ public class CoralSubsystem extends SubsystemBase {
         this.coralModuleIO.updateInputs(this.inputs);
         Logger.processInputs(this.NAME, this.inputs);
 
-        this.disconnected.set(!this.inputs.data.connected());
+        this.topDisconnectedAlert.set(!this.inputs.data.topMotorconnected());
+        this.topDisconnectedAlert.set(!this.inputs.data.bottomMotorconnected());
 
         // actions run for no longer than 3 seconds
         if (this.stateTimer.isRunning() && this.stateTimer.hasElapsed(3)) {

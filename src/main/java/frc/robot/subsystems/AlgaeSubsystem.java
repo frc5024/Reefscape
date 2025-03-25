@@ -21,7 +21,7 @@ public class AlgaeSubsystem extends SubsystemBase {
     private final String NAME = "Algae";
 
     /* Alerts */
-    private final Alert disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
+    private final Alert disconnectedAlert = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
     public static enum Action {
         STOP, EJECT, INTAKE
@@ -141,7 +141,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         this.algaeModuleIO.updateInputs(this.inputs);
         Logger.processInputs(this.NAME, this.inputs);
 
-        this.disconnected.set(!this.inputs.data.connected());
+        this.disconnectedAlert.set(!this.inputs.data.connected());
 
         // actions run for no longer than 3 seconds
         if (this.stateTimer.isRunning() && this.stateTimer.hasElapsed(3)) {

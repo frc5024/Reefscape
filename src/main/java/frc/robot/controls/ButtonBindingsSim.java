@@ -108,15 +108,41 @@ public class ButtonBindingsSim {
 
         // Reset gyro to 0° when B button is pressed
         commandXboxController.b()
-                .whileTrue(new DriveBargeCommand(this.swerveDriveSubsystem));
+                .whileTrue(new SequentialCommandGroup(
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM)),
+                        new WaitUntilCommand(this.elevatorSubsystem::atGoal),
+                        new DriveBargeCommand(this.swerveDriveSubsystem),
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_ALGAE_3)),
+                        new WaitUntilCommand(this.elevatorSubsystem::atGoal), runOnce(() -> {
+                            this.algaeSubsystem.addAction(AlgaeSubsystem.Action.EJECT);
+                        }),
+                        new WaitUntilCommand(this.coralSubsystem::hasEjected),
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM))));
 
         // Drive to nearest coral station
         commandXboxController.x()
-                .whileTrue(new DriveNearestCoralStationCommand(this.swerveDriveSubsystem));
+                .whileTrue(new SequentialCommandGroup(
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM)),
+                        new WaitUntilCommand(this.elevatorSubsystem::atGoal),
+                        new DriveNearestCoralStationCommand(this.swerveDriveSubsystem)));
 
         // Drive to processor station
         commandXboxController.y()
-                .whileTrue(new DriveProcessorCommand(this.swerveDriveSubsystem));
+                .whileTrue(new SequentialCommandGroup(
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM)),
+                        new WaitUntilCommand(this.elevatorSubsystem::atGoal),
+                        new DriveProcessorCommand(this.swerveDriveSubsystem),
+                        new WaitUntilCommand(this.elevatorSubsystem::atGoal), runOnce(() -> {
+                            this.algaeSubsystem.addAction(AlgaeSubsystem.Action.EJECT);
+                        }),
+                        new WaitUntilCommand(this.coralSubsystem::hasEjected),
+                        runOnce(() -> this.elevatorSubsystem
+                                .addAction(ElevatorSubsystem.Action.MOVE_TO_BOTTOM))));
 
         // Drive to right pole of best apriltag
         // commandXboxController.rightTrigger()

@@ -8,8 +8,10 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.utils.SparkUtil;
 
 /**
  * 
@@ -18,9 +20,9 @@ public class CoralModuleIOSparkFlex implements CoralModuleIO {
     /* Constants */
     private final int TOP_MOTOR_CHANNEL = 51;
     private final int BOTTOM_MOTOR_CHANNEL = 52;
-
+    private final double MOTOR_INTAKE_SPEED = -0.1;
+    private final double MOTOR_EJECT_SPEED = 0.1;
     private final int LINEBREAK_CHANNEL = 0;
-
     private final int SERVO_CHANNEL = 0;
 
     private final SparkBaseConfig TOP_MOTOR_CONFIG = new SparkMaxConfig()
@@ -34,8 +36,8 @@ public class CoralModuleIOSparkFlex implements CoralModuleIO {
             .secondaryCurrentLimit(40)
             .inverted(true);
 
-    private final double MOTOR_INTAKE_SPEED = -0.1;
-    private final double MOTOR_EJECT_SPEED = 0.1;
+    private final Debouncer topMotorConnectedDebouncer = new Debouncer(.5);
+    private final Debouncer bottomMotorConnectedDebouncer = new Debouncer(.5);
 
     /* Hardware */
     private final SparkFlex topMotor;
@@ -60,12 +62,14 @@ public class CoralModuleIOSparkFlex implements CoralModuleIO {
 
     @Override
     public void updateInputs(CoralModuleIOInputs inputs) {
+        SparkUtil.sparkStickyFault = false;
         if (DriverStation.isDisabled()) {
             stop();
         }
 
         inputs.data = new CoralModuleIOData(
-                true,
+                this.topMotorConnectedDebouncer.calculate(!SparkUtil.sparkStickyFault),
+                this.bottomMotorConnectedDebouncer.calculate(!SparkUtil.sparkStickyFault),
                 this.topMotor.getEncoder().getPosition(),
                 this.topMotor.getEncoder().getVelocity(),
                 this.appliedVoltage,

@@ -35,7 +35,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final String NAME = "Elevator";
 
     /* Alerts */
-    private final Alert disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
+    private final Alert leaderMotorDisconnectedAlert = new Alert(NAME + " leader motor disconnected!",
+            Alert.AlertType.kWarning);
+    private final Alert followerMotorDisconnectedAlert = new Alert(NAME + " follower motor disconnected!",
+            Alert.AlertType.kWarning);
 
     public static enum Action {
         STOP, MOVE_TO_BOTTOM, MOVE_TO_ALGAE_1, MOVE_TO_ALGAE_2, MOVE_TO_ALGAE_3, MOVE_TO_PROCESSOR, MOVE_TO_CORAL_1,
@@ -297,7 +300,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.elevatorModule.updateInputs(this.inputs);
         Logger.processInputs(this.NAME, this.inputs);
 
-        this.disconnected.set(!this.inputs.data.connected());
+        this.leaderMotorDisconnectedAlert.set(!this.inputs.data.connected());
+        this.followerMotorDisconnectedAlert.set(!this.inputs.data.followerConnected());
 
         State goalState = new State(MathUtil.clamp(this.goal.get().position, 0.0, ElevatorConstants.HEIGHT_IN_METERS),
                 this.goal.get().velocity);

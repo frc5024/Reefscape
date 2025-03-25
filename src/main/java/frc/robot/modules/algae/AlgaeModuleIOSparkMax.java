@@ -9,8 +9,10 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.utils.SparkUtil;
 
 /**
  * 
@@ -19,6 +21,8 @@ public class AlgaeModuleIOSparkMax implements AlgaeModuleIO {
     private final int TOP_MOTOR_ID = 3;
     private final int BOTTOM_MOTOR_ID = 62;
     private final int LINEBREAK_CHANNEL = 9;
+    private final double MOTOR_INTAKE_SPEED = -0.5;
+    private final double MOTOR_EJECT_SPEED = 0.5;
 
     private final SparkBaseConfig TOP_MOTOR_CONFIG = new SparkMaxConfig()
             .idleMode(IdleMode.kBrake)
@@ -31,8 +35,7 @@ public class AlgaeModuleIOSparkMax implements AlgaeModuleIO {
             .secondaryCurrentLimit(40)
             .inverted(true);
 
-    private final double MOTOR_INTAKE_SPEED = -0.5;
-    private final double MOTOR_EJECT_SPEED = 0.5;
+    private final Debouncer connectedDebouncer = new Debouncer(.5);
 
     private final SparkMax topMotor;
     private final SparkMax bottomMotor;
@@ -55,12 +58,13 @@ public class AlgaeModuleIOSparkMax implements AlgaeModuleIO {
 
     @Override
     public void updateInputs(AlgaeModuleIOInputs inputs) {
+        SparkUtil.sparkStickyFault = false;
         if (DriverStation.isDisabled()) {
             stop();
         }
 
         inputs.data = new AlgaeModuleIOData(
-                true,
+                this.connectedDebouncer.calculate(!SparkUtil.sparkStickyFault),
                 this.topMotor.getEncoder().getPosition(),
                 this.topMotor.getEncoder().getVelocity(),
                 this.appliedVoltage,

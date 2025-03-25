@@ -32,11 +32,12 @@ public class SwerveModule {
         this.swerveModuleIO = swerveModuleIO;
         this.index = index;
 
-        driveDisconnectedAlert = new Alert("Disconnected drive motor on module " + Integer.toString(index) + ".",
+        this.driveDisconnectedAlert = new Alert("Disconnected drive motor on module " + Integer.toString(index) + ".",
                 AlertType.kError);
-        turnDisconnectedAlert = new Alert("Disconnected turn motor on module " + Integer.toString(index) + ".",
+        this.turnDisconnectedAlert = new Alert("Disconnected turn motor on module " + Integer.toString(index) + ".",
                 AlertType.kError);
-        turnEncoderDisconnectedAlert = new Alert("Disconnected turn encoder on module " + Integer.toString(index) + ".",
+        this.turnEncoderDisconnectedAlert = new Alert(
+                "Disconnected turn encoder on module " + Integer.toString(index) + ".",
                 AlertType.kError);
     }
 

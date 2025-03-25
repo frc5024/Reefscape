@@ -47,8 +47,7 @@ public class MapleSimUtil {
     public static IntakeSimulation getAlgaeIntakeSimulation() {
         if (algaeIntakeSimulation == null) {
             algaeIntakeSimulation = IntakeSimulation.OverTheBumperIntake("Algae", getSwerveDriveSimulation(),
-                    Meters.of(0.5),
-                    Meters.of(0.4), IntakeSimulation.IntakeSide.BACK, 1);
+                    Meters.of(0.25), Meters.of(1.0), IntakeSimulation.IntakeSide.BACK, 1);
         }
 
         return algaeIntakeSimulation;
@@ -136,6 +135,6 @@ public class MapleSimUtil {
                         nearestDropStation.getRotation(),
                         Meters.of(Units.inchesToMeters(46.0)),
                         MetersPerSecond.of(2),
-                        Degrees.of(-35.0)));
+                        Degrees.of(-25.0)));
     }
 }

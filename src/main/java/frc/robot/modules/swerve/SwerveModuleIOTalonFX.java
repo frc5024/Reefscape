@@ -177,7 +177,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
                         this.turnSupplyCurrentAmps,
                         this.turnTorqueCurrentAmps)),
                 this.turnEncoderConnectedDebounce.calculate(BaseStatusSignal.isAllGood(this.turnAbsolutePosition)),
-                Rotation2d.fromRotations(this.turnAbsolutePosition.getValueAsDouble()).plus(this.encoderOffset),
+                Rotation2d.fromRotations(this.turnAbsolutePosition.getValueAsDouble()).minus(this.encoderOffset),
                 this.turnAbsolutePosition.getValue().in(Degrees),
                 Rotation2d.fromRotations(this.turnPosition.getValueAsDouble()),
                 this.turnPosition.getValue().in(Degrees),

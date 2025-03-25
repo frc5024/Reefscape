@@ -38,6 +38,7 @@ public class CoralModuleIOSim implements CoralModuleIO {
 
         inputs.data = new CoralModuleIOData(
                 true,
+                true,
                 this.dcMotorSim.getAngularPositionRad(),
                 this.dcMotorSim.getAngularVelocityRadPerSec(),
                 this.appliedVoltage,

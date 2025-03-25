@@ -8,11 +8,12 @@ import org.littletonrobotics.junction.AutoLog;
 public interface CoralModuleIO {
     @AutoLog
     class CoralModuleIOInputs {
-        public CoralModuleIOData data = new CoralModuleIOData(false, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        public CoralModuleIOData data = new CoralModuleIOData(false, false, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     }
 
     record CoralModuleIOData(
-            boolean connected,
+            boolean topMotorconnected,
+            boolean bottomMotorconnected,
             double positionRads,
             double velocityRadsPerSec,
             double appliedVoltage,

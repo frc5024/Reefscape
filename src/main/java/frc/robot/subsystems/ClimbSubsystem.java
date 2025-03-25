@@ -19,7 +19,7 @@ public class ClimbSubsystem extends SubsystemBase {
     private final String NAME = "Climb";
 
     /* Alerts */
-    private final Alert disconnected = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
+    private final Alert disconnectedAlert = new Alert(NAME + " motor disconnected!", Alert.AlertType.kWarning);
 
     private final ClimbModuleIO climbModuleIO;
     protected final ClimbModuleIOInputsAutoLogged inputs;
@@ -40,7 +40,7 @@ public class ClimbSubsystem extends SubsystemBase {
     public void periodic() {
         this.climbModuleIO.updateInputs(this.inputs);
 
-        this.disconnected.set(!this.inputs.data.connected());
+        this.disconnectedAlert.set(!this.inputs.data.connected());
 
         Logger.processInputs(this.NAME, this.inputs);
 
