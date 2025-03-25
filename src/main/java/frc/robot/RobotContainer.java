@@ -210,30 +210,6 @@ public class RobotContainer {
                                 Constants.Vision.leftOffset),
                         () -> visionMode));
 
-        // driver.rightTrigger().whileTrue(
-        // Commands.sequence(
-        // Commands.parallel(
-        // new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.rightOffset),
-        // elevatorSubsystem.goToL2Position()),
-        // elevatorSubsystem.goToModePosition(),
-        // coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
-        // elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the
-        // button is released
-        // }));
-
-        // driver.leftTrigger().whileTrue(
-        // Commands.sequence(
-        // Commands.parallel(
-        // new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.leftOffset),
-        // elevatorSubsystem.goToL2Position()),
-        // elevatorSubsystem.goToModePosition(),
-        // coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
-        // elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the
-        // button is released
-        // }));
-
         // driver.povUp().whileTrue(m_climbSubsystem.climbCommand());
         // driver.povDown().whileTrue(m_climbSubsystem.extendingCommand());
 
