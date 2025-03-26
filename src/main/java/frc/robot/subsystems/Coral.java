@@ -11,6 +11,7 @@ import frc.robot.Constants;
 import frc.robot.commands.Coral.CancelIntakeCommand;
 import frc.robot.commands.Coral.ForcedOuttakeCmd;
 import frc.robot.commands.Coral.IntakeCommand;
+import frc.robot.commands.Coral.L1Command;
 import frc.robot.commands.Coral.LowerRampCommand;
 import frc.robot.commands.Coral.OuttakeCommand;
 import frc.robot.commands.Coral.PlopCommand;
@@ -69,6 +70,7 @@ public class Coral extends SubsystemBase {
         tab.addDouble("bottom motor speed", () -> coralMotorReversed.get());
 
         tab.addDouble("encoder value", () -> getEncoder());
+        tab.addDouble("applied output", () -> coralMotor.getAppliedOutput());
 
         // this.coralMotorReversed.configure(coralMotorReversedConfig,
         // ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -102,6 +104,14 @@ public class Coral extends SubsystemBase {
     public boolean isLineBroken() {
         return linebreak.get();
     }
+
+    // public boolean isBlocked() {
+    // if(coralMotor.getAppliedOutput > number){
+    // return true;
+    // } else {
+    // return false;
+    // }
+    // }
 
     public double getEncoder() {
         // Combine or choose one encoder value to return
@@ -150,6 +160,10 @@ public class Coral extends SubsystemBase {
 
     public Command backwardsMotor() {
         return new LowerRampCommand(this);
+    }
+
+    public Command l1Command() {
+        return new L1Command(this);
     }
 
     // ---------------SERVO STUFF --------------
