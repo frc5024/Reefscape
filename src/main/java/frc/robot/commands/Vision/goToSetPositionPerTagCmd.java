@@ -26,8 +26,8 @@ public class goToSetPositionPerTagCmd extends Command {
     double rotationPidOutput = 0;
     double translationPidOutput = 0;
 
-    boolean shouldBeSlowDis = false;
-    boolean shouldBeSlowStrafe = false;
+    // boolean shouldBeSlowDis = false;
+    // boolean shouldBeSlowStrafe = false;
 
     private PIDController strafePidController;
     private PIDController rotationPidController;
@@ -63,8 +63,8 @@ public class goToSetPositionPerTagCmd extends Command {
         translationPidController.reset();
         rotationPidController.reset();
 
-        shouldBeSlowDis = false;
-        shouldBeSlowStrafe = false;
+        // shouldBeSlowDis = false;
+        // shouldBeSlowStrafe = false;
 
         limelight.setRotationPos(false);
         limelight.setXPos(false);
@@ -151,11 +151,11 @@ public class goToSetPositionPerTagCmd extends Command {
             limelight.setZPos(true);
         }
 
-        if (Math.abs(zDiff) < 0.4) {
-            shouldBeSlowDis = true;
-        } else {
-            shouldBeSlowDis = false;
-        }
+        // if (Math.abs(zDiff) < 0.4) {
+        // shouldBeSlowDis = true;
+        // } else {
+        // shouldBeSlowDis = false;
+        // }
     }
 
     // Calculates and outpits PID based on difference to goal state (Left/Right)
@@ -174,11 +174,11 @@ public class goToSetPositionPerTagCmd extends Command {
             limelight.setXPos(true);
         }
 
-        if (Math.abs(xDiff) < 0.2) {
-            shouldBeSlowStrafe = true;
-        } else {
-            shouldBeSlowStrafe = false;
-        }
+        // if (Math.abs(xDiff) < 0.2) {
+        // shouldBeSlowStrafe = true;
+        // } else {
+        // shouldBeSlowStrafe = false;
+        // }
     }
 
     // PID/Speed cap increase smaller adjustments within the PID but caps the max
@@ -187,11 +187,11 @@ public class goToSetPositionPerTagCmd extends Command {
     public void setDrive() {
         swerveDrive.setFieldRelative(false);
 
-        if (shouldBeSlowDis && shouldBeSlowStrafe) {
-            swerveDrive.isSlowMode = true;
-        } else {
-            swerveDrive.isSlowMode = false;
-        }
+        // if (shouldBeSlowDis && shouldBeSlowStrafe) {
+        // swerveDrive.isSlowMode = true;
+        // } else {
+        // swerveDrive.isSlowMode = false;
+        // }
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
         swerveDrive.visionTranslationalVal(translationPidOutput, true);
@@ -208,8 +208,8 @@ public class goToSetPositionPerTagCmd extends Command {
         // Stop all motion
         swerveDrive.isSlowMode = false;
 
-        shouldBeSlowDis = false;
-        shouldBeSlowStrafe = false;
+        // shouldBeSlowDis = false;
+        // shouldBeSlowStrafe = false;
 
         swerveDrive.visionTranslationalVal(0, false);
         swerveDrive.visionStrafeVal(0, false);

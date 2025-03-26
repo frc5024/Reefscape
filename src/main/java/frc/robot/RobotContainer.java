@@ -44,6 +44,8 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
+    private final int elevatorAxis = XboxController.Axis.kLeftX.value;
+
     // Vision Variables
     boolean visionMode = true;
     public String mode;
@@ -120,11 +122,15 @@ public class RobotContainer {
 
         autoChooser.addOption("Non-Processor side 2/3 piece (COMPLETE)",
                 Commands.sequence(new PathPlannerAuto("Start 11R"), new PathPlannerAuto("11R TS 6R"),
-                        new PathPlannerAuto("6R TS 6L")));
+                        new PathPlannerAuto("6R TS 6L"), new PathPlannerAuto("6L TS")));
+
+        autoChooser.addOption("testing second half auto",
+                Commands.sequence(new PathPlannerAuto("11R TS 6R"),
+                        new PathPlannerAuto("6R TS 6L"), new PathPlannerAuto("6L TS")));
 
         autoChooser.addOption("Processor side 2/3 piece (COMPLETE)",
                 Commands.sequence(new PathPlannerAuto("Start 9R"), new PathPlannerAuto("9R BS 8"),
-                        new PathPlannerAuto("8R BS 8L")));
+                        new PathPlannerAuto("8R BS 8L"), new PathPlannerAuto("8L BS")));
 
         autoChooser.addOption("Middle 1 piece right (COMPLETE)", new PathPlannerAuto("MiddleRight"));
         autoChooser.addOption("Middle 1 piece left (COMPLETE)", new PathPlannerAuto("MiddleLeft"));
@@ -206,30 +212,6 @@ public class RobotContainer {
                                 Constants.Vision.leftOffset),
                         () -> visionMode));
 
-        // driver.rightTrigger().whileTrue(
-        // Commands.sequence(
-        // Commands.parallel(
-        // new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.rightOffset),
-        // elevatorSubsystem.goToL2Position()),
-        // elevatorSubsystem.goToModePosition(),
-        // coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
-        // elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the
-        // button is released
-        // }));
-
-        // driver.leftTrigger().whileTrue(
-        // Commands.sequence(
-        // Commands.parallel(
-        // new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.leftOffset),
-        // elevatorSubsystem.goToL2Position()),
-        // elevatorSubsystem.goToModePosition(),
-        // coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
-        // elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the
-        // button is released
-        // }));
-
         // driver.povUp().whileTrue(m_climbSubsystem.climbCommand());
         // driver.povDown().whileTrue(m_climbSubsystem.extendingCommand());
 
@@ -237,6 +219,9 @@ public class RobotContainer {
 
         // Elevator
         operator.a().onTrue(elevatorSubsystem.bottomElevator());
+
+        // operator.y().whileTrue(elevatorSubsystem.forcedUp());
+        // operator.b().whileTrue(elevatorSubsystem.forcedDown());
 
         operator.povLeft()
                 .onTrue(new ConditionalCommand(new InstantCommand(() -> elevatorSubsystem.setModeL1()),

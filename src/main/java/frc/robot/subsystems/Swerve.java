@@ -183,10 +183,11 @@ public class Swerve extends SubsystemBase {
 
     public void setSpeedModifier() {
         speedModifier = 1;
-        speedModifier = speedModifier - elevatorSubsystem.getElevatorPercent();
+        // This is why were not going the right distance in auto
+        // speedModifier = speedModifier - elevatorSubsystem.getElevatorPercent();
 
         if (isSlowMode) {
-            speedModifier = 0.5 * speedModifier;
+            speedModifier = 0.3 * speedModifier;
         }
     }
 

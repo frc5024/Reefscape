@@ -5,40 +5,105 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "DriveTo9"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "DriveRightTag9"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "DriveTo9"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Confirm Vision"
+                      }
+                    },
+                    {
+                      "type": "race",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "DriveRightTag9"
+                            }
+                          },
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 4.0
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "wait",
+                "type": "sequential",
                 "data": {
-                  "waitTime": 0.2
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "L3"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Wait For Vision"
+                      }
+                    },
+                    {
+                      "type": "race",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "L4"
+                            }
+                          },
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 4.0
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "ScoreCoral"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ScoreCoral"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
           }
         }
       ]

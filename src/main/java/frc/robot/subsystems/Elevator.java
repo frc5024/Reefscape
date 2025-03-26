@@ -25,6 +25,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.elevatorConstants;
 import frc.robot.commands.Elevator.SetElevatorModeCmd;
 import frc.robot.commands.Elevator.SetElevatorSetpointCmd;
+import frc.robot.commands.Elevator.manualBottom;
 
 public class Elevator extends SubsystemBase {
     // created and named the motor controller
@@ -201,6 +202,15 @@ public class Elevator extends SubsystemBase {
         elevatorMotor.setVoltage(voltageValue);
     }
 
+    public void forcedBottom(double Speed) {
+        elevatorMotor.set(speed);
+    }
+
+    public void stopMotors() {
+        elevatorMotor.set(0);
+        elevatorMotor2.set(0);
+    }
+
     public boolean targetReached() {
         if (PID.atGoal()) {
             return true;
@@ -262,7 +272,7 @@ public class Elevator extends SubsystemBase {
     }
 
     // gets the encoder value for safety precautions in the periodic
-    private double encoderValue() {
+    public double encoderValue() {
         return elevatorMotor.getEncoder().getPosition();
     }
 
@@ -350,6 +360,14 @@ public class Elevator extends SubsystemBase {
 
     public double elevatorHeight() {
         return rotationsToInches(elevatorMotor.getEncoder().getPosition());
+    }
+
+    public Command forcedDown() {
+        return new manualBottom(this, -0.1);
+    }
+
+    public Command forcedUp() {
+        return new manualBottom(this, 0.1);
     }
 
     public Command goToL1Position() {

@@ -42,8 +42,8 @@ public final class Constants {
 
     public static final class Vision {
         // arbitrary scale
-        public static final double rightOffset = 0.16428740684869218;
-        public static final double leftOffset = -0.1655;
+        public static final double rightOffset = 0.1352;
+        public static final double leftOffset = -0.1825;
         public static final double noOffset = 0;
 
         // changes smaller adjustments and max speed
@@ -57,7 +57,7 @@ public final class Constants {
 
         public static final double rotationTolerance = 1.6; // degrees
         public static final double strafeTolerance = centimetersToMeters(2);
-        public static final double distanceTolerance = centimetersToMeters(6.5); // to be adjusted
+        public static final double distanceTolerance = centimetersToMeters(3); // to be adjusted
 
         public static double centimetersToMeters(double Centimeters) {
             return Centimeters / 100;
@@ -107,7 +107,7 @@ public final class Constants {
         public static final double Algae1 = 5.97514;
         public static final double L3Position = 31.37261 - 1.5;
         public static final double Algae2 = 8.37068;
-        public static final double L4Position = 49.57406;
+        public static final double L4Position = 50.57406;
 
     }
 
@@ -119,7 +119,8 @@ public final class Constants {
         public static final int servoChannel = 0;
 
         public static double intakeSpeed = -0.1;
-        public static double outtakeSpeed = -0.15;
+        public static double outtakeSpeed = -0.10;
+        public static double outtakeL4Speed = -0.15;
         public static double outtakeAutoSpeed = -0.10;
 
         public static double L1Speed = -0.35;

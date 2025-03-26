@@ -5,47 +5,47 @@
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "named",
+                "data": {
+                  "name": "ElevatorRoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCoral"
+                }
+              },
+              {
+                "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "L4"
+                        "waitTime": 0.3
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "path",
                       "data": {
-                        "name": "DriveRightTag6"
+                        "pathName": "8L BS"
                       }
                     }
                   ]
                 }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 4.0
-                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ScoreCoral"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Strictly Vision",
+  "folder": "Processer",
   "choreoAuto": false
 }
