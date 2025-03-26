@@ -21,7 +21,8 @@ public class L1Command extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        coralSubsystem.set(Constants.coralConstants.L1Speed);
+        coralSubsystem.setTop(-Constants.coralConstants.L1Speed);
+        coralSubsystem.setBottom(0);
     }
 
     // execute, startOuttake() once button is pressed
