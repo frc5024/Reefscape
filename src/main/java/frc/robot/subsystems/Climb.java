@@ -22,6 +22,8 @@ public class Climb extends SubsystemBase {
     private TalonFX climbMotor;
     private DigitalInput limitSwitch = new DigitalInput(8);
 
+    private Webcam webcamSubsystem;
+
     ShuffleboardTab tab = Shuffleboard.getTab("Climb");
 
     public boolean extended = false;

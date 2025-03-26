@@ -23,6 +23,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Webcam;
 
 public class RobotContainer {
     // Controllers
@@ -36,6 +37,7 @@ public class RobotContainer {
     private final Coral coralSubsystem = Coral.getInstance();
     private final Elevator elevatorSubsystem = Elevator.getInstance();
     private final LEDs s_LEDs = LEDs.getInstance();
+    private final Webcam s_webcamSubsystem = Webcam.getInstance();
 
     // Drive Controls
     private final int translationAxis = XboxController.Axis.kLeftY.value;
