@@ -18,6 +18,7 @@ import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Vision.autoSetPositionTagID;
 import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
 import frc.robot.commands.Vision.isPathRun;
+import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
@@ -39,6 +40,7 @@ public class RobotContainer {
     private final Elevator elevatorSubsystem = Elevator.getInstance();
     private final LEDs s_LEDs = LEDs.getInstance();
     private final Webcam s_webcamSubsystem = Webcam.getInstance();
+    private final Algae m_algaeSubsystem = Algae.getInstance();
 
     // Drive Controls
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -250,6 +252,9 @@ public class RobotContainer {
 
         operator.rightTrigger().whileTrue(m_climbSubsystem.climbCommand());
         operator.leftTrigger().whileTrue(m_climbSubsystem.extendingCommand());
+
+        // extending
+        operator.rightBumper().whileTrue(m_algaeSubsystem.algaeCommand());
     }
 
     public Command getAutonomousCommand() {

@@ -131,6 +131,12 @@ public final class Constants {
         // public static double servoReset = -0.5;
     }
 
+    public static final class AlgaeConstant {
+        public static double algaeSpeed = 0.3;
+        public static double algaeInPos = 1;
+        public static double algaeOutPos = 0;
+    }
+
     public static final class Swerve {
         public static final int AHRS = 1;
 
