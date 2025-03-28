@@ -8,11 +8,12 @@ import frc.robot.subsystems.Elevator;
 public class ForcedOuttakeCmd extends Command {
 
     private final Coral coralSubsystem;
-    Elevator elevatorSubsystem;
+    private final Elevator elevatorSubsystem;
 
     // constructor for OuttakeCommand
-    public ForcedOuttakeCmd(Coral coralSubsystem) {
+    public ForcedOuttakeCmd(Coral coralSubsystem, Elevator elevatorSubsystem) {
         this.coralSubsystem = coralSubsystem;
+        this.elevatorSubsystem = elevatorSubsystem;
 
         addRequirements(coralSubsystem);
     }
@@ -25,8 +26,11 @@ public class ForcedOuttakeCmd extends Command {
     // execute, startOuttake() once button is pressed
     @Override
     public void execute() {
+        // if (elevatorSubsystem.getSetpoint() == 1) {
+        // coralSubsystem.set(Constants.coralConstants.L1Speed);
+        // } else {
         coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
-
+        // }
     }
 
     // end, when command ends, set activeOuttake to false and set state to IDLE

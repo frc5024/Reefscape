@@ -102,7 +102,7 @@ public final class Constants {
         // position constants for the different levels to score in rotations
         public static final double rootPosition = -10;
         public static final double rootAutoPosition = 0;
-        public static final double L1Position = 15.212;
+        public static final double L1Position = 14;
         public static final double L2Position = 18.0802 - 1;
         public static final double Algae1 = 5.97514;
         public static final double L3Position = 31.37261 - 1.5;
@@ -123,12 +123,18 @@ public final class Constants {
         public static double outtakeL4Speed = -0.15;
         public static double outtakeAutoSpeed = -0.10;
 
-        public static double L1Speed = -0.35;
-        public static double plopSpeed = -0.1;
+        public static double L1Speed = -0.20;
+        public static double plopSpeed = -0.35;
         public static double rampSpeed = 0.1;
 
         // public static double servoRotate = 0.5;
         // public static double servoReset = -0.5;
+    }
+
+    public static final class AlgaeConstant {
+        public static double algaeSpeed = 0.3;
+        // public static double algaeInPos = 1;
+        // public static double algaeOutPos = 0;
     }
 
     public static final class Swerve {

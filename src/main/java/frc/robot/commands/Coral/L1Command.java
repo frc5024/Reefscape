@@ -3,21 +3,17 @@ package frc.robot.commands.Coral;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Coral;
-import frc.robot.subsystems.Elevator;
 
-public class OuttakeCommand extends Command {
+public class L1Command extends Command {
 
     private final Coral coralSubsystem;
-    private final Elevator elevatorSubsystem;
 
     boolean isAuto = false;
     double speed;
 
     // constructor for OuttakeCommand
-    public OuttakeCommand(Coral coralSubsystem, Elevator elevatorSubsystem, boolean isAuto) {
+    public L1Command(Coral coralSubsystem) {
         this.coralSubsystem = coralSubsystem;
-        this.elevatorSubsystem = elevatorSubsystem;
-        this.isAuto = isAuto;
 
         addRequirements(coralSubsystem);
     }
@@ -25,29 +21,13 @@ public class OuttakeCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        if (!coralSubsystem.isLineBroken()) {
-            cancel();
-        }
-
-        if (!isAuto) {
-            // if (elevatorSubsystem.getSetpoint() == 1) {
-            // speed = Constants.coralConstants.L1Speed;
-            // } else {
-            speed = Constants.coralConstants.outtakeSpeed;
-            // }
-        } else {
-            speed = Constants.coralConstants.outtakeAutoSpeed;
-
-            coralSubsystem.set(speed);
-        }
+        coralSubsystem.setTop(-Constants.coralConstants.L1Speed);
+        coralSubsystem.setBottom(0);
     }
 
     // execute, startOuttake() once button is pressed
     @Override
     public void execute() {
-        if (!coralSubsystem.isLineBroken()) {
-            cancel();
-        }
     }
 
     // end, when command ends, set activeOuttake to false and set state to IDLE
