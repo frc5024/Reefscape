@@ -45,7 +45,7 @@ public class Coral extends SubsystemBase {
     double outtakeSpeed = Constants.coralConstants.outtakeSpeed;
     double plopSpeed = Constants.coralConstants.plopSpeed;
 
-    private Elevator elevatorSubsystem;
+    private final Elevator elevatorSubsystem = Elevator.getInstance();
 
     // double servoRotate = Constants.coralConstants.servoRotate;
     // double servoReset = Constants.coralConstants.servoReset;
