@@ -133,7 +133,8 @@ public class RobotContainer {
         autoChooser.addOption("Middle 1 piece right (COMPLETE)", new PathPlannerAuto("MiddleRight"));
         autoChooser.addOption("Middle 1 piece left (COMPLETE)", new PathPlannerAuto("MiddleLeft"));
 
-        autoChooser.addOption("Testing Elevatoring", new PathPlannerAuto("Start 11R"));
+        autoChooser.addOption("Testing Elevatoring",
+                Commands.sequence(new PathPlannerAuto("Start 11R"), elevatorSubsystem.bottomAutoElevator()));
 
         SmartDashboard.putData("Auto/Chooser", autoChooser);
 
