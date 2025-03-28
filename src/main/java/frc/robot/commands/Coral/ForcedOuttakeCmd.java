@@ -26,11 +26,13 @@ public class ForcedOuttakeCmd extends Command {
     // execute, startOuttake() once button is pressed
     @Override
     public void execute() {
-        // if (elevatorSubsystem.getSetpoint() == 1) {
-        // coralSubsystem.set(Constants.coralConstants.L1Speed);
-        // } else {
-        coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
-        // }
+        if (elevatorSubsystem.getSetpoint() == Constants.elevatorConstants.L1Position
+                || elevatorSubsystem.getElevatorPosition() == Constants.elevatorConstants.L1Position) {
+            coralSubsystem.setTop(-Constants.coralConstants.L1Speed);
+            coralSubsystem.setBottom(0);
+        } else {
+            coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
+        }
     }
 
     // end, when command ends, set activeOuttake to false and set state to IDLE

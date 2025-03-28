@@ -28,18 +28,6 @@ public class OuttakeCommand extends Command {
         if (!coralSubsystem.isLineBroken()) {
             cancel();
         }
-
-        if (!isAuto) {
-            // if (elevatorSubsystem.getSetpoint() == 1) {
-            // speed = Constants.coralConstants.L1Speed;
-            // } else {
-            speed = Constants.coralConstants.outtakeSpeed;
-            // }
-        } else {
-            speed = Constants.coralConstants.outtakeAutoSpeed;
-
-            coralSubsystem.set(speed);
-        }
     }
 
     // execute, startOuttake() once button is pressed
@@ -47,6 +35,14 @@ public class OuttakeCommand extends Command {
     public void execute() {
         if (!coralSubsystem.isLineBroken()) {
             cancel();
+        }
+
+        if (elevatorSubsystem.getSetpoint() == Constants.elevatorConstants.L1Position
+                || elevatorSubsystem.getElevatorPosition() == Constants.elevatorConstants.L1Position) {
+            coralSubsystem.setTop(-Constants.coralConstants.L1Speed);
+            coralSubsystem.setBottom(0);
+        } else {
+            coralSubsystem.set(Constants.coralConstants.outtakeSpeed);
         }
     }
 
