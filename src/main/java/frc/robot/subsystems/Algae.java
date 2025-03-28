@@ -5,7 +5,6 @@ import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.commands.AlgaeCmd;
 
 public class Algae extends SubsystemBase {
@@ -24,7 +23,7 @@ public class Algae extends SubsystemBase {
     }
 
     public Algae() {
-        algaeMotor = new SparkMax(0, SparkLowLevel.MotorType.kBrushless);
+        algaeMotor = new SparkMax(38, SparkLowLevel.MotorType.kBrushless);
     }
 
     public void start(double speed) {
@@ -35,23 +34,25 @@ public class Algae extends SubsystemBase {
         algaeMotor.set(0);
     }
 
-    public boolean isExtended() {
-        if (algaeMotor.getEncoder().getPosition() > Constants.AlgaeConstant.algaeOutPos) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // public boolean isExtended() {
+    // if (algaeMotor.getEncoder().getPosition() >
+    // Constants.AlgaeConstant.algaeOutPos) {
+    // return true;
+    // } else {
+    // return false;
+    // }
+    // }
 
-    public boolean isRetracted() {
-        if (algaeMotor.getEncoder().getPosition() < Constants.AlgaeConstant.algaeInPos) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // public boolean isRetracted() {
+    // if (algaeMotor.getEncoder().getPosition() <
+    // Constants.AlgaeConstant.algaeInPos) {
+    // return true;
+    // } else {
+    // return false;
+    // }
+    // }
 
-    public Command algaeCommand() {
-        return new AlgaeCmd(this);
+    public Command algaeCommand(boolean toggleExtending) {
+        return new AlgaeCmd(this, toggleExtending);
     }
 }

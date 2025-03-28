@@ -11,15 +11,15 @@ public class AlgaeCmd extends Command {
     public double speed;
     public Timer timer = new Timer();
 
-    public AlgaeCmd(Algae algaeSubsystem) {
+    public AlgaeCmd(Algae algaeSubsystem, boolean toggleExtending) {
         this.algaeSubsystem = algaeSubsystem;
+        this.toggleExtending = toggleExtending;
 
         speed = Constants.AlgaeConstant.algaeSpeed;
     }
 
     public void initialize() {
         timer.restart();
-        toggleExtending = !toggleExtending;
 
         if (toggleExtending) {
             algaeSubsystem.start(speed);
@@ -31,20 +31,21 @@ public class AlgaeCmd extends Command {
     public void execute() {
     }
 
-    public void end() {
+    public void end(boolean interrupted) {
         algaeSubsystem.stop();
         timer.reset();
     }
 
     public boolean isFinished() {
-        if (timer.hasElapsed(3)) {
+        if (timer.hasElapsed(1)) {
             return true;
         } else {
-            if (toggleExtending) {
-                return algaeSubsystem.isExtended();
-            } else {
-                return algaeSubsystem.isRetracted();
-            }
+            // if (toggleExtending) {
+            // return algaeSubsystem.isExtended();
+            // } else {
+            // return algaeSubsystem.isRetracted();
+            // }
+            return false;
         }
     }
 }

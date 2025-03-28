@@ -51,14 +51,14 @@ public class Climb extends SubsystemBase {
     // arm retracts with blue LEDs
     public void retractArm() {
         climbMotor.set(Constants.ClimbConstants.climbSpeed);
+        // LEDs.getInstance().setCommand(LEDPreset.Solid.kBlue).schedule();
 
-        LEDs.getInstance().setCommand(LEDPreset.Rainbow.kConfetti).schedule();
     }
 
     public void extendArm() {
         // Sets motor to extending speed
         climbMotor.set(Constants.ClimbConstants.extendSpeed);
-        LEDs.getInstance().setCommand(LEDPreset.Solid.kViolet).schedule();
+        LEDs.getInstance().persistCommand(LEDPreset.Solid.kViolet).schedule();
     }
 
     public void moveMotor(double Speed) {
@@ -105,5 +105,9 @@ public class Climb extends SubsystemBase {
         Logger.recordOutput("Subsystems/Climb/Position", climbMotor.getPosition().getValueAsDouble());
 
         SmartDashboard.putBoolean("Climb LimitSwitch", isLimitSwitchBroken());
+
+        if (isLimitSwitchBroken()) {
+            LEDs.getInstance().persistCommand(LEDPreset.Rainbow.kConfetti).schedule();
+        }
     }
 }

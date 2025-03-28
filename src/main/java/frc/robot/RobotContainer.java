@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.leds.LEDPreset;
 import frc.robot.commands.TeleopSwerve;
@@ -173,8 +172,8 @@ public class RobotContainer {
         driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
         // Vision
-        // driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
-        driver.a().onTrue(elevatorSubsystem.goToL1Position());
+        driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
+        // driver.a().onTrue(elevatorSubsystem.goToL1Position());
 
         // Elevator
         driver.y().whileTrue(coralSubsystem.forcedOuttakeCommand());
@@ -182,9 +181,8 @@ public class RobotContainer {
         // Coral
         driver.rightBumper().whileTrue(coralSubsystem.intakeCommand());
         driver.rightBumper().onTrue(elevatorSubsystem.bottomElevator());
-        // driver.b().whileTrue(coralSubsystem.backwardsMotor());
+        driver.b().whileTrue(coralSubsystem.backwardsMotor());
         // driver.b().whileTrue(coralSubsystem.l1Command());
-
         // driver.start().onTrue(new InstantCommand(() ->
         // elevatorSubsystem.increaseMode()));
         // driver.back().onTrue(new InstantCommand(() ->
@@ -217,12 +215,10 @@ public class RobotContainer {
                                 Constants.Vision.leftOffset),
                         () -> visionMode));
 
-        driver.b()
-                .whileTrue(new SequentialCommandGroup(Commands.sequence(
-                        coralSubsystem.l1Command(),
-                        Commands.parallel(
-                                elevatorSubsystem.slowL2(),
-                                coralSubsystem.l1Command()))));
+        // driver.b()
+        // .whileTrue(new SequentialCommandGroup(Commands.sequence(
+        // elevatorSubsystem.goToL1Position(),
+        // coralSubsystem.l1Command())));
 
         // driver.povUp().whileTrue(m_climbSubsystem.climbCommand());
         // driver.povDown().whileTrue(m_climbSubsystem.extendingCommand());
@@ -254,7 +250,8 @@ public class RobotContainer {
         operator.leftTrigger().whileTrue(m_climbSubsystem.extendingCommand());
 
         // extending
-        operator.rightBumper().whileTrue(m_algaeSubsystem.algaeCommand());
+        operator.rightBumper().whileTrue(m_algaeSubsystem.algaeCommand(true));
+        operator.leftBumper().whileTrue(m_algaeSubsystem.algaeCommand(false));
     }
 
     public Command getAutonomousCommand() {
