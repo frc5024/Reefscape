@@ -23,7 +23,7 @@ public class Algae extends SubsystemBase {
     }
 
     public Algae() {
-        algaeMotor = new SparkMax(38, SparkLowLevel.MotorType.kBrushless);
+        algaeMotor = new SparkMax(62, SparkLowLevel.MotorType.kBrushless);
     }
 
     public void start(double speed) {

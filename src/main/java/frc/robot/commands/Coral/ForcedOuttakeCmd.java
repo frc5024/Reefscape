@@ -8,11 +8,12 @@ import frc.robot.subsystems.Elevator;
 public class ForcedOuttakeCmd extends Command {
 
     private final Coral coralSubsystem;
-    Elevator elevatorSubsystem;
+    private final Elevator elevatorSubsystem;
 
     // constructor for OuttakeCommand
-    public ForcedOuttakeCmd(Coral coralSubsystem) {
+    public ForcedOuttakeCmd(Coral coralSubsystem, Elevator elevatorSubsystem) {
         this.coralSubsystem = coralSubsystem;
+        this.elevatorSubsystem = elevatorSubsystem;
 
         addRequirements(coralSubsystem);
     }

@@ -140,7 +140,7 @@ public class Coral extends SubsystemBase {
     }
 
     public Command forcedOuttakeCommand() {
-        return new ForcedOuttakeCmd(this);
+        return new ForcedOuttakeCmd(this, elevatorSubsystem);
     }
 
     public Command intakeCommand() {
