@@ -11,6 +11,7 @@ import frc.robot.Constants;
 import frc.robot.commands.Coral.CancelIntakeCommand;
 import frc.robot.commands.Coral.ForcedOuttakeCmd;
 import frc.robot.commands.Coral.IntakeCommand;
+import frc.robot.commands.Coral.L1Command;
 import frc.robot.commands.Coral.LowerRampCommand;
 import frc.robot.commands.Coral.OuttakeCommand;
 import frc.robot.commands.Coral.PlopCommand;
@@ -163,9 +164,9 @@ public class Coral extends SubsystemBase {
         return new LowerRampCommand(this);
     }
 
-    // public Command l1Command() {
-    // return new L1Command(this);
-    // }
+    public Command l1Command() {
+        return new L1Command(this);
+    }
 
     // ---------------SERVO STUFF --------------
     // rotate servo 90 degrees (lowers the ramp)

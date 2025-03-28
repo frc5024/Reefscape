@@ -182,7 +182,7 @@ public class RobotContainer {
         driver.rightBumper().whileTrue(coralSubsystem.intakeCommand());
         driver.rightBumper().onTrue(elevatorSubsystem.bottomElevator());
         driver.b().whileTrue(coralSubsystem.backwardsMotor());
-        // driver.b().whileTrue(coralSubsystem.l1Command());
+        driver.start().whileTrue(coralSubsystem.l1Command());
         // driver.start().onTrue(new InstantCommand(() ->
         // elevatorSubsystem.increaseMode()));
         // driver.back().onTrue(new InstantCommand(() ->

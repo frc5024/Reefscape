@@ -123,7 +123,7 @@ public final class Constants {
         public static double outtakeL4Speed = -0.15;
         public static double outtakeAutoSpeed = -0.10;
 
-        public static double L1Speed = -0.1;
+        public static double L1Speed = -0.20;
         public static double plopSpeed = -0.35;
         public static double rampSpeed = 0.1;
 
@@ -132,7 +132,7 @@ public final class Constants {
     }
 
     public static final class AlgaeConstant {
-        public static double algaeSpeed = 0.2;
+        public static double algaeSpeed = 0.3;
         // public static double algaeInPos = 1;
         // public static double algaeOutPos = 0;
     }

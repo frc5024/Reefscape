@@ -30,11 +30,11 @@ public class OuttakeCommand extends Command {
         }
 
         if (!isAuto) {
-            if (elevatorSubsystem.getSetpoint() == 1) {
-                speed = Constants.coralConstants.L1Speed;
-            } else {
-                speed = Constants.coralConstants.outtakeSpeed;
-            }
+            // if (elevatorSubsystem.getSetpoint() == 1) {
+            // speed = Constants.coralConstants.L1Speed;
+            // } else {
+            speed = Constants.coralConstants.outtakeSpeed;
+            // }
         } else {
             speed = Constants.coralConstants.outtakeAutoSpeed;
 
