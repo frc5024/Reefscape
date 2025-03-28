@@ -122,10 +122,6 @@ public class RobotContainer {
                 Commands.sequence(new PathPlannerAuto("Start 11R"), new PathPlannerAuto("11R TS 6R"),
                         new PathPlannerAuto("6R TS 6L"), new PathPlannerAuto("6L TS")));
 
-        autoChooser.addOption("testing second half auto",
-                Commands.sequence(new PathPlannerAuto("11R TS 6R"),
-                        new PathPlannerAuto("6R TS 6L"), new PathPlannerAuto("6L TS")));
-
         autoChooser.addOption("Processor side 2/3 piece (COMPLETE)",
                 Commands.sequence(new PathPlannerAuto("Start 9R"), new PathPlannerAuto("9R BS 8"),
                         new PathPlannerAuto("8R BS 8L"), new PathPlannerAuto("8L BS")));
@@ -134,6 +130,13 @@ public class RobotContainer {
         autoChooser.addOption("Middle 1 piece left (COMPLETE)", new PathPlannerAuto("MiddleLeft"));
 
         autoChooser.addOption("Testing Elevatoring", new PathPlannerAuto("Start 11R"));
+
+        autoChooser.addOption("testing second half auto",
+                Commands.sequence(new PathPlannerAuto("11R TS 6R"),
+                        new PathPlannerAuto("6R TS 6L"), new PathPlannerAuto("6L TS")));
+
+        autoChooser.addOption("testing first coral",
+                Commands.sequence(new PathPlannerAuto("Start 11R"), elevatorSubsystem.bottomAutoElevator()));
 
         SmartDashboard.putData("Auto/Chooser", autoChooser);
 
@@ -189,8 +192,7 @@ public class RobotContainer {
                         Commands.parallel(
                                 new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
                                         Constants.Vision.rightOffset),
-                                elevatorSubsystem.goToL2Position()),
-                        elevatorSubsystem.goToModePosition(),
+                                elevatorSubsystem.goToModePosition()),
                         coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
                             elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the button is released
                         }), new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
@@ -202,8 +204,7 @@ public class RobotContainer {
                         Commands.parallel(
                                 new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
                                         Constants.Vision.leftOffset),
-                                elevatorSubsystem.goToL2Position()),
-                        elevatorSubsystem.goToModePosition(),
+                                elevatorSubsystem.goToModePosition()),
                         coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
                             elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the button is released
                         }), new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,

@@ -77,6 +77,7 @@ public class Robot extends LoggedRobot {
         Logger.start();
 
         // james + james = baby boy
+        // ro + cam = <3
 
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our

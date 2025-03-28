@@ -57,7 +57,7 @@ public final class Constants {
 
         public static final double rotationTolerance = 1.6; // degrees
         public static final double strafeTolerance = centimetersToMeters(2);
-        public static final double distanceTolerance = centimetersToMeters(3); // to be adjusted
+        public static final double distanceTolerance = centimetersToMeters(8); // to be adjusted was at 3 at waterloo
 
         public static double centimetersToMeters(double Centimeters) {
             return Centimeters / 100;

@@ -187,10 +187,17 @@ public class goToSetPositionPerTagCmd extends Command {
     public void setDrive() {
         swerveDrive.setFieldRelative(false);
 
-        // if (shouldBeSlowDis && shouldBeSlowStrafe) {
-        // swerveDrive.isSlowMode = true;
-        // } else {
-        // swerveDrive.isSlowMode = false;
+        // if (Math.abs(rotationPidOutput) < 0.1) {
+        // rotationPidOutput = (rotationPidOutput / Math.abs(rotationPidOutput)) * 0.1;
+        // }
+
+        // if (Math.abs(strafePidOutput) < 0.1) {
+        // strafePidOutput = (strafePidOutput / Math.abs(strafePidOutput)) * 0.1;
+        // }
+
+        // if (Math.abs(translationPidOutput) < 0.1) {
+        // translationPidOutput = (translationPidOutput /
+        // Math.abs(translationPidOutput)) * 0.1;
         // }
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
