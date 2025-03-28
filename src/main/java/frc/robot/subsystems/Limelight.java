@@ -44,7 +44,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getAprilTagID() {
-        return limelightTable.getEntry("tid").getDouble(-100); // -100 if no target
+        return limelightTable.getEntry("tid").getDouble(-1); 
     }
 
     public void setRotationPos(boolean rotationPos) {
