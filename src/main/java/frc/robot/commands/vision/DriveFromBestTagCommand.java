@@ -103,7 +103,7 @@ public class DriveFromBestTagCommand extends Command {
     private Pose2d getBestTagPose(Pose3d currentPose) {
         boolean isCoralMode = this.gamePieceModeSupplier.get() == GamePieceMode.CORAL;
 
-        if (isCoralMode && (VisionConstants.FRONT_LEFT_CAMERA == null || VisionConstants.FRONT_RIGHT_CAMERA == null)) {
+        if (isCoralMode && VisionConstants.FRONT_CAMERA == null) {
             return null;
         }
 
@@ -112,9 +112,7 @@ public class DriveFromBestTagCommand extends Command {
         }
 
         String cameraName = isCoralMode
-                ? this.isLeftPole
-                        ? VisionConstants.FRONT_LEFT_CAMERA.getName()
-                        : VisionConstants.FRONT_RIGHT_CAMERA.getName()
+                ? VisionConstants.FRONT_CAMERA.getName()
                 : VisionConstants.REAR_CAMERA.getName();
         Pose3d targetPose = this.visionSubsystem.getBestTargetPose(cameraName);
 

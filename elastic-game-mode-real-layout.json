@@ -99,24 +99,7 @@
             }
           },
           {
-            "title": "Left Camera Has Target",
-            "x": 256.0,
-            "y": 0.0,
-            "width": 192.0,
-            "height": 192.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/AdvantageKit/Vision/Camera Arducam_UC626-2/HasTarget",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
-            }
-          },
-          {
-            "title": "Left Camera Best Target Id",
+            "title": "Rear Camera Best Target Id",
             "x": 256.0,
             "y": 192.0,
             "width": 192.0,
@@ -129,14 +112,14 @@
             }
           },
           {
-            "title": "Right Camera Has Target",
+            "title": "Front Camera Has Target",
             "x": 448.0,
             "y": 0.0,
             "width": 192.0,
             "height": 192.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera limelight-two/HasTarget",
+              "topic": "/AdvantageKit/Vision/Camera limelight/HasTarget",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -146,14 +129,14 @@
             }
           },
           {
-            "title": "Right Camera Best Target Id",
+            "title": "Front Camera Best Target Id",
             "x": 448.0,
             "y": 192.0,
             "width": 192.0,
             "height": 192.0,
             "type": "Large Text Display",
             "properties": {
-              "topic": "/AdvantageKit/Vision/Camera limelight-two/BestTargetId",
+              "topic": "/AdvantageKit/Vision/Camera limelight/BestTargetId",
               "period": 0.06,
               "data_type": "int"
             }
@@ -371,6 +354,23 @@
             "type": "Boolean Box",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/GameData/IsCorlLevel4",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Rear Camera Has Tarrget",
+            "x": 256.0,
+            "y": 0.0,
+            "width": 192.0,
+            "height": 192.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/Camera Arducam_UC626-2/HasTarget",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,

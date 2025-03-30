@@ -19,6 +19,7 @@ public class SwerveModuleBuilder {
     public final int encoderChannel;
     public final Rotation2d encoderOffset;
 
+    private final boolean driveInverted;
     private final boolean turnInverted;
     private final boolean encoderInverted;
     private final COTSTalonFXSwerveConstants cotsDriveConstants;
@@ -32,12 +33,14 @@ public class SwerveModuleBuilder {
      * 
      */
     public SwerveModuleBuilder(int driveMotorId, int turnMotorId, int encoderChannel, Rotation2d encoderOffset,
-            boolean turnInverted, boolean encoderInverted, COTSTalonFXSwerveConstants cotsDriveConstants,
+            boolean driveInverted, boolean turnInverted, boolean encoderInverted,
+            COTSTalonFXSwerveConstants cotsDriveConstants,
             COTSTalonFXSwerveConstants cotsTurnConstants) {
         this.driveMotorId = driveMotorId;
         this.turnMotorId = turnMotorId;
         this.encoderChannel = encoderChannel;
         this.encoderOffset = encoderOffset;
+        this.driveInverted = driveInverted;
         this.turnInverted = turnInverted;
         this.encoderInverted = encoderInverted;
         this.cotsDriveConstants = cotsDriveConstants;
@@ -83,7 +86,9 @@ public class SwerveModuleBuilder {
 
         /** Swerve Drive Motor Configuration */
         /* Motor Inverts and Neutral Mode */
-        this.driveTalonFXConfig.MotorOutput.Inverted = this.cotsDriveConstants.driveMotorInvert;
+        this.driveTalonFXConfig.MotorOutput.Inverted = this.driveInverted
+                ? InvertedValue.Clockwise_Positive
+                : InvertedValue.CounterClockwise_Positive;
         this.driveTalonFXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         /* Gear Ratio Config */

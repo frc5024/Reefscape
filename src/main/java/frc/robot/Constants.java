@@ -258,13 +258,13 @@ public final class Constants {
         public static final double SWERVE_MODULE_DRIVE_KV = 0.69922;
         public static final double SWERVE_MODULE_DRIVE_KA = 0.0;
 
-        public static final double SWERVE_MODULE_TURN_KP = 400.0;
+        public static final double SWERVE_MODULE_TURN_KP = 10.0;
         public static final double SWERVE_MODULE_TURN_KI = 0.0;
-        public static final double SWERVE_MODULE_TURN_KD = 0.68275;
+        public static final double SWERVE_MODULE_TURN_KD = 0.0;
 
-        public static final double SWERVE_MODULE_TURN_KS = 0.28;
-        public static final double SWERVE_MODULE_TURN_KV = 2.7935;
-        public static final double SWERVE_MODULE_TURN_KA = 0.031543;
+        public static final double SWERVE_MODULE_TURN_KS = 0.0; // 0.28;
+        public static final double SWERVE_MODULE_TURN_KV = 0.0; // 2.7935;
+        public static final double SWERVE_MODULE_TURN_KA = 0.0; // 0.031543;
 
         // PID constants for simulated swerve modules
         public static final double SIM_SWERVE_MODULE_DRIVE_KP = 1.0;
@@ -450,10 +450,10 @@ public final class Constants {
          * TODO: set camera names and positions - pitch is based on degress from
          * vertical
          */
-        public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight-two",
+        public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
-                Units.inchesToMeters(10.0), Units.inchesToMeters(7.25), Units.inchesToMeters(9.5),
-                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(30.0));
+                Units.inchesToMeters(12.0), Units.inchesToMeters(0.0), Units.inchesToMeters(5.0),
+                0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(0.0));
 
         public static final Camera ARDUCAM1_CAMERA = new Camera("Arducam_OV9281-1",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
@@ -462,8 +462,8 @@ public final class Constants {
 
         public static final Camera ARDUCAM2_CAMERA = new Camera("Arducam_UC626-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(9.75), Units.inchesToMeters(7.5), Units.inchesToMeters(8.5),
-                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(-30.0));
+                Units.inchesToMeters(12.125), Units.inchesToMeters(0.0), Units.inchesToMeters(4.75),
+                0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(0.0));
 
         public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_OV9281-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
@@ -480,9 +480,8 @@ public final class Constants {
 
         public static final List<Camera> CAMERAS = Robot.isReal() ? BEALTOVEN_CAMERAS : SIMULATION_CAMERAS;
 
-        public static final Camera FRONT_RIGHT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
-        public static final Camera FRONT_LEFT_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
-        public static final Camera REAR_CAMERA = CAMERAS.size() > 2 ? CAMERAS.get(2) : null;
+        public static final Camera FRONT_CAMERA = CAMERAS.size() > 0 ? CAMERAS.get(0) : null;
+        public static final Camera REAR_CAMERA = CAMERAS.size() > 1 ? CAMERAS.get(1) : null;
 
         /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.3;
