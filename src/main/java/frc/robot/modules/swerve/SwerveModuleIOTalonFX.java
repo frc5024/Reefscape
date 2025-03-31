@@ -126,7 +126,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
 
         // Configure periodic frames
         BaseStatusSignal.setUpdateFrequencyForAll(PhoenixOdometryThread.ODOMETRY_FREQUENCY, this.drivePosition,
-                this.turnPosition);
+                this.turnPosition, this.turnAbsolutePosition);
         BaseStatusSignal.setUpdateFrequencyForAll(
                 50.0,
                 this.driveVelocity,
