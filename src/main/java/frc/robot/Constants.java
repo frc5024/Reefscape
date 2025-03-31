@@ -453,29 +453,23 @@ public final class Constants {
         public static final Camera LIMELIGHT2_CAMERA = new Camera("limelight",
                 Camera.Type.APRILTAG, Camera.Processor.LIMELIGHT, 0,
                 Units.inchesToMeters(12.0), Units.inchesToMeters(0.0), Units.inchesToMeters(5.0),
-                0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(0.0));
+                0.0, Units.degreesToRadians(30.0), Units.degreesToRadians(0.0));
 
         public static final Camera ARDUCAM1_CAMERA = new Camera("Arducam_OV9281-1",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(11.0), Units.inchesToMeters(11.0), Units.inchesToMeters(9.25),
-                0.0, Units.degreesToRadians(20.0), Units.degreesToRadians(30.0));
+                Units.inchesToMeters(12.0), Units.inchesToMeters(0.0), Units.inchesToMeters(5.0),
+                0.0, Units.degreesToRadians(30.0), Units.degreesToRadians(0.0));
 
         public static final Camera ARDUCAM2_CAMERA = new Camera("Arducam_UC626-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(12.125), Units.inchesToMeters(0.0), Units.inchesToMeters(4.75),
-                0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(0.0));
-
-        public static final Camera ARDUCAM3_CAMERA = new Camera("Arducam_OV9281-2",
-                Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
-                Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(9.25),
-                0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-150.0));
+                Units.inchesToMeters(-12.125), Units.inchesToMeters(0.0), Units.inchesToMeters(4.75),
+                0.0, Units.degreesToRadians(-30.0), Units.degreesToRadians(180.0));
 
         /**
          * TODO: set list of enabled camera
          */
         public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM2_CAMERA);
-        public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM1_CAMERA, ARDUCAM2_CAMERA,
-                ARDUCAM3_CAMERA);
+        public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM1_CAMERA, ARDUCAM2_CAMERA);
         public static final List<Camera> NO_CAMERAS = new ArrayList<>();
 
         public static final List<Camera> CAMERAS = Robot.isReal() ? BEALTOVEN_CAMERAS : SIMULATION_CAMERAS;

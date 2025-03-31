@@ -21,7 +21,7 @@
     ],
     "cameras": [
         {
-            "name": "FrontRightCam",
+            "name": "FrontCam",
             "rotations": [
                 {
                     "axis": "x",
@@ -29,17 +29,17 @@
                 },
                 {
                     "axis": "y",
-                    "degrees": -20
+                    "degrees": -30
                 },
                 {
                     "axis": "z",
-                    "degrees": 30
+                    "degrees": 0
                 }
             ],
             "position": [
-                0.254,
-                -0.1778,
-                0.2286
+                0.3048,
+                0.0,
+                0.127
             ],
             "resolution": [
                 960,
@@ -48,7 +48,7 @@
             "fov": 70
         },
         {
-            "name": "FrontLeftCam",
+            "name": "RearCam",
             "rotations": [
                 {
                     "axis": "x",
@@ -56,17 +56,17 @@
                 },
                 {
                     "axis": "y",
-                    "degrees": -20
+                    "degrees": -30
                 },
                 {
                     "axis": "z",
-                    "degrees": -30
+                    "degrees": 180
                 }
             ],
             "position": [
-                0.24765,
-                0.1905,
-                0.2286
+                -0.307975,
+                0.0,
+                0.12065
             ],
             "resolution": [
                 960,
