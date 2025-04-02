@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Webcam extends SubsystemBase {
 
-    private Climb m_climbSubsystem;
-
     UsbCamera webcam;
     private static Webcam mInstance = null;
 
