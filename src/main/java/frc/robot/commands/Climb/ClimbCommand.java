@@ -7,6 +7,7 @@ import frc.robot.subsystems.Climb;
 public class ClimbCommand extends Command {
 
     private Climb climbSubsystem;
+
     public Timer climbTimer = new Timer();
 
     public ClimbCommand(Climb climbSubsystem) {
