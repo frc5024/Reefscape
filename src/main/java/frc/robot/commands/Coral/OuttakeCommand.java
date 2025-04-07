@@ -37,8 +37,7 @@ public class OuttakeCommand extends Command {
             cancel();
         }
 
-        if (elevatorSubsystem.getSetpoint() == Constants.elevatorConstants.L1Position
-                || elevatorSubsystem.getElevatorPosition() == Constants.elevatorConstants.L1Position) {
+        if (elevatorSubsystem.getElevatorPosition() == Constants.elevatorConstants.L1Position) {
             coralSubsystem.setTop(-Constants.coralConstants.L1Speed);
             coralSubsystem.setBottom(0);
         } else {

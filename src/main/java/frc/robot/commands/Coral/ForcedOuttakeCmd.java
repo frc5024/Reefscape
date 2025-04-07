@@ -26,8 +26,7 @@ public class ForcedOuttakeCmd extends Command {
     // execute, startOuttake() once button is pressed
     @Override
     public void execute() {
-        if (elevatorSubsystem.getSetpoint() == Constants.elevatorConstants.L1Position
-                || elevatorSubsystem.getElevatorPosition() == Constants.elevatorConstants.L1Position) {
+        if (elevatorSubsystem.getElevatorPosition() == Constants.elevatorConstants.L1Position) {
             coralSubsystem.setTop(-Constants.coralConstants.L1Speed);
             coralSubsystem.setBottom(0);
         } else {
