@@ -1,7 +1,6 @@
 package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
 public class SetElevatorModeCmd extends Command {
@@ -26,9 +25,8 @@ public class SetElevatorModeCmd extends Command {
 
         elevatorSubsystem.setGoal(setpoint);
         elevatorSubsystem.togglePID(true);
-        if (setpoint != Constants.elevatorConstants.rootPosition) {
-            elevatorSubsystem.setElevatorPosition(setpoint);
-        }
+        elevatorSubsystem.setElevatorPosition(setpoint);
+
     }
 
     // "end" is called when the button is no longer being pressed

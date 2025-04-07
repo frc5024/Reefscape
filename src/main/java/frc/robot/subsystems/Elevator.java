@@ -104,7 +104,7 @@ public class Elevator extends SubsystemBase {
 
         PID = new ProfiledPIDController(elevatorConstants.kP, elevatorConstants.kI, elevatorConstants.kD,
                 feedForwardConstraints);
-        PID.setTolerance(2, 1.5); // TODO: put in constants
+        PID.setTolerance(4, 1.5); // TODO: put in constants
         feedForward = new ElevatorFeedforward(0, elevatorConstants.G, elevatorConstants.kV, elevatorConstants.kA); // ks,
                                                                                                                    // kg,
                                                                                                                    // kv,
@@ -134,6 +134,8 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        Logger.recordOutput("Subsytems/Auto/Elevator At Target", targetReached());
 
         SmartDashboard.putNumber("Elevator Mode", elevatorNumeredMode);
         updateSetpoint(elevatorNumeredMode);

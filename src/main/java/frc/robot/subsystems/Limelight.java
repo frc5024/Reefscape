@@ -16,6 +16,11 @@ public class Limelight extends SubsystemBase {
     boolean zPos = false;
     public boolean done = false;
 
+    double distanceDiff;
+    double strafeDiff;
+    double rotationDiff;
+    boolean isVisionActivated = false;
+
     private static Limelight mInstance = null;
 
     boolean isTagSeen = false;
@@ -44,7 +49,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getAprilTagID() {
-        return limelightTable.getEntry("tid").getDouble(-1); 
+        return limelightTable.getEntry("tid").getDouble(-1);
     }
 
     public void setRotationPos(boolean rotationPos) {
@@ -83,6 +88,38 @@ public class Limelight extends SubsystemBase {
         return done;
     }
 
+    public void setDistanceDiff(double diff) {
+        distanceDiff = diff;
+    }
+
+    public void setStrafeDiff(double diff) {
+        strafeDiff = diff;
+    }
+
+    public void setRotationDiff(double diff) {
+        rotationDiff = diff;
+    }
+
+    public double getDistanceDiff() {
+        return distanceDiff;
+    }
+
+    public double getStrafeDiff() {
+        return strafeDiff;
+    }
+
+    public double getRotationDiff() {
+        return rotationDiff;
+    }
+
+    public void isVisionActivated(boolean isVisionActivated) {
+        this.isVisionActivated = isVisionActivated;
+    }
+
+    public boolean getIsVisionActive() {
+        return isVisionActivated;
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("rotationPos", rotatePos);
@@ -91,7 +128,19 @@ public class Limelight extends SubsystemBase {
 
         SmartDashboard.putBoolean("is Tag Visable", isTargetVisible());
         SmartDashboard.putNumber("Visable Tag", getAprilTagID());
+
         Logger.recordOutput("Subsystems/Limelight/BestTargetId", LimelightHelpers.getFiducialID("limelight"));
         Logger.recordOutput("Subsystems/Limelight/CurrentPose", LimelightHelpers.getBotPose3d("limelight"));
+
+        Logger.recordOutput("Subsystems/Auto/Distance Difference (0.03 tol)", getDistanceDiff());
+        Logger.recordOutput("Subsystems/Auto/Strafe Difference (0.02 tol)", getStrafeDiff());
+        Logger.recordOutput("Subsystems/Auto/Rotation Difference (1.6 tol)", getRotationDiff());
+
+        Logger.recordOutput("Subsystems/Auto/at Distance", getZPos());
+        Logger.recordOutput("Subsystems/Auto/at Strafe", getXPos());
+        Logger.recordOutput("Subsystems/Auto/at Rotation", getRotationPos());
+        Logger.recordOutput("Subsystems/Auto/Is In Position?", inPosition());
+
+        Logger.recordOutput("Subsystems/Auto/Is Vision Running?", getIsVisionActive());
     }
 }
