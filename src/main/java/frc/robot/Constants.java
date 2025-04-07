@@ -42,8 +42,8 @@ public final class Constants {
 
     public static final class Vision {
         // arbitrary scale
-        public static final double rightOffset = 0.1352;
-        public static final double leftOffset = -0.1825;
+        public static final double rightOffset = 0.1502;
+        public static final double leftOffset = -0.169025;
         public static final double noOffset = 0;
 
         // changes smaller adjustments and max speed
@@ -103,11 +103,11 @@ public final class Constants {
         public static final double rootPosition = -10;
         public static final double rootAutoPosition = 0;
         public static final double L1Position = 14;
-        public static final double L2Position = 18.0802 - 1;
+        public static final double L2Position = (17.0802 - 1) + 1;
         public static final double Algae1 = 5.97514;
-        public static final double L3Position = 31.37261 - 1.5;
+        public static final double L3Position = (31.37261 - 1.5) + 1;
         public static final double Algae2 = 8.37068;
-        public static final double L4Position = 50.57406;
+        public static final double L4Position = 50.57406 + 1;
 
     }
 

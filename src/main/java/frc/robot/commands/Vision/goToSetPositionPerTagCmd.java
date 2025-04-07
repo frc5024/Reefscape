@@ -66,6 +66,8 @@ public class goToSetPositionPerTagCmd extends Command {
         // shouldBeSlowDis = false;
         // shouldBeSlowStrafe = false;
 
+        limelight.isVisionActivated(false);
+
         limelight.setRotationPos(false);
         limelight.setXPos(false);
         limelight.setZPos(false);
@@ -135,6 +137,8 @@ public class goToSetPositionPerTagCmd extends Command {
             rotationPidOutput = 0;
             limelight.setRotationPos(true);
         }
+
+        limelight.setRotationDiff(rotationToTag);
     }
 
     // Calculates and outpits PID based on difference to goal state (Forward
@@ -151,6 +155,7 @@ public class goToSetPositionPerTagCmd extends Command {
             limelight.setZPos(true);
         }
 
+        limelight.setDistanceDiff(zDiff);
         // if (Math.abs(zDiff) < 0.4) {
         // shouldBeSlowDis = true;
         // } else {
@@ -173,6 +178,7 @@ public class goToSetPositionPerTagCmd extends Command {
             strafePidOutput = 0;
             limelight.setXPos(true);
         }
+        limelight.setStrafeDiff(xDiff);
 
         // if (Math.abs(xDiff) < 0.2) {
         // shouldBeSlowStrafe = true;
@@ -214,6 +220,8 @@ public class goToSetPositionPerTagCmd extends Command {
         swerveDrive.visionTranslationalVal(0, false);
         swerveDrive.visionStrafeVal(0, false);
         swerveDrive.visionRotationVal(0, false);
+
+        limelight.isVisionActivated(true);
 
         swerveDrive.setFieldRelative(true);
 

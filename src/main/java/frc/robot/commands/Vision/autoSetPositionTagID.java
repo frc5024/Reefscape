@@ -60,6 +60,8 @@ public class autoSetPositionTagID extends Command {
         translationPidController.reset();
         rotationPidController.reset();
 
+        limelight.isVisionActivated(true);
+
         limelight.setRotationPos(false);
         limelight.setXPos(false);
         limelight.setZPos(false);
@@ -103,7 +105,7 @@ public class autoSetPositionTagID extends Command {
             // if (rotationPidOutput != 0) {
             // lastSeenRotation = rotationPidOutput;
             // }
-            System.out.println("I SEE THE TAG");
+            // System.out.println("I SEE THE TAG");
 
             ledCmd.schedule();
             ledOffCmd.cancel();
@@ -142,7 +144,7 @@ public class autoSetPositionTagID extends Command {
         translateToTag(zDiff);
         strafeToTag(xDiff);
 
-        System.out.println("I SHOULD CALLING DRIVE");
+        // System.out.println("I SHOULD CALLING DRIVE");
 
         setDrive();
     }
@@ -157,6 +159,7 @@ public class autoSetPositionTagID extends Command {
             rotationPidOutput = 0;
             limelight.setRotationPos(true);
         }
+        limelight.setRotationDiff(rotationToTag);
     }
 
     // Calculates and outpits PID based on difference to goal state (Forward
@@ -172,6 +175,7 @@ public class autoSetPositionTagID extends Command {
             translationPidOutput = 0;
             limelight.setZPos(true);
         }
+        limelight.setDistanceDiff(zDiff);
     }
 
     // Calculates and outpits PID based on difference to goal state (Left/Right)
@@ -189,6 +193,7 @@ public class autoSetPositionTagID extends Command {
             strafePidOutput = 0;
             limelight.setXPos(true);
         }
+        limelight.setStrafeDiff(xDiff);
     }
 
     // PID/Speed cap increase smaller adjustments within the PID but caps the max
@@ -197,7 +202,7 @@ public class autoSetPositionTagID extends Command {
     public void setDrive() {
         swerveDrive.setFieldRelative(false);
 
-        System.out.println("I SHOULD BE DRIVING RIGHT NOW");
+        // System.out.println("I SHOULD BE DRIVING RIGHT NOW");
 
         swerveDrive.visionRotationVal(rotationPidOutput, true);
         swerveDrive.visionTranslationalVal(translationPidOutput, true);
@@ -219,6 +224,8 @@ public class autoSetPositionTagID extends Command {
         swerveDrive.visionTranslationalVal(0, false);
         swerveDrive.visionStrafeVal(0, false);
         swerveDrive.visionRotationVal(0, false);
+
+        limelight.isVisionActivated(false);
 
         tag = 0;
         tag2 = 0;
