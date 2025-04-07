@@ -194,8 +194,7 @@ public class RobotContainer {
                         Commands.parallel(
                                 new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
                                         Constants.Vision.rightOffset),
-                                elevatorSubsystem.goToL2Position()),
-                        elevatorSubsystem.goToModePosition(),
+                                elevatorSubsystem.goToModePosition()),
                         coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
                             elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the button is released
                         }), new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
@@ -207,8 +206,7 @@ public class RobotContainer {
                         Commands.parallel(
                                 new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
                                         Constants.Vision.leftOffset),
-                                elevatorSubsystem.goToL2Position()),
-                        elevatorSubsystem.goToModePosition(),
+                                elevatorSubsystem.goToModePosition()),
                         coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
                             elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the button is released
                         }), new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
@@ -246,8 +244,10 @@ public class RobotContainer {
 
         operator.start().whileTrue(elevatorSubsystem.slowL2());
 
-        operator.rightTrigger().whileTrue(m_climbSubsystem.climbCommand());
-        operator.leftTrigger().whileTrue(m_climbSubsystem.extendingCommand());
+        operator.rightTrigger()
+                .whileTrue(Commands.parallel(m_climbSubsystem.climbCommand(), coralSubsystem.outtakeCommand()));
+        operator.leftTrigger()
+                .whileTrue(Commands.parallel(m_climbSubsystem.extendingCommand(), coralSubsystem.outtakeCommand()));
 
         // extending
         operator.rightBumper().whileTrue(m_algaeSubsystem.algaeCommand(true));
