@@ -19,12 +19,6 @@
                       }
                     },
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "Confirm Vision"
-                      }
-                    },
-                    {
                       "type": "race",
                       "data": {
                         "commands": [
@@ -37,7 +31,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 4.0
+                              "waitTime": 2.5
                             }
                           }
                         ]
@@ -57,9 +51,9 @@
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "Wait For Vision"
+                        "waitTime": 0.8
                       }
                     },
                     {
@@ -75,7 +69,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 4.0
+                              "waitTime": 2.5
                             }
                           }
                         ]
