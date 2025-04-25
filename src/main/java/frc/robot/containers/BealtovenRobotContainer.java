@@ -3,22 +3,20 @@ package frc.robot.containers;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.generated.TunerConstants;
 import frc.robot.modules.algae.AlgaeModuleIOSim;
 import frc.robot.modules.coral.CoralModuleIOSim;
 import frc.robot.modules.elevator.ElevatorModuleIOSim;
-import frc.robot.modules.gyro.GyroModuleIONavX;
+import frc.robot.modules.gyro.GyroModuleIOPigeon2;
 import frc.robot.modules.swerve.SwerveModuleIOTalonFX;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.utils.SwerveModuleBuilder;
 
 /**
  * 
@@ -30,14 +28,12 @@ public class BealtovenRobotContainer extends RobotContainer {
     public BealtovenRobotContainer() {
         super();
 
-        SwerveModuleBuilder[] swerveModuleConfigs = getModuleConfigs();
-
         this.swerveDriveSubsystem = new SwerveDriveSubsystem(
-                new GyroModuleIONavX(),
-                new SwerveModuleIOTalonFX(swerveModuleConfigs[0]),
-                new SwerveModuleIOTalonFX(swerveModuleConfigs[1]),
-                new SwerveModuleIOTalonFX(swerveModuleConfigs[2]),
-                new SwerveModuleIOTalonFX(swerveModuleConfigs[3]));
+                new GyroModuleIOPigeon2(),
+                new SwerveModuleIOTalonFX(TunerConstants.FrontLeft),
+                new SwerveModuleIOTalonFX(TunerConstants.FrontRight),
+                new SwerveModuleIOTalonFX(TunerConstants.BackLeft),
+                new SwerveModuleIOTalonFX(TunerConstants.BackRight));
 
         this.visionSubsystem = new VisionSubsystem(VisionConstants.BEALTOVEN_CAMERAS, this.swerveDriveSubsystem,
                 this.swerveDriveSubsystem::getPose, this.swerveDriveSubsystem::getRotation);
@@ -69,26 +65,6 @@ public class BealtovenRobotContainer extends RobotContainer {
         NamedCommands.registerCommand("WaitForEject", new WaitUntilCommand(this.coralSubsystem::hasEjected));
         NamedCommands.registerCommand("WaitForElevator", new WaitUntilCommand(this.elevatorSubsystem::atGoal));
         NamedCommands.registerCommand("WaitForIntake", new WaitUntilCommand(this.coralSubsystem::hasCoral));
-    }
-
-    /**
-     * Be sure to update SwerveConstants to match robot
-     */
-    private SwerveModuleBuilder[] getModuleConfigs() {
-        SwerveModuleBuilder frontLeft = new SwerveModuleBuilder(41, 42, 4,
-                Rotation2d.fromRotations(-0.44921875), false, true, false, SwerveConstants.cotsDriveConstants,
-                SwerveConstants.cotsTurnConstants);
-        SwerveModuleBuilder frontRight = new SwerveModuleBuilder(11, 12, 1,
-                Rotation2d.fromRotations(0.38330078125), true, true, false, SwerveConstants.cotsDriveConstants,
-                SwerveConstants.cotsTurnConstants);
-        SwerveModuleBuilder backLeft = new SwerveModuleBuilder(31, 32, 3,
-                Rotation2d.fromRotations(0.205322265625), false, true, false, SwerveConstants.cotsDriveConstants,
-                SwerveConstants.cotsTurnConstants);
-        SwerveModuleBuilder backRight = new SwerveModuleBuilder(21, 22, 2,
-                Rotation2d.fromRotations(-0.451904296875), true, true, false, SwerveConstants.cotsDriveConstants,
-                SwerveConstants.cotsTurnConstants);
-
-        return new SwerveModuleBuilder[] { frontLeft, frontRight, backLeft, backRight };
     }
 
     /**

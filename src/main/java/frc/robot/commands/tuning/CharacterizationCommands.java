@@ -17,8 +17,8 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  */
 public class CharacterizationCommands {
     private final SwerveDriveSubsystem swerveDriveSubsystem;
-    private final SysIdRoutine turnRoutine;
     private final SysIdRoutine driveRoutine;
+    private final SysIdRoutine turnRoutine;
 
     /**
      * 
@@ -26,26 +26,36 @@ public class CharacterizationCommands {
     public CharacterizationCommands(SwerveDriveSubsystem swerveDriveSubsystem) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
 
+        /*
+         * SysId routine for characterizing translation. This is used to find PID gains
+         * for the drive motors.
+         */
         this.driveRoutine = new SysIdRoutine(
                 new SysIdRoutine.Config(
                         null, // Default ramp rate is acceptable
                         Volts.of(3.5),
                         Seconds.of(3.5),
                         // Log state with Phoenix SignalLogger class
-                        (state) -> SignalLogger.writeString("state", state.toString())),
+                        (state) -> SignalLogger.writeString("SysIdTranslation_State", state.toString())),
                 new SysIdRoutine.Mechanism(
-                        (volts) -> swerveDriveSubsystem.runDriveCharacterizationVolts(volts.in(Volts)), null,
+                        (volts) -> swerveDriveSubsystem.runDriveCharacterizationVolts(volts.in(Volts)),
+                        null,
                         swerveDriveSubsystem));
 
+        /*
+         * SysId routine for characterizing steer. This is used to find PID gains for
+         * the steer motors.
+         */
         this.turnRoutine = new SysIdRoutine(
                 new SysIdRoutine.Config(
                         null, // Default ramp rate is acceptable
                         Volts.of(3.5),
                         Seconds.of(3.5),
                         // Log state with Phoenix SignalLogger class
-                        (state) -> SignalLogger.writeString("state", state.toString())),
+                        (state) -> SignalLogger.writeString("SysIdSteer_State", state.toString())),
                 new SysIdRoutine.Mechanism(
-                        (volts) -> swerveDriveSubsystem.runTurnCharacterizationVolts(volts.in(Volts)), null,
+                        (volts) -> swerveDriveSubsystem.runTurnCharacterizationVolts(volts.in(Volts)),
+                        null,
                         swerveDriveSubsystem));
     }
 

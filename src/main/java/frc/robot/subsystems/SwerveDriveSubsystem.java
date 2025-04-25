@@ -332,7 +332,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements VisionSubsyst
 
     /** Returns a command to run a dynamic test in the specified direction. */
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return run(() -> runDriveCharacterizationVolts(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
+        return run(() -> runDriveCharacterizationVolts(0.0))
+                .withTimeout(1.0)
+                .andThen(sysId.dynamic(direction));
     }
 
     /**
