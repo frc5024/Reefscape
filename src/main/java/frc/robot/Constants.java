@@ -31,8 +31,23 @@ public final class Constants {
                 public static double plopSpeed = -0.05;
                 public static double rampSpeed = -0.05;
 
+                public static final double kP = 0;
+                public static final double kI = 0;
+                public static final double kD = 0;
+
+                public static double targetAngle = 0; 
+
                 // public static double servoRotate = 0.5; 
                 // public static double servoReset = -0.5;    
+        }
+
+        public static final class turretConstants {
+                public static final int turretMotorChannel = 0;
+                public static final double turretTolerance = 0.5;
+                public static final int kP = 0;
+                public static final int kI = 0;
+                public static final int kD = 0;
+                
         }
 
       public static final class Swerve {

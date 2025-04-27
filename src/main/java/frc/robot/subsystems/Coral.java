@@ -7,6 +7,7 @@ import frc.robot.commands.Coral.IntakeCommand;
 import frc.robot.commands.Coral.OuttakeCommand;
 import frc.robot.commands.Coral.PlopCommand;
 import frc.robot.commands.Coral.LowerRampCommand;
+import frc.robot.commands.Coral.SpinToAngleCommand;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -21,10 +22,12 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import edu.wpi.first.math.controller.PIDController;
+
 
 public class Coral extends SubsystemBase{     
     // motor controller for coral
-    private SparkFlex coralMotor;
+    public SparkFlex coralMotor;
     private SparkFlex coralMotorReversed;
     
     // private final SparkBaseConfig coralMotorReversedConfig = new SparkFlexConfig()
@@ -32,6 +35,8 @@ public class Coral extends SubsystemBase{
     //     .follow(coralConstants.coralMotorChannel);
 
     private static DigitalInput linebreak;
+
+    private PIDController PID;
 
     //all constants for coral
     int coralMotorChannel = Constants.coralConstants.coralMotorChannel;
@@ -51,31 +56,33 @@ public class Coral extends SubsystemBase{
     GenericEntry outtakeMotorSpeedEntry = tab.add("SET outtake speed", outtakeSpeed).getEntry();
     GenericEntry plopSpeedEntry = tab.add("SET plop speed", plopSpeed).getEntry();
 
+    GenericEntry pEntry = tab.add("SET P", coralConstants.kP).getEntry();
+    GenericEntry iEntry = tab.add("SET I", coralConstants.kI).getEntry();
+    GenericEntry dEntry = tab.add("SET D", coralConstants.kD).getEntry();
+
+
+
     //constructor for coralMotor
     public Coral() {
-        linebreak = new DigitalInput(Constants.coralConstants.linebreakChannel);
-        tab.addBoolean("linebreak", () -> linebreak.get());
+        ShuffleboardTab tab = Shuffleboard.getTab("Coral");
         
+        linebreak = new DigitalInput(Constants.coralConstants.linebreakChannel);
+        tab.addBoolean("linebreak", () -> linebreak.get()); 
         coralMotor = new SparkFlex(coralMotorChannel, SparkFlex.MotorType.kBrushless);
         tab.addDouble("motor speed", () -> coralMotor.get());
-        
         coralMotorReversed = new SparkFlex(coralMotorReversedChannel, SparkFlex.MotorType.kBrushless);
         tab.addDouble("bottom motor speed", () -> coralMotorReversed.get());
 
         tab.addDouble("encoder value", () -> getEncoder());
 
-        //this.coralMotorReversed.configure(coralMotorReversedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
     }
-    
-
-    // method for intaking coral, takes in a boolean to determine if the coral should intake
 
     @Override
     public void periodic() {
         intakeSpeed = intakeMotorSpeedEntry.getDouble(intakeSpeed);
         outtakeSpeed = outtakeMotorSpeedEntry.getDouble(outtakeSpeed);
         plopSpeed = plopSpeedEntry.getDouble(plopSpeed);
+
     }
 
     //idle state, set motor to 0
@@ -89,9 +96,7 @@ public class Coral extends SubsystemBase{
     }
 
     public double getEncoder() {
-        // Combine or choose one encoder value to return
-        //return (coralMotor.getAbsoluteEncoder().getPosition() + coralMotorReversed.getAbsoluteEncoder().getPosition()) / 2;
-        return coralMotorReversed.getAbsoluteEncoder().getPosition(); //getExternalEncoder() or getAbsoluteEncoder(), not sure yet
+        return coralMotor.getAbsoluteEncoder().getPosition(); 
     }
 
     public void set(double speed) { 
@@ -125,6 +130,10 @@ public class Coral extends SubsystemBase{
 
     public Command lowerRampCommand(){
         return new LowerRampCommand(this);
+    }
+
+    public Command spinToAngle(){
+        return new SpinToAngleCommand(this);
     }
 
     //---------------SERVO STUFF --------------
