@@ -30,6 +30,7 @@ public final class Constants {
                 public static double outtakeSpeed = -0.2;
                 public static double plopSpeed = -0.05;
                 public static double rampSpeed = -0.05;
+                public static double L1Speed = -0.35;
 
                 public static final double kP = 0;
                 public static final double kI = 0;
