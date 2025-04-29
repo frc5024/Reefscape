@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.leds.LEDPreset;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.PIDmotor.setPIDMotorSetPoint;
 import frc.robot.commands.Vision.autoSetPositionTagID;
 import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
 import frc.robot.commands.Vision.isPathRun;
@@ -167,10 +168,20 @@ public class RobotContainer {
         // Driver Controls
         // Drive
 
+
+        driver.x().whileTrue(new setPIDMotorSetPoint(200));
+
+
+
+
+
+
+
+
+
         driver.leftBumper().whileTrue(new InstantCommand(() -> s_Swerve.isSlowMode = true));
         driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.isSlowMode = false));
 
-        driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
         // Vision
         driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
