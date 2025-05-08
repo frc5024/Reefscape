@@ -47,6 +47,9 @@ public class Swerve extends SubsystemBase {
 
     public boolean isSlowMode = false;
 
+    // Change this to change if its in baby mode (30% speed)
+    public boolean babyMode = true;
+
     public final double scaleValue = 3600.0 / 3831.020004272461;
 
     private static Swerve mInstance;
@@ -183,6 +186,10 @@ public class Swerve extends SubsystemBase {
 
     public void setSpeedModifier() {
         speedModifier = 1;
+
+        if (babyMode) {
+            speedModifier = 0.3;
+        }
         // This is why were not going the right distance in auto
         // speedModifier = speedModifier - elevatorSubsystem.getElevatorPercent();
 

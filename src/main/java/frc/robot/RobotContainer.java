@@ -49,7 +49,7 @@ public class RobotContainer {
     private final int elevatorAxis = XboxController.Axis.kLeftX.value;
 
     // Vision Variables
-    boolean visionMode = true;
+    boolean visionMode = false;
     public String mode;
 
     // Auto
@@ -173,7 +173,7 @@ public class RobotContainer {
         driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
         // Vision
-        driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
+        // driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
         // driver.a().onTrue(elevatorSubsystem.goToL1Position());
 
         // Elevator
