@@ -267,15 +267,15 @@ public final class Constants {
         public static final double SWERVE_MODULE_TURN_KA = 0.0; // 0.031543;
 
         // PID constants for simulated swerve modules
-        public static final double SIM_SWERVE_MODULE_DRIVE_KP = 1.0;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KP = 0.05; // 1.0;
         public static final double SIM_SWERVE_MODULE_DRIVE_KI = 0.0;
         public static final double SIM_SWERVE_MODULE_DRIVE_KD = 0.0;
 
-        public static final double SIM_SWERVE_MODULE_DRIVE_KS = 0.25;
-        public static final double SIM_SWERVE_MODULE_DRIVE_KV = 0.134;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KS = 0.00865; // 0.25;
+        public static final double SIM_SWERVE_MODULE_DRIVE_KV = 0.0789; // 0.134;
         public static final double SIM_SWERVE_MODULE_DRIVE_KA = 0.0;
 
-        public static final double SIM_SWERVE_MODULE_TURN_KP = 10.0;
+        public static final double SIM_SWERVE_MODULE_TURN_KP = 8.0; // 10.0;
         public static final double SIM_SWERVE_MODULE_TURN_KI = 0.0;
         public static final double SIM_SWERVE_MODULE_TURN_KD = 0.0;
 
@@ -460,7 +460,12 @@ public final class Constants {
                 Units.inchesToMeters(12.0), Units.inchesToMeters(0.0), Units.inchesToMeters(5.0),
                 0.0, Units.degreesToRadians(30.0), Units.degreesToRadians(0.0));
 
-        public static final Camera ARDUCAM2_CAMERA = new Camera("Arducam_UC626-2",
+        public static final Camera ARDUCAM2_CAMERA = new Camera("Arducam_OV9281-2",
+                Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
+                Units.inchesToMeters(-12.0), Units.inchesToMeters(0.0), Units.inchesToMeters(5.0),
+                0.0, Units.degreesToRadians(-30.0), Units.degreesToRadians(180.0));
+
+        public static final Camera ARDUCAMUC2_CAMERA = new Camera("Arducam_UC626-2",
                 Camera.Type.APRILTAG, Camera.Processor.PHOTONVISION, 0,
                 Units.inchesToMeters(-12.125), Units.inchesToMeters(0.0), Units.inchesToMeters(4.75),
                 0.0, Units.degreesToRadians(-30.0), Units.degreesToRadians(180.0));
@@ -468,7 +473,7 @@ public final class Constants {
         /**
          * TODO: set list of enabled camera
          */
-        public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(LIMELIGHT2_CAMERA, ARDUCAM2_CAMERA);
+        public static final List<Camera> BEALTOVEN_CAMERAS = Arrays.asList(ARDUCAM1_CAMERA, ARDUCAM2_CAMERA);
         public static final List<Camera> SIMULATION_CAMERAS = Arrays.asList(ARDUCAM1_CAMERA, ARDUCAM2_CAMERA);
         public static final List<Camera> NO_CAMERAS = new ArrayList<>();
 
