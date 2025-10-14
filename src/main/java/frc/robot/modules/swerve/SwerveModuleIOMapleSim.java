@@ -3,6 +3,7 @@ package frc.robot.modules.swerve;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import java.util.Arrays;
@@ -75,6 +76,7 @@ public class SwerveModuleIOMapleSim implements SwerveModuleIO {
                 true,
                 this.moduleSimulation.getDriveWheelFinalPosition().in(Radians),
                 this.moduleSimulation.getDriveWheelFinalSpeed().in(RadiansPerSecond),
+                this.moduleSimulation.getDriveWheelFinalSpeed().in(RotationsPerSecond),
                 this.driveAppliedVolts,
                 Math.abs(this.moduleSimulation.getDriveMotorSupplyCurrent().in(Amps)),
                 0.0,

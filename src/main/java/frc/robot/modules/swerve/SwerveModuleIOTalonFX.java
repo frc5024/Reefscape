@@ -107,6 +107,8 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
         driveConfig.MotorOutput.Inverted = swerveModuleConstants.DriveMotorInverted
                 ? InvertedValue.Clockwise_Positive
                 : InvertedValue.CounterClockwise_Positive;
+        driveConfig.MotionMagic.MotionMagicAcceleration = 400.0;
+        driveConfig.MotionMagic.MotionMagicJerk = 4000.0;
 
         tryUntilOk(5, () -> this.driveTalon.getConfigurator().apply(driveConfig, 0.25));
         tryUntilOk(5, () -> this.driveTalon.setPosition(0.0, 0.25));
@@ -204,6 +206,7 @@ public class SwerveModuleIOTalonFX implements SwerveModuleIO {
                         this.driveTorqueCurrentAmps)),
                 Units.rotationsToRadians(this.drivePosition.getValueAsDouble()),
                 Units.rotationsToRadians(this.driveVelocity.getValueAsDouble()),
+                Units.radiansToRotations(Units.rotationsToRadians(this.driveVelocity.getValueAsDouble())),
                 this.driveAppliedVolts.getValueAsDouble(),
                 this.driveSupplyCurrentAmps.getValueAsDouble(),
                 this.driveTorqueCurrentAmps.getValueAsDouble(),

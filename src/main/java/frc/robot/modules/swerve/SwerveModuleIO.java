@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public interface SwerveModuleIO {
     @AutoLog
     public class SwerveModuleIOInputs {
-        public SwerveModuleIOData data = new SwerveModuleIOData(false, 0.0, 0.0, 0.0, 0.0, 0.0, false, false,
+        public SwerveModuleIOData data = new SwerveModuleIOData(false, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false,
                 Rotation2d.kZero, 0.0, Rotation2d.kZero, 0.0, 0.0, 0.0, 0.0, 0.0);
 
         public double[] odometryTimestamps = new double[] {};
@@ -22,6 +22,7 @@ public interface SwerveModuleIO {
             boolean driveConnected,
             double drivePositionRad,
             double driveVelocityRadPerSec,
+            double driveVelocityRotPerSec,
             double driveAppliedVolts,
             double driveSupplyCurrentAmps,
             double driveTorqueCurrentAmps,

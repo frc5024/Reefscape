@@ -89,6 +89,7 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
                 true,
                 this.driveMotorSim.getAngularPositionRad(),
                 this.driveMotorSim.getAngularVelocityRadPerSec(),
+                this.driveMotorSim.getAngularVelocityRPM() / 60.0,
                 this.driveAppliedVolts,
                 Math.abs(this.driveMotorSim.getCurrentDrawAmps()),
                 0.0,
