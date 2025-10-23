@@ -24,6 +24,21 @@ public final class Constants {
         public final static int servoPort = 8;// Port for Servo, Make sure it is PWM not DIO
     }
 
+    // Constants for intake mechanism and IDs/Channels
+    public static class Algaes {
+        public final static int algaeMotor1_ID = 3;
+        public final static int algaeMotor2_ID = 62;
+        public final static int linebreakChannel = 0;
+
+        public final static double outtakeTimer = 1.5;
+
+        public final static double intakeSpeed = -0.5;
+        public final static double idleSpeed = 0.0;
+        public final static double launchSpeed = 0.5;
+        public final static double dropSpeed = 0.1;
+
+    }
+
     // AdvantageKit simulation
     public static final Mode simMode = Mode.SIM;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;

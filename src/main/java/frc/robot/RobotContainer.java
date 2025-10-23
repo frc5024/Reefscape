@@ -40,6 +40,7 @@ public class RobotContainer {
     private final LEDs s_LEDs = LEDs.getInstance();
     private final Webcam s_webcamSubsystem = Webcam.getInstance();
     private final Algae m_algaeSubsystem = Algae.getInstance();
+    private final Algae s_Algae = Algae.getInstance();
 
     // Drive Controls
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -62,7 +63,15 @@ public class RobotContainer {
                                                                                                           // robotcentric
         ));
 
+        // Testing Algae Command - Uncomment this for manual control of Algae subsystem
+        // s_Algae.setDefaultCommand(new AlgaeManualCommand(s_Algae, () ->
+        // driver.getLeftTriggerAxis(), () -> driver.getRightTriggerAxis()));
+
+        // s_Algae.setDefaultCommand(new AlgaeStateCommand(s_Algae, () ->
+        // driver.getRightTriggerAxis()));
+
         configureBindings();
+        // Sets the controllers triggers to be used by algae command
 
         // Auto Commands
         // Vision
@@ -167,6 +176,9 @@ public class RobotContainer {
         // Driver Controls
         // Drive
 
+        driver.back().onTrue(s_Algae.intake());
+        driver.start().whileTrue(s_Algae.launch());
+
         driver.leftBumper().whileTrue(new InstantCommand(() -> s_Swerve.isSlowMode = true));
         driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.isSlowMode = false));
 
@@ -257,4 +269,5 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
+
 }
