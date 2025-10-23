@@ -28,7 +28,7 @@ public final class Constants {
     public static class Algaes {
         public final static int algaeMotor1_ID = 8;
         public final static int algaeMotor2_ID = 62;
-        public final static int linebreakChannel = 3;
+        public final static int linebreakChannel = 0;
 
         public final static double outtakeTimer = 1.5;
 
@@ -127,24 +127,24 @@ public final class Constants {
     }
 
     // constants for intake and channels
-    public static final class coralConstants {
-        public static final int coralMotorChannel = 51;
-        public static final int coralMotorReversedChannel = 52;
-        public static final int linebreakChannel = 0;
-        public static final int servoChannel = 0;
+    // public static final class coralConstants {
+    // // public static final int coralMotorChannel = 51;
+    // // public static final int coralMotorReversedChannel = 52;
+    // public static final int linebreakChannel = 0;
+    // public static final int servoChannel = 0;
 
-        public static double intakeSpeed = -0.1;
-        public static double outtakeSpeed = -0.10;
-        public static double outtakeL4Speed = -0.15;
-        public static double outtakeAutoSpeed = -0.10;
+    // public static double intakeSpeed = -0.1;
+    // public static double outtakeSpeed = -0.10;
+    // public static double outtakeL4Speed = -0.15;
+    // public static double outtakeAutoSpeed = -0.10;
 
-        public static double L1Speed = -0.20;
-        public static double plopSpeed = -0.35;
-        public static double rampSpeed = 0.1;
+    // public static double L1Speed = -0.20;
+    // public static double plopSpeed = -0.35;
+    // public static double rampSpeed = 0.1;
 
-        // public static double servoRotate = 0.5;
-        // public static double servoReset = -0.5;
-    }
+    // // public static double servoRotate = 0.5;
+    // // public static double servoReset = -0.5;
+    // }
 
     public static final class AlgaeConstant {
         public static double algaeSpeed = 0.3;

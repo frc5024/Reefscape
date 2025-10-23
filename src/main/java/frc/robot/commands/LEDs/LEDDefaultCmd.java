@@ -7,14 +7,14 @@ package frc.robot.commands.LEDs;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.leds.LEDPreset;
 import frc.robot.subsystems.Climb;
-import frc.robot.subsystems.Coral;
+//import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 
 public class LEDDefaultCmd extends Command {
 
     private final LEDs s_LED;
-    Coral coralSubsystem = Coral.getInstance();
+    // Coral coralSubsystem = Coral.getInstance();
     Climb climbSubsystem = Climb.getInstance();
     Limelight s_Limelight = Limelight.getInstance();
 
@@ -32,8 +32,8 @@ public class LEDDefaultCmd extends Command {
     public void execute() {
         if (climbSubsystem.isLimitSwitchBroken()) {
             s_LED.set(LEDPreset.Rainbow.kConfetti);
-        } else if (coralSubsystem.isLineBroken()) {
-            s_LED.set(LEDPreset.Solid.kGreen);
+            // } else if (coralSubsystem.isLineBroken()) {
+            // s_LED.set(LEDPreset.Solid.kGreen);
         } else {
             s_LED.set(LEDPreset.Solid.kRed);
         }

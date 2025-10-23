@@ -53,7 +53,7 @@ public class Algae extends SubsystemBase {
     // (ex. idle, launch, drop, intake)
     public void setSpeed(Double speed) {
         algaeMotor1.set(speed);
-        algaeMotor2.set(speed);
+        algaeMotor2.set(-speed);
     }
 
     // Gets the current value of the linebreak sensor and returns to systems outside
