@@ -262,8 +262,8 @@ public class RobotContainer {
                 .whileTrue(Commands.parallel(m_climbSubsystem.extendingCommand(), coralSubsystem.outtakeCommand()));
 
         // extending
-        operator.rightBumper().whileTrue(m_algaeSubsystem.algaeCommand(true));
-        operator.leftBumper().whileTrue(m_algaeSubsystem.algaeCommand(false));
+        // operator.rightBumper().whileTrue(m_algaeSubsystem.algaeCommand(true));
+        // operator.leftBumper().whileTrue(m_algaeSubsystem.algaeCommand(false));
     }
 
     public Command getAutonomousCommand() {
