@@ -26,9 +26,9 @@ public final class Constants {
 
     // Constants for intake mechanism and IDs/Channels
     public static class Algaes {
-        public final static int algaeMotor1_ID = 3;
+        public final static int algaeMotor1_ID = 8;
         public final static int algaeMotor2_ID = 62;
-        public final static int linebreakChannel = 0;
+        public final static int linebreakChannel = 3;
 
         public final static double outtakeTimer = 1.5;
 
