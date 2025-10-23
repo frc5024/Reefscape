@@ -17,13 +17,10 @@ import frc.robot.commands.Vision.autoSetPositionTagID;
 import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
 import frc.robot.commands.Vision.isPathRun;
 import frc.robot.subsystems.Algae;
-import frc.robot.subsystems.Climb;
-// import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.Webcam;
 
 public class RobotContainer {
     // Controllers
@@ -31,13 +28,10 @@ public class RobotContainer {
     private final CommandXboxController operator = new CommandXboxController(1);
 
     // Subsystems
-    private final Climb m_climbSubsystem = Climb.getInstance();
     private final Swerve s_Swerve = Swerve.getInstance();
     private final Limelight limelightSubsystem = Limelight.getInstance();
-    // private final Coral coralSubsystem = Coral.getInstance();
     private final Elevator elevatorSubsystem = Elevator.getInstance();
     private final LEDs s_LEDs = LEDs.getInstance();
-    private final Webcam s_webcamSubsystem = Webcam.getInstance();
     private final Algae m_algaeSubsystem = Algae.getInstance();
     private final Algae s_Algae = Algae.getInstance();
 
@@ -112,11 +106,6 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("elevatorMode", elevatorSubsystem.goToModePosition());
 
-        // Coral
-        // NamedCommands.registerCommand("ScoreCoral",
-        // coralSubsystem.outtakeAutoCommand());
-        // NamedCommands.registerCommand("IntakeCoral", coralSubsystem.intakeCommand());
-
         NamedCommands.registerCommand("Confirm Vision", new InstantCommand(() -> limelightSubsystem.pathIsDone(true))); // fix
         // better
         NamedCommands.registerCommand("Wait For Vision", new isPathRun(limelightSubsystem));
@@ -150,12 +139,6 @@ public class RobotContainer {
                 Commands.sequence(new PathPlannerAuto("Start 11R"), elevatorSubsystem.bottomAutoElevator()));
 
         SmartDashboard.putData("Auto/Chooser", autoChooser);
-
-        // if (coralSubsystem.isLineBroken()) {
-        // s_LEDs.setCommand(LEDPreset.Solid.kGreen);
-        // } else {
-        // s_LEDs.setCommand(LEDPreset.Solid.kRed);
-        // }
     }
 
     // Vision Mode
@@ -175,14 +158,16 @@ public class RobotContainer {
     private void configureBindings() {
         // Driver Controls
         // Drive
-
-        driver.back().onTrue(s_Algae.intake());
-        driver.start().whileTrue(s_Algae.launch());
-
         driver.leftBumper().whileTrue(new InstantCommand(() -> s_Swerve.isSlowMode = true));
         driver.leftBumper().onFalse(new InstantCommand(() -> s_Swerve.isSlowMode = false));
 
-        driver.x().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        driver.povUp().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+
+        // Algae
+        driver.x().onTrue(s_Algae.intake());
+        driver.y().onTrue(s_Algae.cancel());
+        driver.b().whileTrue(s_Algae.launch());
+        driver.a().onTrue(s_Algae.drop());
 
         // Vision
         // driver.a().onTrue(new InstantCommand(() -> toggleVisionMode()));
@@ -190,50 +175,6 @@ public class RobotContainer {
 
         // Elevator
         // driver.y().whileTrue(coralSubsystem.forcedOuttakeCommand());
-
-        // Coral
-        // driver.rightBumper().whileTrue(coralSubsystem.intakeCommand());
-        // driver.rightBumper().onTrue(elevatorSubsystem.bottomElevator());
-        // driver.b().whileTrue(coralSubsystem.backwardsMotor());
-        // driver.start().onTrue(new InstantCommand(() ->
-        // elevatorSubsystem.increaseMode()));
-        // driver.back().onTrue(new InstantCommand(() ->
-        // elevatorSubsystem.decreaseMode()));
-
-        // scoring
-        // driver.rightTrigger()
-        // .whileTrue(new ConditionalCommand(Commands.sequence(
-        // Commands.parallel(
-        // new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.rightOffset),
-        // elevatorSubsystem.goToModePosition()),
-        // coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
-        // elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the
-        // button is released
-        // }), new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.rightOffset),
-        // () -> visionMode));
-
-        // driver.leftTrigger()
-        // .whileTrue(new ConditionalCommand(Commands.sequence(
-        // Commands.parallel(
-        // new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.leftOffset),
-        // elevatorSubsystem.goToModePosition()),
-        // coralSubsystem.outtakeCommand()).finallyDo((interrupted) -> {
-        // elevatorSubsystem.bottomAutoElevator().schedule(); // Runs once when the
-        // button is released
-        // }), new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve,
-        // Constants.Vision.leftOffset),
-        // () -> visionMode));
-
-        // driver.b()
-        // .whileTrue(new SequentialCommandGroup(Commands.sequence(
-        // elevatorSubsystem.goToL1Position(),
-        // coralSubsystem.l1Command())));
-
-        // driver.povUp().whileTrue(m_climbSubsystem.climbCommand());
-        // driver.povDown().whileTrue(m_climbSubsystem.extendingCommand());
 
         // Operator Controls
 
@@ -257,17 +198,6 @@ public class RobotContainer {
                         elevatorSubsystem.goToL4Position(), () -> visionMode));
 
         operator.start().whileTrue(elevatorSubsystem.slowL2());
-
-        // operator.rightTrigger()
-        // .whileTrue(Commands.parallel(m_climbSubsystem.climbCommand(),
-        // coralSubsystem.outtakeCommand()));
-        // operator.leftTrigger()
-        // .whileTrue(Commands.parallel(m_climbSubsystem.extendingCommand(),
-        // coralSubsystem.outtakeCommand()));
-
-        // extending
-        // operator.rightBumper().whileTrue(m_algaeSubsystem.algaeCommand(true));
-        // operator.leftBumper().whileTrue(m_algaeSubsystem.algaeCommand(false));
     }
 
     public Command getAutonomousCommand() {
