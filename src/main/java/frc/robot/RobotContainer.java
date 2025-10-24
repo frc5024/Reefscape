@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.lib.leds.LEDPreset;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Vision.autoSetPositionTagID;
 import frc.robot.commands.Vision.goToSetPositionPerTagCmd;
@@ -50,10 +51,10 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-
-        s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, () -> -driver.getRawAxis(translationAxis),
-                () -> -driver.getRawAxis(strafeAxis), () -> -driver.getRawAxis(rotationAxis), () -> false // true =
-                                                                                                          // robotcentric
+        // flipped translation and strafe axis and made both negative
+        s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, () -> -driver.getRawAxis(strafeAxis),
+                () -> driver.getRawAxis(translationAxis), () -> -driver.getRawAxis(rotationAxis), () -> false // true =
+        // robotcentric
         ));
 
         // Testing Algae Command - Uncomment this for manual control of Algae subsystem
@@ -139,6 +140,12 @@ public class RobotContainer {
                 Commands.sequence(new PathPlannerAuto("Start 11R"), elevatorSubsystem.bottomAutoElevator()));
 
         SmartDashboard.putData("Auto/Chooser", autoChooser);
+
+        if (s_Algae.getAlgaeLinebreak()) {
+            s_LEDs.setCommand(LEDPreset.Solid.kGreen);
+        } else {
+            s_LEDs.setCommand(LEDPreset.Solid.kRed);
+        }
     }
 
     // Vision Mode

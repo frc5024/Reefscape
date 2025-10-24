@@ -28,7 +28,9 @@ public class LEDDefaultCmd extends Command {
 
     @Override
     public void execute() {
-        if (s_Algae.getAlgaeLinebreak()) {
+        System.out.println("LEDS ARE RUNNINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+
+        if (s_Algae.getAlgaeLinebreak() == true) {
             s_LED.set(LEDPreset.Solid.kGreen);
         } else {
             s_LED.set(LEDPreset.Solid.kRed);

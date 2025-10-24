@@ -16,7 +16,7 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static class LEDs {
-        public final static int ledPort = 9; // Port for LED, Make sure it is PWM not DIO
+        public final static int ledPort = 7; // Port for LED, Make sure it is PWM not DIO
         public final static ILEDPreset defaultLED = LEDPreset.Solid.kRed;// Default Colour
     }
 
@@ -80,7 +80,7 @@ public final class Constants {
     }
 
     public static class LEDsConstants { // changed name to LEDsConstants
-        public final static int ledPort = 0; // Port for LED, Make sure it is PWM not DIO
+        public final static int ledPort = 7; // Port for LED, Make sure it is PWM not DIO
         public final static ILEDPreset defaultLED = LEDPreset.Solid.kGold;// Default Colour
 
     }
@@ -117,8 +117,8 @@ public final class Constants {
         // position constants for the different levels to score in rotations
         public static final double rootPosition = -10;
         public static final double rootAutoPosition = 0;
-        public static final double L1Position = 14;
-        public static final double L2Position = (17.0802 - 1) + 1;
+        public static final double L1Position = 5;
+        public static final double L2Position = (17.0802 - 1);
         public static final double Algae1 = 5.97514;
         public static final double L3Position = (31.37261 - 1.5) + 1;
         public static final double Algae2 = 8.37068;
