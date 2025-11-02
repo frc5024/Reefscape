@@ -69,6 +69,7 @@ public class RobotContainer {
 
         // Auto Commands
         // Vision
+
         NamedCommands.registerCommand("DriveRightTag",
                 new goToSetPositionPerTagCmd(limelightSubsystem, s_Swerve, Constants.Vision.rightOffset));
 
@@ -138,6 +139,8 @@ public class RobotContainer {
 
         autoChooser.addOption("Testing Elevatoring",
                 Commands.sequence(new PathPlannerAuto("Start 11R"), elevatorSubsystem.bottomAutoElevator()));
+
+        autoChooser.addOption("SimpleAuto", new PathPlannerAuto("SimpleAuto"));
 
         SmartDashboard.putData("Auto/Chooser", autoChooser);
 

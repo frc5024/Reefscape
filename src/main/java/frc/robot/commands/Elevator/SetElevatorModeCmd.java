@@ -38,6 +38,7 @@ public class SetElevatorModeCmd extends Command {
 
     @Override
     public boolean isFinished() {
+        elevatorSubsystem.togglePID(false);
         return elevatorSubsystem.targetReached();
     }
 
