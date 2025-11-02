@@ -48,7 +48,7 @@ public class Swerve extends SubsystemBase {
     public boolean isSlowMode = false;
 
     // Change this to change if its in baby mode (30% speed)
-    public boolean babyMode = true;
+    public boolean babyMode = false;
 
     public final double scaleValue = 3600.0 / 3831.020004272461;
 
