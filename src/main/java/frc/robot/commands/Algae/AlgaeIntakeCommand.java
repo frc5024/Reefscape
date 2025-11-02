@@ -29,8 +29,10 @@ public class AlgaeIntakeCommand extends Command {
         // If linebreak is triggered, set motors to
         // idleSpeed and set hasAlgae to true
         if (m_AlgaeCommandBased.getAlgaeLinebreak()) {
+
             m_AlgaeCommandBased.setSpeed(Constants.Algaes.idleSpeed);
             hasAlgae = true;
+        } else {
         }
     }
 
